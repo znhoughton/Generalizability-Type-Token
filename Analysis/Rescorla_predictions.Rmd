@@ -1,0 +1,478 @@
+---
+title: "Token Frequency Rescorla"
+author: "Zachary Houghton"
+date: "2023-11-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Rescorla Predictions
+
+Libraries:
+
+```{r}
+library(tidyverse)
+library(ndl)
+library(arm)
+#logistic perceptron from neural net
+source("RescorlaLogistic.R")
+```
+
+Let's test what the RW predictions for our experiment are.
+
+## Conditions Tables
+
+Table1:
+
+|                |            |           |                |            |           |                |            |           |
+|---------|---------|--------|---------|---------|--------|----------|--------|-------|
+| **Condition1** | #of tokens | #of types | **Condition2** | #of tokens | #of types | **Condition3** | #of tokens | #of types |
+| *dan*          | 12         | 12        | *dan*          | 12         | 3         | *dan*          | 12         | 12        |
+| *nem*          | 12         | 3         | *nem*          | 3          | 3         | *nem*          | 3          | 3         |
+| *sil*          | 6          | 6         | *sil*          | 6          | 6         | *sil*          | 6          | 6         |
+| *shoon*        | 6          | 6         | *shoon*        | 6          | 6         | *shoon*        | 6          | 6         |
+| **Condition4** |            |           | **Condition5** |            |           | **Condition6** | #of tokens | #of types |
+| *dan*          | 12         | 3         | *dan*          | 3          | 3         | *dan*          | 3          | 3         |
+| *nem*          | 12         | 12        | *nem*          | 12         | 3         | *nem*          | 12         | 12        |
+| *sil*          | 6          | 6         | *sil*          | 6          | 6         | *sil*          | 6          | 6         |
+| *shoon*        | 6          | 6         | *shoon*        | 6          | 6         | *shoon*        | 6          | 6         |
+
+Table2
+
+|               |               |               |               |                 |              |              |              |                |
+|--------|:------:|:-------:|:-----:|:-------:|:------:|:------:|:-------:|:-------:|
+| **Condition** | **dan token** | **nem token** | **sil token** | **shoon token** | **dan type** | **nem type** | **sil type** | **shoon type** |
+| 1             |      12       |      12       |       6       |        6        |      12      |      3       |      6       |       6        |
+| 2             |      12       |       3       |       6       |        6        |      3       |      3       |      6       |       6        |
+| 3             |      12       |       3       |       6       |        6        |      12      |      3       |      6       |       6        |
+| 4             |      12       |      12       |       6       |        6        |      3       |      12      |      6       |       6        |
+| 5             |       3       |      12       |       6       |        6        |      3       |      3       |      6       |       6        |
+| 6             |       3       |      12       |       6       |        6        |      3       |      12      |      6       |       6        |
+
+## Condition 1 (dan type): 12 token, 12 type (nem 12 tokens 3 types)
+
+### Preparing Data
+
+```{r}
+#cues = c('bal', 'berko', 'kora', 'nako', 'pipa', 'bani', 'chool', 'kudom', 'osto', 'vorke', 'bin', 'mero', 'pil', 'shinti', 'shinder', 'bassi', 'lucko', 'runde')
+#outcomes = c('dan', 'nem', 'sil', 'shoon')
+
+#data_cond1 = expand.grid(cues, outcomes) %>%
+  #mutate(frequency = ifelse(Var2 == 'dan', 1, ifelse(Var1 %in% c('bal', 'berko', 'kora') & Var2 == 'nem', 4, ifelse(Var1 %in% c('bal', 'berko', 'kora') & Var2 %in% c('sil', 'shoon'), 2, 0)))) %>%
+  #mutate_if(is.factor, as.character) #factors break the RW model code
+
+#data_cond1$frequency = data_cond1$frequency * 5 #in our experiment each block repeats 5 times
+
+#colnames(data_cond1) = c('Cues', 'Outcomes', 'Frequency') 
+
+#data_cond1 = data_cond1 %>%
+  #mutate(Cues = paste(Cues, Outcomes, sep = '_'))
+
+#data_cond1_v2 = read_csv('data_cond1_v2.csv') #%>%
+  #mutate()
+
+
+#data_cond1 = data_cond1_v2 #%>%
+  #full_join(data_cond1_v2)
+
+#data_cond1$cues = expand.grid(orthoCoding(cues), outcomes)
+
+#data_test = data.frame(rep(c(paste(orthoCoding(cues),"dim_sg",sep="_"),paste(orthoCoding(cues),("big_pl"),sep="_")),2)) %>%
+  #mutate(Outcomes = rep(c('nem', 'dan', 'shoon', 'sil'), each = length(cues)))
+
+#colnames(data_test) = c('cue', 'outcome')
+
+cond1 = read_csv('../Experiment/Condition1.csv') 
+cond1 = cond1 %>%
+  mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = ifelse((suffix == 'dan' | suffix == 'sil'), 'big_pl', 'dim_sg'))
+
+cond1 = cond1 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond1_key = cond1 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond1_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond1 = cond1_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5)
+```
+
+### Rescorla Predictions
+
+We'll use the RW-model with logistic function.
+
+As a reminder, the question we're investigating is whether type or token frequency (or some combination of both) affects the generalizability of a morpheme (this is operationalized as whether type or token frequency affects the *associability,* or the weight, of one cue with the plural outcome outcome).
+
+```{r}
+n = 10
+b = sqrt(.1)
+
+big_dan_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='big', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F) #ap = T means you're learning something if the cue is absent 
+pl_dan_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+
+dim_dan_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='dim', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+#pl_dan_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_nem_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='big', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+pl_nem_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+
+dim_nem_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='dim', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+#pl_nem_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_pl_dan_cond1 = big_dan_cond1$weightvector + pl_dan_cond1$weightvector
+dim_pl_dan_cond1 = dim_dan_cond1$weightvector + pl_dan_cond1$weightvector
+big_pl_nem_cond1 = big_nem_cond1$weightvector + pl_nem_cond1$weightvector
+dim_pl_nem_cond1 = dim_nem_cond1$weightvector + pl_nem_cond1$weightvector
+
+
+plot(big_pl_dan_cond1, type='l' )
+plot(dim_pl_dan_cond1, type = 'l')
+
+plot(big_pl_nem_cond1, type = 'l')
+plot(dim_pl_nem_cond1, type = 'l')
+
+plot(big_pl_dan_cond1 - big_pl_nem_cond1, type = 'l')
+plot(dim_pl_dan_cond1 - dim_pl_nem_cond1, type = 'l')
+
+
+```
+
+## Condition 2 (dan token): 12 tokens, 3 types
+
+```{r}
+
+cond2 = read_csv('../Experiment/Condition2.csv') 
+cond2 = cond2 %>%
+  mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = ifelse((suffix == 'dan' | suffix == 'sil'), 'big_pl', 'dim_sg'))
+
+cond2 = cond2 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond2_key = cond2 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond2_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond2 = cond2_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5)
+```
+
+### Rescorla Predictions
+
+```{r}
+n = 10
+b = sqrt(.1)
+
+big_dan_cond2 = RescorlaLogistic(data_cond2, nruns = n, traceCue='big', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F) #ap = T means you're learning something if the cue is absent 
+pl_dan_cond2 = RescorlaLogistic(data_cond2, nruns = n, traceCue='pl', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+
+dim_dan_cond2 = RescorlaLogistic(data_cond2, nruns = n, traceCue='dim', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+#pl_dan_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_nem_cond2 = RescorlaLogistic(data_cond2, nruns = n, traceCue='big', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+pl_nem_cond2 = RescorlaLogistic(data_cond2, nruns = n, traceCue='pl', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+
+dim_nem_cond2 = RescorlaLogistic(data_cond2, nruns = n, traceCue='dim', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+#pl_nem_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_pl_dan_cond2 = big_dan_cond2$weightvector + pl_dan_cond2$weightvector
+dim_pl_dan_cond2 = dim_dan_cond2$weightvector + pl_dan_cond2$weightvector
+big_pl_nem_cond2 = big_nem_cond2$weightvector + pl_nem_cond2$weightvector
+dim_pl_nem_cond2 = dim_nem_cond2$weightvector + pl_nem_cond2$weightvector
+
+
+plot(big_pl_dan_cond2, type='l' )
+plot(dim_pl_dan_cond2, type = 'l')
+
+plot(big_pl_nem_cond2, type = 'l')
+plot(dim_pl_nem_cond2, type = 'l')
+
+plot(big_pl_dan_cond2 - big_pl_nem_cond2, type = 'l')
+plot(dim_pl_dan_cond2 - dim_pl_nem_cond2, type = 'l')
+
+```
+
+## Condition 3 (dan type and token): 12 tokens, 12 types (nem 3 tokens, 3 types)
+
+```{r}
+
+cond3 = read_csv('../Experiment/Condition3.csv') 
+cond3 = cond3 %>%
+  mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = ifelse((suffix == 'dan' | suffix == 'sil'), 'big_pl', 'dim_sg'))
+
+cond3 = cond3 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond3_key = cond3 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond3_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond3 = cond3_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5)
+```
+
+### Rescorla Predictions
+
+```{r}
+n = 10
+b = sqrt(.1)
+
+big_dan_cond3 = RescorlaLogistic(data_cond3, nruns = n, traceCue='big', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F) #ap = T means you're learning something if the cue is absent 
+pl_dan_cond3 = RescorlaLogistic(data_cond3, nruns = n, traceCue='pl', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+
+dim_dan_cond3 = RescorlaLogistic(data_cond3, nruns = n, traceCue='dim', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+#pl_dan_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_nem_cond3 = RescorlaLogistic(data_cond3, nruns = n, traceCue='big', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+pl_nem_cond3 = RescorlaLogistic(data_cond3, nruns = n, traceCue='pl', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+
+dim_nem_cond3 = RescorlaLogistic(data_cond3, nruns = n, traceCue='dim', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+#pl_nem_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_pl_dan_cond3 = big_dan_cond3$weightvector + pl_dan_cond3$weightvector
+dim_pl_dan_cond3 = dim_dan_cond3$weightvector + pl_dan_cond3$weightvector
+big_pl_nem_cond3 = big_nem_cond3$weightvector + pl_nem_cond3$weightvector
+dim_pl_nem_cond3 = dim_nem_cond3$weightvector + pl_nem_cond3$weightvector
+
+
+plot(big_pl_dan_cond3, type='l' )
+plot(dim_pl_dan_cond3, type = 'l')
+
+plot(big_pl_nem_cond3, type = 'l')
+plot(dim_pl_nem_cond3, type = 'l')
+
+plot(big_pl_dan_cond3 - big_pl_nem_cond3, type = 'l')
+plot(dim_pl_dan_cond3 - dim_pl_nem_cond3, type = 'l')
+```
+
+## Condition 4 (nem type): 12 token, 12 type (dan 12 token, 3 type)
+
+```{r}
+
+cond4 = read_csv('../Experiment/Condition4.csv') 
+cond4 = cond4 %>%
+  mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = ifelse((suffix == 'dan' | suffix == 'sil'), 'big_pl', 'dim_sg'))
+
+cond4 = cond4 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond4_key = cond4 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond4_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond4 = cond4_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5)
+```
+
+### Rescorla Predictions
+
+```{r}
+n = 10
+b = sqrt(.1)
+
+big_dan_cond4 = RescorlaLogistic(data_cond4, nruns = n, traceCue='big', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F) #ap = T means you're learning something if the cue is absent 
+pl_dan_cond4 = RescorlaLogistic(data_cond4, nruns = n, traceCue='pl', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+
+dim_dan_cond4 = RescorlaLogistic(data_cond4, nruns = n, traceCue='dim', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+#pl_dan_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_nem_cond4 = RescorlaLogistic(data_cond4, nruns = n, traceCue='big', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+pl_nem_cond4 = RescorlaLogistic(data_cond4, nruns = n, traceCue='pl', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+
+dim_nem_cond4 = RescorlaLogistic(data_cond4, nruns = n, traceCue='dim', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+#pl_nem_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_pl_dan_cond4 = big_dan_cond4$weightvector + pl_dan_cond4$weightvector
+dim_pl_dan_cond4 = dim_dan_cond4$weightvector + pl_dan_cond4$weightvector
+big_pl_nem_cond4 = big_nem_cond4$weightvector + pl_nem_cond4$weightvector
+dim_pl_nem_cond4 = dim_nem_cond4$weightvector + pl_nem_cond4$weightvector
+
+
+plot(big_pl_dan_cond4, type='l' )
+plot(dim_pl_dan_cond4, type = 'l')
+
+plot(big_pl_nem_cond4, type = 'l')
+plot(dim_pl_nem_cond4, type = 'l')
+
+plot(big_pl_dan_cond4 - big_pl_nem_cond4, type = 'l')
+plot(dim_pl_dan_cond4 - dim_pl_nem_cond4, type = 'l')
+```
+
+## Condition 5 (nem token): 12 token, 3 types (dan 3 token, 3 type)
+
+```{r}
+
+cond5 = read_csv('../Experiment/Condition5.csv') 
+cond5 = cond5 %>%
+  mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = ifelse((suffix == 'dan' | suffix == 'sil'), 'big_pl', 'dim_sg'))
+
+cond5 = cond5 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond5_key = cond5 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond5_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond5 = cond5_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5)
+```
+
+### Rescorla Predictions
+
+```{r}
+n = 10
+b = sqrt(.1)
+
+big_dan_cond5 = RescorlaLogistic(data_cond5, nruns = n, traceCue='big', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F) #ap = T means you're learning something if the cue is absent 
+pl_dan_cond5 = RescorlaLogistic(data_cond5, nruns = n, traceCue='pl', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+
+dim_dan_cond5 = RescorlaLogistic(data_cond5, nruns = n, traceCue='dim', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+#pl_dan_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_nem_cond5 = RescorlaLogistic(data_cond5, nruns = n, traceCue='big', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+pl_nem_cond5 = RescorlaLogistic(data_cond5, nruns = n, traceCue='pl', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+
+dim_nem_cond5 = RescorlaLogistic(data_cond5, nruns = n, traceCue='dim', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+#pl_nem_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_pl_dan_cond5 = big_dan_cond5$weightvector + pl_dan_cond5$weightvector
+dim_pl_dan_cond5 = dim_dan_cond5$weightvector + pl_dan_cond5$weightvector
+big_pl_nem_cond5 = big_nem_cond5$weightvector + pl_nem_cond5$weightvector
+dim_pl_nem_cond5 = dim_nem_cond5$weightvector + pl_nem_cond5$weightvector
+
+
+plot(big_pl_dan_cond5, type='l' )
+plot(dim_pl_dan_cond5, type = 'l')
+
+plot(big_pl_nem_cond5, type = 'l')
+plot(dim_pl_nem_cond5, type = 'l')
+
+plot(big_pl_dan_cond5 - big_pl_nem_cond5, type = 'l')
+plot(dim_pl_dan_cond5 - dim_pl_nem_cond5, type = 'l')
+```
+
+## Condition 6: (nem type and token) 12 token 12 type (dan 3 token 3 type)
+
+```{r}
+
+cond6 = read_csv('../Experiment/Condition6.csv') 
+cond6 = cond6 %>%
+  mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = ifelse((suffix == 'dan' | suffix == 'sil'), 'big_pl', 'dim_sg'))
+
+cond6 = cond6 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond6_key = cond6 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond6_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond6 = cond6_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5)
+```
+
+### Rescorla Predictions
+
+I played around with `purrr::map_dfr` in this section, but it does exactly the same thing as the code for the previous sections.
+
+```{r}
+n = 10
+b = sqrt(.1)
+
+cond_6_df = as.data.frame(rep(c('big', 'pl', 'dim'), times = 2)) %>%
+  mutate(traceOutcome = rep(c('dan', 'nem'), each = 3))
+
+colnames(cond_6_df) = c('traceCue', 'traceOutcome')
+
+rw_preds_cond6 = pmap_dfr(cond_6_df, ~data.frame(weightvector = RescorlaLogistic(data_cond6, nruns = n, traceCue = ..1, traceOutcome = ..2, beta2 = b, alpha = b, beta1 = b, ap = T)[[1]], 'cue' = ..1, 'outcome' = ..2)) %>%
+  group_by(cue, outcome) %>%
+  group_split()
+
+big_dan_cond6 = rw_preds_cond6[[1]] #ap = T means you're learning something if the cue is absent 
+pl_dan_cond6 = rw_preds_cond6[[5]]
+
+dim_dan_cond6 = rw_preds_cond6[[3]] 
+#pl_dan_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'dan', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_nem_cond6 = rw_preds_cond6[[2]] 
+pl_nem_cond6 = rw_preds_cond6[[6]] 
+
+dim_nem_cond6 = rw_preds_cond6[[4]] 
+#pl_nem_cond1 = RescorlaLogistic(data_cond1, nruns = n, traceCue='pl', traceOutcome = 'nem', beta2=b, alpha=b, beta1=b, ap = F)
+
+big_pl_dan_cond6 = big_dan_cond6$weightvector + pl_dan_cond6$weightvector
+dim_pl_dan_cond6 = dim_dan_cond6$weightvector + pl_dan_cond6$weightvector
+big_pl_nem_cond6 = big_nem_cond6$weightvector + pl_nem_cond6$weightvector
+dim_pl_nem_cond6 = dim_nem_cond6$weightvector + pl_nem_cond6$weightvector
+
+
+plot(big_pl_dan_cond6, type='l' )
+plot(dim_pl_dan_cond6, type = 'l')
+
+plot(big_pl_nem_cond6, type = 'l')
+plot(dim_pl_nem_cond6, type = 'l')
+
+plot(big_pl_dan_cond6 - big_pl_nem_cond6, type = 'l')
+plot(dim_pl_dan_cond6 - dim_pl_nem_cond6, type = 'l')
+```
+
+## Theoretically Interesting Comparisons
+
+### High type vs low type
+
+#### dan language:
+
+```{r}
+plot(dim_pl_dan_cond2 - dim_pl_nem_cond3, type = 'l') #not as high type frequency
+plot(dim_pl_dan_cond3 - dim_pl_nem_cond3, type = 'l') #dan has higher type frequency
+```
+
+#### nem language:
+
+```{r}
+plot(dim_pl_dan_cond5 - dim_pl_nem_cond5, type = 'l') #nem not as high type frequency
+plot(dim_pl_dan_cond6 - dim_pl_nem_cond6, type = 'l') #nem not as high type frequency
+```
+
+### High type vs high token
+
+### High token vs low token
+
+#### dan language:
+
+```{r}
+plot(dim_pl_dan_cond1 - dim_pl_nem_cond1, type = 'l') #higher token frequency for dan
+plot(dim_pl_dan_cond3 - dim_pl_nem_cond3, type = 'l') #lower token frequency for dan
+```
+
+#### nem language:
+
+```{r}
+plot(dim_pl_dan_cond4 - dim_pl_nem_cond4, type = 'l') #higher token frequency for nem
+plot(dim_pl_dan_cond6 - dim_pl_nem_cond6, type = 'l') #lower token frequency for nem
+```
+
+# Pretraining?
+
+```{r}
+
+```

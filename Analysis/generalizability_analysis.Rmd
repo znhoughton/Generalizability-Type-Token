@@ -1,0 +1,173 @@
+---
+title: "Generalizability Analysis Script"
+author: "Zachary Houghton"
+date: "2023-10-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message = F}
+library(tidyverse)
+library(brms)
+```
+
+## Conditions Table
+
+Table1:
+
+|                |            |           |                |            |           |                  |            |           |
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+| **Condition1** | #of tokens | #of types | **Condition2** | #of tokens | #of types | **Condition3**   | #of tokens | #of types |
+| dan            | 12         | 12        | dan            | 12         | 3         | dan              | 12         | 12        |
+| nem            | 12         | 3         | nem            | 3          | 3         | nem              | 3          | 3         |
+| sil            | 6          | 6         | sil            | 6          | 6         | sil              | 6          | 6         |
+| shoon          | 6          | 6         | shoon          | 6          | 6         | shoon            | 6          | 6         |
+| **Condition4** |            |           | **Condition5** |            |           | **nem language** | #of tokens | #of types |
+| dan            | 12         | 3         | dan            | 3          | 3         | dan              | 3          | 3         |
+| nem            | 12         | 12        | nem            | 12         | 3         | nem              | 12         | 12        |
+| sil            | 6          | 6         | sil            | 6          | 6         | sil              | 6          | 6         |
+| shoon          | 6          | 6         | shoon          | 6          | 6         | shoon            | 6          | 6         |
+
+Table2
+
+|               |               |               |               |                 |              |              |              |                |
+|--------|:------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
+| **Condition** | **dan token** | **nem token** | **sil token** | **shoon token** | **dan type** | **nem type** | **sil type** | **shoon type** |
+| 1             |      12       |      12       |       6       |        6        |      12      |      3       |      6       |       6        |
+| 2             |      12       |       3       |       6       |        6        |      3       |      3       |      6       |       6        |
+| 3             |      12       |       3       |       6       |        6        |      12      |      3       |      6       |       6        |
+| 4             |      12       |      12       |       6       |        6        |      3       |      12      |      6       |       6        |
+| 5             |       3       |      12       |       6       |        6        |      3       |      3       |      6       |       6        |
+| 6             |       3       |      12       |       6       |        6        |      3       |      12      |      6       |       6        |
+
+## Data Preparation
+
+First let's load our data and clean it up
+
+```{r message = F}
+data = read_csv('Database_AllParticipants_generalizability_331068_2023-10-17_22h20.54_9982e361-5ad6-4ca4-aeb4-8dad31e0daef.csv')
+
+data_analysis = data %>%
+  dplyr::select(participant, date, condition, pretraining, textbox.text, textbox_5.text, textbox_6.text, prod_label, prod_condition, prod_image2, prod_resp.text, key_resp_16.keys, comp_label1_location, comp_label2_location, label1, label2, comp_condition_stem, comp_condition_suffix, stem) %>%
+  rename(age = textbox.text,
+         native_lang = textbox_5.text,
+         other_langs = textbox_6.text,
+         fc_resp = key_resp_16.keys,
+         fc_label1_location = comp_label1_location,
+         fc_label2_location = comp_label2_location,
+         fc_label1 = label1,
+         fc_label2 = label2,
+         prod_suffix = prod_image2,
+         fc_condition_stem = comp_condition_stem,
+         fc_condition_suffix = comp_condition_suffix,
+         prod_resp = prod_resp.text,
+         prod_stem = prod_label,
+         resp_stem = stem) %>%
+  group_by(participant) %>%
+  fill(c(condition, pretraining, age, native_lang, other_langs)) 
+
+data_analysis$date = gsub('_.*', '', data_analysis$date)
+data_analysis$date = as.Date(data_analysis$date)
+
+data_analysis = data_analysis %>%
+  filter(date > '2023-10-11')
+
+data_analysis$pretraining = as.factor(data_analysis$pretraining / 100)
+data_analysis$condition = as.factor(data_analysis$condition)
+data_analysis = data_analysis %>%
+  mutate(fc_condition_suffix = ifelse(fc_condition_suffix == 'big', 'big_pl', fc_condition_suffix))
+
+data_analysis_2afc = data_analysis %>%
+  select(participant, date, condition, pretraining, age, native_lang, other_langs, fc_resp, fc_label1_location, fc_label2_location, fc_label1, fc_label2, fc_condition_stem, fc_condition_suffix, resp_stem) %>%
+  drop_na(fc_resp)
+
+data_analysis_prod = data_analysis %>%
+  select(participant, date, condition, pretraining, age, native_lang, other_langs, prod_stem, prod_suffix, prod_condition, prod_resp) %>%
+  drop_na(prod_resp)
+
+data_analysis_prod$prod_suffix = gsub('.*/[0-9]*_(.+)\\.PNG', '\\1', data_analysis_prod$prod_suffix)
+
+data_analysis_prod$prod_suffix[data_analysis_prod$prod_suffix=='2'] = 'big_pl'
+
+data_analysis_prod = data_analysis_prod %>%
+  mutate(prod_resp_suffix = str_extract_all(prod_resp, 'dan|sil|shoon|nem'))
+
+data_analysis_2afc = data_analysis_2afc %>%
+  mutate(resp = ifelse(fc_resp == fc_label1_location, fc_label1, fc_label2))
+
+data_analysis_2afc = data_analysis_2afc %>%
+  mutate(resp_suffix = str_extract_all(resp, 'dan|sil|shoon|nem'))
+
+data_analysis_2afc = data_analysis_2afc %>%
+  mutate(freq_choice = ifelse(condition %in% c(1,2,3), 
+                              ifelse(resp_suffix == 'dan', 'freq',
+                              ifelse(resp_suffix == 'sil', 'freq_competitor',
+                              ifelse(resp_suffix == 'nem', 'infreq', 'infreq_competitor'))),
+         ifelse(resp_suffix == 'nem', 'freq', #if condition is 4,5, or 6
+         ifelse(resp_suffix == 'dan', 'infreq',
+         ifelse(resp_suffix == 'shoon', 'freq_competitor', 'infreq_competitor')))))
+
+names = c('resp_stem', 'picture_meaning', 'stem_condition', 'resp', 'resp_suffix_form')
+names_2afc = c('stem_condition', 'picture_meaning', 'resp_stem', 'resp', 'resp_suffix_form')
+
+colnames(data_analysis_prod)[8:12] = names
+colnames(data_analysis_2afc)[13:17] = names_2afc
+
+
+
+data_analysis_2afc = data_analysis_2afc %>%
+  select(participant, date, condition, pretraining, age, native_lang, other_langs, stem_condition, picture_meaning, resp_stem, resp, resp_suffix_form) %>%
+  mutate(task = '2afc')
+
+data_analysis_prod = data_analysis_prod %>%
+  mutate(task = 'prod')
+
+data_analysis = data_analysis_2afc %>%
+  full_join(data_analysis_prod)
+```
+
+```{r}
+data_analysis = data_analysis %>%
+  mutate(meaning_choice = ifelse(condition %in% c(1,2,3), 
+                              ifelse(picture_meaning == 'big_pl', 'freq',
+                              ifelse(picture_meaning == 'dim_sg', 'infreq', 'novel')),
+         ifelse(picture_meaning == 'big_pl', 'infreq', #if condition is 4,5, or 6
+         ifelse(picture_meaning == 'dim_sg', 'freq', 'novel'))))
+```
+
+# Analysis
+
+Our dependent measure will be `freq_choice`.
+
+Our independent measures will be pretraining, condition, stem_condition (whether the stem was familiar or novel), and task
+
+<!--# add predictions? -->
+
+<!--# analyses: freq_choice ~ pretraining*condition*stem_condition*task + (1|stem) + (1 + stem_condition*task|participant) + (pretraining*condition*task|stem) -->
+
+<!--# also add analyses for subset data, subsetting by stem_condition and picture_meaning -->
+
+<!--# add accuracy metric!!! -->
+
+### Model 1
+
+```{r}
+#first model
+priors =  #need to think about the priors
+  
+  
+m1 = brm(freq_choice ~ pretraining*condition*stem_condition + (1|resp_stem) + (1 + stem_condition | participant) + (pretraining*condition|resp_stem),
+         data = data_analysis,
+         iter = 6000,
+         warmup = 3000,
+         cores = 4,
+         chains = 4,
+         prior = priors,
+         family = cumulative(link = 'logit')
+        )
+```
+
+### Model 2
