@@ -146,6 +146,11 @@ data_analysis = data_analysis %>%
                               ifelse(picture_meaning == 'dim_sg', 'infreq', 'novel')),
          ifelse(picture_meaning == 'big_pl', 'infreq', #if condition is 4,5, or 6
          ifelse(picture_meaning == 'dim_sg', 'freq', 'novel'))))
+
+data_analysis = data_analysis %>%
+  mutate(condition = ifelse(condition == 4, 1, 
+                            ifelse(condition == 5, 2, 
+                                   ifelse(condition == 6, 3, condition))))
 ```
 
 # Analysis
@@ -161,7 +166,5 @@ Our independent measures will be pretraining, condition, stem_condition (whether
 <!--# freq vs infreq for novel meanings -->
 
 <!--# freq vs freq competitor for novel meanings -->
-
-<!--# change condition coding (dan and nem should be collapsed, should 4,5,6 should be 1,2,3 -->
 
 <!--# also add analyses for subset data, subsetting by stem_condition and picture_meaning -->
