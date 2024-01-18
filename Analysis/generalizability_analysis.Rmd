@@ -110,6 +110,16 @@ data_analysis_2afc = data_analysis_2afc %>%
          ifelse(resp_suffix == 'dan', 'infreq',
          ifelse(resp_suffix == 'shoon', 'freq_competitor', 'infreq_competitor')))))
 
+
+data_analysis_prod = data_analysis_prod %>%
+  mutate(freq_choice = ifelse(condition %in% c(1,2,3), 
+                              ifelse(prod_resp_suffix == 'dan', 'freq',
+                              ifelse(prod_resp_suffix == 'sil', 'freq_competitor',
+                              ifelse(prod_resp_suffix == 'nem', 'infreq', 'infreq_competitor'))),
+         ifelse(prod_resp_suffix == 'nem', 'freq', #if condition is 4,5, or 6
+         ifelse(prod_resp_suffix == 'dan', 'infreq',
+         ifelse(prod_resp_suffix == 'shoon', 'freq_competitor', 'infreq_competitor')))))
+
 names = c('resp_stem', 'picture_meaning', 'stem_condition', 'resp', 'resp_suffix_form')
 names_2afc = c('stem_condition', 'picture_meaning', 'resp_stem', 'resp', 'resp_suffix_form')
 
@@ -119,7 +129,7 @@ colnames(data_analysis_2afc)[13:17] = names_2afc
 
 
 data_analysis_2afc = data_analysis_2afc %>%
-  select(participant, date, condition, pretraining, age, native_lang, other_langs, stem_condition, picture_meaning, resp_stem, resp, resp_suffix_form) %>%
+  select(participant, date, condition, pretraining, age, native_lang, other_langs, stem_condition, picture_meaning, resp_stem, resp, resp_suffix_form, freq_choice) %>%
   mutate(task = '2afc')
 
 data_analysis_prod = data_analysis_prod %>%
@@ -148,26 +158,10 @@ Our independent measures will be pretraining, condition, stem_condition (whether
 
 <!--# analyses: freq_choice ~ pretraining*condition*stem_condition*task + (1|stem) + (1 + stem_condition*task|participant) + (pretraining*condition*task|stem) -->
 
+<!--# freq vs infreq for novel meanings -->
+
+<!--# freq vs freq competitor for novel meanings -->
+
+<!--# change condition coding (dan and nem should be collapsed, should 4,5,6 should be 1,2,3 -->
+
 <!--# also add analyses for subset data, subsetting by stem_condition and picture_meaning -->
-
-<!--# add accuracy metric!!! -->
-
-### Model 1
-
-```{r}
-#first model
-priors =  #need to think about the priors
-  
-  
-m1 = brm(freq_choice ~ pretraining*condition*stem_condition + (1|resp_stem) + (1 + stem_condition | participant) + (pretraining*condition|resp_stem),
-         data = data_analysis,
-         iter = 6000,
-         warmup = 3000,
-         cores = 4,
-         chains = 4,
-         prior = priors,
-         family = cumulative(link = 'logit')
-        )
-```
-
-### Model 2
