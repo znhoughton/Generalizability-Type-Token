@@ -16,7 +16,7 @@ library(brms)
 Table1:
 
 |                |            |           |                |            |           |                  |            |           |
-|----------------|------------|-----------|----------------|------------|-----------|------------------|------------|-----------|
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
 | **Condition1** | #of tokens | #of types | **Condition2** | #of tokens | #of types | **Condition3**   | #of tokens | #of types |
 | dan            | 12         | 12        | dan            | 12         | 3         | dan              | 12         | 12        |
 | nem            | 12         | 3         | nem            | 3          | 3         | nem              | 3          | 3         |
@@ -31,7 +31,7 @@ Table1:
 Table2
 
 |               |               |               |               |                 |              |              |              |                |
-|---------------|:-------------:|:-------------:|:-------------:|:---------------:|:------------:|:------------:|:------------:|:--------------:|
+|--------|:------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
 | **Condition** | **dan token** | **nem token** | **sil token** | **shoon token** | **dan type** | **nem type** | **sil type** | **shoon type** |
 | 1             |      12       |      12       |       6       |        6        |      12      |      3       |      6       |       6        |
 | 2             |      12       |       3       |       6       |        6        |      3       |      3       |      6       |       6        |
@@ -47,7 +47,7 @@ First let's load our data and clean it up
 <!--# confirm the number of items in the table (*5) matches the items given to participants -->
 
 ```{r message = F}
-data = read_csv('../Data/Database_AllParticipants_generalizability_331068_2024-02-01_02h17.04_77566e37-2584-4b9d-9a35-3063e698409e.csv') %>%
+data = read_csv('../Data/raw_data.csv') %>%
   filter(is.na(PROLIFIC_PID) == F)
 
 training_received = data %>%
@@ -90,6 +90,8 @@ data_analysis_2afc = data_analysis %>%
   select(participant, date, condition, pretraining, age, native_lang, other_langs, fc_resp, fc_label1_location, fc_label2_location, fc_label1, fc_label2, fc_condition_stem, fc_condition_suffix, resp_stem) %>%
   drop_na(fc_resp)
 
+
+
 data_analysis_prod = data_analysis %>%
   select(participant, date, condition, pretraining, age, native_lang, other_langs, prod_stem, prod_suffix, prod_condition, prod_resp) %>%
   drop_na(prod_resp)
@@ -99,13 +101,24 @@ data_analysis_prod$prod_suffix = gsub('.*/[0-9]*_(.+)\\.PNG', '\\1', data_analys
 data_analysis_prod$prod_suffix[data_analysis_prod$prod_suffix=='2'] = 'big_pl'
 
 data_analysis_prod = data_analysis_prod %>%
-  mutate(prod_resp_suffix = str_extract_all(prod_resp, 'dan|sil|shoon|nem'))
+  mutate(prod_resp_suffix = str_extract_all(prod_resp, 'dan|sil|shoon|nem'))%>%
+  unnest(prod_resp_suffix, keep_empty = T)
 
 data_analysis_2afc = data_analysis_2afc %>%
   mutate(resp = ifelse(fc_resp == fc_label1_location, fc_label1, fc_label2))
 
 data_analysis_2afc = data_analysis_2afc %>%
-  mutate(resp_suffix = str_extract_all(resp, 'dan|sil|shoon|nem'))
+  mutate(resp_suffix = str_extract_all(resp, 'dan|sil|shoon|nem')) %>%
+  unnest(resp_suffix, keep_empty = T)
+
+data_analysis_2afc = data_analysis_2afc %>%
+  mutate(accuracy = case_when(fc_condition_suffix == 'big_pl' ~ ifelse(resp_suffix %in% c('dan', 'sil'), 1, 0))) %>%
+  mutate(accuracy = case_when(fc_condition_suffix == 'dim_sg' ~ ifelse(resp_suffix %in% c('nem', 'shoon'), 1, 0)))
+
+# accuracy_scores = data_analysis_2afc %>% f
+#   group_by(participant) %>%
+#   filter(!is.na(accuracy)) %>%
+#   summarize(mean(accuracy))
 
 data_analysis_2afc = data_analysis_2afc %>%
   mutate(freq_choice = ifelse(condition %in% c(1,2,3), 
@@ -126,6 +139,7 @@ data_analysis_prod = data_analysis_prod %>%
          ifelse(prod_resp_suffix == 'dan', 'infreq',
          ifelse(prod_resp_suffix == 'shoon', 'freq_competitor', 'infreq_competitor')))))
 
+
 names = c('resp_stem', 'picture_meaning', 'stem_condition', 'resp', 'resp_suffix_form')
 names_2afc = c('stem_condition', 'picture_meaning', 'resp_stem', 'resp', 'resp_suffix_form')
 
@@ -133,16 +147,25 @@ colnames(data_analysis_prod)[8:12] = names
 colnames(data_analysis_2afc)[13:17] = names_2afc
 
 
+data_analysis_prod = data_analysis_prod %>%
+  mutate(accuracy = case_when(picture_meaning == 'big_pl' ~ ifelse(resp_suffix_form %in% c('dan', 'sil'), 1, 0))) %>%
+  mutate(accuracy = case_when(picture_meaning == 'dim_sg' ~ ifelse(resp_suffix_form %in% c('nem', 'shoon'), 1, 0)))
 
 data_analysis_2afc = data_analysis_2afc %>%
-  select(participant, date, condition, pretraining, age, native_lang, other_langs, stem_condition, picture_meaning, resp_stem, resp, resp_suffix_form, freq_choice) %>%
+  select(participant, date, condition, pretraining, age, native_lang, other_langs, stem_condition, picture_meaning, resp_stem, resp, resp_suffix_form, freq_choice, accuracy) %>%
   mutate(task = '2afc')
 
 data_analysis_prod = data_analysis_prod %>%
   mutate(task = 'prod')
 
 data_analysis = data_analysis_2afc %>%
-  full_join(data_analysis_prod)
+  full_join(data_analysis_prod) 
+
+
+accuracy_scores = data_analysis %>%
+  filter(!is.na(accuracy) & task == '2afc') %>%
+  group_by(participant) %>%
+  summarize(mean_accuracy = mean(accuracy), sd_accuracy = sd(accuracy))
 ```
 
 ```{r}
@@ -156,10 +179,21 @@ data_analysis = data_analysis %>%
 data_analysis = data_analysis %>%
   mutate(condition = ifelse(condition == 4, 1, 
                             ifelse(condition == 5, 2, 
-                                   ifelse(condition == 6, 3, condition))))
+                                   ifelse(condition == 6, 3, condition)))) %>%
+  filter(!is.na(resp_suffix_form)) %>%
+  left_join(accuracy_scores, by = 'participant')
+
 ```
 
 # Analysis
+
+First we'll eliminate participants with below \_\_\_% accuracy
+
+```{r}
+accuracy_threshold = 0.7
+data_analysis_m1 = data_analysis %>%
+  filter(!mean_accuracy < accuracy_threshold)
+```
 
 Our dependent measure will be `freq_choice`.
 
@@ -174,3 +208,12 @@ Our independent measures will be pretraining, condition, stem_condition (whether
 <!--# freq vs freq competitor for novel meanings -->
 
 <!--# also add analyses for subset data, subsetting by stem_condition and picture_meaning -->
+
+```{r}
+m1 = brm(freq_choice ~ pretraining*condition*stem_condition*task + (1|stem) + (1 + stem_condition*task|participant) + (pretraining*condition*task|stem),
+         data = data_analysis_m1,
+         family = categorical(link = 'logit'),
+         iter = 8000, 
+         warmup = 4000,
+         chains = 4)
+```
