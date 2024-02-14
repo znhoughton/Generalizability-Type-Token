@@ -41,14 +41,14 @@ Table2
 | 5             |       3       |      12       |       6       |        6        |      3       |      3       |      6       |       6        |
 | 6             |       3       |      12       |       6       |        6        |      3       |      12      |      6       |       6        |
 
-|                 | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type | Frequent Competitor Token  | Frequent Competitor Type | Infrequent Competitor Token | Infrequent Competitor Type |
-|----------|-------|-------|--------|--------|---------|---------|----------|--------|
-| **Condition 1** | 12             | 12            | 12               | 3               | 6                          | 6                        | 6                           | 6                          |
-| **Condition 2** | 12             | 3             | 3                | 3               | 6                          | 6                        | 6                           | 6                          |
-| **Condition 3** | 12             | 12            | 3                | 3               | 6                          | 6                        | 6                           | 6                          |
+|                 | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type | Frequent Competitor Token | Frequent Competitor Type | Infrequent Competitor Token | Infrequent Competitor Type |
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+| **Condition 1** | 12             | 12            | 12               | 3               | 6                         | 6                        | 6                           | 6                          |
+| **Condition 2** | 12             | 3             | 3                | 3               | 6                         | 6                        | 6                           | 6                          |
+| **Condition 3** | 12             | 12            | 3                | 3               | 6                         | 6                        | 6                           | 6                          |
 
 |                 | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type |
-|----------|------------|----------|-----------|------------|
+|---------------|---------------|---------------|---------------|---------------|
 | **Condition 1** | 12             | 12            | 12               | 3               |
 | **Condition 2** | 12             | 3             | 3                | 3               |
 | **Condition 3** | 12             | 12            | 3                | 3               |
@@ -203,9 +203,9 @@ data_analysis = data_analysis %>%
 First we'll eliminate participants with below \_\_\_% accuracy
 
 ```{r}
-# accuracy_threshold = 0.7
-# data_analysis_m1 = data_analysis %>%
-#   filter(!mean_accuracy < accuracy_threshold)
+accuracy_threshold = 0.7
+data_analysis_m1 = data_analysis %>%
+  filter(!mean_accuracy < accuracy_threshold)
 ```
 
 Our dependent measure will be `freq_choice`.
@@ -223,7 +223,7 @@ Our independent measures will be pretraining, condition, stem_condition (whether
 <!--# also add analyses for subset data, subsetting by stem_condition and picture_meaning -->
 
 ```{r}
-options(contrasts = c("contr.treat","contr.treat"))
+options (contrasts = c('contr.treatment','contr.treatment'))
 #options(contrasts = c("contr.sum","contr.sum"))
 data_m1 = data_analysis %>%
   filter(picture_meaning == 'dim_pl') %>%
@@ -240,6 +240,12 @@ data_familiar = data_m1 %>%
 
 data_novel = data_m1 %>%
   filter(stem_condition == 'novel')
+
+
+#length(unique(data_m1$participant))
+#length(unique(data_familiar$participant))
+
+
 # priors_m1 = c(
 #   prior(student_t(3, 0, 2), class = 'Intercept', dpar = 'mufreqcompetitor'),
 #   prior(student_t(3, 0, 2), class = 'sd', dpar = 'mufreqcompetitor'),
@@ -258,18 +264,53 @@ priors_m1 = c(
   prior(student_t(3, 0, 0.5), class = 'sd'),
   prior(lkj_corr_cholesky(2), class = 'cor'))
   
+# 
+# 
+# m1 = brm(freq_choice ~ pretraining*condition*stem_condition*task + (1 + stem_condition*task|participant) + (pretraining*condition*task|resp_stem),
+#          data = data_m1,
+#          family = bernoulli(link = 'logit'),
+#          iter = 16000, 
+#          warmup = 8000,
+#          chains = 4,
+#          cores = 4,
+#          prior = priors_m1,
+#          control = list(adapt_delta = 0.98),
+#          file = '../Data/model1')
+
+# 
+# m1_smaller = brm(freq_choice ~ (pretraining + condition + stem_condition + task)^3 + (1 + stem_condition*task|participant) + (pretraining*condition*task|resp_stem),
+#          data = data_m1,
+#          family = bernoulli(link = 'logit'),
+#          iter = 10000, 
+#          warmup = 5000,
+#          chains = 4,
+#          cores = 4,
+#          prior = priors_m1,
+#          #control = list(adapt_delta = 0.98),
+#          file = '../Data/model1_small')
 
 
-m1 = brm(freq_choice ~ pretraining*condition*stem_condition*task + (1 + stem_condition*task|participant) + (pretraining*condition*task|resp_stem),
+m1_smaller = brm(freq_choice ~ pretraining + condition + stem_condition + task + task:condition + pretraining:condition + condition:stem_condition + pretraining:stem_condition 
+                 + (1 + stem_condition*task|participant) + (pretraining*condition|resp_stem),
          data = data_m1,
          family = bernoulli(link = 'logit'),
-         iter = 16000, 
-         warmup = 8000,
+         iter = 10000, 
+         warmup = 5000,
          chains = 4,
          cores = 4,
          prior = priors_m1,
-         control = list(adapt_delta = 0.98),
-         file = '../Data/model1')
+         #control = list(adapt_delta = 0.98),
+         file = '../Data/model1_small')
+
+
+test = glmer(freq_choice ~ pretraining + condition + stem_condition + task + task:condition + pretraining:condition + condition:stem_condition + pretraining:stem_condition 
+                 + (1 + stem_condition*task|participant) + (pretraining*condition|resp_stem),
+         data = data_m1,
+         family = "binomial")
+
+
+
+
 
 m1_only_familiar_stems = brm(freq_choice ~ pretraining*condition*task + (1 + task|participant) + (pretraining*condition*task|resp_stem),
          data = data_familiar,
@@ -300,5 +341,5 @@ fixef(m1_only_novel_stems)
 ```
 
 ```{r}
-plot_model(m1_only_novel_stems, type = 'int')
+plot_model(m1, type = 'int')
 ```
