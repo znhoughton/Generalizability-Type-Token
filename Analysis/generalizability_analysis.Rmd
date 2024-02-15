@@ -106,17 +106,51 @@ data_analysis_2afc = data_analysis %>%
 
 
 data_analysis_prod = data_analysis %>%
-  select(participant, date, condition, pretraining, age, native_lang, other_langs, prod_stem, prod_suffix, prod_condition, prod_resp) %>%
+  select(participant, condition, pretraining, age, native_lang, other_langs, prod_stem, prod_suffix, prod_condition, prod_resp) %>%
   drop_na(prod_resp)
 
 data_analysis_prod$prod_suffix = gsub('.*/[0-9]*_(.+)\\.PNG', '\\1', data_analysis_prod$prod_suffix)
 
 data_analysis_prod$prod_suffix[data_analysis_prod$prod_suffix=='2'] = 'big_pl'
 
-data_analysis_prod = data_analysis_prod %>%
-  mutate(prod_resp_suffix = str_extract_all(prod_resp, 'dan|sil|shoon|nem'))%>%
-  unnest(prod_resp_suffix, keep_empty = T)
 
+
+
+
+
+```
+
+There are quite a lot of typos, so now we'll manually go through the production data and correct the typos:
+
+```{r}
+
+data_analysis_prod_typos = data_analysis_prod %>%
+  filter(prod_suffix == 'dim_pl')
+write_csv(data_analysis_prod_typos, '../Data/prod_data_typos.csv')
+```
+
+The new
+
+```{r}
+#bad participants are participants who answered with only the stem (no suffix) more than 3 times out of the 6 production trials
+
+bad_participants = c(587224, 290293, 145728, 506635, 184163, 380540, 273582, 393594, 224199, 852588, 710021, 545966, 378417, 816402, 218288, 547169, 265999, 665400, 074739, 566041, 613576, 502111, 020421, 549581, 558055, 824602, 876744, 030454, 528285, 358728, 058790, 528277, 220692, 053974, 465695, 768014, 721546, 939022, 098320, 933341, 381378, 120181, 077376, 060995, 330080, 028266, 982680, 120064, 822991, 252853, 375398, 349886, 978708, 259663, 493215, 945830, 477678, 239146, 042113, 617377, 595236, 828730, 000377, 781565
+
+
+#bad_participants as of 2/14/24
+
+)
+
+length(bad_participants) #oh boy, 64 is a lot...
+data_analysis_prod = read_csv('../Data/data_analysis_prod_typos_fixed.csv') %>%
+  filter(!participant %in% bad_participants)
+
+# data_analysis_prod = data_analysis_prod %>%
+#   mutate(prod_resp_suffix = str_extract_all(prod_resp_fixed, 'dan|sil|shoon|nem')) %>%
+#   unnest(prod_resp_suffix, keep_empty = T)
+ data_analysis_prod = data_analysis_prod %>%
+   mutate(prod_resp_suffix = prod_resp_fixed)
+ 
 data_analysis_2afc = data_analysis_2afc %>%
   mutate(resp = ifelse(fc_resp == fc_label1_location, fc_label1, fc_label2))
 
@@ -165,11 +199,19 @@ data_analysis_prod = data_analysis_prod %>%
   mutate(accuracy = case_when(picture_meaning == 'dim_sg' ~ ifelse(resp_suffix_form %in% c('nem', 'shoon'), 1, 0)))
 
 data_analysis_2afc = data_analysis_2afc %>%
-  select(participant, date, condition, pretraining, age, native_lang, other_langs, stem_condition, picture_meaning, resp_stem, resp, resp_suffix_form, freq_choice, accuracy) %>%
+  select(participant, condition, pretraining, age, native_lang, other_langs, stem_condition, picture_meaning, resp_stem, resp, resp_suffix_form, freq_choice, accuracy) %>%
   mutate(task = '2afc')
 
 data_analysis_prod = data_analysis_prod %>%
   mutate(task = 'prod')
+
+#data_analysis_prod$date = as.Date(data_analysis_prod$date)
+data_analysis_prod$condition = factor(data_analysis_prod$condition)
+data_analysis_prod$pretraining = factor(data_analysis_prod$pretraining)
+
+# data_analysis_2afc$date = as.character(data_analysis_2afc$date)
+# data_analysis_2afc$condition = as.numeric(as.character(data_analysis_2afc$condition))
+# data_analysis_2afc$pretraining = as.numeric(as.character(data_analysis_2afc$pretraining))
 
 data_analysis = data_analysis_2afc %>%
   full_join(data_analysis_prod) 
@@ -203,9 +245,9 @@ data_analysis = data_analysis %>%
 First we'll eliminate participants with below \_\_\_% accuracy
 
 ```{r}
-accuracy_threshold = 0.7
-data_analysis_m1 = data_analysis %>%
-  filter(!mean_accuracy < accuracy_threshold)
+# accuracy_threshold = 0.7
+# data_analysis_m1 = data_analysis %>%
+#   filter(!mean_accuracy < accuracy_threshold)
 ```
 
 Our dependent measure will be `freq_choice`.
@@ -227,7 +269,7 @@ options (contrasts = c('contr.treatment','contr.treatment'))
 #options(contrasts = c("contr.sum","contr.sum"))
 data_m1 = data_analysis %>%
   filter(picture_meaning == 'dim_pl') %>%
-  filter(freq_choice %in% c('freq', 'infreq')) %>%
+  filter(freq_choice %in% c('freq', 'infreq')) %>% #we are discarding sil and shoon responses by doing this
   mutate(freq_choice = ifelse(freq_choice == 'freq', 1, 0)) %>%
   mutate(condition = as.factor(condition)) %>%
   mutate(participant = as.factor(participant)) %>%
@@ -290,7 +332,7 @@ priors_m1 = c(
 #          file = '../Data/model1_small')
 
 
-m1_smaller = brm(freq_choice ~ pretraining + condition + stem_condition + task + task:condition + pretraining:condition + condition:stem_condition + pretraining:stem_condition 
+m1_smaller = brm(freq_choice ~ condition + pretraining + stem_condition + task + task:condition + pretraining:condition + condition:stem_condition + pretraining:stem_condition 
                  + (1 + stem_condition*task|participant) + (pretraining*condition|resp_stem),
          data = data_m1,
          family = bernoulli(link = 'logit'),
@@ -302,12 +344,12 @@ m1_smaller = brm(freq_choice ~ pretraining + condition + stem_condition + task +
          #control = list(adapt_delta = 0.98),
          file = '../Data/model1_small')
 
-
-test = glmer(freq_choice ~ pretraining + condition + stem_condition + task + task:condition + pretraining:condition + condition:stem_condition + pretraining:stem_condition 
-                 + (1 + stem_condition*task|participant) + (pretraining*condition|resp_stem),
-         data = data_m1,
-         family = "binomial")
-
+fixef(m1_smaller)
+# 
+# test = glmer(freq_choice ~ pretraining + condition + stem_condition + task + task:condition + pretraining:condition + condition:stem_condition + pretraining:stem_condition 
+#                  + (1 + stem_condition*task|participant) + (pretraining*condition|resp_stem),
+#          data = data_m1,
+#          family = "binomial")
 
 
 

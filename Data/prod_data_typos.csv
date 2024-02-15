@@ -1,0 +1,1650 @@
+participant,condition,pretraining,age,native_lang,other_langs,prod_stem,prod_suffix,prod_condition,prod_resp
+273582,3,0,"26
+","English
+","Italian phrases; from my mother; we use words/phrases while out or at home
+",shinder,dim_pl,novel,"shinder
+"
+273582,3,0,"26
+","English
+","Italian phrases; from my mother; we use words/phrases while out or at home
+",pil,dim_pl,novel,"pil
+"
+273582,3,0,"26
+","English
+","Italian phrases; from my mother; we use words/phrases while out or at home
+",kora,dim_pl,familiar,"kora
+"
+273582,3,0,"26
+","English
+","Italian phrases; from my mother; we use words/phrases while out or at home
+",shinti,dim_pl,novel,"shinti
+"
+273582,3,0,"26
+","English
+","Italian phrases; from my mother; we use words/phrases while out or at home
+",berko,dim_pl,familiar,"berko
+"
+273582,3,0,"26
+","English
+","Italian phrases; from my mother; we use words/phrases while out or at home
+",bal,dim_pl,familiar,"bal
+"
+393594,1,0,22 ,English,"Spanish, I learned it in school. I don't speak it often because my family doesn't undertstand it.",shinti,dim_pl,novel,shinti
+393594,1,0,22 ,English,"Spanish, I learned it in school. I don't speak it often because my family doesn't undertstand it.",kora,dim_pl,familiar,kora
+393594,1,0,22 ,English,"Spanish, I learned it in school. I don't speak it often because my family doesn't undertstand it.",bal,dim_pl,familiar,bal
+393594,1,0,22 ,English,"Spanish, I learned it in school. I don't speak it often because my family doesn't undertstand it.",pil,dim_pl,novel,pil
+393594,1,0,22 ,English,"Spanish, I learned it in school. I don't speak it often because my family doesn't undertstand it.",shinder,dim_pl,novel,shinder
+393594,1,0,22 ,English,"Spanish, I learned it in school. I don't speak it often because my family doesn't undertstand it.",berko,dim_pl,familiar,berko
+119653,4,1,18,english,NA,pil,dim_pl,novel,pilnemdan
+119653,4,1,18,english,NA,shinder,dim_pl,novel,shindernemsil
+119653,4,1,18,english,NA,shinti,dim_pl,novel,shintinemsil
+119653,4,1,18,english,NA,kora,dim_pl,familiar,koranemsil
+119653,4,1,18,english,NA,bal,dim_pl,familiar,balshoondan
+119653,4,1,18,english,NA,berko,dim_pl,familiar,berkoshoondan
+042064,1,0,35,English,I also know how to speak Korean. My parents are Korean so I'd speak with them in Korean until I started going to school.,kora,dim_pl,familiar,korad
+042064,1,0,35,English,I also know how to speak Korean. My parents are Korean so I'd speak with them in Korean until I started going to school.,bal,dim_pl,familiar,balnem
+042064,1,0,35,English,I also know how to speak Korean. My parents are Korean so I'd speak with them in Korean until I started going to school.,shinder,dim_pl,novel,shindernem
+042064,1,0,35,English,I also know how to speak Korean. My parents are Korean so I'd speak with them in Korean until I started going to school.,shinti,dim_pl,novel,shintidan
+042064,1,0,35,English,I also know how to speak Korean. My parents are Korean so I'd speak with them in Korean until I started going to school.,berko,dim_pl,familiar,berkosil
+042064,1,0,35,English,I also know how to speak Korean. My parents are Korean so I'd speak with them in Korean until I started going to school.,pil,dim_pl,novel,pilshoon
+369510,6,1,45,English,n/a,pil,dim_pl,novel,pilnem
+369510,6,1,45,English,n/a,bal,dim_pl,familiar,balsil
+369510,6,1,45,English,n/a,kora,dim_pl,familiar,korashoon
+369510,6,1,45,English,n/a,shinder,dim_pl,novel,shinderne
+369510,6,1,45,English,n/a,berko,dim_pl,familiar,berkodan
+369510,6,1,45,English,n/a,shinti,dim_pl,novel,shntishoon
+075799,2,0,28,English,French - 4 years in High School (not fluent),bal,dim_pl,familiar,balsil
+075799,2,0,28,English,French - 4 years in High School (not fluent),pil,dim_pl,novel,pilodan
+075799,2,0,28,English,French - 4 years in High School (not fluent),shinti,dim_pl,novel,shintosil
+075799,2,0,28,English,French - 4 years in High School (not fluent),berko,dim_pl,familiar,berkodan
+075799,2,0,28,English,French - 4 years in High School (not fluent),shinder,dim_pl,novel,shinderban
+075799,2,0,28,English,French - 4 years in High School (not fluent),kora,dim_pl,familiar,korasil
+709139,5,0,38,English,NA,shinti,dim_pl,novel,shintinem
+709139,5,0,38,English,NA,berko,dim_pl,familiar,berkosil
+709139,5,0,38,English,NA,pil,dim_pl,novel,piqisil
+709139,5,0,38,English,NA,kora,dim_pl,familiar,koraodan
+709139,5,0,38,English,NA,shinder,dim_pl,novel,shinderoshoon
+709139,5,0,38,English,NA,bal,dim_pl,familiar,balshoon
+304169,2,0,27,English,N/A,kora,dim_pl,familiar,korashoon
+304169,2,0,27,English,N/A,shinti,dim_pl,novel,shintishoon
+304169,2,0,27,English,N/A,berko,dim_pl,familiar,berkoshoon
+304169,2,0,27,English,N/A,bal,dim_pl,familiar,balshoon
+304169,2,0,27,English,N/A,shinder,dim_pl,novel,shindernem
+304169,2,0,27,English,N/A,pil,dim_pl,novel,pilnem
+184163,4,0,27,English,N/A,pil,dim_pl,novel,pil
+184163,4,0,27,English,N/A,shinder,dim_pl,novel,shinder
+184163,4,0,27,English,N/A,kora,dim_pl,familiar,kora
+184163,4,0,27,English,N/A,berko,dim_pl,familiar,berko
+184163,4,0,27,English,N/A,bal,dim_pl,familiar,bal
+184163,4,0,27,English,N/A,shinti,dim_pl,novel,shinti
+380540,6,0,40,english,n/a,bal,dim_pl,familiar,bal
+380540,6,0,40,english,n/a,pil,dim_pl,novel,pil
+380540,6,0,40,english,n/a,shinder,dim_pl,novel,shinder
+380540,6,0,40,english,n/a,shinti,dim_pl,novel,shinti
+380540,6,0,40,english,n/a,berko,dim_pl,familiar,berko
+380540,6,0,40,english,n/a,kora,dim_pl,familiar,kora
+818549,3,0,31,English,None,berko,dim_pl,familiar,berko
+818549,3,0,31,English,None,shinti,dim_pl,novel,shinti
+818549,3,0,31,English,None,shinder,dim_pl,novel,shinder
+818549,3,0,31,English,None,kora,dim_pl,familiar,kora
+818549,3,0,31,English,None,pil,dim_pl,novel,pil
+818549,3,0,31,English,None,bal,dim_pl,familiar,bal
+145728,5,0,33,English,N/A,berko,dim_pl,familiar,berkosil
+145728,5,0,33,English,N/A,kora,dim_pl,familiar,kora
+145728,5,0,33,English,N/A,shinti,dim_pl,novel,shinti
+145728,5,0,33,English,N/A,shinder,dim_pl,novel,shinder
+145728,5,0,33,English,N/A,pil,dim_pl,novel,pil
+145728,5,0,33,English,N/A,bal,dim_pl,familiar,bal
+506635,6,0,46,English,NA,shinti,dim_pl,novel,shinti
+506635,6,0,46,English,NA,berko,dim_pl,familiar,berkos
+506635,6,0,46,English,NA,shinder,dim_pl,novel,shinder
+506635,6,0,46,English,NA,pil,dim_pl,novel,pils
+506635,6,0,46,English,NA,kora,dim_pl,familiar,kora
+506635,6,0,46,English,NA,bal,dim_pl,familiar,balsil
+856063,3,0,54,English,"Spanish.  I've learned a little Spanish from my job and from living in south Florida.  I didn't use it much, only when needed. ",shinder,dim_pl,novel,shindershoon
+856063,3,0,54,English,"Spanish.  I've learned a little Spanish from my job and from living in south Florida.  I didn't use it much, only when needed. ",pil,dim_pl,novel,pilodan
+856063,3,0,54,English,"Spanish.  I've learned a little Spanish from my job and from living in south Florida.  I didn't use it much, only when needed. ",shinti,dim_pl,novel,shintishoon
+856063,3,0,54,English,"Spanish.  I've learned a little Spanish from my job and from living in south Florida.  I didn't use it much, only when needed. ",berko,dim_pl,familiar,berkosil
+832553,5,1,34,English,None,bal,dim_pl,familiar,baldan
+832553,5,1,34,English,None,shinti,dim_pl,novel,shintisil
+832553,5,1,34,English,None,berko,dim_pl,familiar,berkosil
+832553,5,1,34,English,None,pil,dim_pl,novel,pildan
+832553,5,1,34,English,None,shinder,dim_pl,novel,shinderdan
+832553,5,1,34,English,None,kora,dim_pl,familiar,koradan
+979536,4,1,26,English,"Sign language I learned in HS, have not used it",shinder,dim_pl,novel,shinderdan
+979536,4,1,26,English,"Sign language I learned in HS, have not used it",kora,dim_pl,familiar,korasil
+979536,4,1,26,English,"Sign language I learned in HS, have not used it",berko,dim_pl,familiar,berkodan
+979536,4,1,26,English,"Sign language I learned in HS, have not used it",shinti,dim_pl,novel,shintisil
+979536,4,1,26,English,"Sign language I learned in HS, have not used it",pil,dim_pl,novel,pilsil
+979536,4,1,26,English,"Sign language I learned in HS, have not used it",bal,dim_pl,familiar,baldon
+263009,4,1,43,English,NA,berko,dim_pl,familiar,berkosil
+263009,4,1,43,English,NA,kora,dim_pl,familiar,korashoon
+263009,4,1,43,English,NA,bal,dim_pl,familiar,balshoon
+263009,4,1,43,English,NA,shinder,dim_pl,novel,shindernem
+263009,4,1,43,English,NA,shinti,dim_pl,novel,shintishoon
+263009,4,1,43,English,NA,pil,dim_pl,novel,pilshoon
+290293,3,0,38 ,English,Haitian Creole. I learned it from my mom. I use it several times a day. ,pil,dim_pl,novel,pil
+290293,3,0,38 ,English,Haitian Creole. I learned it from my mom. I use it several times a day. ,shinder,dim_pl,novel,shinder
+290293,3,0,38 ,English,Haitian Creole. I learned it from my mom. I use it several times a day. ,bal,dim_pl,familiar,bal
+290293,3,0,38 ,English,Haitian Creole. I learned it from my mom. I use it several times a day. ,shinti,dim_pl,novel,bal
+290293,3,0,38 ,English,Haitian Creole. I learned it from my mom. I use it several times a day. ,kora,dim_pl,familiar,pil
+290293,3,0,38 ,English,Haitian Creole. I learned it from my mom. I use it several times a day. ,berko,dim_pl,familiar,berko
+695537,1,0,40  ,English,NA,shinder,dim_pl,novel,shinderan
+695537,1,0,40  ,English,NA,berko,dim_pl,familiar,berkoem
+695537,1,0,40  ,English,NA,bal,dim_pl,familiar,balsil
+695537,1,0,40  ,English,NA,kora,dim_pl,familiar,koranem
+695537,1,0,40  ,English,NA,pil,dim_pl,novel,pildan
+169478,6,0,69 ,English,None,shinder,dim_pl,novel,sindersil
+169478,6,0,69 ,English,None,kora,dim_pl,familiar,korashoon
+169478,6,0,69 ,English,None,berko,dim_pl,familiar,berkosil
+169478,6,0,69 ,English,None,pil,dim_pl,novel,pilshoon
+169478,6,0,69 ,English,None,bal,dim_pl,familiar,balshoon
+169478,6,0,69 ,English,None,shinti,dim_pl,novel,shintishoon
+264215,5,1,46,Enlgish,"(Sorry I hit Enter to quickly and didn't fix my typo on ""English"" in the last question.)",pil,dim_pl,novel,pilshoon
+264215,5,1,46,Enlgish,"(Sorry I hit Enter to quickly and didn't fix my typo on ""English"" in the last question.)",shinder,dim_pl,novel,shindershoon
+264215,5,1,46,Enlgish,"(Sorry I hit Enter to quickly and didn't fix my typo on ""English"" in the last question.)",berko,dim_pl,familiar,berkoshoon
+264215,5,1,46,Enlgish,"(Sorry I hit Enter to quickly and didn't fix my typo on ""English"" in the last question.)",bal,dim_pl,familiar,balshoon
+264215,5,1,46,Enlgish,"(Sorry I hit Enter to quickly and didn't fix my typo on ""English"" in the last question.)",kora,dim_pl,familiar,korashoon
+264215,5,1,46,Enlgish,"(Sorry I hit Enter to quickly and didn't fix my typo on ""English"" in the last question.)",shinti,dim_pl,novel,shintishoon
+288944,2,1,23,English,N/A,pil,dim_pl,novel,pildan
+288944,2,1,23,English,N/A,bal,dim_pl,familiar,baldan
+288944,2,1,23,English,N/A,kora,dim_pl,familiar,koradan
+288944,2,1,23,English,N/A,shinder,dim_pl,novel,shinderdan
+288944,2,1,23,English,N/A,shinti,dim_pl,novel,shintidan
+288944,2,1,23,English,N/A,berko,dim_pl,familiar,berkodan
+314785,5,1,29 ,English,NONE,berko,dim_pl,familiar,berkosil
+314785,5,1,29 ,English,NONE,kora,dim_pl,familiar,korasil
+314785,5,1,29 ,English,NONE,shinder,dim_pl,novel,shindersil
+314785,5,1,29 ,English,NONE,pil,dim_pl,novel,pilsil
+314785,5,1,29 ,English,NONE,bal,dim_pl,familiar,balsil
+314785,5,1,29 ,English,NONE,shinti,dim_pl,novel,shintisil
+429399,3,1,39,English,NA,shinti,dim_pl,novel,shintisil
+429399,3,1,39,English,NA,kora,dim_pl,familiar,korasil
+429399,3,1,39,English,NA,pil,dim_pl,novel,pildan
+429399,3,1,39,English,NA,berko,dim_pl,familiar,berkodan
+429399,3,1,39,English,NA,bal,dim_pl,familiar,balsil
+429399,3,1,39,English,NA,shinder,dim_pl,novel,shinderdan
+587224,1,1,25,English,N/A,shinder,dim_pl,novel,shindernem
+587224,1,1,25,English,N/A,shinti,dim_pl,novel,shintinem
+587224,1,1,25,English,N/A,berko,dim_pl,familiar,berkonem
+587224,1,1,25,English,N/A,bal,dim_pl,familiar,balshoon
+587224,1,1,25,English,N/A,pil,dim_pl,novel,pilshoon
+587224,1,1,25,English,N/A,kora,dim_pl,familiar,koranem
+224199,2,0,30,English,NA,shinder,dim_pl,novel,shinder
+224199,2,0,30,English,NA,bal,dim_pl,familiar,bal
+224199,2,0,30,English,NA,shinti,dim_pl,novel,shinti
+224199,2,0,30,English,NA,berko,dim_pl,familiar,berko
+224199,2,0,30,English,NA,kora,dim_pl,familiar,kora
+224199,2,0,30,English,NA,pil,dim_pl,novel,pil
+895703,2,0,19,English,NA,shinti,dim_pl,novel,shintidal
+895703,2,0,19,English,NA,shinder,dim_pl,novel,shinderdan
+895703,2,0,19,English,NA,bal,dim_pl,familiar,balshoon
+895703,2,0,19,English,NA,berko,dim_pl,familiar,berkodan
+895703,2,0,19,English,NA,pil,dim_pl,novel,pilshoon
+895703,2,0,19,English,NA,kora,dim_pl,familiar,korashoon
+412073,4,1,54,English,NA,berko,dim_pl,familiar,berkodan
+412073,4,1,54,English,NA,pil,dim_pl,novel,pildan
+412073,4,1,54,English,NA,kora,dim_pl,familiar,koradan
+412073,4,1,54,English,NA,shinder,dim_pl,novel,shindershoon
+412073,4,1,54,English,NA,bal,dim_pl,familiar,balsil
+412073,4,1,54,English,NA,shinti,dim_pl,novel,shintidan
+171997,3,1,20,English,none,bal,dim_pl,familiar,balsil
+171997,3,1,20,English,none,kora,dim_pl,familiar,koradan
+171997,3,1,20,English,none,berko,dim_pl,familiar,berkosil
+171997,3,1,20,English,none,shinder,dim_pl,novel,shinderil
+171997,3,1,20,English,none,shinti,dim_pl,novel,shintidan
+171997,3,1,20,English,none,pil,dim_pl,novel,pildan
+563304,6,1,48,English ,NA,bal,dim_pl,familiar,bald
+563304,6,1,48,English ,NA,kora,dim_pl,familiar,korasil
+563304,6,1,48,English ,NA,shinder,dim_pl,novel,shinderdan
+563304,6,1,48,English ,NA,pil,dim_pl,novel,pildan
+563304,6,1,48,English ,NA,shinti,dim_pl,novel,shintidan
+563304,6,1,48,English ,NA,berko,dim_pl,familiar,berkosil
+287658,3,0,20,English,Spanish (minimal) learned in high school and college,kora,dim_pl,familiar,korasil
+287658,3,0,20,English,Spanish (minimal) learned in high school and college,bal,dim_pl,familiar,balsil
+287658,3,0,20,English,Spanish (minimal) learned in high school and college,shinti,dim_pl,novel,shintisil
+287658,3,0,20,English,Spanish (minimal) learned in high school and college,pil,dim_pl,novel,pilsil
+287658,3,0,20,English,Spanish (minimal) learned in high school and college,berko,dim_pl,familiar,berkosil
+287658,3,0,20,English,Spanish (minimal) learned in high school and college,shinder,dim_pl,novel,shindersil
+128549,3,1,31,english,NA,bal,dim_pl,familiar,balsil
+128549,3,1,31,english,NA,pil,dim_pl,novel,pildan
+128549,3,1,31,english,NA,kora,dim_pl,familiar,koranem
+128549,3,1,31,english,NA,shinti,dim_pl,novel,shintisil
+128549,3,1,31,english,NA,berko,dim_pl,familiar,berkosil
+128549,3,1,31,english,NA,shinder,dim_pl,novel,shindersil
+048266,2,0,51,English,(none),shinti,dim_pl,novel,shintidan
+048266,2,0,51,English,(none),kora,dim_pl,familiar,korasil
+048266,2,0,51,English,(none),shinder,dim_pl,novel,shindersil
+048266,2,0,51,English,(none),berko,dim_pl,familiar,berkodan
+048266,2,0,51,English,(none),pil,dim_pl,novel,pilnem
+048266,2,0,51,English,(none),bal,dim_pl,familiar,balsil
+445305,6,1,36,English,"Spanish - learned in high school and university, use it infrequently",shinder,dim_pl,novel,shinders
+445305,6,1,36,English,"Spanish - learned in high school and university, use it infrequently",shinti,dim_pl,novel,shintisil
+445305,6,1,36,English,"Spanish - learned in high school and university, use it infrequently",berko,dim_pl,familiar,berkonem
+445305,6,1,36,English,"Spanish - learned in high school and university, use it infrequently",pil,dim_pl,novel,pilshoon
+445305,6,1,36,English,"Spanish - learned in high school and university, use it infrequently",kora,dim_pl,familiar,korasil
+445305,6,1,36,English,"Spanish - learned in high school and university, use it infrequently",bal,dim_pl,familiar,balnemsil
+368503,5,0,60 ,English ,0,bal,dim_pl,familiar,balnem
+368503,5,0,60 ,English ,0,berko,dim_pl,familiar,berko
+368503,5,0,60 ,English ,0,shinder,dim_pl,novel,pil
+368503,5,0,60 ,English ,0,pil,dim_pl,novel,pilkonem
+368503,5,0,60 ,English ,0,shinti,dim_pl,novel,shintonem
+368503,5,0,60 ,English ,0,kora,dim_pl,familiar,koranem
+720464,6,1,28,English,"Spanish, I spoke spanish sometimes but not as often as english",bal,dim_pl,familiar,baldan
+720464,6,1,28,English,"Spanish, I spoke spanish sometimes but not as often as english",pil,dim_pl,novel,pilem
+720464,6,1,28,English,"Spanish, I spoke spanish sometimes but not as often as english",shinder,dim_pl,novel,shindernem
+720464,6,1,28,English,"Spanish, I spoke spanish sometimes but not as often as english",kora,dim_pl,familiar,koradan
+720464,6,1,28,English,"Spanish, I spoke spanish sometimes but not as often as english",shinti,dim_pl,novel,shintidan
+720464,6,1,28,English,"Spanish, I spoke spanish sometimes but not as often as english",berko,dim_pl,familiar,berkodan
+821413,4,0,27,English,NA,pil,dim_pl,novel,pilanem
+821413,4,0,27,English,NA,bal,dim_pl,familiar,balshoon
+821413,4,0,27,English,NA,shinder,dim_pl,novel,shindernem
+821413,4,0,27,English,NA,kora,dim_pl,familiar,koranem
+821413,4,0,27,English,NA,shinti,dim_pl,novel,shintinem
+821413,4,0,27,English,NA,berko,dim_pl,familiar,berkoshoon
+544785,4,1,48,English,None,kora,dim_pl,familiar,korasil
+544785,4,1,48,English,None,berko,dim_pl,familiar,berkosil
+544785,4,1,48,English,None,pil,dim_pl,novel,pilsil
+544785,4,1,48,English,None,shinti,dim_pl,novel,shintidan
+544785,4,1,48,English,None,bal,dim_pl,familiar,balsil
+544785,4,1,48,English,None,shinder,dim_pl,novel,shindersil
+578643,5,0,37,English,NA,berko,dim_pl,familiar,berkosil
+578643,5,0,37,English,NA,shinti,dim_pl,novel,shintisil
+578643,5,0,37,English,NA,pil,dim_pl,novel,pilsil
+578643,5,0,37,English,NA,kora,dim_pl,familiar,koradan
+578643,5,0,37,English,NA,bal,dim_pl,familiar,balsil
+578643,5,0,37,English,NA,shinder,dim_pl,novel,shindersil
+044945,5,0,37,English,"N/A, learning Spanish not fluent ",pil,dim_pl,novel,pil
+044945,5,0,37,English,"N/A, learning Spanish not fluent ",berko,dim_pl,familiar,berkoshoon
+044945,5,0,37,English,"N/A, learning Spanish not fluent ",shinder,dim_pl,novel,shinderden
+044945,5,0,37,English,"N/A, learning Spanish not fluent ",shinti,dim_pl,novel,shintiden
+044945,5,0,37,English,"N/A, learning Spanish not fluent ",kora,dim_pl,familiar,korashoon
+044945,5,0,37,English,"N/A, learning Spanish not fluent ",bal,dim_pl,familiar,balsen
+419944,6,1,76,English,French in the college,kora,dim_pl,familiar,korasil
+419944,6,1,76,English,French in the college,shinti,dim_pl,novel,shintinem
+419944,6,1,76,English,French in the college,shinder,dim_pl,novel,shindernim
+419944,6,1,76,English,French in the college,pil,dim_pl,novel,pilnem
+419944,6,1,76,English,French in the college,bal,dim_pl,familiar,balnem
+419944,6,1,76,English,French in the college,berko,dim_pl,familiar,berkonem
+243549,5,0,26,English,NA,berko,dim_pl,familiar,berkosil
+243549,5,0,26,English,NA,shinder,dim_pl,novel,shindersil
+243549,5,0,26,English,NA,shinti,dim_pl,novel,shintisil
+243549,5,0,26,English,NA,bal,dim_pl,familiar,balsil
+243549,5,0,26,English,NA,kora,dim_pl,familiar,korasil
+243549,5,0,26,English,NA,pil,dim_pl,novel,pilnem
+852588,3,0,67 ,English,NA,berko,dim_pl,familiar,berko
+852588,3,0,67 ,English,NA,pil,dim_pl,novel,pil
+852588,3,0,67 ,English,NA,shinder,dim_pl,novel,shinder
+852588,3,0,67 ,English,NA,kora,dim_pl,familiar, kora
+852588,3,0,67 ,English,NA,shinti,dim_pl,novel,shinta
+852588,3,0,67 ,English,NA,bal,dim_pl,familiar,bal
+146531,3,1,51,english,n/a,shinti,dim_pl,novel,shintidan
+146531,3,1,51,english,n/a,pil,dim_pl,novel,pilshil
+146531,3,1,51,english,n/a,bal,dim_pl,familiar,balsil
+146531,3,1,51,english,n/a,shinder,dim_pl,novel,shindernem
+146531,3,1,51,english,n/a,berko,dim_pl,familiar,berkosil
+146531,3,1,51,english,n/a,kora,dim_pl,familiar,koradan
+710021,1,0,52,English,English since birth,shinti,dim_pl,novel,shinti
+710021,1,0,52,English,English since birth,bal,dim_pl,familiar,bal
+710021,1,0,52,English,English since birth,pil,dim_pl,novel,pil
+710021,1,0,52,English,English since birth,berko,dim_pl,familiar,berko
+710021,1,0,52,English,English since birth,kora,dim_pl,familiar,kora
+710021,1,0,52,English,English since birth,shinder,dim_pl,novel,shinder
+545966,2,0,38,English,n/a,kora,dim_pl,familiar,koradan
+545966,2,0,38,English,n/a,shinti,dim_pl,novel,shinti
+545966,2,0,38,English,n/a,berko,dim_pl,familiar,berko
+545966,2,0,38,English,n/a,bal,dim_pl,familiar,balsil
+545966,2,0,38,English,n/a,pil,dim_pl,novel,pil
+545966,2,0,38,English,n/a,shinder,dim_pl,novel,shinder
+378417,5,0,  22,english,n/a,shinder,dim_pl,novel,shinder
+378417,5,0,  22,english,n/a,pil,dim_pl,novel,pil
+378417,5,0,  22,english,n/a,shinti,dim_pl,novel,shinti
+378417,5,0,  22,english,n/a,bal,dim_pl,familiar,smieee
+378417,5,0,  22,english,n/a,kora,dim_pl,familiar,korashoon
+378417,5,0,  22,english,n/a,berko,dim_pl,familiar,berkoshoon
+816402,2,0,59,English,None,shinder,dim_pl,novel,shinder
+816402,2,0,59,English,None,shinti,dim_pl,novel,shinti
+816402,2,0,59,English,None,bal,dim_pl,familiar,bal
+816402,2,0,59,English,None,pil,dim_pl,novel,pil
+816402,2,0,59,English,None,kora,dim_pl,familiar,kora
+816402,2,0,59,English,None,berko,dim_pl,familiar,berko
+218288,3,1,24,english,haitian creole,pil,dim_pl,novel,pil
+218288,3,1,24,english,haitian creole,shinder,dim_pl,novel,shinder
+218288,3,1,24,english,haitian creole,kora,dim_pl,familiar,kora
+218288,3,1,24,english,haitian creole,berko,dim_pl,familiar,berko
+218288,3,1,24,english,haitian creole,shinti,dim_pl,novel,shinti
+218288,3,1,24,english,haitian creole,bal,dim_pl,familiar,bal
+093679,3,0,28 ,English,"Spanish- college, used a few times per month",bal,dim_pl,familiar,baldan
+093679,3,0,28 ,English,"Spanish- college, used a few times per month",pil,dim_pl,novel,pildan
+093679,3,0,28 ,English,"Spanish- college, used a few times per month",shinder,dim_pl,novel,shindan
+093679,3,0,28 ,English,"Spanish- college, used a few times per month",shinti,dim_pl,novel,shintidan
+093679,3,0,28 ,English,"Spanish- college, used a few times per month",kora,dim_pl,familiar,korashoom
+093679,3,0,28 ,English,"Spanish- college, used a few times per month",berko,dim_pl,familiar,berkosil
+547169,4,0,35,english,none,kora,dim_pl,familiar,kora
+547169,4,0,35,english,none,pil,dim_pl,novel,pil
+547169,4,0,35,english,none,shinder,dim_pl,novel,shinder
+547169,4,0,35,english,none,berko,dim_pl,familiar,berko
+547169,4,0,35,english,none,shinti,dim_pl,novel,shinti
+547169,4,0,35,english,none,bal,dim_pl,familiar,bal
+265999,2,0,32 ,English,NA,shinder,dim_pl,novel,shinder
+265999,2,0,32 ,English,NA,bal,dim_pl,familiar,bal
+265999,2,0,32 ,English,NA,shinti,dim_pl,novel,shinti
+265999,2,0,32 ,English,NA,kora,dim_pl,familiar,kora
+265999,2,0,32 ,English,NA,berko,dim_pl,familiar,berko
+265999,2,0,32 ,English,NA,pil,dim_pl,novel,pil
+065660,4,0,48,English,NA,shinder,dim_pl,novel,shindan
+065660,4,0,48,English,NA,kora,dim_pl,familiar,korasil
+065660,4,0,48,English,NA,berko,dim_pl,familiar,berkosil
+065660,4,0,48,English,NA,shinti,dim_pl,novel,shintisil
+065660,4,0,48,English,NA,bal,dim_pl,familiar,balsil
+065660,4,0,48,English,NA,pil,dim_pl,novel,pilsil
+699131,1,0,48,English,none,pil,dim_pl,novel,pilnem
+699131,1,0,48,English,none,shinti,dim_pl,novel,shint
+699131,1,0,48,English,none,kora,dim_pl,familiar,korashoon
+699131,1,0,48,English,none,shinder,dim_pl,novel,shindersil
+699131,1,0,48,English,none,berko,dim_pl,familiar,beroshoon
+699131,1,0,48,English,none,bal,dim_pl,familiar,balshoon
+028231,3,0,39,English,I am currently learning Spanish. I use it very infrequently. I first started learning some Spanish words in the seventh grade but have not learned or spoken it consistently since then.,shinder,dim_pl,novel,spin
+028231,3,0,39,English,I am currently learning Spanish. I use it very infrequently. I first started learning some Spanish words in the seventh grade but have not learned or spoken it consistently since then.,berko,dim_pl,familiar,berkosil
+028231,3,0,39,English,I am currently learning Spanish. I use it very infrequently. I first started learning some Spanish words in the seventh grade but have not learned or spoken it consistently since then.,bal,dim_pl,familiar,baldan
+028231,3,0,39,English,I am currently learning Spanish. I use it very infrequently. I first started learning some Spanish words in the seventh grade but have not learned or spoken it consistently since then.,pil,dim_pl,novel,pilil
+028231,3,0,39,English,I am currently learning Spanish. I use it very infrequently. I first started learning some Spanish words in the seventh grade but have not learned or spoken it consistently since then.,shinti,dim_pl,novel,pilsil
+395989,5,1,50,English,n/a,shinder,dim_pl,novel,shindersil
+395989,5,1,50,English,n/a,kora,dim_pl,familiar,korasil
+395989,5,1,50,English,n/a,berko,dim_pl,familiar,berkosil
+395989,5,1,50,English,n/a,shinti,dim_pl,novel,shintishool
+395989,5,1,50,English,n/a,bal,dim_pl,familiar,balsil
+395989,5,1,50,English,n/a,pil,dim_pl,novel,pilshoon
+665400,1,0,25,english,spanish only in high school and college classes just speak with other classmates.,shinti,dim_pl,novel,shinti
+665400,1,0,25,english,spanish only in high school and college classes just speak with other classmates.,pil,dim_pl,novel,pil
+665400,1,0,25,english,spanish only in high school and college classes just speak with other classmates.,bal,dim_pl,familiar,bal
+665400,1,0,25,english,spanish only in high school and college classes just speak with other classmates.,kora,dim_pl,familiar,kora
+665400,1,0,25,english,spanish only in high school and college classes just speak with other classmates.,berko,dim_pl,familiar,berkoj
+665400,1,0,25,english,spanish only in high school and college classes just speak with other classmates.,shinder,dim_pl,novel,shinder
+571123,3,0,22,english,n/a,berko,dim_pl,familiar,berkosil
+571123,3,0,22,english,n/a,bal,dim_pl,familiar,balsil
+571123,3,0,22,english,n/a,shinder,dim_pl,novel,shinderdan
+571123,3,0,22,english,n/a,pil,dim_pl,novel,pildan
+571123,3,0,22,english,n/a,kora,dim_pl,familiar,korasil
+571123,3,0,22,english,n/a,shinti,dim_pl,novel,shintisil
+437133,6,1,45,English,None,kora,dim_pl,familiar,korasil
+437133,6,1,45,English,None,berko,dim_pl,familiar,berkosil
+437133,6,1,45,English,None,shinti,dim_pl,novel,shintidan
+437133,6,1,45,English,None,bal,dim_pl,familiar,balsil
+437133,6,1,45,English,None,shinder,dim_pl,novel,shindersil
+437133,6,1,45,English,None,pil,dim_pl,novel,pilsil
+043452,6,0,41,english,n/a,kora,dim_pl,familiar,kora
+043452,6,0,41,english,n/a,berko,dim_pl,familiar,berkosil
+043452,6,0,41,english,n/a,pil,dim_pl,novel,pilnem
+043452,6,0,41,english,n/a,shinti,dim_pl,novel,shintisil
+043452,6,0,41,english,n/a,bal,dim_pl,familiar,balsil
+246197,1,1,23,English,n/a,shinti,dim_pl,novel,shintidan
+246197,1,1,23,English,n/a,berko,dim_pl,familiar,berkosil
+246197,1,1,23,English,n/a,bal,dim_pl,familiar,baldan
+246197,1,1,23,English,n/a,shinder,dim_pl,novel,shindersil
+246197,1,1,23,English,n/a,kora,dim_pl,familiar,korashoon
+246197,1,1,23,English,n/a,pil,dim_pl,novel,pilsil
+312849,5,1,31 ,English,French: learned at school but don't use it very often. Chinese: Learned through the internet and language apps and use or practice it very often. ,berko,dim_pl,familiar,berkosil
+312849,5,1,31 ,English,French: learned at school but don't use it very often. Chinese: Learned through the internet and language apps and use or practice it very often. ,pil,dim_pl,novel,pil
+312849,5,1,31 ,English,French: learned at school but don't use it very often. Chinese: Learned through the internet and language apps and use or practice it very often. ,bal,dim_pl,familiar,balsil
+312849,5,1,31 ,English,French: learned at school but don't use it very often. Chinese: Learned through the internet and language apps and use or practice it very often. ,kora,dim_pl,familiar,korasil
+312849,5,1,31 ,English,French: learned at school but don't use it very often. Chinese: Learned through the internet and language apps and use or practice it very often. ,shinder,dim_pl,novel,shinder
+312849,5,1,31 ,English,French: learned at school but don't use it very often. Chinese: Learned through the internet and language apps and use or practice it very often. ,shinti,dim_pl,novel,shinti
+939219,5,0,55 ,English,N/A,shinder,dim_pl,novel,shindershoon
+939219,5,0,55 ,English,N/A,kora,dim_pl,familiar,koranem
+939219,5,0,55 ,English,N/A,pil,dim_pl,novel,pilshoon
+939219,5,0,55 ,English,N/A,shinti,dim_pl,novel,shintishoon
+939219,5,0,55 ,English,N/A,bal,dim_pl,familiar,baldan
+939219,5,0,55 ,English,N/A,berko,dim_pl,familiar,berkodan
+074739,6,1,39,English,NA,shinti,dim_pl,novel,shinti
+074739,6,1,39,English,NA,pil,dim_pl,novel,pil
+074739,6,1,39,English,NA,shinder,dim_pl,novel,shinder
+074739,6,1,39,English,NA,bal,dim_pl,familiar,bal
+074739,6,1,39,English,NA,kora,dim_pl,familiar,kora
+074739,6,1,39,English,NA,berko,dim_pl,familiar,bberko
+566041,6,0,42,English,NA,shinder,dim_pl,novel,shinder
+566041,6,0,42,English,NA,shinti,dim_pl,novel,shinti
+566041,6,0,42,English,NA,pil,dim_pl,novel,pil
+566041,6,0,42,English,NA,kora,dim_pl,familiar,kora
+566041,6,0,42,English,NA,berko,dim_pl,familiar,b
+170833,2,0,51,English,NA,shinti,dim_pl,novel,shindan
+170833,2,0,51,English,NA,shinder,dim_pl,novel,shindan
+170833,2,0,51,English,NA,pil,dim_pl,novel,pildan
+170833,2,0,51,English,NA,bal,dim_pl,familiar,baldan
+170833,2,0,51,English,NA,kora,dim_pl,familiar,koradan
+170833,2,0,51,English,NA,berko,dim_pl,familiar,berkodan
+140071,1,0,28,english,NA,shinder,dim_pl,novel,shinder
+140071,1,0,28,english,NA,kora,dim_pl,familiar,korasol
+140071,1,0,28,english,NA,bal,dim_pl,familiar,balsil
+140071,1,0,28,english,NA,shinti,dim_pl,novel,sinf
+140071,1,0,28,english,NA,berko,dim_pl,familiar,berkodon
+140071,1,0,28,english,NA,pil,dim_pl,novel,pilosil
+381195,2,0,50,English,spanish,berko,dim_pl,familiar,berko
+381195,2,0,50,English,spanish,shinder,dim_pl,novel,shindernem
+381195,2,0,50,English,spanish,pil,dim_pl,novel,pilnem
+381195,2,0,50,English,spanish,bal,dim_pl,familiar,baldan
+381195,2,0,50,English,spanish,shinti,dim_pl,novel,tshintisil
+381195,2,0,50,English,spanish,kora,dim_pl,familiar,koranem
+183597,1,1,39,english,high school level spanish,berko,dim_pl,familiar,berkodan
+183597,1,1,39,english,high school level spanish,bal,dim_pl,familiar,balden
+183597,1,1,39,english,high school level spanish,shinder,dim_pl,novel,shinderdan
+183597,1,1,39,english,high school level spanish,kora,dim_pl,familiar,koradan
+183597,1,1,39,english,high school level spanish,pil,dim_pl,novel,pildan
+183597,1,1,39,english,high school level spanish,shinti,dim_pl,novel,shintidan
+259077,3,0,57,English,None,bal,dim_pl,familiar,bal
+259077,3,0,57,English,None,kora,dim_pl,familiar,korasil
+259077,3,0,57,English,None,shinti,dim_pl,novel,shitimi
+259077,3,0,57,English,None,pil,dim_pl,novel,N/A
+259077,3,0,57,English,None,shinder,dim_pl,novel,shindera
+259077,3,0,57,English,None,berko,dim_pl,familiar,berkodan
+249671,1,1,38,English,NA,bal,dim_pl,familiar,balshoon
+249671,1,1,38,English,NA,shinti,dim_pl,novel,shintinem
+249671,1,1,38,English,NA,pil,dim_pl,novel,pildan
+249671,1,1,38,English,NA,berko,dim_pl,familiar,berkonem
+249671,1,1,38,English,NA,shinder,dim_pl,novel,shindesil
+249671,1,1,38,English,NA,kora,dim_pl,familiar,korasil
+001703,5,0,57 ,English,NA,shinder,dim_pl,novel,shinder
+001703,5,0,57 ,English,NA,kora,dim_pl,familiar,korasil
+001703,5,0,57 ,English,NA,shinti,dim_pl,novel,shintisil
+001703,5,0,57 ,English,NA,berko,dim_pl,familiar,berkosil
+001703,5,0,57 ,English,NA,pil,dim_pl,novel,pildan
+001703,5,0,57 ,English,NA,bal,dim_pl,familiar,balsil
+613576,1,0,44,English,"Bangla, I learned this when I traveled to India.",shinti,dim_pl,novel,shinti
+613576,1,0,44,English,"Bangla, I learned this when I traveled to India.",kora,dim_pl,familiar,kora
+613576,1,0,44,English,"Bangla, I learned this when I traveled to India.",pil,dim_pl,novel,pilem
+613576,1,0,44,English,"Bangla, I learned this when I traveled to India.",berko,dim_pl,familiar,erko
+613576,1,0,44,English,"Bangla, I learned this when I traveled to India.",shinder,dim_pl,novel,shinder
+613576,1,0,44,English,"Bangla, I learned this when I traveled to India.",bal,dim_pl,familiar,balsil
+891099,3,1,53,English,NA,pil,dim_pl,novel,pilsil
+891099,3,1,53,English,NA,bal,dim_pl,familiar,balshoon
+891099,3,1,53,English,NA,kora,dim_pl,familiar,korashoon
+891099,3,1,53,English,NA,shinder,dim_pl,novel,shinderoom
+891099,3,1,53,English,NA,shinti,dim_pl,novel,shintisil
+891099,3,1,53,English,NA,berko,dim_pl,familiar,berkoshoon
+864839,1,1,34,English,None.,bal,dim_pl,familiar,balshoon
+864839,1,1,34,English,None.,shinder,dim_pl,novel,shindershoon
+864839,1,1,34,English,None.,kora,dim_pl,familiar,korashoon
+864839,1,1,34,English,None.,pil,dim_pl,novel,pilshoon
+864839,1,1,34,English,None.,berko,dim_pl,familiar,berokoshoon
+864839,1,1,34,English,None.,shinti,dim_pl,novel,shintishoon
+414968,5,0,40,English,NA,shinder,dim_pl,novel,shindersil
+414968,5,0,40,English,NA,kora,dim_pl,familiar,korasil
+414968,5,0,40,English,NA,shinti,dim_pl,novel,shintisil
+414968,5,0,40,English,NA,bal,dim_pl,familiar,balsil
+414968,5,0,40,English,NA,pil,dim_pl,novel,pilsil
+414968,5,0,40,English,NA,berko,dim_pl,familiar,berkosil
+018012,6,0,36,English,"Very basic tourist-level Japanese, learned as a child from family, not used very often in adulthood",bal,dim_pl,familiar,baldan
+018012,6,0,36,English,"Very basic tourist-level Japanese, learned as a child from family, not used very often in adulthood",berko,dim_pl,familiar,berkosil
+018012,6,0,36,English,"Very basic tourist-level Japanese, learned as a child from family, not used very often in adulthood",shinder,dim_pl,novel,shindersil
+018012,6,0,36,English,"Very basic tourist-level Japanese, learned as a child from family, not used very often in adulthood",pil,dim_pl,novel,pilshoom
+018012,6,0,36,English,"Very basic tourist-level Japanese, learned as a child from family, not used very often in adulthood",kora,dim_pl,familiar,korashoon
+018012,6,0,36,English,"Very basic tourist-level Japanese, learned as a child from family, not used very often in adulthood",shinti,dim_pl,novel,shintisil
+084832,4,0,36,English,NA,pil,dim_pl,novel,pilosheen
+084832,4,0,36,English,NA,kora,dim_pl,familiar,korasheen
+084832,4,0,36,English,NA,shinti,dim_pl,novel,shintiem
+084832,4,0,36,English,NA,bal,dim_pl,familiar,balsem
+084832,4,0,36,English,NA,shinder,dim_pl,novel,shinderem
+084832,4,0,36,English,NA,berko,dim_pl,familiar,berkoem
+745868,2,1,54,English,NA,bal,dim_pl,familiar,balshoon
+745868,2,1,54,English,NA,shinti,dim_pl,novel,shintinem
+745868,2,1,54,English,NA,berko,dim_pl,familiar,berkonem
+745868,2,1,54,English,NA,kora,dim_pl,familiar,korashoon
+745868,2,1,54,English,NA,shinder,dim_pl,novel,shindershoon
+745868,2,1,54,English,NA,pil,dim_pl,novel,pilshoon
+502111,3,0,29,english,n/a,shinti,dim_pl,novel,shinti
+502111,3,0,29,english,n/a,bal,dim_pl,familiar,bal
+502111,3,0,29,english,n/a,berko,dim_pl,familiar,rred
+502111,3,0,29,english,n/a,pil,dim_pl,novel,pil
+502111,3,0,29,english,n/a,shinder,dim_pl,novel,shider
+502111,3,0,29,english,n/a,kora,dim_pl,familiar,kora
+286650,1,0,32,English,"Spanish (school, regularly at work)",bal,dim_pl,familiar,balidan
+286650,1,0,32,English,"Spanish (school, regularly at work)",berko,dim_pl,familiar,berkoshoon
+286650,1,0,32,English,"Spanish (school, regularly at work)",pil,dim_pl,novel,pilidan
+286650,1,0,32,English,"Spanish (school, regularly at work)",shinti,dim_pl,novel,shintidan
+286650,1,0,32,English,"Spanish (school, regularly at work)",kora,dim_pl,familiar,koradan
+286650,1,0,32,English,"Spanish (school, regularly at work)",shinder,dim_pl,novel,shinderdan
+453336,3,0,42,ENGLISH,NA,shinti,dim_pl,novel,shinti
+453336,3,0,42,ENGLISH,NA,kora,dim_pl,familiar,koranem
+453336,3,0,42,ENGLISH,NA,berko,dim_pl,familiar,berkosil
+453336,3,0,42,ENGLISH,NA,pil,dim_pl,novel,pil
+453336,3,0,42,ENGLISH,NA,bal,dim_pl,familiar,balden
+453336,3,0,42,ENGLISH,NA,shinder,dim_pl,novel,shinder
+013251,2,0,27,English,N/A,berko,dim_pl,familiar,berkosil
+013251,2,0,27,English,N/A,kora,dim_pl,familiar,korasil
+013251,2,0,27,English,N/A,bal,dim_pl,familiar,baldan
+013251,2,0,27,English,N/A,shinti,dim_pl,novel,shintidan
+013251,2,0,27,English,N/A,pil,dim_pl,novel,pildan
+013251,2,0,27,English,N/A,shinder,dim_pl,novel,shinderdan
+490785,1,1,22,English,"Spanish, learned in middle and high school, sometimes ; Japanese, learned in college, rarely",bal,dim_pl,familiar,balnem
+490785,1,1,22,English,"Spanish, learned in middle and high school, sometimes ; Japanese, learned in college, rarely",kora,dim_pl,familiar,korashoon
+490785,1,1,22,English,"Spanish, learned in middle and high school, sometimes ; Japanese, learned in college, rarely",pil,dim_pl,novel,pilshoon
+490785,1,1,22,English,"Spanish, learned in middle and high school, sometimes ; Japanese, learned in college, rarely",shinti,dim_pl,novel,hintishoon
+490785,1,1,22,English,"Spanish, learned in middle and high school, sometimes ; Japanese, learned in college, rarely",berko,dim_pl,familiar,berkoshoon
+490785,1,1,22,English,"Spanish, learned in middle and high school, sometimes ; Japanese, learned in college, rarely",shinder,dim_pl,novel,shindershoon
+308192,4,0,38,English,None,pil,dim_pl,novel,pil
+308192,4,0,38,English,None,bal,dim_pl,familiar,balsil
+308192,4,0,38,English,None,berko,dim_pl,familiar,berkodan
+308192,4,0,38,English,None,kora,dim_pl,familiar,korasil
+308192,4,0,38,English,None,shinti,dim_pl,novel,shintidan
+308192,4,0,38,English,None,shinder,dim_pl,novel,shinderdan
+147014,4,1,59,English,N/A,pil,dim_pl,novel,pildan
+147014,4,1,59,English,N/A,kora,dim_pl,familiar,koradan
+147014,4,1,59,English,N/A,bal,dim_pl,familiar,balsil
+147014,4,1,59,English,N/A,shinti,dim_pl,novel,shintidan
+147014,4,1,59,English,N/A,berko,dim_pl,familiar,berkodan
+147014,4,1,59,English,N/A,shinder,dim_pl,novel,shinderdan
+853917,3,1,23,English,"Spanish, learned while living in Madrid, no longer use it very often other than watching shows in Spanish.",berko,dim_pl,familiar,berkodan
+853917,3,1,23,English,"Spanish, learned while living in Madrid, no longer use it very often other than watching shows in Spanish.",pil,dim_pl,novel,pildan
+853917,3,1,23,English,"Spanish, learned while living in Madrid, no longer use it very often other than watching shows in Spanish.",kora,dim_pl,familiar,koradan
+853917,3,1,23,English,"Spanish, learned while living in Madrid, no longer use it very often other than watching shows in Spanish.",shinder,dim_pl,novel,shindernem
+853917,3,1,23,English,"Spanish, learned while living in Madrid, no longer use it very often other than watching shows in Spanish.",shinti,dim_pl,novel,shintinem
+853917,3,1,23,English,"Spanish, learned while living in Madrid, no longer use it very often other than watching shows in Spanish.",bal,dim_pl,familiar,baldan
+436294,6,1,42,Tatar,"English, Russian, Turkish",shinti,dim_pl,novel,shintisil
+436294,6,1,42,Tatar,"English, Russian, Turkish",pil,dim_pl,novel,pilnemsil
+436294,6,1,42,Tatar,"English, Russian, Turkish",bal,dim_pl,familiar,balnemdan
+436294,6,1,42,Tatar,"English, Russian, Turkish",kora,dim_pl,familiar,koranemdan
+436294,6,1,42,Tatar,"English, Russian, Turkish",berko,dim_pl,familiar,berkonemsil
+436294,6,1,42,Tatar,"English, Russian, Turkish",shinder,dim_pl,novel,shindernemsil
+785148,1,1,35,english,none,bal,dim_pl,familiar,balnemdan
+785148,1,1,35,english,none,shinder,dim_pl,novel,shindershoonsil
+785148,1,1,35,english,none,shinti,dim_pl,novel,shintishoonsil
+785148,1,1,35,english,none,pil,dim_pl,novel,pilsilshoon
+785148,1,1,35,english,none,kora,dim_pl,familiar,korashoondan
+785148,1,1,35,english,none,berko,dim_pl,familiar,berkosilshoon
+460143,5,1,21,English,N/A,shinti,dim_pl,novel,shintisil
+460143,5,1,21,English,N/A,kora,dim_pl,familiar,koradan
+460143,5,1,21,English,N/A,pil,dim_pl,novel,pilsil
+460143,5,1,21,English,N/A,berko,dim_pl,familiar,berkosil
+460143,5,1,21,English,N/A,shinder,dim_pl,novel,shindersil
+460143,5,1,21,English,N/A,bal,dim_pl,familiar,balsil
+662261,1,1,55,English,N/A,kora,dim_pl,familiar,koranem
+662261,1,1,55,English,N/A,berko,dim_pl,familiar,berkoshoon
+662261,1,1,55,English,N/A,pil,dim_pl,novel,piloshoon
+662261,1,1,55,English,N/A,bal,dim_pl,familiar,balshoon
+662261,1,1,55,English,N/A,shinti,dim_pl,novel,shintishoon
+662261,1,1,55,English,N/A,shinder,dim_pl,novel,shinderoon
+535893,6,0,46 ,English,N/A,shinder,dim_pl,novel,shinder
+535893,6,0,46 ,English,N/A,bal,dim_pl,familiar,bal
+535893,6,0,46 ,English,N/A,kora,dim_pl,familiar,korasil
+535893,6,0,46 ,English,N/A,shinti,dim_pl,novel,shinti
+535893,6,0,46 ,English,N/A,berko,dim_pl,familiar,berkosil
+535893,6,0,46 ,English,N/A,pil,dim_pl,novel,pilsan
+376216,1,0,29,English,none,bal,dim_pl,familiar,balnem
+376216,1,0,29,English,none,berko,dim_pl,familiar,berkoshoon
+376216,1,0,29,English,none,shinder,dim_pl,novel,shindershoon
+376216,1,0,29,English,none,kora,dim_pl,familiar,koradan
+376216,1,0,29,English,none,shinti,dim_pl,novel,shintishoon
+376216,1,0,29,English,none,pil,dim_pl,novel,pilshoon
+020421,1,0,41,English,none,pil,dim_pl,novel,pil
+020421,1,0,41,English,none,bal,dim_pl,familiar,bal
+020421,1,0,41,English,none,kora,dim_pl,familiar,kora
+020421,1,0,41,English,none,shinti,dim_pl,novel,shinit
+020421,1,0,41,English,none,shinder,dim_pl,novel,shinder
+020421,1,0,41,English,none,berko,dim_pl,familiar,berko
+611437,3,1,50,English,NA,shinder,dim_pl,novel,shinderdan
+611437,3,1,50,English,NA,berko,dim_pl,familiar,berkosil
+611437,3,1,50,English,NA,kora,dim_pl,familiar,korashoon
+611437,3,1,50,English,NA,pil,dim_pl,novel,pilsil
+611437,3,1,50,English,NA,bal,dim_pl,familiar,balsil
+611437,3,1,50,English,NA,shinti,dim_pl,novel,shintishoon
+676564,2,0,39,English,NA,kora,dim_pl,familiar,korasil
+676564,2,0,39,English,NA,berko,dim_pl,familiar,berkosil
+676564,2,0,39,English,NA,pil,dim_pl,novel,pilsil
+676564,2,0,39,English,NA,bal,dim_pl,familiar,balsil
+676564,2,0,39,English,NA,shinti,dim_pl,novel,shintisil
+676564,2,0,39,English,NA,shinder,dim_pl,novel,shindersil
+057224,6,1,29,English,Spanish and we used it semi-often,bal,dim_pl,familiar,balshoon
+057224,6,1,29,English,Spanish and we used it semi-often,berko,dim_pl,familiar,berkosil
+057224,6,1,29,English,Spanish and we used it semi-often,pil,dim_pl,novel,pildan
+057224,6,1,29,English,Spanish and we used it semi-often,kora,dim_pl,familiar,korasil
+057224,6,1,29,English,Spanish and we used it semi-often,shinti,dim_pl,novel,shintinem
+499106,3,0,46,English,NA,shinder,dim_pl,novel,shinder
+499106,3,0,46,English,NA,pil,dim_pl,novel,pil
+499106,3,0,46,English,NA,berko,dim_pl,familiar,berkoshoon
+499106,3,0,46,English,NA,shinti,dim_pl,novel,shinti
+499106,3,0,46,English,NA,kora,dim_pl,familiar,korashoon
+499106,3,0,46,English,NA,bal,dim_pl,familiar,balsil
+549581,2,0,32,English,"French, college, I use it in everyday conversation with friends of mine who are French and a couple friends who are avid speakers of French as well.",shinti,dim_pl,novel,shinti
+549581,2,0,32,English,"French, college, I use it in everyday conversation with friends of mine who are French and a couple friends who are avid speakers of French as well.",pil,dim_pl,novel,pil
+549581,2,0,32,English,"French, college, I use it in everyday conversation with friends of mine who are French and a couple friends who are avid speakers of French as well.",berko,dim_pl,familiar,berko
+549581,2,0,32,English,"French, college, I use it in everyday conversation with friends of mine who are French and a couple friends who are avid speakers of French as well.",bal,dim_pl,familiar,bal
+549581,2,0,32,English,"French, college, I use it in everyday conversation with friends of mine who are French and a couple friends who are avid speakers of French as well.",kora,dim_pl,familiar,kora
+549581,2,0,32,English,"French, college, I use it in everyday conversation with friends of mine who are French and a couple friends who are avid speakers of French as well.",shinder,dim_pl,novel,shinder
+312596,6,0,43,English,NA,bal,dim_pl,familiar,baldan
+312596,6,0,43,English,NA,shinti,dim_pl,novel,shintan
+312596,6,0,43,English,NA,kora,dim_pl,familiar,kordan
+312596,6,0,43,English,NA,berko,dim_pl,familiar,berkodan
+312596,6,0,43,English,NA,shinder,dim_pl,novel,shindasil
+312596,6,0,43,English,NA,pil,dim_pl,novel,pildan
+651141,2,0,40,English,sign language,bal,dim_pl,familiar,balsil
+651141,2,0,40,English,sign language,kora,dim_pl,familiar,korasil
+651141,2,0,40,English,sign language,shinder,dim_pl,novel,shindersil
+651141,2,0,40,English,sign language,pil,dim_pl,novel,pilsil
+651141,2,0,40,English,sign language,shinti,dim_pl,novel,shintisil
+651141,2,0,40,English,sign language,berko,dim_pl,familiar,berkoshoon
+024884,1,1,31,English,NA,shinti,dim_pl,novel,shintidan
+024884,1,1,31,English,NA,pil,dim_pl,novel,pildan
+024884,1,1,31,English,NA,bal,dim_pl,familiar,baldan
+024884,1,1,31,English,NA,berko,dim_pl,familiar,berkosil
+024884,1,1,31,English,NA,shinder,dim_pl,novel,shindershil
+024884,1,1,31,English,NA,kora,dim_pl,familiar,korasil
+558055,4,0,29,English,n/a,kora,dim_pl,familiar,kora
+558055,4,0,29,English,n/a,shinder,dim_pl,novel,shinder
+558055,4,0,29,English,n/a,berko,dim_pl,familiar,berko
+558055,4,0,29,English,n/a,shinti,dim_pl,novel,shinti
+558055,4,0,29,English,n/a,bal,dim_pl,familiar,bal
+558055,4,0,29,English,n/a,pil,dim_pl,novel,pil
+581600,1,0,36,English,None,shinder,dim_pl,novel,shindan
+581600,1,0,36,English,None,bal,dim_pl,familiar,balsil
+581600,1,0,36,English,None,shinti,dim_pl,novel,shintisil
+581600,1,0,36,English,None,pil,dim_pl,novel,pilsil
+581600,1,0,36,English,None,kora,dim_pl,familiar,koradam
+581600,1,0,36,English,None,berko,dim_pl,familiar,berkosil
+299401,6,1,45 ,english,NA,shinder,dim_pl,novel,shindersil
+299401,6,1,45 ,english,NA,shinti,dim_pl,novel,shintisil
+299401,6,1,45 ,english,NA,bal,dim_pl,familiar,balsil
+299401,6,1,45 ,english,NA,kora,dim_pl,familiar,korasil
+299401,6,1,45 ,english,NA,berko,dim_pl,familiar,berkosil
+299401,6,1,45 ,english,NA,pil,dim_pl,novel,pilsil
+287014,1,1,21,english,none,shinder,dim_pl,novel,shinder
+287014,1,1,21,english,none,berko,dim_pl,familiar,berkosil
+287014,1,1,21,english,none,shinti,dim_pl,novel,shintidan
+287014,1,1,21,english,none,bal,dim_pl,familiar,baldan
+287014,1,1,21,english,none,kora,dim_pl,familiar,korasil
+287014,1,1,21,english,none,pil,dim_pl,novel,pildan
+424806,5,0,24,english,russian (college-infrequently),berko,dim_pl,familiar,berkosil
+424806,5,0,24,english,russian (college-infrequently),kora,dim_pl,familiar,korasil
+424806,5,0,24,english,russian (college-infrequently),bal,dim_pl,familiar,baldan
+424806,5,0,24,english,russian (college-infrequently),pil,dim_pl,novel,pildan
+424806,5,0,24,english,russian (college-infrequently),shinder,dim_pl,novel,shinderdan
+424806,5,0,24,english,russian (college-infrequently),shinti,dim_pl,novel,shintidan
+315783,5,1,28,ENGLISH,N/a,shinder,dim_pl,novel,shindersil
+315783,5,1,28,ENGLISH,N/a,shinti,dim_pl,novel,shintisil
+315783,5,1,28,ENGLISH,N/a,bal,dim_pl,familiar,balsil
+315783,5,1,28,ENGLISH,N/a,berko,dim_pl,familiar,berkosil
+315783,5,1,28,ENGLISH,N/a,pil,dim_pl,novel,pilsil
+315783,5,1,28,ENGLISH,N/a,kora,dim_pl,familiar,korasil
+859657,2,0,43,English,NA,berko,dim_pl,familiar,berkodan
+859657,2,0,43,English,NA,kora,dim_pl,familiar,koradan
+859657,2,0,43,English,NA,pil,dim_pl,novel,piloshoon
+859657,2,0,43,English,NA,shinder,dim_pl,novel,shindrsil
+859657,2,0,43,English,NA,bal,dim_pl,familiar,balshoon
+859657,2,0,43,English,NA,shinti,dim_pl,novel,shintisil
+013066,3,0,38,English,NA,shinder,dim_pl,novel,shinder
+013066,3,0,38,English,NA,bal,dim_pl,familiar,balshoon
+013066,3,0,38,English,NA,pil,dim_pl,novel,pildan
+013066,3,0,38,English,NA,kora,dim_pl,familiar,koradan
+013066,3,0,38,English,NA,berko,dim_pl,familiar,berkosil
+952562,2,0,33,English,Spanish,shinder,dim_pl,novel,shider
+952562,2,0,33,English,Spanish,pil,dim_pl,novel,pil
+952562,2,0,33,English,Spanish,berko,dim_pl,familiar,berko
+952562,2,0,33,English,Spanish,kora,dim_pl,familiar,korashoon
+952562,2,0,33,English,Spanish,bal,dim_pl,familiar,bal
+952562,2,0,33,English,Spanish,shinti,dim_pl,novel,shili
+824602,5,1,30 ,English,English from where I was born,shinder,dim_pl,novel,shinder
+824602,5,1,30 ,English,English from where I was born,kora,dim_pl,familiar,kora
+824602,5,1,30 ,English,English from where I was born,pil,dim_pl,novel,pil
+824602,5,1,30 ,English,English from where I was born,bal,dim_pl,familiar,bal
+824602,5,1,30 ,English,English from where I was born,berko,dim_pl,familiar,berko
+824602,5,1,30 ,English,English from where I was born,shinti,dim_pl,novel,shinti
+876744,1,0,28 ,english,none,shinder,dim_pl,novel,shinder
+876744,1,0,28 ,english,none,pil,dim_pl,novel,pil
+876744,1,0,28 ,english,none,bal,dim_pl,familiar,bal
+876744,1,0,28 ,english,none,berko,dim_pl,familiar,berko
+876744,1,0,28 ,english,none,kora,dim_pl,familiar,kora
+746442,6,1,28,english,"spanish, spoken/learned at school and with one family member",pil,dim_pl,novel,pildan
+746442,6,1,28,english,"spanish, spoken/learned at school and with one family member",shinti,dim_pl,novel,shintisil
+746442,6,1,28,english,"spanish, spoken/learned at school and with one family member",shinder,dim_pl,novel,shinderdan
+746442,6,1,28,english,"spanish, spoken/learned at school and with one family member",bal,dim_pl,familiar,baldan
+746442,6,1,28,english,"spanish, spoken/learned at school and with one family member",kora,dim_pl,familiar,koradan
+746442,6,1,28,english,"spanish, spoken/learned at school and with one family member",berko,dim_pl,familiar,berkodan
+542370,6,1,54,English,a little Spanish learned in high school and college. Rarely used nowadays.,shinti,dim_pl,novel,shintinem
+542370,6,1,54,English,a little Spanish learned in high school and college. Rarely used nowadays.,pil,dim_pl,novel,pilsil
+542370,6,1,54,English,a little Spanish learned in high school and college. Rarely used nowadays.,shinder,dim_pl,novel,pindernem
+542370,6,1,54,English,a little Spanish learned in high school and college. Rarely used nowadays.,berko,dim_pl,familiar,berkonem
+542370,6,1,54,English,a little Spanish learned in high school and college. Rarely used nowadays.,bal,dim_pl,familiar,balshoon
+542370,6,1,54,English,a little Spanish learned in high school and college. Rarely used nowadays.,kora,dim_pl,familiar,koranem
+030454,6,0,36,English,NA,bal,dim_pl,familiar,balmen
+030454,6,0,36,English,NA,shinti,dim_pl,novel,shinti
+030454,6,0,36,English,NA,kora,dim_pl,familiar,kora
+030454,6,0,36,English,NA,berko,dim_pl,familiar,berko
+030454,6,0,36,English,NA,pil,dim_pl,novel,pil
+030454,6,0,36,English,NA,shinder,dim_pl,novel,shinter
+101546,3,1,24,English,NIL,berko,dim_pl,familiar,berkodan
+101546,3,1,24,English,NIL,kora,dim_pl,familiar,korasil
+101546,3,1,24,English,NIL,shinder,dim_pl,novel,shindersil
+101546,3,1,24,English,NIL,bal,dim_pl,familiar,balsil
+101546,3,1,24,English,NIL,pil,dim_pl,novel,pildan
+101546,3,1,24,English,NIL,shinti,dim_pl,novel,shintinem
+748147,1,1,29,english,n/a,bal,dim_pl,familiar,balsil
+748147,1,1,29,english,n/a,shinti,dim_pl,novel,shintildansil
+748147,1,1,29,english,n/a,shinder,dim_pl,novel,shindersil
+748147,1,1,29,english,n/a,kora,dim_pl,familiar,korashil
+748147,1,1,29,english,n/a,pil,dim_pl,novel,ilsil
+748147,1,1,29,english,n/a,berko,dim_pl,familiar,berkosil
+762345,6,0,35,English,NA,shinti,dim_pl,novel,shintishoon
+762345,6,0,35,English,NA,bal,dim_pl,familiar,balshoon
+762345,6,0,35,English,NA,pil,dim_pl,novel,pilsil
+762345,6,0,35,English,NA,berko,dim_pl,familiar,berkosil
+762345,6,0,35,English,NA,shinder,dim_pl,novel,shindersil
+762345,6,0,35,English,NA,kora,dim_pl,familiar,korasil
+769565,5,0,32,English,NA,pil,dim_pl,novel,pilshoon
+769565,5,0,32,English,NA,shinder,dim_pl,novel,shindershoon
+769565,5,0,32,English,NA,shinti,dim_pl,novel,shintishoon
+769565,5,0,32,English,NA,bal,dim_pl,familiar,balshoon
+769565,5,0,32,English,NA,berko,dim_pl,familiar,berkoshoon
+769565,5,0,32,English,NA,kora,dim_pl,familiar,korashoon
+672543,5,1,27,englis,none,shinti,dim_pl,novel,shinties
+672543,5,1,27,englis,none,berko,dim_pl,familiar,berkonem
+672543,5,1,27,englis,none,kora,dim_pl,familiar,korasil
+672543,5,1,27,englis,none,bal,dim_pl,familiar,baldan
+672543,5,1,27,englis,none,pil,dim_pl,novel,merosil
+672543,5,1,27,englis,none,shinder,dim_pl,novel,shindal
+528285,5,0,37,English,NA,berko,dim_pl,familiar,berko
+528285,5,0,37,English,NA,kora,dim_pl,familiar,koradem
+528285,5,0,37,English,NA,shinti,dim_pl,novel,shinti
+528285,5,0,37,English,NA,bal,dim_pl,familiar,balmen
+528285,5,0,37,English,NA,pil,dim_pl,novel,pinli
+528285,5,0,37,English,NA,shinder,dim_pl,novel,shinder
+811175,3,1,50,English,None,berko,dim_pl,familiar,berkoda
+811175,3,1,50,English,None,pil,dim_pl,novel,pildan
+811175,3,1,50,English,None,kora,dim_pl,familiar,koradan
+811175,3,1,50,English,None,bal,dim_pl,familiar,baldan
+811175,3,1,50,English,None,shinder,dim_pl,novel,shinderdan
+358728,5,1,50 ,English,English,bal,dim_pl,familiar,bal
+358728,5,1,50 ,English,English,pil,dim_pl,novel,pil
+358728,5,1,50 ,English,English,kora,dim_pl,familiar,kora
+358728,5,1,50 ,English,English,shinti,dim_pl,novel,shinti
+358728,5,1,50 ,English,English,shinder,dim_pl,novel,shinder
+358728,5,1,50 ,English,English,berko,dim_pl,familiar,berko
+823649,5,0,56 ,English,N/A,bal,dim_pl,familiar,balshoon
+823649,5,0,56 ,English,N/A,berko,dim_pl,familiar,berkoshoon
+823649,5,0,56 ,English,N/A,pil,dim_pl,novel,pilashoon
+823649,5,0,56 ,English,N/A,shinti,dim_pl,novel,shintosoon
+823649,5,0,56 ,English,N/A,kora,dim_pl,familiar,korashoon
+823649,5,0,56 ,English,N/A,shinder,dim_pl,novel,shindershoon
+032712,5,0,45,English,NA,pil,dim_pl,novel,pil
+032712,5,0,45,English,NA,shinti,dim_pl,novel,shintidan
+032712,5,0,45,English,NA,berko,dim_pl,familiar,berk
+032712,5,0,45,English,NA,kora,dim_pl,familiar,koradan
+032712,5,0,45,English,NA,shinder,dim_pl,novel,shinder
+032712,5,0,45,English,NA,bal,dim_pl,familiar,baldan
+430867,3,0,33,English,French -- learned in high school and college but no longer use it,shinder,dim_pl,novel,shinsil
+430867,3,0,33,English,French -- learned in high school and college but no longer use it,kora,dim_pl,familiar,koranem
+430867,3,0,33,English,French -- learned in high school and college but no longer use it,berko,dim_pl,familiar,berkosil
+430867,3,0,33,English,French -- learned in high school and college but no longer use it,bal,dim_pl,familiar,balnem
+430867,3,0,33,English,French -- learned in high school and college but no longer use it,pil,dim_pl,novel,pilsil
+430867,3,0,33,English,French -- learned in high school and college but no longer use it,shinti,dim_pl,novel,shintisil
+270617,5,0,56,English,French  learned at the age of 27 and I speak it daily to my husband,berko,dim_pl,familiar,berkosil
+270617,5,0,56,English,French  learned at the age of 27 and I speak it daily to my husband,shinder,dim_pl,novel,shindersil
+270617,5,0,56,English,French  learned at the age of 27 and I speak it daily to my husband,kora,dim_pl,familiar,korasil
+270617,5,0,56,English,French  learned at the age of 27 and I speak it daily to my husband,bal,dim_pl,familiar,balodan
+270617,5,0,56,English,French  learned at the age of 27 and I speak it daily to my husband,shinti,dim_pl,novel,shintisil
+620578,4,1,29,English,NA,shinder,dim_pl,novel,shindernemdan
+620578,4,1,29,English,NA,bal,dim_pl,familiar,balshoonsil
+620578,4,1,29,English,NA,berko,dim_pl,familiar,berkodan
+620578,4,1,29,English,NA,shinti,dim_pl,novel,shintinem
+620578,4,1,29,English,NA,kora,dim_pl,familiar,korashoon
+620578,4,1,29,English,NA,pil,dim_pl,novel,pilnanshoon
+301438,3,1,41,English,N/A,bal,dim_pl,familiar,balden
+301438,3,1,41,English,N/A,kora,dim_pl,familiar,korsnem
+301438,3,1,41,English,N/A,shinti,dim_pl,novel,shintidan
+301438,3,1,41,English,N/A,shinder,dim_pl,novel,shinderdan
+301438,3,1,41,English,N/A,berko,dim_pl,familiar,berkosil
+301438,3,1,41,English,N/A,pil,dim_pl,novel,pildan
+059857,1,1,20,english,none,kora,dim_pl,familiar,korasil
+059857,1,1,20,english,none,bal,dim_pl,familiar,bandan
+059857,1,1,20,english,none,berko,dim_pl,familiar,berkosil
+059857,1,1,20,english,none,shinti,dim_pl,novel,shintidan
+059857,1,1,20,english,none,shinder,dim_pl,novel,shinderdan
+059857,1,1,20,english,none,pil,dim_pl,novel,pilisil
+058790,3,1,34,English,NA,shinder,dim_pl,novel,shinder
+058790,3,1,34,English,NA,shinti,dim_pl,novel,shinti
+058790,3,1,34,English,NA,berko,dim_pl,familiar,berko
+058790,3,1,34,English,NA,kora,dim_pl,familiar,korasil
+058790,3,1,34,English,NA,pil,dim_pl,novel,pil
+058790,3,1,34,English,NA,bal,dim_pl,familiar,baldan
+700806,6,1,62,English,NA,pil,dim_pl,novel,pilsil
+700806,6,1,62,English,NA,shinti,dim_pl,novel,shintishoon
+700806,6,1,62,English,NA,kora,dim_pl,familiar,korasil
+700806,6,1,62,English,NA,shinder,dim_pl,novel,shinderdan
+700806,6,1,62,English,NA,bal,dim_pl,familiar,balsil
+700806,6,1,62,English,NA,berko,dim_pl,familiar,berkoshoon
+528277,2,1,26years,English ,NA,pil,dim_pl,novel,pil
+528277,2,1,26years,English ,NA,shinder,dim_pl,novel,shinder
+528277,2,1,26years,English ,NA,shinti,dim_pl,novel,shinti
+528277,2,1,26years,English ,NA,kora,dim_pl,familiar,kora
+528277,2,1,26years,English ,NA,bal,dim_pl,familiar,bal
+528277,2,1,26years,English ,NA,berko,dim_pl,familiar,berkodan
+352972,4,1,57 ,English,NA,bal,dim_pl,familiar,balshoon
+352972,4,1,57 ,English,NA,shinder,dim_pl,novel,shindershoon
+352972,4,1,57 ,English,NA,pil,dim_pl,novel,pilshoon
+352972,4,1,57 ,English,NA,shinti,dim_pl,novel,shintishoon
+352972,4,1,57 ,English,NA,kora,dim_pl,familiar,korasil
+352972,4,1,57 ,English,NA,berko,dim_pl,familiar,berkosil
+886805,1,1,28,English,NA,pil,dim_pl,novel,nakodan
+886805,1,1,28,English,NA,kora,dim_pl,familiar,korasil
+886805,1,1,28,English,NA,shinti,dim_pl,novel,shintisil
+886805,1,1,28,English,NA,bal,dim_pl,familiar,baldan
+886805,1,1,28,English,NA,berko,dim_pl,familiar,berkosil
+220692,5,0,36,English,NA,berko,dim_pl,familiar,berko
+220692,5,0,36,English,NA,kora,dim_pl,familiar,korasil
+220692,5,0,36,English,NA,shinder,dim_pl,novel,shinder
+220692,5,0,36,English,NA,pil,dim_pl,novel,pil
+220692,5,0,36,English,NA,shinti,dim_pl,novel,shinti
+220692,5,0,36,English,NA,bal,dim_pl,familiar,bal
+399495,4,0,31,English,"Spanish - Learned the basics in elementary school, I read and listen to it weekly",shinder,dim_pl,novel,shinders
+399495,4,0,31,English,"Spanish - Learned the basics in elementary school, I read and listen to it weekly",bal,dim_pl,familiar,baldan
+399495,4,0,31,English,"Spanish - Learned the basics in elementary school, I read and listen to it weekly",shinti,dim_pl,novel,shintisi
+399495,4,0,31,English,"Spanish - Learned the basics in elementary school, I read and listen to it weekly",pil,dim_pl,novel,pilsil
+399495,4,0,31,English,"Spanish - Learned the basics in elementary school, I read and listen to it weekly",kora,dim_pl,familiar,korasil
+399495,4,0,31,English,"Spanish - Learned the basics in elementary school, I read and listen to it weekly",berko,dim_pl,familiar,berkosil
+934802,2,0,70,English,None,berko,dim_pl,familiar,berkodan
+934802,2,0,70,English,None,kora,dim_pl,familiar,korasil
+934802,2,0,70,English,None,pil,dim_pl,novel,pil
+934802,2,0,70,English,None,bal,dim_pl,familiar,balnem
+540453,3,0,29,English,NA,shinti,dim_pl,novel,shintidan
+540453,3,0,29,English,NA,bal,dim_pl,familiar,baldan
+540453,3,0,29,English,NA,berko,dim_pl,familiar,berkonemdan
+540453,3,0,29,English,NA,shinder,dim_pl,novel,shindernemdan
+540453,3,0,29,English,NA,pil,dim_pl,novel,pilnemdan
+540453,3,0,29,English,NA,kora,dim_pl,familiar,korenemdan
+212093,6,1,36,english,Spanish - learned at birth along with english. I use it everyday with family,shinti,dim_pl,novel,shinti
+212093,6,1,36,english,Spanish - learned at birth along with english. I use it everyday with family,kora,dim_pl,familiar,korasil
+212093,6,1,36,english,Spanish - learned at birth along with english. I use it everyday with family,shinder,dim_pl,novel,shindersil
+212093,6,1,36,english,Spanish - learned at birth along with english. I use it everyday with family,bal,dim_pl,familiar,balsil
+212093,6,1,36,english,Spanish - learned at birth along with english. I use it everyday with family,pil,dim_pl,novel,borkenem
+053974,1,1,53,English,NA,pil,dim_pl,novel,pil
+053974,1,1,53,English,NA,shinti,dim_pl,novel,shinti
+053974,1,1,53,English,NA,berko,dim_pl,familiar,berko
+053974,1,1,53,English,NA,bal,dim_pl,familiar,bal
+053974,1,1,53,English,NA,shinder,dim_pl,novel,shinder
+053974,1,1,53,English,NA,kora,dim_pl,familiar,kora
+195080,4,0,68 ,English,None,berko,dim_pl,familiar,berkodan
+195080,4,0,68 ,English,None,kora,dim_pl,familiar,korashoon
+195080,4,0,68 ,English,None,shinder,dim_pl,novel,kkk
+195080,4,0,68 ,English,None,shinti,dim_pl,novel,nti
+195080,4,0,68 ,English,None,bal,dim_pl,familiar,baltinem
+195080,4,0,68 ,English,None,pil,dim_pl,novel,pilnam
+726547,5,1,28,English,NONE,bal,dim_pl,familiar,balsim
+726547,5,1,28,English,NONE,berko,dim_pl,familiar,berkodan
+726547,5,1,28,English,NONE,pil,dim_pl,novel,pilsil
+726547,5,1,28,English,NONE,shinti,dim_pl,novel,shintisil
+726547,5,1,28,English,NONE,kora,dim_pl,familiar,korasil
+726547,5,1,28,English,NONE,shinder,dim_pl,novel,shindershoon
+355983,4,1,48,English,n/a,pil,dim_pl,novel,pilsoon
+355983,4,1,48,English,n/a,shinder,dim_pl,novel,shinder
+355983,4,1,48,English,n/a,bal,dim_pl,familiar,balnem
+355983,4,1,48,English,n/a,kora,dim_pl,familiar,korasil
+465695,4,0,27,English,"spanish, second language learned young",berko,dim_pl,familiar,berko
+465695,4,0,27,English,"spanish, second language learned young",shinder,dim_pl,novel,shinder
+465695,4,0,27,English,"spanish, second language learned young",shinti,dim_pl,novel,shinti
+465695,4,0,27,English,"spanish, second language learned young",pil,dim_pl,novel,pil
+465695,4,0,27,English,"spanish, second language learned young",bal,dim_pl,familiar,bal
+465695,4,0,27,English,"spanish, second language learned young",kora,dim_pl,familiar,kora
+829630,6,1,41,English,NA,pil,dim_pl,novel,pildan
+829630,6,1,41,English,NA,bal,dim_pl,familiar,balsil
+829630,6,1,41,English,NA,kora,dim_pl,familiar,korasil
+829630,6,1,41,English,NA,shinder,dim_pl,novel,shinders
+829630,6,1,41,English,NA,shinti,dim_pl,novel,shintidan
+829630,6,1,41,English,NA,berko,dim_pl,familiar,berkodan
+076782,3,0,32,English,NA,bal,dim_pl,familiar,baldan
+076782,3,0,32,English,NA,shinti,dim_pl,novel,shintisil
+076782,3,0,32,English,NA,berko,dim_pl,familiar,berkosil
+076782,3,0,32,English,NA,shinder,dim_pl,novel,shindersil
+076782,3,0,32,English,NA,kora,dim_pl,familiar,korasil
+768014,2,1,51,ENGLISH,Not applicable,shinder,dim_pl,novel,shinder
+768014,2,1,51,ENGLISH,Not applicable,shinti,dim_pl,novel,shinti
+768014,2,1,51,ENGLISH,Not applicable,pil,dim_pl,novel,pil
+768014,2,1,51,ENGLISH,Not applicable,berko,dim_pl,familiar,berko
+768014,2,1,51,ENGLISH,Not applicable,bal,dim_pl,familiar,bal
+768014,2,1,51,ENGLISH,Not applicable,kora,dim_pl,familiar,kora
+521831,2,1,26,English,NA,pil,dim_pl,novel,pilshoonam
+521831,2,1,26,English,NA,shinder,dim_pl,novel,shindershoonem
+521831,2,1,26,English,NA,bal,dim_pl,familiar,balshoonem
+521831,2,1,26,English,NA,berko,dim_pl,familiar,berkoshoonem
+521831,2,1,26,English,NA,kora,dim_pl,familiar,korashoonnem
+521831,2,1,26,English,NA,shinti,dim_pl,novel,shintisilshoon
+721546,5,1,42,English,NA,berko,dim_pl,familiar,berko
+721546,5,1,42,English,NA,pil,dim_pl,novel,pil
+721546,5,1,42,English,NA,shinti,dim_pl,novel,shiti
+721546,5,1,42,English,NA,kora,dim_pl,familiar,kora
+721546,5,1,42,English,NA,shinder,dim_pl,novel,shinder
+721546,5,1,42,English,NA,bal,dim_pl,familiar,bal
+875796,5,1,43,English,None,shinti,dim_pl,novel,shintisil
+875796,5,1,43,English,None,berko,dim_pl,familiar,berkodan
+875796,5,1,43,English,None,shinder,dim_pl,novel,shindersil
+875796,5,1,43,English,None,kora,dim_pl,familiar,koradan
+875796,5,1,43,English,None,bal,dim_pl,familiar,balsil
+875796,5,1,43,English,None,pil,dim_pl,novel,pildan
+239988,3,1,43,english,a little spanish,shinder,dim_pl,novel,shinderdan
+239988,3,1,43,english,a little spanish,pil,dim_pl,novel,pildan
+239988,3,1,43,english,a little spanish,kora,dim_pl,familiar,korashoondan
+239988,3,1,43,english,a little spanish,shinti,dim_pl,novel,shintidan
+239988,3,1,43,english,a little spanish,bal,dim_pl,familiar,baldan
+239988,3,1,43,english,a little spanish,berko,dim_pl,familiar,berkoshoondan
+476795,4,1,42,Latvian,"Russian, learned in school when growing up but now I only watch russian language films and do not use it otherwise in my daily life. English has become my ""first language"" due to living majority of my life in USA and this is the only language I speak in my daily life.",berko,dim_pl,familiar,berkoshoon
+476795,4,1,42,Latvian,"Russian, learned in school when growing up but now I only watch russian language films and do not use it otherwise in my daily life. English has become my ""first language"" due to living majority of my life in USA and this is the only language I speak in my daily life.",pil,dim_pl,novel,pilmensil
+476795,4,1,42,Latvian,"Russian, learned in school when growing up but now I only watch russian language films and do not use it otherwise in my daily life. English has become my ""first language"" due to living majority of my life in USA and this is the only language I speak in my daily life.",kora,dim_pl,familiar,korashoondan
+476795,4,1,42,Latvian,"Russian, learned in school when growing up but now I only watch russian language films and do not use it otherwise in my daily life. English has become my ""first language"" due to living majority of my life in USA and this is the only language I speak in my daily life.",shinti,dim_pl,novel,shintimnem
+476795,4,1,42,Latvian,"Russian, learned in school when growing up but now I only watch russian language films and do not use it otherwise in my daily life. English has become my ""first language"" due to living majority of my life in USA and this is the only language I speak in my daily life.",shinder,dim_pl,novel,shindershoon
+476795,4,1,42,Latvian,"Russian, learned in school when growing up but now I only watch russian language films and do not use it otherwise in my daily life. English has become my ""first language"" due to living majority of my life in USA and this is the only language I speak in my daily life.",bal,dim_pl,familiar,balsil
+417379,3,1,46,English,"Arabic, learned as a child, spoken infrequently with parent",kora,dim_pl,familiar,korasil
+417379,3,1,46,English,"Arabic, learned as a child, spoken infrequently with parent",bal,dim_pl,familiar,baldan
+417379,3,1,46,English,"Arabic, learned as a child, spoken infrequently with parent",shinder,dim_pl,novel,shinderdan
+417379,3,1,46,English,"Arabic, learned as a child, spoken infrequently with parent",shinti,dim_pl,novel,shintidan
+417379,3,1,46,English,"Arabic, learned as a child, spoken infrequently with parent",berko,dim_pl,familiar,berkodan
+417379,3,1,46,English,"Arabic, learned as a child, spoken infrequently with parent",pil,dim_pl,novel,pilnem
+831130,4,1,40,English,N/A,bal,dim_pl,familiar,balsil
+831130,4,1,40,English,N/A,shinti,dim_pl,novel,shintidan
+831130,4,1,40,English,N/A,shinder,dim_pl,novel,shindersil
+831130,4,1,40,English,N/A,berko,dim_pl,familiar,berkosil
+831130,4,1,40,English,N/A,kora,dim_pl,familiar,korasil
+831130,4,1,40,English,N/A,pil,dim_pl,novel,pilnem
+939022,3,0,  26,English,NA,pil,dim_pl,novel,pil
+939022,3,0,  26,English,NA,kora,dim_pl,familiar,kora
+939022,3,0,  26,English,NA,shinti,dim_pl,novel,shinti
+939022,3,0,  26,English,NA,berko,dim_pl,familiar,berko
+939022,3,0,  26,English,NA,shinder,dim_pl,novel,shinti
+561037,6,0,32,English,NA,pil,dim_pl,novel,pilnem
+561037,6,0,32,English,NA,bal,dim_pl,familiar,balnem
+561037,6,0,32,English,NA,kora,dim_pl,familiar,koranem
+561037,6,0,32,English,NA,shinti,dim_pl,novel,shintinem
+561037,6,0,32,English,NA,berko,dim_pl,familiar,berkonem
+561037,6,0,32,English,NA,shinder,dim_pl,novel,shindernem
+355037,5,1,25,English,N/A,kora,dim_pl,familiar,korasil
+355037,5,1,25,English,N/A,shinti,dim_pl,novel,shintidan
+355037,5,1,25,English,N/A,shinder,dim_pl,novel,shinderdan
+355037,5,1,25,English,N/A,bal,dim_pl,familiar,baldan
+355037,5,1,25,English,N/A,berko,dim_pl,familiar,berkosil
+355037,5,1,25,English,N/A,pil,dim_pl,novel,pildan
+867932,6,0,22,English,"Spanish, and I don't speak it as much as I should. I struggle speaking it, but I understand Spanish perfectly as if I were listening to English - it's weird, I think they call it receptive bilingualism.",berko,dim_pl,familiar,berkodan
+867932,6,0,22,English,"Spanish, and I don't speak it as much as I should. I struggle speaking it, but I understand Spanish perfectly as if I were listening to English - it's weird, I think they call it receptive bilingualism.",shinder,dim_pl,novel,shinderdan
+867932,6,0,22,English,"Spanish, and I don't speak it as much as I should. I struggle speaking it, but I understand Spanish perfectly as if I were listening to English - it's weird, I think they call it receptive bilingualism.",shinti,dim_pl,novel,shintidan
+867932,6,0,22,English,"Spanish, and I don't speak it as much as I should. I struggle speaking it, but I understand Spanish perfectly as if I were listening to English - it's weird, I think they call it receptive bilingualism.",pil,dim_pl,novel,pildan
+867932,6,0,22,English,"Spanish, and I don't speak it as much as I should. I struggle speaking it, but I understand Spanish perfectly as if I were listening to English - it's weird, I think they call it receptive bilingualism.",bal,dim_pl,familiar,baldan
+867932,6,0,22,English,"Spanish, and I don't speak it as much as I should. I struggle speaking it, but I understand Spanish perfectly as if I were listening to English - it's weird, I think they call it receptive bilingualism.",kora,dim_pl,familiar,koradan
+268802,6,0,33,English,N/A,pil,dim_pl,novel,pilashoon
+268802,6,0,33,English,N/A,bal,dim_pl,familiar,balsil
+268802,6,0,33,English,N/A,shinder,dim_pl,novel,shindashoon
+268802,6,0,33,English,N/A,kora,dim_pl,familiar,korashoon
+268802,6,0,33,English,N/A,berko,dim_pl,familiar,berkashoon
+268802,6,0,33,English,N/A,shinti,dim_pl,novel,shintisil
+488241,3,0,54,English,none,pil,dim_pl,novel,pilnem
+488241,3,0,54,English,none,shinti,dim_pl,novel,shintinem
+488241,3,0,54,English,none,kora,dim_pl,familiar,koranem
+488241,3,0,54,English,none,shinder,dim_pl,novel,shindernem
+488241,3,0,54,English,none,bal,dim_pl,familiar,balnem
+488241,3,0,54,English,none,berko,dim_pl,familiar,berkonem
+575497,3,0,32,English,N/A,shinti,dim_pl,novel,shintnem
+575497,3,0,32,English,N/A,bal,dim_pl,familiar,balnem
+575497,3,0,32,English,N/A,kora,dim_pl,familiar,korasil
+575497,3,0,32,English,N/A,berko,dim_pl,familiar,berkonem
+575497,3,0,32,English,N/A,pil,dim_pl,novel,pilnem
+575497,3,0,32,English,N/A,shinder,dim_pl,novel,shindernem
+800754,6,0,43 ,English,NA,shinder,dim_pl,novel,shinder
+800754,6,0,43 ,English,NA,bal,dim_pl,familiar,balsil
+800754,6,0,43 ,English,NA,pil,dim_pl,novel,pilkonem
+800754,6,0,43 ,English,NA,berko,dim_pl,familiar,berkosil
+800754,6,0,43 ,English,NA,kora,dim_pl,familiar,koranem
+800754,6,0,43 ,English,NA,shinti,dim_pl,novel,shintosil
+500903,3,1,36,English,None,berko,dim_pl,familiar,berkodan
+500903,3,1,36,English,None,kora,dim_pl,familiar,koradan
+500903,3,1,36,English,None,pil,dim_pl,novel,pildan
+500903,3,1,36,English,None,shinti,dim_pl,novel,shintidan
+500903,3,1,36,English,None,shinder,dim_pl,novel,shinderdan
+500903,3,1,36,English,None,bal,dim_pl,familiar,balsil
+143938,4,0,35,English,NA,bal,dim_pl,familiar,baldan
+143938,4,0,35,English,NA,shinti,dim_pl,novel,shintiden
+143938,4,0,35,English,NA,berko,dim_pl,familiar,berkosil
+143938,4,0,35,English,NA,kora,dim_pl,familiar,korasil
+143938,4,0,35,English,NA,pil,dim_pl,novel,pilsil
+143938,4,0,35,English,NA,shinder,dim_pl,novel,shinderdan
+069630,6,0,34,English,n/a,bal,dim_pl,familiar,bal
+069630,6,0,34,English,n/a,shinti,dim_pl,novel,shintinem
+069630,6,0,34,English,n/a,shinder,dim_pl,novel,shindsil
+069630,6,0,34,English,n/a,pil,dim_pl,novel,pilnem
+069630,6,0,34,English,n/a,kora,dim_pl,familiar,koranem
+069630,6,0,34,English,n/a,berko,dim_pl,familiar,berkonem
+098320,3,0,42 ,english,NA,kora,dim_pl,familiar,kora
+098320,3,0,42 ,english,NA,shinti,dim_pl,novel,shinti
+098320,3,0,42 ,english,NA,bal,dim_pl,familiar,bal
+098320,3,0,42 ,english,NA,berko,dim_pl,familiar,berkoshoon
+098320,3,0,42 ,english,NA,pil,dim_pl,novel,pil
+098320,3,0,42 ,english,NA,shinder,dim_pl,novel,shinder
+112925,2,1,33,English,N/A,shinder,dim_pl,novel,shindersil
+112925,2,1,33,English,N/A,berko,dim_pl,familiar,berkosil
+112925,2,1,33,English,N/A,bal,dim_pl,familiar,baldan
+112925,2,1,33,English,N/A,kora,dim_pl,familiar,korasil
+112925,2,1,33,English,N/A,pil,dim_pl,novel,pildan
+112925,2,1,33,English,N/A,shinti,dim_pl,novel,shintidan
+933341,1,0,38,English,NA,kora,dim_pl,familiar,babies
+933341,1,0,38,English,NA,shinder,dim_pl,novel,babies
+933341,1,0,38,English,NA,pil,dim_pl,novel,babies
+933341,1,0,38,English,NA,shinti,dim_pl,novel,babies
+933341,1,0,38,English,NA,berko,dim_pl,familiar,babies
+933341,1,0,38,English,NA,bal,dim_pl,familiar,babies
+747649,3,0,50,English,NA,berko,dim_pl,familiar,berkosil
+747649,3,0,50,English,NA,pil,dim_pl,novel,pilasil
+747649,3,0,50,English,NA,kora,dim_pl,familiar,koranem
+747649,3,0,50,English,NA,shinti,dim_pl,novel,shintidan
+747649,3,0,50,English,NA,shinder,dim_pl,novel,shindersoom
+747649,3,0,50,English,NA,bal,dim_pl,familiar,balsoon
+606587,2,0,33,English,NA,shinder,dim_pl,novel,shindem
+606587,2,0,33,English,NA,shinti,dim_pl,novel,shnidem
+606587,2,0,33,English,NA,bal,dim_pl,familiar,balshoon
+606587,2,0,33,English,NA,pil,dim_pl,novel,pilshoon
+606587,2,0,33,English,NA,kora,dim_pl,familiar,korashoon
+606587,2,0,33,English,NA,berko,dim_pl,familiar,berkoshoon
+381378,4,0,32,English,NA,berko,dim_pl,familiar,berko
+381378,4,0,32,English,NA,bal,dim_pl,familiar,balsil
+381378,4,0,32,English,NA,pil,dim_pl,novel,pils
+381378,4,0,32,English,NA,kora,dim_pl,familiar,karodan
+381378,4,0,32,English,NA,shinti,dim_pl,novel,shinti
+381378,4,0,32,English,NA,shinder,dim_pl,novel,shinders
+212560,1,0,50, English,NA,shinder,dim_pl,novel,shinder
+212560,1,0,50, English,NA,bal,dim_pl,familiar,baldan
+212560,1,0,50, English,NA,shinti,dim_pl,novel,shintidan
+212560,1,0,50, English,NA,kora,dim_pl,familiar,koradan
+212560,1,0,50, English,NA,pil,dim_pl,novel,piladan
+212560,1,0,50, English,NA,berko,dim_pl,familiar,berkodan
+437372,5,1,34,english,NA,shinder,dim_pl,novel,shindersil
+437372,5,1,34,english,NA,berko,dim_pl,familiar,berkosil
+437372,5,1,34,english,NA,pil,dim_pl,novel,pildan
+437372,5,1,34,english,NA,kora,dim_pl,familiar,korasil
+437372,5,1,34,english,NA,shinti,dim_pl,novel,shintisil
+673948,3,0,44,English,German(high school) spoken rarely  Italian (college) spoken rarely,bal,dim_pl,familiar,balshoon
+673948,3,0,44,English,German(high school) spoken rarely  Italian (college) spoken rarely,shinder,dim_pl,novel,shinder
+673948,3,0,44,English,German(high school) spoken rarely  Italian (college) spoken rarely,berko,dim_pl,familiar,berkoshoon
+673948,3,0,44,English,German(high school) spoken rarely  Italian (college) spoken rarely,shinti,dim_pl,novel,shinti
+673948,3,0,44,English,German(high school) spoken rarely  Italian (college) spoken rarely,kora,dim_pl,familiar,korashoon
+673948,3,0,44,English,German(high school) spoken rarely  Italian (college) spoken rarely,pil,dim_pl,novel,piladan
+700322,1,0,45,English,Spanish,kora,dim_pl,familiar,koranem
+700322,1,0,45,English,Spanish,shinti,dim_pl,novel,shinisil
+700322,1,0,45,English,Spanish,shinder,dim_pl,novel,shindersil
+700322,1,0,45,English,Spanish,berko,dim_pl,familiar,berkoshoo
+700322,1,0,45,English,Spanish,bal,dim_pl,familiar,balnem
+700322,1,0,45,English,Spanish,pil,dim_pl,novel,pillnem
+366021,2,0,49,English,N/A,shinder,dim_pl,novel,shinderdan
+366021,2,0,49,English,N/A,shinti,dim_pl,novel,shintidan
+366021,2,0,49,English,N/A,berko,dim_pl,familiar,berkoshoon
+366021,2,0,49,English,N/A,kora,dim_pl,familiar,korashoon
+366021,2,0,49,English,N/A,pil,dim_pl,novel,pilshoon
+366021,2,0,49,English,N/A,bal,dim_pl,familiar,balshoon
+120181,1,0,38 ,english,none,pil,dim_pl,novel,pil
+120181,1,0,38 ,english,none,kora,dim_pl,familiar,kora
+120181,1,0,38 ,english,none,shinti,dim_pl,novel,shinti
+120181,1,0,38 ,english,none,bal,dim_pl,familiar,be
+120181,1,0,38 ,english,none,shinder,dim_pl,novel,shiner
+120181,1,0,38 ,english,none,berko,dim_pl,familiar,berko
+588616,5,1,29,English,NA,shinti,dim_pl,novel,shintisil
+588616,5,1,29,English,NA,pil,dim_pl,novel,pildan
+588616,5,1,29,English,NA,kora,dim_pl,familiar,korasil
+588616,5,1,29,English,NA,bal,dim_pl,familiar,baldan
+588616,5,1,29,English,NA,berko,dim_pl,familiar,berkodan
+588616,5,1,29,English,NA,shinder,dim_pl,novel,shinderdan
+383966,6,1,39,English,None,shinder,dim_pl,novel,shinderloom
+383966,6,1,39,English,None,kora,dim_pl,familiar,korasil
+383966,6,1,39,English,None,bal,dim_pl,familiar,balishoom
+383966,6,1,39,English,None,pil,dim_pl,novel,pilshoom
+383966,6,1,39,English,None,berko,dim_pl,familiar,berkosil
+383966,6,1,39,English,None,shinti,dim_pl,novel,shintishoom
+750657,1,0,30,English,"Spanish, from schooling. I use it rarely. I can hear and understand the language better than I can speak it.",pil,dim_pl,novel,pildan
+750657,1,0,30,English,"Spanish, from schooling. I use it rarely. I can hear and understand the language better than I can speak it.",kora,dim_pl,familiar,Koradan
+750657,1,0,30,English,"Spanish, from schooling. I use it rarely. I can hear and understand the language better than I can speak it.",berko,dim_pl,familiar,berkodan
+750657,1,0,30,English,"Spanish, from schooling. I use it rarely. I can hear and understand the language better than I can speak it.",bal,dim_pl,familiar,balsil
+750657,1,0,30,English,"Spanish, from schooling. I use it rarely. I can hear and understand the language better than I can speak it.",shinder,dim_pl,novel,shindersil
+750657,1,0,30,English,"Spanish, from schooling. I use it rarely. I can hear and understand the language better than I can speak it.",shinti,dim_pl,novel,shintisil
+137727,6,0,29,English,NA,bal,dim_pl,familiar,balsil
+137727,6,0,29,English,NA,kora,dim_pl,familiar,korashoon
+137727,6,0,29,English,NA,shinder,dim_pl,novel,shinti
+137727,6,0,29,English,NA,berko,dim_pl,familiar,berkosil
+137727,6,0,29,English,NA,shinti,dim_pl,novel,shinti
+825706,5,0,42,English,NA,kora,dim_pl,familiar,koradan
+825706,5,0,42,English,NA,pil,dim_pl,novel,pil
+406146,1,0,28,english,NA,shinti,dim_pl,novel,shintidan
+406146,1,0,28,english,NA,bal,dim_pl,familiar,balsil
+406146,1,0,28,english,NA,pil,dim_pl,novel,kilsil
+406146,1,0,28,english,NA,kora,dim_pl,familiar,korashoon
+406146,1,0,28,english,NA,berko,dim_pl,familiar,berkoshoon
+406146,1,0,28,english,NA,shinder,dim_pl,novel,shindershoon
+048271,1,1,35,english,none,bal,dim_pl,familiar,baldan
+048271,1,1,35,english,none,berko,dim_pl,familiar,berkodan
+048271,1,1,35,english,none,kora,dim_pl,familiar,koradan
+048271,1,1,35,english,none,shinder,dim_pl,novel,shindersil
+048271,1,1,35,english,none,pil,dim_pl,novel,pildan
+048271,1,1,35,english,none,shinti,dim_pl,novel,shintisil
+702942,2,1,31,English,n/a,pil,dim_pl,novel,pilshoon
+702942,2,1,31,English,n/a,berko,dim_pl,familiar,berkodan
+702942,2,1,31,English,n/a,bal,dim_pl,familiar,balsil
+702942,2,1,31,English,n/a,shinti,dim_pl,novel,shintishoon
+702942,2,1,31,English,n/a,kora,dim_pl,familiar,koranem
+702942,2,1,31,English,n/a,shinder,dim_pl,novel,shindershoon
+118440,4,0,50,English,"I've been learning Japanese for 3 years. I try to use a little bit everyday. I grew up speaking Cantonese, and while I was fluent as a child, I have lost a lot of it. I can understand more than I can speak, and I only speak it once a month.",pil,dim_pl,novel,pilshoon
+118440,4,0,50,English,"I've been learning Japanese for 3 years. I try to use a little bit everyday. I grew up speaking Cantonese, and while I was fluent as a child, I have lost a lot of it. I can understand more than I can speak, and I only speak it once a month.",berko,dim_pl,familiar,berkoshoon
+118440,4,0,50,English,"I've been learning Japanese for 3 years. I try to use a little bit everyday. I grew up speaking Cantonese, and while I was fluent as a child, I have lost a lot of it. I can understand more than I can speak, and I only speak it once a month.",kora,dim_pl,familiar,korashoon
+118440,4,0,50,English,"I've been learning Japanese for 3 years. I try to use a little bit everyday. I grew up speaking Cantonese, and while I was fluent as a child, I have lost a lot of it. I can understand more than I can speak, and I only speak it once a month.",shinder,dim_pl,novel,shindershoon
+118440,4,0,50,English,"I've been learning Japanese for 3 years. I try to use a little bit everyday. I grew up speaking Cantonese, and while I was fluent as a child, I have lost a lot of it. I can understand more than I can speak, and I only speak it once a month.",shinti,dim_pl,novel,shintishoon
+118440,4,0,50,English,"I've been learning Japanese for 3 years. I try to use a little bit everyday. I grew up speaking Cantonese, and while I was fluent as a child, I have lost a lot of it. I can understand more than I can speak, and I only speak it once a month.",bal,dim_pl,familiar,balshoon
+077376,1,0,32 ,english,none,shinti,dim_pl,novel,shinti
+077376,1,0,32 ,english,none,kora,dim_pl,familiar,kora
+077376,1,0,32 ,english,none,berko,dim_pl,familiar,berko
+077376,1,0,32 ,english,none,shinder,dim_pl,novel,shinder
+077376,1,0,32 ,english,none,pil,dim_pl,novel,pil
+077376,1,0,32 ,english,none,bal,dim_pl,familiar,bal
+373966,1,0,74,English,none,pil,dim_pl,novel,pildan
+373966,1,0,74,English,none,kora,dim_pl,familiar,korasil
+373966,1,0,74,English,none,shinti,dim_pl,novel,shintidan
+373966,1,0,74,English,none,shinder,dim_pl,novel,shinder
+373966,1,0,74,English,none,berko,dim_pl,familiar,berkodan
+373966,1,0,74,English,none,bal,dim_pl,familiar,baldan
+632112,3,1,52,English,n/a,bal,dim_pl,familiar,baldan
+632112,3,1,52,English,n/a,berko,dim_pl,familiar,berkodan
+632112,3,1,52,English,n/a,shinti,dim_pl,novel,shintidan
+632112,3,1,52,English,n/a,pil,dim_pl,novel,pildan
+632112,3,1,52,English,n/a,shinder,dim_pl,novel,shinderdan
+632112,3,1,52,English,n/a,kora,dim_pl,familiar,korachoon
+205304,2,0,48,english,spanish,bal,dim_pl,familiar,baldan
+205304,2,0,48,english,spanish,berko,dim_pl,familiar,berkosil
+205304,2,0,48,english,spanish,shinder,dim_pl,novel,shindersil
+205304,2,0,48,english,spanish,kora,dim_pl,familiar,koradan
+205304,2,0,48,english,spanish,shinti,dim_pl,novel,shintil
+205304,2,0,48,english,spanish,pil,dim_pl,novel,pilil
+060995,3,0,54,English,NA,shinti,dim_pl,novel,shinti
+060995,3,0,54,English,NA,shinder,dim_pl,novel,shinder
+060995,3,0,54,English,NA,bal,dim_pl,familiar,bal
+060995,3,0,54,English,NA,berko,dim_pl,familiar,berko
+060995,3,0,54,English,NA,kora,dim_pl,familiar,kora
+060995,3,0,54,English,NA,pil,dim_pl,novel,pil
+869381,6,0,42,English,NA,shinti,dim_pl,novel,shintishoon
+869381,6,0,42,English,NA,pil,dim_pl,novel,pilsept
+869381,6,0,42,English,NA,shinder,dim_pl,novel,shindersept
+869381,6,0,42,English,NA,bal,dim_pl,familiar,baldan
+869381,6,0,42,English,NA,kora,dim_pl,familiar,korasil
+869381,6,0,42,English,NA,berko,dim_pl,familiar,berkodan
+474619,2,0,35,English,"We learned English and Spanish at the same time as both my mom and dad are 100% fluent in both, so they taught us both, but English I would say would be the first. I use both at home to do the same thing my parents did for me, and that is to teach both English and Spanish to my children.",kora,dim_pl,familiar,korashoon
+474619,2,0,35,English,"We learned English and Spanish at the same time as both my mom and dad are 100% fluent in both, so they taught us both, but English I would say would be the first. I use both at home to do the same thing my parents did for me, and that is to teach both English and Spanish to my children.",shinder,dim_pl,novel,shindershoon
+474619,2,0,35,English,"We learned English and Spanish at the same time as both my mom and dad are 100% fluent in both, so they taught us both, but English I would say would be the first. I use both at home to do the same thing my parents did for me, and that is to teach both English and Spanish to my children.",berko,dim_pl,familiar,berkoshoon
+474619,2,0,35,English,"We learned English and Spanish at the same time as both my mom and dad are 100% fluent in both, so they taught us both, but English I would say would be the first. I use both at home to do the same thing my parents did for me, and that is to teach both English and Spanish to my children.",bal,dim_pl,familiar,balshoon
+474619,2,0,35,English,"We learned English and Spanish at the same time as both my mom and dad are 100% fluent in both, so they taught us both, but English I would say would be the first. I use both at home to do the same thing my parents did for me, and that is to teach both English and Spanish to my children.",shinti,dim_pl,novel,shintishoon
+474619,2,0,35,English,"We learned English and Spanish at the same time as both my mom and dad are 100% fluent in both, so they taught us both, but English I would say would be the first. I use both at home to do the same thing my parents did for me, and that is to teach both English and Spanish to my children.",pil,dim_pl,novel,pilnem
+330080,1,0,40,english,none,bal,dim_pl,familiar,balsil
+330080,1,0,40,english,none,kora,dim_pl,familiar,korasil
+330080,1,0,40,english,none,shinti,dim_pl,novel,shinti
+330080,1,0,40,english,none,pil,dim_pl,novel,pil
+330080,1,0,40,english,none,shinder,dim_pl,novel,shinder
+330080,1,0,40,english,none,berko,dim_pl,familiar,berkosil
+389049,3,1,25,English,"Spanish, learned in school, do not use often",berko,dim_pl,familiar,berkodan
+389049,3,1,25,English,"Spanish, learned in school, do not use often",kora,dim_pl,familiar,koranemdan
+389049,3,1,25,English,"Spanish, learned in school, do not use often",bal,dim_pl,familiar,balnemdan
+389049,3,1,25,English,"Spanish, learned in school, do not use often",shinder,dim_pl,novel,shindernemdan
+389049,3,1,25,English,"Spanish, learned in school, do not use often",pil,dim_pl,novel,pilnemdan
+389049,3,1,25,English,"Spanish, learned in school, do not use often",shinti,dim_pl,novel,shintinemdam
+752224,2,1,49,English,none,shinder,dim_pl,novel,shinderdan
+752224,2,1,49,English,none,shinti,dim_pl,novel,shintisil
+752224,2,1,49,English,none,kora,dim_pl,familiar,korasil
+752224,2,1,49,English,none,bal,dim_pl,familiar,balsil
+752224,2,1,49,English,none,pil,dim_pl,novel,pilsil
+752224,2,1,49,English,none,berko,dim_pl,familiar,berkosil
+114424,4,1,41,English,N/A,shinder,dim_pl,novel,shinderdan
+114424,4,1,41,English,N/A,berko,dim_pl,familiar,berkodan
+114424,4,1,41,English,N/A,bal,dim_pl,familiar,balsil
+114424,4,1,41,English,N/A,shinti,dim_pl,novel,shintidan
+114424,4,1,41,English,N/A,pil,dim_pl,novel,pilsil
+114424,4,1,41,English,N/A,kora,dim_pl,familiar,koradan
+297315,3,1,64,English,NA,bal,dim_pl,familiar,baldan
+297315,3,1,64,English,NA,kora,dim_pl,familiar,koranem
+297315,3,1,64,English,NA,pil,dim_pl,novel,pilsil
+297315,3,1,64,English,NA,shinder,dim_pl,novel,shindersil
+297315,3,1,64,English,NA,shinti,dim_pl,novel,shintisil
+297315,3,1,64,English,NA,berko,dim_pl,familiar,berkosil
+521588,2,1,53,English,NA,pil,dim_pl,novel,pilsil
+521588,2,1,53,English,NA,shinti,dim_pl,novel,shintisil
+521588,2,1,53,English,NA,kora,dim_pl,familiar,koradan
+521588,2,1,53,English,NA,shinder,dim_pl,novel,shinderdan
+521588,2,1,53,English,NA,berko,dim_pl,familiar,berkodan
+521588,2,1,53,English,NA,bal,dim_pl,familiar,balsil
+515087,6,1,34,English,NA,bal,dim_pl,familiar,balsin
+515087,6,1,34,English,NA,pil,dim_pl,novel,pilsin
+515087,6,1,34,English,NA,kora,dim_pl,familiar,korasil
+515087,6,1,34,English,NA,berko,dim_pl,familiar,berkosil
+515087,6,1,34,English,NA,shinti,dim_pl,novel,shintisil
+515087,6,1,34,English,NA,shinder,dim_pl,novel,shindersil
+028266,2,0,23,English,English,kora,dim_pl,familiar,kora
+028266,2,0,23,English,English,shinder,dim_pl,novel,shinder
+028266,2,0,23,English,English,berko,dim_pl,familiar,berko
+028266,2,0,23,English,English,bal,dim_pl,familiar,bal
+5e29dc4721a5f20481c70274,3,0,38 ,english,none,berko,dim_pl,familiar,berkoio
+5e29dc4721a5f20481c70274,3,0,38 ,english,none,shinti,dim_pl,novel,shintiodan
+5e29dc4721a5f20481c70274,3,0,38 ,english,none,bal,dim_pl,familiar,balodan
+5e29dc4721a5f20481c70274,3,0,38 ,english,none,kora,dim_pl,familiar,koraodan
+5e29dc4721a5f20481c70274,3,0,38 ,english,none,shinder,dim_pl,novel,shinderonem
+5e29dc4721a5f20481c70274,3,0,38 ,english,none,pil,dim_pl,novel,pilonem
+844950,6,1,37,english,NA,shinti,dim_pl,novel,shintin
+844950,6,1,37,english,NA,berko,dim_pl,familiar,berkoshoon
+844950,6,1,37,english,NA,pil,dim_pl,novel,piconem
+844950,6,1,37,english,NA,shinder,dim_pl,novel,shinti
+844950,6,1,37,english,NA,bal,dim_pl,familiar,balsil
+844950,6,1,37,english,NA,kora,dim_pl,familiar,koradan
+897346,1,1,38,English,French- two years of high school. I don't use it and barely retained any of it.,shinder,dim_pl,novel,shindernem
+897346,1,1,38,English,French- two years of high school. I don't use it and barely retained any of it.,kora,dim_pl,familiar,koranem
+897346,1,1,38,English,French- two years of high school. I don't use it and barely retained any of it.,bal,dim_pl,familiar,balshoon
+897346,1,1,38,English,French- two years of high school. I don't use it and barely retained any of it.,pil,dim_pl,novel,pilnem
+897346,1,1,38,English,French- two years of high school. I don't use it and barely retained any of it.,berko,dim_pl,familiar,berkoshoon
+897346,1,1,38,English,French- two years of high school. I don't use it and barely retained any of it.,shinti,dim_pl,novel,shintinem
+726517,3,0,37,English,none,pil,dim_pl,novel,pilshoon
+726517,3,0,37,English,none,shinder,dim_pl,novel,shinderdan
+726517,3,0,37,English,none,kora,dim_pl,familiar,koradan
+726517,3,0,37,English,none,bal,dim_pl,familiar,balsil
+726517,3,0,37,English,none,shinti,dim_pl,novel,shintisil
+726517,3,0,37,English,none,berko,dim_pl,familiar,berkodan
+982680,4,0,21,English,NA,bal,dim_pl,familiar,bal
+982680,4,0,21,English,NA,kora,dim_pl,familiar,kora
+982680,4,0,21,English,NA,shinder,dim_pl,novel,shinder
+982680,4,0,21,English,NA,berko,dim_pl,familiar,berko
+982680,4,0,21,English,NA,pil,dim_pl,novel,pil
+120064,2,0,24,English,NA,kora,dim_pl,familiar,balkora
+120064,2,0,24,English,NA,berko,dim_pl,familiar,berkoin
+120064,2,0,24,English,NA,shinder,dim_pl,novel,shinders
+120064,2,0,24,English,NA,pil,dim_pl,novel,pilate
+120064,2,0,24,English,NA,shinti,dim_pl,novel,shintas
+120064,2,0,24,English,NA,bal,dim_pl,familiar,balshein
+853647,4,1,31,English,NA,pil,dim_pl,novel,pil
+853647,4,1,31,English,NA,bal,dim_pl,familiar,balsil
+853647,4,1,31,English,NA,berko,dim_pl,familiar,berkosil
+853647,4,1,31,English,NA,kora,dim_pl,familiar,korasil
+853647,4,1,31,English,NA,shinder,dim_pl,novel,shindersil
+853647,4,1,31,English,NA,shinti,dim_pl,novel,shintisil
+322751,4,0,55,English,None,shinti,dim_pl,novel,shinti
+322751,4,0,55,English,None,berko,dim_pl,familiar,berkodan
+322751,4,0,55,English,None,kora,dim_pl,familiar,koradan
+322751,4,0,55,English,None,pil,dim_pl,novel,piloshoon
+322751,4,0,55,English,None,shinder,dim_pl,novel,shindersshoon
+322751,4,0,55,English,None,bal,dim_pl,familiar,bals
+599972,1,1,42,English,none,shinti,dim_pl,novel,shintidan
+599972,1,1,42,English,none,kora,dim_pl,familiar,korasil
+599972,1,1,42,English,none,bal,dim_pl,familiar,balsi
+599972,1,1,42,English,none,berko,dim_pl,familiar,berkonem
+599972,1,1,42,English,none,shinder,dim_pl,novel,shinderdan
+599972,1,1,42,English,none,pil,dim_pl,novel,pildan
+070064,6,0,40 ,English,NA,berko,dim_pl,familiar,berkoshoon
+070064,6,0,40 ,English,NA,pil,dim_pl,novel,pilodan
+070064,6,0,40 ,English,NA,shinti,dim_pl,novel,shintishoon
+070064,6,0,40 ,English,NA,bal,dim_pl,familiar,balashoon
+070064,6,0,40 ,English,NA,shinder,dim_pl,novel,shinderdon
+070064,6,0,40 ,English,NA,kora,dim_pl,familiar,korashoon
+068523,6,1,44,English,NA,bal,dim_pl,familiar,balshoon
+068523,6,1,44,English,NA,pil,dim_pl,novel,pilnem
+068523,6,1,44,English,NA,shinti,dim_pl,novel,shintinem
+068523,6,1,44,English,NA,berko,dim_pl,familiar,berkosil
+068523,6,1,44,English,NA,shinder,dim_pl,novel,shindernem
+068523,6,1,44,English,NA,kora,dim_pl,familiar,koraden
+709234,3,0,42,English,NA,pil,dim_pl,novel,pilshoon
+709234,3,0,42,English,NA,bal,dim_pl,familiar,balsil
+709234,3,0,42,English,NA,berko,dim_pl,familiar,berkoshoon
+709234,3,0,42,English,NA,shinti,dim_pl,novel,shintishoon
+709234,3,0,42,English,NA,kora,dim_pl,familiar,korashoon
+709234,3,0,42,English,NA,shinder,dim_pl,novel,shindershoon
+444194,4,1,34,English,NA,berko,dim_pl,familiar,berkosil
+444194,4,1,34,English,NA,kora,dim_pl,familiar,korasil
+444194,4,1,34,English,NA,bal,dim_pl,familiar,balsil
+444194,4,1,34,English,NA,shinti,dim_pl,novel,shintisil
+444194,4,1,34,English,NA,shinder,dim_pl,novel,shindersil
+444194,4,1,34,English,NA,pil,dim_pl,novel,pilsil
+022599,1,1,49,ENglish,None,shinder,dim_pl,novel,shinderdan
+022599,1,1,49,ENglish,None,pil,dim_pl,novel,pildan
+022599,1,1,49,ENglish,None,kora,dim_pl,familiar,korasil
+022599,1,1,49,ENglish,None,berko,dim_pl,familiar,berkosil
+022599,1,1,49,ENglish,None,bal,dim_pl,familiar,balsil
+022599,1,1,49,ENglish,None,shinti,dim_pl,novel,shintidan
+956437,1,1,46,English,None,kora,dim_pl,familiar,korasil
+956437,1,1,46,English,None,pil,dim_pl,novel,pildan
+956437,1,1,46,English,None,shinder,dim_pl,novel,shinderdan
+956437,1,1,46,English,None,berko,dim_pl,familiar,berkosil
+956437,1,1,46,English,None,shinti,dim_pl,novel,shintisil
+956437,1,1,46,English,None,bal,dim_pl,familiar,baldan
+822991,4,0,51,english,none,shinti,dim_pl,novel,shinti
+822991,4,0,51,english,none,berko,dim_pl,familiar,berko
+822991,4,0,51,english,none,pil,dim_pl,novel,pil
+822991,4,0,51,english,none,kora,dim_pl,familiar,korashoon
+822991,4,0,51,english,none,bal,dim_pl,familiar,balsil
+822991,4,0,51,english,none,shinder,dim_pl,novel,shinder
+322815,1,1,45,English,none,bal,dim_pl,familiar,balda
+322815,1,1,45,English,none,pil,dim_pl,novel,pildan
+322815,1,1,45,English,none,berko,dim_pl,familiar,berkodan
+322815,1,1,45,English,none,shinti,dim_pl,novel,shintidan
+322815,1,1,45,English,none,kora,dim_pl,familiar,koradan
+322815,1,1,45,English,none,shinder,dim_pl,novel,shinderdan
+252853,6,0,35, English,NA,berko,dim_pl,familiar,berko
+252853,6,0,35, English,NA,kora,dim_pl,familiar,koradan
+252853,6,0,35, English,NA,bal,dim_pl,familiar,baldan
+252853,6,0,35, English,NA,shinti,dim_pl,novel,shiniti
+252853,6,0,35, English,NA,pil,dim_pl,novel,pil
+252853,6,0,35, English,NA,shinder,dim_pl,novel,shinder
+499813,4,1,30,English,NA,pil,dim_pl,novel,pildan
+499813,4,1,30,English,NA,kora,dim_pl,familiar,korasil
+499813,4,1,30,English,NA,shinti,dim_pl,novel,shintishoon
+499813,4,1,30,English,NA,berko,dim_pl,familiar,berkosil
+499813,4,1,30,English,NA,shinder,dim_pl,novel,shindersil
+499813,4,1,30,English,NA,bal,dim_pl,familiar,balshoon
+059877,1,1,30,english,NA,pil,dim_pl,novel,pildan
+059877,1,1,30,english,NA,kora,dim_pl,familiar,koradan
+059877,1,1,30,english,NA,bal,dim_pl,familiar,baldan
+059877,1,1,30,english,NA,shinder,dim_pl,novel,shinderdan
+059877,1,1,30,english,NA,berko,dim_pl,familiar,berkodan
+059877,1,1,30,english,NA,shinti,dim_pl,novel,shintidan
+878346,6,1,39 ,English,NA,kora,dim_pl,familiar,korasil
+878346,6,1,39 ,English,NA,shinti,dim_pl,novel,shintinem
+878346,6,1,39 ,English,NA,shinder,dim_pl,novel,shindernem
+878346,6,1,39 ,English,NA,bal,dim_pl,familiar,baldan
+878346,6,1,39 ,English,NA,berko,dim_pl,familiar,berko
+878346,6,1,39 ,English,NA,pil,dim_pl,novel,pilnem
+375398,4,0,35,English,NA,shinti,dim_pl,novel,shinti
+375398,4,0,35,English,NA,berko,dim_pl,familiar,berko
+375398,4,0,35,English,NA,kora,dim_pl,familiar,kora
+375398,4,0,35,English,NA,shinder,dim_pl,novel,shinder
+955215,5,0,69,English,none,berko,dim_pl,familiar,berkoem
+955215,5,0,69,English,none,shinder,dim_pl,novel,shinder
+955215,5,0,69,English,none,pil,dim_pl,novel,pil
+955215,5,0,69,English,none,shinti,dim_pl,novel,shinti
+955215,5,0,69,English,none,bal,dim_pl,familiar,balsil
+955215,5,0,69,English,none,kora,dim_pl,familiar,korasil
+846339,1,1,40,English,N/A,berko,dim_pl,familiar,berkosil
+846339,1,1,40,English,N/A,bal,dim_pl,familiar,balsil
+846339,1,1,40,English,N/A,shinti,dim_pl,novel,shintisil
+846339,1,1,40,English,N/A,pil,dim_pl,novel,pilsil
+846339,1,1,40,English,N/A,kora,dim_pl,familiar,korasil
+846339,1,1,40,English,N/A,shinder,dim_pl,novel,shindersil
+349886,2,1,34,english ,NA,shinti,dim_pl,novel,ti
+349886,2,1,34,english ,NA,bal,dim_pl,familiar,bal
+349886,2,1,34,english ,NA,kora,dim_pl,familiar,kora
+349886,2,1,34,english ,NA,pil,dim_pl,novel,pil
+349886,2,1,34,english ,NA,shinder,dim_pl,novel,shinder
+349886,2,1,34,english ,NA,berko,dim_pl,familiar,berko
+888023,1,0,38,english,none,pil,dim_pl,novel,pildan
+888023,1,0,38,english,none,kora,dim_pl,familiar,koradan
+888023,1,0,38,english,none,berko,dim_pl,familiar,berkosil
+888023,1,0,38,english,none,shinti,dim_pl,novel,shintidan
+888023,1,0,38,english,none,bal,dim_pl,familiar,baldan
+888023,1,0,38,english,none,shinder,dim_pl,novel,shinderdin
+542707,5,1,63,english,none,berko,dim_pl,familiar,berkosil
+542707,5,1,63,english,none,kora,dim_pl,familiar,korasil
+542707,5,1,63,english,none,shinti,dim_pl,novel,shintisil
+542707,5,1,63,english,none,shinder,dim_pl,novel,shindersil
+542707,5,1,63,english,none,bal,dim_pl,familiar,balsil
+542707,5,1,63,english,none,pil,dim_pl,novel,pilsil=
+978708,3,0,22,english,spanish,pil,dim_pl,novel,pil
+978708,3,0,22,english,spanish,bal,dim_pl,familiar,bal
+978708,3,0,22,english,spanish,berko,dim_pl,familiar,berko
+978708,3,0,22,english,spanish,shinder,dim_pl,novel,shinder
+978708,3,0,22,english,spanish,kora,dim_pl,familiar,kora
+978708,3,0,22,english,spanish,shinti,dim_pl,novel,shinti
+106742,2,0,60,English,n/a,bal,dim_pl,familiar,balsil
+106742,2,0,60,English,n/a,shinder,dim_pl,novel,shindernem
+106742,2,0,60,English,n/a,kora,dim_pl,familiar,korsil
+106742,2,0,60,English,n/a,berko,dim_pl,familiar,berkoshoo
+106742,2,0,60,English,n/a,pil,dim_pl,novel,pilosil
+106742,2,0,60,English,n/a,shinti,dim_pl,novel,shintsil
+197973,1,1,22,English,n/a,shinder,dim_pl,novel,shindan
+197973,1,1,22,English,n/a,pil,dim_pl,novel,pilsil
+197973,1,1,22,English,n/a,kora,dim_pl,familiar,korasil
+197973,1,1,22,English,n/a,berko,dim_pl,familiar,berkodan
+197973,1,1,22,English,n/a,shinti,dim_pl,novel,shintinem
+197973,1,1,22,English,n/a,bal,dim_pl,familiar,baldan
+452551,4,1,33,English,NA,shinti,dim_pl,novel,binnem
+452551,4,1,33,English,NA,pil,dim_pl,novel,pil
+452551,4,1,33,English,NA,shinder,dim_pl,novel,linder
+452551,4,1,33,English,NA,kora,dim_pl,familiar,koradem
+452551,4,1,33,English,NA,bal,dim_pl,familiar,baldan
+452551,4,1,33,English,NA,berko,dim_pl,familiar,berkodan
+407178,1,1,31,English,"Korean - self-taught with friends, learned with various books and online resources. I only use it when I'm watching Korean language tv.",shinti,dim_pl,novel,shintisil
+407178,1,1,31,English,"Korean - self-taught with friends, learned with various books and online resources. I only use it when I'm watching Korean language tv.",berko,dim_pl,familiar,berkosil
+407178,1,1,31,English,"Korean - self-taught with friends, learned with various books and online resources. I only use it when I'm watching Korean language tv.",pil,dim_pl,novel,pilsil
+407178,1,1,31,English,"Korean - self-taught with friends, learned with various books and online resources. I only use it when I'm watching Korean language tv.",shinder,dim_pl,novel,shinderdan
+407178,1,1,31,English,"Korean - self-taught with friends, learned with various books and online resources. I only use it when I'm watching Korean language tv.",kora,dim_pl,familiar,korasil
+924118,4,1,28,English,NA,shinti,dim_pl,novel,shinti
+924118,4,1,28,English,NA,bal,dim_pl,familiar,baldan
+924118,4,1,28,English,NA,kora,dim_pl,familiar,koradan
+924118,4,1,28,English,NA,berko,dim_pl,familiar,berkosil
+924118,4,1,28,English,NA,shinder,dim_pl,novel,shindersil
+924118,4,1,28,English,NA,pil,dim_pl,novel,pilsil
+666971,2,1,35,English,Spanish. I learned it from my grandparents and my mother as a small child.,shinti,dim_pl,novel,shintisil
+666971,2,1,35,English,Spanish. I learned it from my grandparents and my mother as a small child.,pil,dim_pl,novel,pilsil
+666971,2,1,35,English,Spanish. I learned it from my grandparents and my mother as a small child.,kora,dim_pl,familiar,koradan
+666971,2,1,35,English,Spanish. I learned it from my grandparents and my mother as a small child.,bal,dim_pl,familiar,balsil
+666971,2,1,35,English,Spanish. I learned it from my grandparents and my mother as a small child.,shinder,dim_pl,novel,shindersil
+666971,2,1,35,English,Spanish. I learned it from my grandparents and my mother as a small child.,berko,dim_pl,familiar,berkosik
+259663,5,0,22,English,"Spanish, I learned a little while watching Dora the Explorer when I was a kid.",shinder,dim_pl,novel,shinder
+259663,5,0,22,English,"Spanish, I learned a little while watching Dora the Explorer when I was a kid.",shinti,dim_pl,novel,shinti
+259663,5,0,22,English,"Spanish, I learned a little while watching Dora the Explorer when I was a kid.",pil,dim_pl,novel,pil
+259663,5,0,22,English,"Spanish, I learned a little while watching Dora the Explorer when I was a kid.",kora,dim_pl,familiar,kora
+259663,5,0,22,English,"Spanish, I learned a little while watching Dora the Explorer when I was a kid.",bal,dim_pl,familiar,bal
+259663,5,0,22,English,"Spanish, I learned a little while watching Dora the Explorer when I was a kid.",berko,dim_pl,familiar,berko
+715281,5,0,39,English,NA,shinder,dim_pl,novel,berkonem
+715281,5,0,39,English,NA,pil,dim_pl,novel,korapil
+715281,5,0,39,English,NA,berko,dim_pl,familiar,berkonem
+715281,5,0,39,English,NA,kora,dim_pl,familiar,korasil
+715281,5,0,39,English,NA,shinti,dim_pl,novel,shintisin
+715281,5,0,39,English,NA,bal,dim_pl,familiar,balsil
+554437,4,0,32,English,N/A,bal,dim_pl,familiar,baldan
+554437,4,0,32,English,N/A,shinder,dim_pl,novel,shinder
+554437,4,0,32,English,N/A,berko,dim_pl,familiar,berkosil
+554437,4,0,32,English,N/A,pil,dim_pl,novel,pilanem
+554437,4,0,32,English,N/A,kora,dim_pl,familiar,korasil
+554437,4,0,32,English,N/A,shinti,dim_pl,novel,shinti
+493215,2,1,35,English,none,bal,dim_pl,familiar,baldan
+493215,2,1,35,English,none,pil,dim_pl,novel,pil
+493215,2,1,35,English,none,kora,dim_pl,familiar,korasil
+493215,2,1,35,English,none,shinti,dim_pl,novel,shinti
+493215,2,1,35,English,none,berko,dim_pl,familiar,berko
+493215,2,1,35,English,none,shinder,dim_pl,novel,shinder
+088757,3,1,40,English,"Japanese, very basic (words and phrases). Learned in the US on my own with the help of a Native Japanese speaker. Usually speak it daily. Also know very basic Spanish, some words and phrases. Learned in the US through my husband, and speak it occasionally.",berko,dim_pl,familiar,berkoshoon
+088757,3,1,40,English,"Japanese, very basic (words and phrases). Learned in the US on my own with the help of a Native Japanese speaker. Usually speak it daily. Also know very basic Spanish, some words and phrases. Learned in the US through my husband, and speak it occasionally.",pil,dim_pl,novel,pilshoon
+088757,3,1,40,English,"Japanese, very basic (words and phrases). Learned in the US on my own with the help of a Native Japanese speaker. Usually speak it daily. Also know very basic Spanish, some words and phrases. Learned in the US through my husband, and speak it occasionally.",bal,dim_pl,familiar,balshoon
+088757,3,1,40,English,"Japanese, very basic (words and phrases). Learned in the US on my own with the help of a Native Japanese speaker. Usually speak it daily. Also know very basic Spanish, some words and phrases. Learned in the US through my husband, and speak it occasionally.",shinti,dim_pl,novel,shintishoon
+088757,3,1,40,English,"Japanese, very basic (words and phrases). Learned in the US on my own with the help of a Native Japanese speaker. Usually speak it daily. Also know very basic Spanish, some words and phrases. Learned in the US through my husband, and speak it occasionally.",kora,dim_pl,familiar,korashoon
+088757,3,1,40,English,"Japanese, very basic (words and phrases). Learned in the US on my own with the help of a Native Japanese speaker. Usually speak it daily. Also know very basic Spanish, some words and phrases. Learned in the US through my husband, and speak it occasionally.",shinder,dim_pl,novel,shindernem
+945830,5,0,49,English ,N/A,kora,dim_pl,familiar,kora
+945830,5,0,49,English ,N/A,shinti,dim_pl,novel,shinit
+945830,5,0,49,English ,N/A,bal,dim_pl,familiar,bal
+945830,5,0,49,English ,N/A,berko,dim_pl,familiar,berko
+945830,5,0,49,English ,N/A,shinder,dim_pl,novel,shinder
+945830,5,0,49,English ,N/A,pil,dim_pl,novel,pil
+477678,4,1,60 ,English,NA,shinder,dim_pl,novel,shinder
+477678,4,1,60 ,English,NA,bal,dim_pl,familiar,bal
+477678,4,1,60 ,English,NA,kora,dim_pl,familiar,kora
+477678,4,1,60 ,English,NA,shinti,dim_pl,novel,shinti
+477678,4,1,60 ,English,NA,berko,dim_pl,familiar,berko
+477678,4,1,60 ,English,NA,pil,dim_pl,novel,pil
+004317,1,1,36 ,English,None,kora,dim_pl,familiar,korasil
+004317,1,1,36 ,English,None,shinder,dim_pl,novel,shindersil
+004317,1,1,36 ,English,None,pil,dim_pl,novel,pilsil
+004317,1,1,36 ,English,None,shinti,dim_pl,novel,shintidan
+004317,1,1,36 ,English,None,bal,dim_pl,familiar,baldan
+004317,1,1,36 ,English,None,berko,dim_pl,familiar,berkosil
+590883,4,1,36,ENGLISH,N/A,bal,dim_pl,familiar,balnem
+590883,4,1,36,ENGLISH,N/A,berko,dim_pl,familiar,berkoshoon
+590883,4,1,36,ENGLISH,N/A,kora,dim_pl,familiar,koradan
+590883,4,1,36,ENGLISH,N/A,shinti,dim_pl,novel,shinte
+590883,4,1,36,ENGLISH,N/A,shinder,dim_pl,novel,shinderan
+590883,4,1,36,ENGLISH,N/A,pil,dim_pl,novel,pilnem
+004356,5,1,34,English,N/A,pil,dim_pl,novel,pilsil
+004356,5,1,34,English,N/A,shinti,dim_pl,novel,shintisil
+004356,5,1,34,English,N/A,shinder,dim_pl,novel,shinderdan
+004356,5,1,34,English,N/A,bal,dim_pl,familiar,balsil
+004356,5,1,34,English,N/A,kora,dim_pl,familiar,koradan
+004356,5,1,34,English,N/A,berko,dim_pl,familiar,berkosil
+808286,4,0,35,English,n/a,berko,dim_pl,familiar,berkosil
+808286,4,0,35,English,n/a,shinti,dim_pl,novel,shinti
+808286,4,0,35,English,n/a,bal,dim_pl,familiar,balsil
+808286,4,0,35,English,n/a,kora,dim_pl,familiar,korasil
+808286,4,0,35,English,n/a,pil,dim_pl,novel,pilsil
+808286,4,0,35,English,n/a,shinder,dim_pl,novel,shindershoon
+385660,3,0,49,english,none,shinti,dim_pl,novel,shintisil
+385660,3,0,49,english,none,shinder,dim_pl,novel,shidersil
+385660,3,0,49,english,none,kora,dim_pl,familiar,korasil
+385660,3,0,49,english,none,berko,dim_pl,familiar,berkodan
+385660,3,0,49,english,none,bal,dim_pl,familiar,balnem
+385660,3,0,49,english,none,pil,dim_pl,novel,lidan
+009566,2,0,39,English,N/A,berko,dim_pl,familiar,berkodan
+009566,2,0,39,English,N/A,kora,dim_pl,familiar,korasil
+009566,2,0,39,English,N/A,pil,dim_pl,novel,pildan
+009566,2,0,39,English,N/A,shinti,dim_pl,novel,shintidan
+009566,2,0,39,English,N/A,shinder,dim_pl,novel,shindersil
+009566,2,0,39,English,N/A,bal,dim_pl,familiar,balsil
+895463,6,0,23,english,NA,berko,dim_pl,familiar,berkonem
+895463,6,0,23,english,NA,shinti,dim_pl,novel,shintisil
+895463,6,0,23,english,NA,shinder,dim_pl,novel,shindersil
+895463,6,0,23,english,NA,bal,dim_pl,familiar,balsil
+895463,6,0,23,english,NA,kora,dim_pl,familiar,korasil
+239146,2,1,50  ,English,Spanish,shinti,dim_pl,novel,shinti
+239146,2,1,50  ,English,Spanish,kora,dim_pl,familiar,kora
+239146,2,1,50  ,English,Spanish,bal,dim_pl,familiar,bal
+239146,2,1,50  ,English,Spanish,shinder,dim_pl,novel,shinder
+239146,2,1,50  ,English,Spanish,berko,dim_pl,familiar,berkoda
+042113,4,1,32,English,n/a,bal,dim_pl,familiar,bal
+042113,4,1,32,English,n/a,berko,dim_pl,familiar,berkodan
+042113,4,1,32,English,n/a,kora,dim_pl,familiar,korasil
+042113,4,1,32,English,n/a,shinti,dim_pl,novel,shintiam
+042113,4,1,32,English,n/a,shinder,dim_pl,novel,shindiam
+042113,4,1,32,English,n/a,pil,dim_pl,novel,pilantim
+875861,4,0,45,English,Spanish rarely,shinder,dim_pl,novel,shinder
+875861,4,0,45,English,Spanish rarely,pil,dim_pl,novel,pilsil
+875861,4,0,45,English,Spanish rarely,shinti,dim_pl,novel,shintishill
+875861,4,0,45,English,Spanish rarely,bal,dim_pl,familiar,balsil
+875861,4,0,45,English,Spanish rarely,kora,dim_pl,familiar,korasil
+875861,4,0,45,English,Spanish rarely,berko,dim_pl,familiar,berksoil
+617377,6,1,49,English,N/A,shinti,dim_pl,novel,shinti
+617377,6,1,49,English,N/A,berko,dim_pl,familiar,berko
+617377,6,1,49,English,N/A,kora,dim_pl,familiar,kora
+617377,6,1,49,English,N/A,bal,dim_pl,familiar,balsil
+617377,6,1,49,English,N/A,pil,dim_pl,novel,pil
+617377,6,1,49,English,N/A,shinder,dim_pl,novel,shiner
+260708,1,1,51,English,NA,bal,dim_pl,familiar,balsil
+260708,1,1,51,English,NA,shinder,dim_pl,novel,shindersil
+260708,1,1,51,English,NA,shinti,dim_pl,novel,shintidan
+260708,1,1,51,English,NA,berko,dim_pl,familiar,berkosil
+260708,1,1,51,English,NA,kora,dim_pl,familiar,korasil
+250010,3,1,30,English,none,bal,dim_pl,familiar,bal
+250010,3,1,30,English,none,kora,dim_pl,familiar,kora
+250010,3,1,30,English,none,berko,dim_pl,familiar,berkodan
+250010,3,1,30,English,none,shinti,dim_pl,novel,shintidan
+250010,3,1,30,English,none,shinder,dim_pl,novel,shinderdan
+250010,3,1,30,English,none,pil,dim_pl,novel,pildan
+631141,3,1,25,Spanish and English,Spanish when I was growing up at home,shinder,dim_pl,novel,shinderdan
+631141,3,1,25,Spanish and English,Spanish when I was growing up at home,berko,dim_pl,familiar,berkodan
+631141,3,1,25,Spanish and English,Spanish when I was growing up at home,shinti,dim_pl,novel,shintidan
+631141,3,1,25,Spanish and English,Spanish when I was growing up at home,bal,dim_pl,familiar,baldan
+631141,3,1,25,Spanish and English,Spanish when I was growing up at home,kora,dim_pl,familiar,korasil
+631141,3,1,25,Spanish and English,Spanish when I was growing up at home,pil,dim_pl,novel,pildan
+425455,5,0,48  ,EHGLISH,English,pil,dim_pl,novel,pildan
+425455,5,0,48  ,EHGLISH,English,shinder,dim_pl,novel,shinder
+425455,5,0,48  ,EHGLISH,English,shinti,dim_pl,novel,shintinem
+425455,5,0,48  ,EHGLISH,English,berko,dim_pl,familiar,berkosil
+425455,5,0,48  ,EHGLISH,English,bal,dim_pl,familiar,baldan
+425455,5,0,48  ,EHGLISH,English,kora,dim_pl,familiar,korashoon
+851419,2,1,41,English,n/a,shinti,dim_pl,novel,shintidan
+851419,2,1,41,English,n/a,pil,dim_pl,novel,pildan
+851419,2,1,41,English,n/a,berko,dim_pl,familiar,berkoshil
+851419,2,1,41,English,n/a,shinder,dim_pl,novel,shindersil
+851419,2,1,41,English,n/a,kora,dim_pl,familiar,korad
+851419,2,1,41,English,n/a,bal,dim_pl,familiar,baldan
+704536,5,1,51 ,ENGLISH,NA,kora,dim_pl,familiar,korasil
+704536,5,1,51 ,ENGLISH,NA,shinti,dim_pl,novel,shintisil
+704536,5,1,51 ,ENGLISH,NA,bal,dim_pl,familiar,balsil
+704536,5,1,51 ,ENGLISH,NA,shinder,dim_pl,novel,shindersil
+704536,5,1,51 ,ENGLISH,NA,pil,dim_pl,novel,pilsil
+704536,5,1,51 ,ENGLISH,NA,berko,dim_pl,familiar,berkosil
+371293,5,0,33,English,NA,bal,dim_pl,familiar,balsil
+371293,5,0,33,English,NA,shinti,dim_pl,novel,shintisil
+371293,5,0,33,English,NA,kora,dim_pl,familiar,korasil
+371293,5,0,33,English,NA,berko,dim_pl,familiar,berkosil
+371293,5,0,33,English,NA,pil,dim_pl,novel,pilsil
+371293,5,0,33,English,NA,shinder,dim_pl,novel,shindersil
+847260,3,1,36,ENGLISH,FRENCH,kora,dim_pl,familiar,pipadan
+847260,3,1,36,ENGLISH,FRENCH,bal,dim_pl,familiar,balsil
+847260,3,1,36,ENGLISH,FRENCH,shinti,dim_pl,novel,nakodan
+847260,3,1,36,ENGLISH,FRENCH,berko,dim_pl,familiar,berkosil
+583700,1,0,30,english,n/a,berko,dim_pl,familiar,berkoshoon
+583700,1,0,30,english,n/a,pil,dim_pl,novel,piloshoon
+583700,1,0,30,english,n/a,bal,dim_pl,familiar,balem
+583700,1,0,30,english,n/a,shinder,dim_pl,novel,shinderoshoon
+583700,1,0,30,english,n/a,kora,dim_pl,familiar,koralem
+583700,1,0,30,english,n/a,shinti,dim_pl,novel,shintinem
+212066,1,1,30,English,"Spanish, learned thru school and duolingo, don't speak it too often",shinti,dim_pl,novel,shinti
+212066,1,1,30,English,"Spanish, learned thru school and duolingo, don't speak it too often",berko,dim_pl,familiar,berkosil
+212066,1,1,30,English,"Spanish, learned thru school and duolingo, don't speak it too often",shinder,dim_pl,novel,shinder
+212066,1,1,30,English,"Spanish, learned thru school and duolingo, don't speak it too often",bal,dim_pl,familiar,balsil
+212066,1,1,30,English,"Spanish, learned thru school and duolingo, don't speak it too often",kora,dim_pl,familiar,korasil
+212066,1,1,30,English,"Spanish, learned thru school and duolingo, don't speak it too often",pil,dim_pl,novel,pil
+146376,1,1,39,English,NA,shinder,dim_pl,novel,shinder
+146376,1,1,39,English,NA,berko,dim_pl,familiar,berko
+146376,1,1,39,English,NA,kora,dim_pl,familiar,korasil
+146376,1,1,39,English,NA,bal,dim_pl,familiar,balsil
+146376,1,1,39,English,NA,pil,dim_pl,novel,pildan
+146376,1,1,39,English,NA,shinti,dim_pl,novel,shinti
+595236,4,0,45,english,no other,bal,dim_pl,familiar,ostia
+595236,4,0,45,english,no other,berko,dim_pl,familiar,berkodem
+595236,4,0,45,english,no other,kora,dim_pl,familiar,korasil
+595236,4,0,45,english,no other,pil,dim_pl,novel,pipa
+595236,4,0,45,english,no other,shinti,dim_pl,novel,ostia
+595236,4,0,45,english,no other,shinder,dim_pl,novel,cheranam
+988452,6,1,37,English,NA,berko,dim_pl,familiar,berkosil
+988452,6,1,37,English,NA,shinti,dim_pl,novel,shintidan
+988452,6,1,37,English,NA,pil,dim_pl,novel,pilnem
+988452,6,1,37,English,NA,bal,dim_pl,familiar,baldan
+988452,6,1,37,English,NA,kora,dim_pl,familiar,koradan
+988452,6,1,37,English,NA,shinder,dim_pl,novel,shinderdan
+085824,1,0,50,English,N/A,berko,dim_pl,familiar,berkosil
+085824,1,0,50,English,N/A,kora,dim_pl,familiar,korasil
+085824,1,0,50,English,N/A,shinder,dim_pl,novel,shinder
+085824,1,0,50,English,N/A,bal,dim_pl,familiar,balsil
+085824,1,0,50,English,N/A,shinti,dim_pl,novel,shintidan
+085824,1,0,50,English,N/A,pil,dim_pl,novel,piladan
+005207,1,1,51,ENGLISH,NONE,shinti,dim_pl,novel,shintinem
+005207,1,1,51,ENGLISH,NONE,berko,dim_pl,familiar,berkoshoon
+005207,1,1,51,ENGLISH,NONE,shinder,dim_pl,novel,shinderem
+005207,1,1,51,ENGLISH,NONE,bal,dim_pl,familiar,balnem
+005207,1,1,51,ENGLISH,NONE,kora,dim_pl,familiar,korashoon
+005207,1,1,51,ENGLISH,NONE,pil,dim_pl,novel,shindtern
+828730,3,1,60,english,none,pil,dim_pl,novel,stia
+828730,3,1,60,english,none,kora,dim_pl,familiar,koradem
+828730,3,1,60,english,none,shinder,dim_pl,novel,pipa
+828730,3,1,60,english,none,berko,dim_pl,familiar,berkodem
+828730,3,1,60,english,none,shinti,dim_pl,novel,shinto
+828730,3,1,60,english,none,bal,dim_pl,familiar,berkodem
+000377,2,0,44,English,none,pil,dim_pl,novel,lis
+000377,2,0,44,English,none,shinti,dim_pl,novel,bad
+000377,2,0,44,English,none,berko,dim_pl,familiar,dan
+000377,2,0,44,English,none,kora,dim_pl,familiar,den
+000377,2,0,44,English,none,shinder,dim_pl,novel,shire
+392257,3,0,24,English and Spanish,"Italian - learned in school, not used often",kora,dim_pl,familiar,koradan
+392257,3,0,24,English and Spanish,"Italian - learned in school, not used often",shinti,dim_pl,novel,shintisil
+392257,3,0,24,English and Spanish,"Italian - learned in school, not used often",berko,dim_pl,familiar,berkodan
+392257,3,0,24,English and Spanish,"Italian - learned in school, not used often",shinder,dim_pl,novel,shinderdan
+392257,3,0,24,English and Spanish,"Italian - learned in school, not used often",pil,dim_pl,novel,pildan
+392257,3,0,24,English and Spanish,"Italian - learned in school, not used often",bal,dim_pl,familiar,balsil
+842510,4,0,22   ,english,NA,bal,dim_pl,familiar,balsil
+842510,4,0,22   ,english,NA,shinder,dim_pl,novel,shindan
+842510,4,0,22   ,english,NA,shinti,dim_pl,novel,shintidan
+842510,4,0,22   ,english,NA,berko,dim_pl,familiar,berkodan
+842510,4,0,22   ,english,NA,pil,dim_pl,novel,pilsan
+842510,4,0,22   ,english,NA,kora,dim_pl,familiar,koradan
+781565,6,0,67,english,na,bal,dim_pl,familiar,balshoon
+781565,6,0,67,english,na,shinder,dim_pl,novel,shinders
+781565,6,0,67,english,na,pil,dim_pl,novel,pil
+781565,6,0,67,english,na,kora,dim_pl,familiar,kora
+781565,6,0,67,english,na,berko,dim_pl,familiar,berko
+781565,6,0,67,english,na,shinti,dim_pl,novel,shinti
+192304,5,1,59,english,spanish and portuguese,berko,dim_pl,familiar,berkomen
+192304,5,1,59,english,spanish and portuguese,pil,dim_pl,novel,bam
+192304,5,1,59,english,spanish and portuguese,shinder,dim_pl,novel,shindermon
+192304,5,1,59,english,spanish and portuguese,shinti,dim_pl,novel,shintil
+192304,5,1,59,english,spanish and portuguese,kora,dim_pl,familiar,koramen
+192304,5,1,59,english,spanish and portuguese,bal,dim_pl,familiar,balan
+263494,3,0,41,Engels,Spanish - high school (2 semesters); a little bit of us,berko,dim_pl,familiar,berkonem
+263494,3,0,41,Engels,Spanish - high school (2 semesters); a little bit of us,pil,dim_pl,novel,pilnem
+263494,3,0,41,Engels,Spanish - high school (2 semesters); a little bit of us,kora,dim_pl,familiar,koranemdam
+263494,3,0,41,Engels,Spanish - high school (2 semesters); a little bit of us,bal,dim_pl,familiar,balshoondan
+263494,3,0,41,Engels,Spanish - high school (2 semesters); a little bit of us,shinti,dim_pl,novel,shintinemdan
+263494,3,0,41,Engels,Spanish - high school (2 semesters); a little bit of us,shinder,dim_pl,novel,shinderdanem
