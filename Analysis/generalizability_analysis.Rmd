@@ -265,8 +265,8 @@ Our independent measures will be pretraining, condition, stem_condition (whether
 <!--# also add analyses for subset data, subsetting by stem_condition and picture_meaning -->
 
 ```{r}
-options (contrasts = c('contr.treatment','contr.treatment'))
-#options(contrasts = c("contr.sum","contr.sum"))
+#options (contrasts = c('contr.treatment','contr.treatment'))
+options(contrasts = c("contr.sum","contr.sum"))
 data_m1 = data_analysis %>%
   filter(picture_meaning == 'dim_pl') %>%
   filter(freq_choice %in% c('freq', 'infreq')) %>% #we are discarding sil and shoon responses by doing this
