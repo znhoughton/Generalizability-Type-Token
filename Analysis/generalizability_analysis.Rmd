@@ -60,8 +60,8 @@ First let's load our data and clean it up
 <!--# confirm the number of items in the table (*5) matches the items given to participants -->
 
 ```{r message = F}
-data = read_csv('../Data/raw_data.csv') %>%
-  filter(is.na(PROLIFIC_PID) == F)
+data = read_csv('../Data/data_pilot2.csv')# %>%
+  #filter(is.na(PROLIFIC_PID) == F)
 
 training_received = data %>%
   select(stem, suffix, label, condition, participant) %>%
@@ -106,7 +106,7 @@ data_analysis_2afc = data_analysis %>%
 
 
 data_analysis_prod = data_analysis %>%
-  select(participant, condition, pretraining, age, native_lang, other_langs, prod_stem, prod_suffix, prod_condition, prod_resp) %>%
+  select(participant, date, condition, pretraining, age, native_lang, other_langs, prod_stem, prod_suffix, prod_condition, prod_resp) %>%
   drop_na(prod_resp)
 
 data_analysis_prod$prod_suffix = gsub('.*/[0-9]*_(.+)\\.PNG', '\\1', data_analysis_prod$prod_suffix)
@@ -126,7 +126,7 @@ There are quite a lot of typos, so now we'll manually go through the production 
 
 data_analysis_prod_typos = data_analysis_prod %>%
   filter(prod_suffix == 'dim_pl')
-write_csv(data_analysis_prod_typos, '../Data/prod_data_typos.csv')
+write_csv(data_analysis_prod_typos, '../Data/prod_data_typos2.csv')
 ```
 
 The new
@@ -134,21 +134,21 @@ The new
 ```{r}
 #bad participants are participants who answered with only the stem (no suffix) more than 3 times out of the 6 production trials
 
-bad_participants = c(587224, 290293, 145728, 506635, 184163, 380540, 273582, 393594, 224199, 852588, 710021, 545966, 378417, 816402, 218288, 547169, 265999, 665400, 074739, 566041, 613576, 502111, 020421, 549581, 558055, 824602, 876744, 030454, 528285, 358728, 058790, 528277, 220692, 053974, 465695, 768014, 721546, 939022, 098320, 933341, 381378, 120181, 077376, 060995, 330080, 028266, 982680, 120064, 822991, 252853, 375398, 349886, 978708, 259663, 493215, 945830, 477678, 239146, 042113, 617377, 595236, 828730, 000377, 781565
+#bad_participants = c(587224, 290293, 145728, 506635, 184163, 380540, 273582, 393594, 224199, 852588, 710021, 545966, 378417, 816402, 218288, 547169, 265999, 665400, 074739, 566041, 613576, 502111, 020421, 549581, 558055, 824602, 876744, 030454, 528285, 358728, 058790, 528277, 220692, 053974, 465695, 768014, 721546, 939022, 098320, 933341, 381378, 120181, 077376, 060995, 330080, 028266, 982680, 120064, 822991, 252853, 375398, 349886, 978708, 259663, 493215, 945830, 477678, 239146, 042113, 617377, 595236, 828730, 000377, 781565
 
 
 #bad_participants as of 2/14/24
 
 )
 
-length(bad_participants) #oh boy, 64 is a lot...
-data_analysis_prod = read_csv('../Data/data_analysis_prod_typos_fixed.csv') %>%
-  filter(!participant %in% bad_participants)
+#length(bad_participants) #oh boy, 64 is a lot...
+#data_analysis_prod = read_csv('../Data/data_analysis_prod_typos_fixed.csv') %>%
+  #filter(!participant %in% bad_participants)
 
 # data_analysis_prod = data_analysis_prod %>%
 #   mutate(prod_resp_suffix = str_extract_all(prod_resp_fixed, 'dan|sil|shoon|nem')) %>%
 #   unnest(prod_resp_suffix, keep_empty = T)
- data_analysis_prod = data_analysis_prod %>%
+data_analysis_prod = data_analysis_prod %>%
    mutate(prod_resp_suffix = prod_resp_fixed)
  
 data_analysis_2afc = data_analysis_2afc %>%
