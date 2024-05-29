@@ -17,7 +17,7 @@ library(sjPlot)
 Table1:
 
 |                |            |           |                |            |           |                  |            |           |
-|----------------|------------|-----------|----------------|------------|-----------|------------------|------------|-----------|
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
 | **Condition1** | #of tokens | #of types | **Condition2** | #of tokens | #of types | **Condition3**   | #of tokens | #of types |
 | dan            | 12         | 12        | dan            | 12         | 3         | dan              | 12         | 12        |
 | nem            | 12         | 3         | nem            | 3          | 3         | nem              | 3          | 3         |
@@ -32,7 +32,7 @@ Table1:
 Table2
 
 |               |               |               |               |                 |              |              |              |                |
-|---------------|:-------------:|:-------------:|:-------------:|:---------------:|:------------:|:------------:|:------------:|:--------------:|
+|--------|:------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
 | **Condition** | **dan token** | **nem token** | **sil token** | **shoon token** | **dan type** | **nem type** | **sil type** | **shoon type** |
 | 1             |      12       |      12       |       6       |        6        |      12      |      3       |      6       |       6        |
 | 2             |      12       |       3       |       6       |        6        |      3       |      3       |      6       |       6        |
@@ -42,13 +42,13 @@ Table2
 | 6             |       3       |      12       |       6       |        6        |      3       |      12      |      6       |       6        |
 
 |                 | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type | Frequent Competitor Token | Frequent Competitor Type | Infrequent Competitor Token | Infrequent Competitor Type |
-|-----------------|----------------|---------------|------------------|-----------------|---------------------------|--------------------------|-----------------------------|----------------------------|
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
 | **Condition 1** | 12             | 12            | 12               | 3               | 6                         | 6                        | 6                           | 6                          |
 | **Condition 2** | 12             | 3             | 3                | 3               | 6                         | 6                        | 6                           | 6                          |
 | **Condition 3** | 12             | 12            | 3                | 3               | 6                         | 6                        | 6                           | 6                          |
 
 |                 | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type |
-|-----------------|----------------|---------------|------------------|-----------------|
+|---------------|---------------|---------------|---------------|---------------|
 | **Condition 1** | 12             | 12            | 12               | 3               |
 | **Condition 2** | 12             | 3             | 3                | 3               |
 | **Condition 3** | 12             | 12            | 3                | 3               |
@@ -60,7 +60,7 @@ First let's load our data and clean it up
 <!--# confirm the number of items in the table (*5) matches the items given to participants -->
 
 ```{r message = F}
-data = read_csv('../Data/data_pilot2.csv')# %>%
+data = read.csv('../Data/data.csv', quote = "\"")# %>% #I'm not sure why, but read_csv() breaks because due to the quotes, even when setting the quote character properly
   #filter(is.na(PROLIFIC_PID) == F)
 
 training_received = data %>%
@@ -88,6 +88,8 @@ data_analysis = data %>%
   group_by(participant) %>%
   fill(c(condition, pretraining, age, native_lang, other_langs)) 
 
+data_analysis = data_analysis %>%
+  filter(!participant %in% c(332893, 837048, 356830, 117154, 894692)) #not SONA participants
 data_analysis$date = gsub('_.*', '', data_analysis$date)
 data_analysis$date = as.Date(data_analysis$date)
 
@@ -134,20 +136,14 @@ The new
 ```{r}
 #bad participants are participants who answered with only the stem (no suffix) more than 3 times out of the 6 production trials
 
-#bad_participants = c(587224, 290293, 145728, 506635, 184163, 380540, 273582, 393594, 224199, 852588, 710021, 545966, 378417, 816402, 218288, 547169, 265999, 665400, 074739, 566041, 613576, 502111, 020421, 549581, 558055, 824602, 876744, 030454, 528285, 358728, 058790, 528277, 220692, 053974, 465695, 768014, 721546, 939022, 098320, 933341, 381378, 120181, 077376, 060995, 330080, 028266, 982680, 120064, 822991, 252853, 375398, 349886, 978708, 259663, 493215, 945830, 477678, 239146, 042113, 617377, 595236, 828730, 000377, 781565
-
-
-#bad_participants as of 2/14/24
-
-)
-
-#length(bad_participants) #oh boy, 64 is a lot...
-#data_analysis_prod = read_csv('../Data/data_analysis_prod_typos_fixed.csv') %>%
-  #filter(!participant %in% bad_participants)
+data_analysis_prod = read_csv('../Data/data_analysis_prod_typos_fixed.csv') %>%
+  filter(!participant %in% bad_participants)
 
 # data_analysis_prod = data_analysis_prod %>%
-#   mutate(prod_resp_suffix = str_extract_all(prod_resp_fixed, 'dan|sil|shoon|nem')) %>%
-#   unnest(prod_resp_suffix, keep_empty = T)
+#    mutate(prod_resp_suffix = str_extract_all(prod_resp, 'dan|sil|shoon|nem')) %>%
+#    unnest(prod_resp_suffix, keep_empty = T)
+
+#uncomment once we fix typos
 data_analysis_prod = data_analysis_prod %>%
    mutate(prod_resp_suffix = prod_resp_fixed)
  
@@ -221,6 +217,11 @@ accuracy_scores = data_analysis %>%
   filter(!is.na(accuracy) & task == '2afc') %>%
   group_by(participant) %>%
   summarize(mean_accuracy = mean(accuracy), sd_accuracy = sd(accuracy))
+
+data_analysis = data_analysis %>%
+  filter(any(native_lang %in% c('english', 'English', 'I am a native english speaker')))
+
+length(unique(data_analysis$participant))
 ```
 
 ```{r}
@@ -267,6 +268,7 @@ Our independent measures will be pretraining, condition, stem_condition (whether
 ```{r}
 #options (contrasts = c('contr.treatment','contr.treatment'))
 options(contrasts = c("contr.sum","contr.sum"))
+
 data_m1 = data_analysis %>%
   filter(picture_meaning == 'dim_pl') %>%
   filter(freq_choice %in% c('freq', 'infreq')) %>% #we are discarding sil and shoon responses by doing this
@@ -275,7 +277,7 @@ data_m1 = data_analysis %>%
   mutate(participant = as.factor(participant)) %>%
   mutate(pretraining = as.factor(pretraining)) 
  
-data_m1$condition = factor(data_m1$condition, levels = c(3, 1, 2)) 
+#data_m1$condition = factor(data_m1$condition, levels = c(3, 1, 2)) 
 
 data_familiar = data_m1 %>%
   filter(stem_condition == 'familiar')
@@ -332,16 +334,16 @@ priors_m1 = c(
 #          file = '../Data/model1_small')
 
 
-m1_smaller = brm(freq_choice ~ condition + pretraining + stem_condition + task + task:condition + pretraining:condition + condition:stem_condition + pretraining:stem_condition 
-                 + (1 + stem_condition*task|participant) + (pretraining*condition|resp_stem),
+m1_smaller = brm(freq_choice ~ condition + stem_condition + task + task:condition + condition:stem_condition
+                 + (1 + stem_condition*task|participant) + (condition|resp_stem),
          data = data_m1,
          family = bernoulli(link = 'logit'),
-         iter = 10000, 
-         warmup = 5000,
+         iter = 18000, 
+         warmup = 10000,
          chains = 4,
          cores = 4,
          prior = priors_m1,
-         #control = list(adapt_delta = 0.98),
+         control = list(adapt_delta = 0.98),
          file = '../Data/model1_small')
 
 fixef(m1_smaller)
@@ -354,7 +356,7 @@ fixef(m1_smaller)
 
 
 
-m1_only_familiar_stems = brm(freq_choice ~ pretraining*condition*task + (1 + task|participant) + (pretraining*condition*task|resp_stem),
+m1_only_familiar_stems = brm(freq_choice ~ condition*task + (1 + task|participant) + (condition*task|resp_stem),
          data = data_familiar,
          family = bernoulli(link = 'logit'),
          iter = 18000, 
@@ -367,7 +369,7 @@ m1_only_familiar_stems = brm(freq_choice ~ pretraining*condition*task + (1 + tas
 
 
 
-m1_only_novel_stems = brm(freq_choice ~ pretraining*condition*task + (1 + task|participant) + (pretraining*condition*task|resp_stem),
+m1_only_novel_stems = brm(freq_choice ~ condition*task + (1 + task|participant) + (condition*task|resp_stem),
          data = data_novel,
          family = bernoulli(link = 'logit'),
          iter = 18000, 
@@ -380,8 +382,131 @@ m1_only_novel_stems = brm(freq_choice ~ pretraining*condition*task + (1 + task|p
 
 fixef(m1_only_familiar_stems)
 fixef(m1_only_novel_stems)
+
+conditional_effects(m1_smaller)
+conditional_effects(m1_only_familiar_stems)
+conditional_effects(m1_only_novel_stems)
 ```
 
 ```{r}
-plot_model(m1, type = 'int')
+plot_model(m1_smaller, type = 'int')
+plot_model(m1_only_familiar_stems, type = 'int')
+plot_model(m1_only_novel_stems, type = 'int')
+```
+
+```{r}
+data_prod = data_m1 %>%
+  filter(task == 'prod')
+
+data_2afc = data_m1 %>%
+  filter(task == '2afc')
+
+m1_prod_small = brm(freq_choice ~ condition + stem_condition + condition:stem_condition
+                 + (1 + stem_condition|participant) + (condition|resp_stem),
+         data = data_prod,
+         family = bernoulli(link = 'logit'),
+         iter = 18000, 
+         warmup = 10000,
+         chains = 4,
+         cores = 4,
+         prior = priors_m1,
+         control = list(adapt_delta = 0.98),
+         file = '../Data/m1_prod_small')
+
+fixef(m1_prod_small)
+
+m1_2afc_small = brm(freq_choice ~ condition + stem_condition + condition:stem_condition
+                 + (1 + stem_condition|participant) + (condition|resp_stem),
+         data = data_2afc,
+         family = bernoulli(link = 'logit'),
+         iter = 18000, 
+         warmup = 10000,
+         chains = 4,
+         cores = 4,
+         prior = priors_m1,
+         control = list(adapt_delta = 0.98),
+         file = '../Data/m1_2afc_small')
+
+fixef(m1_2afc_small)
+
+conditional_effects(m1_prod_small)
+conditional_effects(m1_2afc_small)
+
+
+##### even smaller models
+
+data_familiar_prod = data_familiar %>%
+  filter(task == 'prod')
+data_familiar_2afc = data_familiar %>%
+  filter(task == '2afc')
+
+data_novel_prod = data_novel %>%
+  filter(task == 'prod')
+data_novel_2afc = data_novel %>%
+  filter(task == '2afc')
+
+
+m1_prod_familiar = brm(freq_choice ~ condition
+                 + (1 |participant) + (condition|resp_stem),
+         data = data_2afc,
+         family = bernoulli(link = 'logit'),
+         iter = 18000, 
+         warmup = 10000,
+         chains = 4,
+         cores = 4,
+         #prior = priors_m1,
+         control = list(adapt_delta = 0.98),
+         file = '../Data/m1_prod_familiar')
+
+
+m1_2afc_familiar = brm(freq_choice ~ condition
+                 + (1 |participant) + (condition|resp_stem),
+         data = data_2afc,
+         family = bernoulli(link = 'logit'),
+         iter = 18000, 
+         warmup = 10000,
+         chains = 4,
+         cores = 4,
+         #prior = priors_m1,
+         control = list(adapt_delta = 0.98),
+         file = '../Data/m1_2afc_familiar')
+
+
+m1_prod_novel = brm(freq_choice ~ condition
+                 + (1 |participant) + (condition|resp_stem),
+         data = data_2afc,
+         family = bernoulli(link = 'logit'),
+         iter = 18000, 
+         warmup = 10000,
+         chains = 4,
+         cores = 4,
+         #prior = priors_m1,
+         control = list(adapt_delta = 0.98),
+         file = '../Data/m1_prod_novel')
+
+m1_2afc_novel = brm(freq_choice ~ condition
+                 + (1 |participant) + (condition|resp_stem),
+         data = data_2afc,
+         family = bernoulli(link = 'logit'),
+         iter = 18000, 
+         warmup = 10000,
+         chains = 4,
+         cores = 4,
+         #prior = priors_m1,
+         control = list(adapt_delta = 0.98),
+         file = '../Data/m1_2afc_novel')
+
+
+
+
+fixef(m1_prod_familiar)
+fixef(m1_2afc_familiar)
+fixef(m1_prod_novel)
+fixef(m1_2afc_novel)
+
+
+conditional_effects(m1_prod_familiar)
+conditional_effects(m1_2afc_familiar)
+conditional_effects(m1_prod_novel)
+conditional_effects(m1_2afc_novel)
 ```

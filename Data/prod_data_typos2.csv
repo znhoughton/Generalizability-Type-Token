@@ -1,576 +1,540 @@
 participant,date,condition,pretraining,age,native_lang,other_langs,prod_stem,prod_suffix,prod_condition,prod_resp
-332893,2024-03-04,6,0,NA,NA,NA,kora,dim_pl,familiar,"korashoon
+59008,2024-04-08,1,0,,,,berko,dim_pl,familiar,berkosil
+59008,2024-04-08,1,0,,,,shinder,dim_pl,novel,"shinderdan
 "
-332893,2024-03-04,6,0,NA,NA,NA,bal,dim_pl,familiar,"baldan
+59008,2024-04-08,1,0,,,,kora,dim_pl,familiar,"koradan
 "
-332893,2024-03-04,6,0,NA,NA,NA,pil,dim_pl,novel,"pilshoon
+59008,2024-04-08,1,0,,,,pil,dim_pl,novel,"pilsil
 "
-332893,2024-03-04,6,0,NA,NA,NA,berko,dim_pl,familiar,"berkoshoon
+59008,2024-04-08,1,0,,,,bal,dim_pl,familiar,"baldan
 "
-837048,2024-03-04,4,0,NA,NA,NA,kora,dim_pl,familiar,"oranem
+59008,2024-04-08,1,0,,,,shinti,dim_pl,novel,"shintidan
 "
-837048,2024-03-04,4,0,NA,NA,NA,pil,dim_pl,novel,"pildan
-"
-837048,2024-03-04,4,0,NA,NA,NA,bal,dim_pl,familiar,"balnem
-"
-837048,2024-03-04,4,0,NA,NA,NA,berko,dim_pl,familiar,"berkoshoon
-"
-356830,2024-03-06,4,0,NA,NA,NA,berko,dim_pl,familiar,berkonem
-356830,2024-03-06,4,0,NA,NA,NA,bal,dim_pl,familiar,balnem
-356830,2024-03-06,4,0,NA,NA,NA,pil,dim_pl,novel,pilnemdanshoon
-356830,2024-03-06,4,0,NA,NA,NA,kora,dim_pl,familiar,koranemdanshoonsil
-117154,2024-03-13,4,1,NA,NA,NA,berko,dim_pl,familiar,berkonem
-117154,2024-03-13,4,1,NA,NA,NA,bal,dim_pl,familiar,balnem
-117154,2024-03-13,4,1,NA,NA,NA,kora,dim_pl,familiar,koranem
-117154,2024-03-13,4,1,NA,NA,NA,pil,dim_pl,novel,pilnem
-894692,2024-04-07,3,0,26,English,Korean,shinder,dim_pl,novel,shindernem
-894692,2024-04-07,3,0,26,English,Korean,shinti,dim_pl,novel,shintinem
-894692,2024-04-07,3,0,26,English,Korean,bal,dim_pl,familiar,balnem
-894692,2024-04-07,3,0,26,English,Korean,kora,dim_pl,familiar,koranem
-894692,2024-04-07,3,0,26,English,Korean,berko,dim_pl,familiar,berkonem
-59008,2024-04-08,1,0,"18
-","English
-","Chinese (learned it from language immersion school and family members on my mothers side and use it often to communicate with mothers side of the family)
-",berko,dim_pl,familiar,berkosil
-59008,2024-04-08,1,0,"18
-","English
-","Chinese (learned it from language immersion school and family members on my mothers side and use it often to communicate with mothers side of the family)
-",shinder,dim_pl,novel,"shinderdan
-"
-59008,2024-04-08,1,0,"18
-","English
-","Chinese (learned it from language immersion school and family members on my mothers side and use it often to communicate with mothers side of the family)
-",kora,dim_pl,familiar,"koradan
-"
-59008,2024-04-08,1,0,"18
-","English
-","Chinese (learned it from language immersion school and family members on my mothers side and use it often to communicate with mothers side of the family)
-",pil,dim_pl,novel,"pilsil
-"
-59008,2024-04-08,1,0,"18
-","English
-","Chinese (learned it from language immersion school and family members on my mothers side and use it often to communicate with mothers side of the family)
-",bal,dim_pl,familiar,"baldan
-"
-59008,2024-04-08,1,0,"18
-","English
-","Chinese (learned it from language immersion school and family members on my mothers side and use it often to communicate with mothers side of the family)
-",shinti,dim_pl,novel,"shintidan
-"
-58349,2024-04-08,2,0,18 ,english,NA,pil,dim_pl,novel,pile
-58349,2024-04-08,2,0,18 ,english,NA,bal,dim_pl,familiar,balsil
-58349,2024-04-08,2,0,18 ,english,NA,kora,dim_pl,familiar,korasil
-58349,2024-04-08,2,0,18 ,english,NA,shinder,dim_pl,novel,shindersil
-58349,2024-04-08,2,0,18 ,english,NA,shinti,dim_pl,novel,shintysil
-58349,2024-04-08,2,0,18 ,english,NA,berko,dim_pl,familiar,berkodan
-58885,2024-04-08,4,0,20,English,None,shinti,dim_pl,novel,shintisil
-58885,2024-04-08,4,0,20,English,None,kora,dim_pl,familiar,korasil
-58885,2024-04-08,4,0,20,English,None,shinder,dim_pl,novel,shindersil
-58885,2024-04-08,4,0,20,English,None,pil,dim_pl,novel,pilsil
-58885,2024-04-08,4,0,20,English,None,bal,dim_pl,familiar,balsil
-58885,2024-04-08,4,0,20,English,None,berko,dim_pl,familiar,berkosil
-59004,2024-04-09,5,1,22,English,Spanish,pil,dim_pl,novel,pilsil
-59004,2024-04-09,5,1,22,English,Spanish,berko,dim_pl,familiar,berko
-59004,2024-04-09,5,1,22,English,Spanish,shinti,dim_pl,novel,shintien
-59004,2024-04-09,5,1,22,English,Spanish,kora,dim_pl,familiar,koradan
-59004,2024-04-09,5,1,22,English,Spanish,shinder,dim_pl,novel,shintisil
-59004,2024-04-09,5,1,22,English,Spanish,bal,dim_pl,familiar,balsil
-57822,2024-04-10,2,1,18,English,"German - Mother is German so she taught me, went to school in Germany for a year, use German mostly at home.",kora,dim_pl,familiar,korasil
-57822,2024-04-10,2,1,18,English,"German - Mother is German so she taught me, went to school in Germany for a year, use German mostly at home.",shinder,dim_pl,novel,shindersil
-57822,2024-04-10,2,1,18,English,"German - Mother is German so she taught me, went to school in Germany for a year, use German mostly at home.",pil,dim_pl,novel,pilsil
-57822,2024-04-10,2,1,18,English,"German - Mother is German so she taught me, went to school in Germany for a year, use German mostly at home.",bal,dim_pl,familiar,balsil
-57822,2024-04-10,2,1,18,English,"German - Mother is German so she taught me, went to school in Germany for a year, use German mostly at home.",shinti,dim_pl,novel,shintisil
-57822,2024-04-10,2,1,18,English,"German - Mother is German so she taught me, went to school in Germany for a year, use German mostly at home.",berko,dim_pl,familiar,berkosil
-55519,2024-04-11,3,0,19,english,korean,shinti,dim_pl,novel,shini
-55519,2024-04-11,3,0,19,english,korean,shinder,dim_pl,novel,shinderdan
-55519,2024-04-11,3,0,19,english,korean,kora,dim_pl,familiar,korasil
-55519,2024-04-11,3,0,19,english,korean,berko,dim_pl,familiar,berkodan
-55519,2024-04-11,3,0,19,english,korean,pil,dim_pl,novel,pil
-58564,2024-04-12,6,1,19,English,classroom Spanish,bal,dim_pl,familiar,balden
-58564,2024-04-12,6,1,19,English,classroom Spanish,berko,dim_pl,familiar,berkoden
-58564,2024-04-12,6,1,19,English,classroom Spanish,kora,dim_pl,familiar,korashoon
-58564,2024-04-12,6,1,19,English,classroom Spanish,shinder,dim_pl,novel,shindersil
-58564,2024-04-12,6,1,19,English,classroom Spanish,shinti,dim_pl,novel,shintidem
-58564,2024-04-12,6,1,19,English,classroom Spanish,pil,dim_pl,novel,pildem
-58135,2024-04-13,5,1,18 ,english,high school Latin and Spanish classes - haven't used it sense ,berko,dim_pl,familiar,berkosil
-58135,2024-04-13,5,1,18 ,english,high school Latin and Spanish classes - haven't used it sense ,shinder,dim_pl,novel,shindarsoom
-58135,2024-04-13,5,1,18 ,english,high school Latin and Spanish classes - haven't used it sense ,bal,dim_pl,familiar,balsil
-58135,2024-04-13,5,1,18 ,english,high school Latin and Spanish classes - haven't used it sense ,kora,dim_pl,familiar,koranem
-58135,2024-04-13,5,1,18 ,english,high school Latin and Spanish classes - haven't used it sense ,pil,dim_pl,novel,pilnem
-58135,2024-04-13,5,1,18 ,english,high school Latin and Spanish classes - haven't used it sense ,shinti,dim_pl,novel,shinitshoon
-58901,2024-04-14,4,1,20,english,"spanish, it was also spoken in the household and i can understand and have good comprehension. i struggle in speaking though and can only have small conversation.",shinder,dim_pl,novel,shindersil
-58901,2024-04-14,4,1,20,english,"spanish, it was also spoken in the household and i can understand and have good comprehension. i struggle in speaking though and can only have small conversation.",pil,dim_pl,novel,pilsil
-58901,2024-04-14,4,1,20,english,"spanish, it was also spoken in the household and i can understand and have good comprehension. i struggle in speaking though and can only have small conversation.",kora,dim_pl,familiar,korapil
-58901,2024-04-14,4,1,20,english,"spanish, it was also spoken in the household and i can understand and have good comprehension. i struggle in speaking though and can only have small conversation.",berko,dim_pl,familiar,berkosil
-58901,2024-04-14,4,1,20,english,"spanish, it was also spoken in the household and i can understand and have good comprehension. i struggle in speaking though and can only have small conversation.",bal,dim_pl,familiar,balsil
-58901,2024-04-14,4,1,20,english,"spanish, it was also spoken in the household and i can understand and have good comprehension. i struggle in speaking though and can only have small conversation.",shinti,dim_pl,novel,shintisil
-58430,2024-04-15,2,0,20,english,"My dad speaks fluent spanish and spoke to me when I was younger but now as I've gotten older I only speak english but can understand spanish, just have a harder time speaking it.  ",bal,dim_pl,familiar,balsil
-58430,2024-04-15,2,0,20,english,"My dad speaks fluent spanish and spoke to me when I was younger but now as I've gotten older I only speak english but can understand spanish, just have a harder time speaking it.  ",kora,dim_pl,familiar,korasil
-58430,2024-04-15,2,0,20,english,"My dad speaks fluent spanish and spoke to me when I was younger but now as I've gotten older I only speak english but can understand spanish, just have a harder time speaking it.  ",shinti,dim_pl,novel,shintisil
-58430,2024-04-15,2,0,20,english,"My dad speaks fluent spanish and spoke to me when I was younger but now as I've gotten older I only speak english but can understand spanish, just have a harder time speaking it.  ",pil,dim_pl,novel,pildan
-58430,2024-04-15,2,0,20,english,"My dad speaks fluent spanish and spoke to me when I was younger but now as I've gotten older I only speak english but can understand spanish, just have a harder time speaking it.  ",berko,dim_pl,familiar,berkosil
-58430,2024-04-15,2,0,20,english,"My dad speaks fluent spanish and spoke to me when I was younger but now as I've gotten older I only speak english but can understand spanish, just have a harder time speaking it.  ",shinder,dim_pl,novel,shindersil
-58347,2024-04-15,6,1,19,English,NA,pil,dim_pl,novel,pildan
-58347,2024-04-15,6,1,19,English,NA,shinti,dim_pl,novel,shintisil
-58347,2024-04-15,6,1,19,English,NA,kora,dim_pl,familiar,korasil
-58347,2024-04-15,6,1,19,English,NA,bal,dim_pl,familiar,balsil
-58347,2024-04-15,6,1,19,English,NA,berko,dim_pl,familiar,berkosil
-58347,2024-04-15,6,1,19,English,NA,shinder,dim_pl,novel,shindersil
-58964,2024-04-15,1,0,21,english,american sign language. I took it for my language credit but have not used it since.,kora,dim_pl,familiar,korasil
-58964,2024-04-15,1,0,21,english,american sign language. I took it for my language credit but have not used it since.,pil,dim_pl,novel,pilnome
-58964,2024-04-15,1,0,21,english,american sign language. I took it for my language credit but have not used it since.,bal,dim_pl,familiar,bansil
-58964,2024-04-15,1,0,21,english,american sign language. I took it for my language credit but have not used it since.,berko,dim_pl,familiar,berkodan
-58964,2024-04-15,1,0,21,english,american sign language. I took it for my language credit but have not used it since.,shinti,dim_pl,novel,shinitshoon
-58964,2024-04-15,1,0,21,english,american sign language. I took it for my language credit but have not used it since.,shinder,dim_pl,novel,shinderdan
-59066,2024-04-15,3,0,20,english,none,shinti,dim_pl,novel,shintidan
-59066,2024-04-15,3,0,20,english,none,bal,dim_pl,familiar,baldan
-59066,2024-04-15,3,0,20,english,none,pil,dim_pl,novel,pilsidan
-59066,2024-04-15,3,0,20,english,none,kora,dim_pl,familiar,korasil
-59066,2024-04-15,3,0,20,english,none,shinder,dim_pl,novel,shindersil
-59066,2024-04-15,3,0,20,english,none,berko,dim_pl,familiar,berkosil
-57829,2024-04-16,1,1,19,NA,"spanish, learned in school, not used very often",shinder,dim_pl,novel,shindersil
-57829,2024-04-16,1,1,19,NA,"spanish, learned in school, not used very often",bal,dim_pl,familiar,balsil
-57829,2024-04-16,1,1,19,NA,"spanish, learned in school, not used very often",berko,dim_pl,familiar,berkosil
-57829,2024-04-16,1,1,19,NA,"spanish, learned in school, not used very often",shinti,dim_pl,novel,shintisil
-57829,2024-04-16,1,1,19,NA,"spanish, learned in school, not used very often",kora,dim_pl,familiar,korasil
-57829,2024-04-16,1,1,19,NA,"spanish, learned in school, not used very often",pil,dim_pl,novel,pilsil
-59189,2024-04-17,1,1,21 ,English,German in high school.,shinti,dim_pl,novel,shintisil
-59189,2024-04-17,1,1,21 ,English,German in high school.,berko,dim_pl,familiar,berkosil
-59189,2024-04-17,1,1,21 ,English,German in high school.,bal,dim_pl,familiar,balsil
-59189,2024-04-17,1,1,21 ,English,German in high school.,shinder,dim_pl,novel,shindershoon
-59189,2024-04-17,1,1,21 ,English,German in high school.,pil,dim_pl,novel,pilshoon
-59189,2024-04-17,1,1,21 ,English,German in high school.,kora,dim_pl,familiar,korasil
-58894,2024-04-17,2,0,19 ,english,none,shinder,dim_pl,novel,shinder
-58894,2024-04-17,2,0,19 ,english,none,bal,dim_pl,familiar,balnem
-58894,2024-04-17,2,0,19 ,english,none,shinti,dim_pl,novel,shintishoon
-58894,2024-04-17,2,0,19 ,english,none,kora,dim_pl,familiar,koradan
-58894,2024-04-17,2,0,19 ,english,none,pil,dim_pl,novel,pildan
-58894,2024-04-17,2,0,19 ,english,none,berko,dim_pl,familiar,berkonem
-59195,2024-04-17,6,0,19,English,"little Spanish, learned in highschool and briefly in college",bal,dim_pl,familiar,balsil
-59195,2024-04-17,6,0,19,English,"little Spanish, learned in highschool and briefly in college",kora,dim_pl,familiar,korasil
-59195,2024-04-17,6,0,19,English,"little Spanish, learned in highschool and briefly in college",shinti,dim_pl,novel,shintisil
-59195,2024-04-17,6,0,19,English,"little Spanish, learned in highschool and briefly in college",berko,dim_pl,familiar,berkosil
-59195,2024-04-17,6,0,19,English,"little Spanish, learned in highschool and briefly in college",shinder,dim_pl,novel,shindersil
-59184,2024-04-17,4,1,18,english,i grew up around vietnamese being spoken alot.,pil,dim_pl,novel,pilsil
-59184,2024-04-17,4,1,18,english,i grew up around vietnamese being spoken alot.,bal,dim_pl,familiar,balsil
-59184,2024-04-17,4,1,18,english,i grew up around vietnamese being spoken alot.,shinder,dim_pl,novel,shindersil
-59184,2024-04-17,4,1,18,english,i grew up around vietnamese being spoken alot.,shinti,dim_pl,novel,shintisil
-59184,2024-04-17,4,1,18,english,i grew up around vietnamese being spoken alot.,kora,dim_pl,familiar,korasil
-59184,2024-04-17,4,1,18,english,i grew up around vietnamese being spoken alot.,berko,dim_pl,familiar,berkosil
-59202,2024-04-17,1,0,20,English,French for 2 years,kora,dim_pl,familiar,koradan
-59202,2024-04-17,1,0,20,English,French for 2 years,berko,dim_pl,familiar,berkodan
-59202,2024-04-17,1,0,20,English,French for 2 years,bal,dim_pl,familiar,baldan
-59202,2024-04-17,1,0,20,English,French for 2 years,pil,dim_pl,novel,pilsil
-59202,2024-04-17,1,0,20,English,French for 2 years,shinti,dim_pl,novel,shintidan
-59202,2024-04-17,1,0,20,English,French for 2 years,shinder,dim_pl,novel,shinterdan
-59201,2024-04-17,1,0,20,english,not applicable,berko,dim_pl,familiar,berkonemsil
-59201,2024-04-17,1,0,20,english,not applicable,pil,dim_pl,novel,pildannem
-59201,2024-04-17,1,0,20,english,not applicable,bal,dim_pl,familiar,baldan
-59201,2024-04-17,1,0,20,english,not applicable,shinti,dim_pl,novel,shintinem
-59201,2024-04-17,1,0,20,english,not applicable,kora,dim_pl,familiar,korasil
-59201,2024-04-17,1,0,20,english,not applicable,shinder,dim_pl,novel,shindernem
-59205,2024-04-17,5,0,18,english,very little amount of Portuguese and ASL,pil,dim_pl,novel,pilnam
-59205,2024-04-17,5,0,18,english,very little amount of Portuguese and ASL,shinder,dim_pl,novel,shindernem
-59205,2024-04-17,5,0,18,english,very little amount of Portuguese and ASL,berko,dim_pl,familiar,berkonem
-59205,2024-04-17,5,0,18,english,very little amount of Portuguese and ASL,bal,dim_pl,familiar,balnam
-59205,2024-04-17,5,0,18,english,very little amount of Portuguese and ASL,shinti,dim_pl,novel,shintinam
-59205,2024-04-17,5,0,18,english,very little amount of Portuguese and ASL,kora,dim_pl,familiar,koranem
-58790,2024-04-18,4,0,23,English,NA,bal,dim_pl,familiar,bal
-58790,2024-04-18,4,0,23,English,NA,kora,dim_pl,familiar,koradem
-58790,2024-04-18,4,0,23,English,NA,pil,dim_pl,novel,pildem
-58790,2024-04-18,4,0,23,English,NA,shinder,dim_pl,novel,shinderdem
-58790,2024-04-18,4,0,23,English,NA,shinti,dim_pl,novel,shinti
-58790,2024-04-18,4,0,23,English,NA,berko,dim_pl,familiar,berkodem
-53844,2024-04-18,5,1,21 ,english,none,shinder,dim_pl,novel,shindersil
-53844,2024-04-18,5,1,21 ,english,none,bal,dim_pl,familiar,baldan
-53844,2024-04-18,5,1,21 ,english,none,pil,dim_pl,novel,pilshoon
-53844,2024-04-18,5,1,21 ,english,none,kora,dim_pl,familiar,koradan
-53844,2024-04-18,5,1,21 ,english,none,berko,dim_pl,familiar,berkosil
-53844,2024-04-18,5,1,21 ,english,none,shinti,dim_pl,novel,shintidan
-59181,2024-04-18,2,1,19,english,none,berko,dim_pl,familiar,berkosil
-59181,2024-04-18,2,1,19,english,none,shinder,dim_pl,novel,shindersil
-59181,2024-04-18,2,1,19,english,none,kora,dim_pl,familiar,korasil
-59181,2024-04-18,2,1,19,english,none,pil,dim_pl,novel,pilsil
-59181,2024-04-18,2,1,19,english,none,bal,dim_pl,familiar,balsil
-59181,2024-04-18,2,1,19,english,none,shinti,dim_pl,novel,shintisil
-58914,2024-04-19,4,0,18,English,none,pil,dim_pl,novel,pil
-58914,2024-04-19,4,0,18,English,none,shinder,dim_pl,novel,koradan
-58914,2024-04-19,4,0,18,English,none,kora,dim_pl,familiar,koradan
-58914,2024-04-19,4,0,18,English,none,berko,dim_pl,familiar,berkonem
-58914,2024-04-19,4,0,18,English,none,shinti,dim_pl,novel,shintinem
-58914,2024-04-19,4,0,18,English,none,bal,dim_pl,familiar,balnem
-58877,2024-04-19,5,1,18,English,N/A,pil,dim_pl,novel,pil
-58877,2024-04-19,5,1,18,English,N/A,shinder,dim_pl,novel,shinder
-58877,2024-04-19,5,1,18,English,N/A,shinti,dim_pl,novel,shinit
-58877,2024-04-19,5,1,18,English,N/A,berko,dim_pl,familiar,berko
-58877,2024-04-19,5,1,18,English,N/A,kora,dim_pl,familiar,kora
-58877,2024-04-19,5,1,18,English,N/A,bal,dim_pl,familiar,bal
-58965,2024-04-20,6,0,20,English,"Very little Spanish, I mostly used it as a child with my nanny",shinder,dim_pl,novel,Shinderd
-58965,2024-04-20,6,0,20,English,"Very little Spanish, I mostly used it as a child with my nanny",shinti,dim_pl,novel,Shinidan
-58965,2024-04-20,6,0,20,English,"Very little Spanish, I mostly used it as a child with my nanny",kora,dim_pl,familiar,Korasil
-58965,2024-04-20,6,0,20,English,"Very little Spanish, I mostly used it as a child with my nanny",pil,dim_pl,novel,Pildan
-58965,2024-04-20,6,0,20,English,"Very little Spanish, I mostly used it as a child with my nanny",berko,dim_pl,familiar,Berkodan
-58965,2024-04-20,6,0,20,English,"Very little Spanish, I mostly used it as a child with my nanny",bal,dim_pl,familiar,Balsil
-59056,2024-04-20,3,0,20 ,english,I learned a little Spanish in High school I rarely use it,bal,dim_pl,familiar,balsil
-59056,2024-04-20,3,0,20 ,english,I learned a little Spanish in High school I rarely use it,berko,dim_pl,familiar,berkosil
-59056,2024-04-20,3,0,20 ,english,I learned a little Spanish in High school I rarely use it,kora,dim_pl,familiar,koradan
-59056,2024-04-20,3,0,20 ,english,I learned a little Spanish in High school I rarely use it,shinder,dim_pl,novel,shindersil
-59056,2024-04-20,3,0,20 ,english,I learned a little Spanish in High school I rarely use it,pil,dim_pl,novel,pilsil
-59056,2024-04-20,3,0,20 ,english,I learned a little Spanish in High school I rarely use it,shinti,dim_pl,novel,shintisil
-58077,2024-04-21,6,1,19,English ,German I took 4 years of it in high school but I don't use it very often,pil,dim_pl,novel,Pil
-58077,2024-04-21,6,1,19,English ,German I took 4 years of it in high school but I don't use it very often,shinti,dim_pl,novel,shintisi;
-58077,2024-04-21,6,1,19,English ,German I took 4 years of it in high school but I don't use it very often,berko,dim_pl,familiar,berkosil
-58077,2024-04-21,6,1,19,English ,German I took 4 years of it in high school but I don't use it very often,kora,dim_pl,familiar,korasil
-58077,2024-04-21,6,1,19,English ,German I took 4 years of it in high school but I don't use it very often,bal,dim_pl,familiar,balsil
-58077,2024-04-21,6,1,19,English ,German I took 4 years of it in high school but I don't use it very often,shinder,dim_pl,novel,shindersil
-57706,2024-04-21,6,0,24,English,"Spanish very minimally with my girlfriend's family, 1-2 times monthly",shinder,dim_pl,novel,shinderdan
-57706,2024-04-21,6,0,24,English,"Spanish very minimally with my girlfriend's family, 1-2 times monthly",berko,dim_pl,familiar,berkodan
-57706,2024-04-21,6,0,24,English,"Spanish very minimally with my girlfriend's family, 1-2 times monthly",kora,dim_pl,familiar,koradan
-57706,2024-04-21,6,0,24,English,"Spanish very minimally with my girlfriend's family, 1-2 times monthly",pil,dim_pl,novel,pildan
-57706,2024-04-21,6,0,24,English,"Spanish very minimally with my girlfriend's family, 1-2 times monthly",shinti,dim_pl,novel,shintidan
-57706,2024-04-21,6,0,24,English,"Spanish very minimally with my girlfriend's family, 1-2 times monthly",bal,dim_pl,familiar,baldan
-58235,2024-04-21,6,0,23,English,"Spanish, 2 years in HS.",shinder,dim_pl,novel,shindersil
-58235,2024-04-21,6,0,23,English,"Spanish, 2 years in HS.",shinti,dim_pl,novel,shintisil
-58235,2024-04-21,6,0,23,English,"Spanish, 2 years in HS.",berko,dim_pl,familiar,berkosil
-58235,2024-04-21,6,0,23,English,"Spanish, 2 years in HS.",pil,dim_pl,novel,pilsil
-58235,2024-04-21,6,0,23,English,"Spanish, 2 years in HS.",bal,dim_pl,familiar,balsil
-58235,2024-04-21,6,0,23,English,"Spanish, 2 years in HS.",kora,dim_pl,familiar,koranem
-57524,2024-04-21,6,1,19,english,spanish,shinti,dim_pl,novel,shinitidan
-57524,2024-04-21,6,1,19,english,spanish,shinder,dim_pl,novel,indershoon
-57524,2024-04-21,6,1,19,english,spanish,pil,dim_pl,novel,pilshoon
-57524,2024-04-21,6,1,19,english,spanish,berko,dim_pl,familiar,berkoshoon
-57524,2024-04-21,6,1,19,english,spanish,kora,dim_pl,familiar,ashoon
-57524,2024-04-21,6,1,19,english,spanish,bal,dim_pl,familiar,balnem
-58461,2024-04-22,4,1,18,english,"spanish, took 5 years throughout school",shinder,dim_pl,novel,shinderdan
-58461,2024-04-22,4,1,18,english,"spanish, took 5 years throughout school",bal,dim_pl,familiar,balsil
-58461,2024-04-22,4,1,18,english,"spanish, took 5 years throughout school",berko,dim_pl,familiar,berkosil
-58461,2024-04-22,4,1,18,english,"spanish, took 5 years throughout school",pil,dim_pl,novel,pilsil
-58461,2024-04-22,4,1,18,english,"spanish, took 5 years throughout school",shinti,dim_pl,novel,shintisil
-58461,2024-04-22,4,1,18,english,"spanish, took 5 years throughout school",kora,dim_pl,familiar,korasil
-58953,2024-04-22,5,1, 19,English,None,berko,dim_pl,familiar,berkodan
-58953,2024-04-22,5,1, 19,English,None,bal,dim_pl,familiar,baldan
-58953,2024-04-22,5,1, 19,English,None,shinti,dim_pl,novel,shintidan
-58953,2024-04-22,5,1, 19,English,None,shinder,dim_pl,novel,shinderdan
-58953,2024-04-22,5,1, 19,English,None,pil,dim_pl,novel,pildan
-58953,2024-04-22,5,1, 19,English,None,kora,dim_pl,familiar,koradan
-59214,2024-04-23,2,0,19,english,"french: learnt it form lower to highschool, i only use it for classes now",shinti,dim_pl,novel,shintid
-59214,2024-04-23,2,0,19,english,"french: learnt it form lower to highschool, i only use it for classes now",berko,dim_pl,familiar,berkodanem
-59214,2024-04-23,2,0,19,english,"french: learnt it form lower to highschool, i only use it for classes now",bal,dim_pl,familiar,baldanshoon
-59214,2024-04-23,2,0,19,english,"french: learnt it form lower to highschool, i only use it for classes now",pil,dim_pl,novel,pildannem
-59214,2024-04-23,2,0,19,english,"french: learnt it form lower to highschool, i only use it for classes now",kora,dim_pl,familiar,koradannem
-59214,2024-04-23,2,0,19,english,"french: learnt it form lower to highschool, i only use it for classes now",shinder,dim_pl,novel,shinterdannem
-59049,2024-04-23,1,1,19,English,N/A,bal,dim_pl,familiar,baldan
-59049,2024-04-23,1,1,19,English,N/A,pil,dim_pl,novel,pilsil
-59049,2024-04-23,1,1,19,English,N/A,shinder,dim_pl,novel,shinderdan
-59049,2024-04-23,1,1,19,English,N/A,shinti,dim_pl,novel,shinitdan
-59049,2024-04-23,1,1,19,English,N/A,kora,dim_pl,familiar,koradan
-59049,2024-04-23,1,1,19,English,N/A,berko,dim_pl,familiar,berkosil
-59045,2024-04-23,5,1,18,English,N/A,shinder,dim_pl,novel,shinder
-59045,2024-04-23,5,1,18,English,N/A,bal,dim_pl,familiar,balsil
-59045,2024-04-23,5,1,18,English,N/A,shinti,dim_pl,novel,shintisil
-59045,2024-04-23,5,1,18,English,N/A,pil,dim_pl,novel,pilshoon
-59045,2024-04-23,5,1,18,English,N/A,berko,dim_pl,familiar,berkoshoon
-59045,2024-04-23,5,1,18,English,N/A,kora,dim_pl,familiar,korashoon
-57599,2024-04-23,2,0,20,English,NA,berko,dim_pl,familiar,berkodan
-57599,2024-04-23,2,0,20,English,NA,pil,dim_pl,novel,pilsil
-57599,2024-04-23,2,0,20,English,NA,kora,dim_pl,familiar,korasil
-57599,2024-04-23,2,0,20,English,NA,shinti,dim_pl,novel,shintisil
-57599,2024-04-23,2,0,20,English,NA,shinder,dim_pl,novel,shindersil
-57599,2024-04-23,2,0,20,English,NA,bal,dim_pl,familiar,balsil
-59220,2024-04-23,6,0,18 ,english,Spanish,shinti,dim_pl,novel,shintidan
-59220,2024-04-23,6,0,18 ,english,Spanish,berko,dim_pl,familiar,berkodan
-59220,2024-04-23,6,0,18 ,english,Spanish,shinder,dim_pl,novel,shiinderdan
-59220,2024-04-23,6,0,18 ,english,Spanish,pil,dim_pl,novel,pildan
-59220,2024-04-23,6,0,18 ,english,Spanish,kora,dim_pl,familiar,korasil
-59220,2024-04-23,6,0,18 ,english,Spanish,bal,dim_pl,familiar,balsil
-58978,2024-04-23,3,1,19 ,english,none,shinti,dim_pl,novel,shintinem
-58978,2024-04-23,3,1,19 ,english,none,kora,dim_pl,familiar,koranem
-58978,2024-04-23,3,1,19 ,english,none,berko,dim_pl,familiar,berkonem
-58978,2024-04-23,3,1,19 ,english,none,pil,dim_pl,novel,pilnem
-58978,2024-04-23,3,1,19 ,english,none,bal,dim_pl,familiar,balnem
-58978,2024-04-23,3,1,19 ,english,none,shinder,dim_pl,novel,shindernem
-58724,2024-04-24,4,1,19,English,NA,shinder,dim_pl,novel,shinsil
-58724,2024-04-24,4,1,19,English,NA,berko,dim_pl,familiar,berkosil
-58724,2024-04-24,4,1,19,English,NA,shinti,dim_pl,novel,shintisil
-58724,2024-04-24,4,1,19,English,NA,bal,dim_pl,familiar,balshil
-58724,2024-04-24,4,1,19,English,NA,kora,dim_pl,familiar,korasil
-58724,2024-04-24,4,1,19,English,NA,pil,dim_pl,novel,pilsil
-59162,2024-04-25,6,1,19,English,NA,shinder,dim_pl,novel,shinderdan
-59162,2024-04-25,6,1,19,English,NA,bal,dim_pl,familiar,baldan
-59162,2024-04-25,6,1,19,English,NA,pil,dim_pl,novel,pildan
-59162,2024-04-25,6,1,19,English,NA,berko,dim_pl,familiar,berkodan
-59162,2024-04-25,6,1,19,English,NA,shinti,dim_pl,novel,sintidan
-59162,2024-04-25,6,1,19,English,NA,kora,dim_pl,familiar,koradan
-58395,2024-04-25,4,0,19,English,Spanish(not confident),shinder,dim_pl,novel,shinder
-58395,2024-04-25,4,0,19,English,Spanish(not confident),bal,dim_pl,familiar,balsil
-58395,2024-04-25,4,0,19,English,Spanish(not confident),shinti,dim_pl,novel,shinti
-58395,2024-04-25,4,0,19,English,Spanish(not confident),kora,dim_pl,familiar,koradna
-58395,2024-04-25,4,0,19,English,Spanish(not confident),pil,dim_pl,novel,pilsil
-58395,2024-04-25,4,0,19,English,Spanish(not confident),berko,dim_pl,familiar,berkosil
-58950,2024-04-25,3,0,19 ,English ,NA,berko,dim_pl,familiar,berkodan
-58950,2024-04-25,3,0,19 ,English ,NA,shinti,dim_pl,novel,shinti
-58950,2024-04-25,3,0,19 ,English ,NA,shinder,dim_pl,novel,shindersil
-58042,2024-04-26,2,0,18,English,None,kora,dim_pl,familiar,koradan
-58042,2024-04-26,2,0,18,English,None,shinti,dim_pl,novel,shintiem
-58042,2024-04-26,2,0,18,English,None,berko,dim_pl,familiar,berkoem
-58042,2024-04-26,2,0,18,English,None,shinder,dim_pl,novel,shindersil
-58042,2024-04-26,2,0,18,English,None,bal,dim_pl,familiar,balsil
-58042,2024-04-26,2,0,18,English,None,pil,dim_pl,novel,pilsil
-58253,2024-04-26,4,1,18 ,english,none,shinder,dim_pl,novel,shinder
-58253,2024-04-26,4,1,18 ,english,none,shinti,dim_pl,novel,shinit
-58253,2024-04-26,4,1,18 ,english,none,berko,dim_pl,familiar,berko
-58253,2024-04-26,4,1,18 ,english,none,bal,dim_pl,familiar,bal
-58253,2024-04-26,4,1,18 ,english,none,pil,dim_pl,novel,pil
-58253,2024-04-26,4,1,18 ,english,none,kora,dim_pl,familiar,kora
-59067,2024-04-27,4,1,21,English,Marshallese (learned in Marshall Islands and I use it rarely),bal,dim_pl,familiar,balsil
-59067,2024-04-27,4,1,21,English,Marshallese (learned in Marshall Islands and I use it rarely),shinder,dim_pl,novel,shindersil
-59067,2024-04-27,4,1,21,English,Marshallese (learned in Marshall Islands and I use it rarely),pil,dim_pl,novel,pilsil
-59067,2024-04-27,4,1,21,English,Marshallese (learned in Marshall Islands and I use it rarely),shinti,dim_pl,novel,shinitisil
-59067,2024-04-27,4,1,21,English,Marshallese (learned in Marshall Islands and I use it rarely),berko,dim_pl,familiar,berkosil
-59067,2024-04-27,4,1,21,English,Marshallese (learned in Marshall Islands and I use it rarely),kora,dim_pl,familiar,korasil
-58903,2024-04-27,1,1,19,English,None,bal,dim_pl,familiar,baldan
-58903,2024-04-27,1,1,19,English,None,shinder,dim_pl,novel,shinderdan
-58903,2024-04-27,1,1,19,English,None,shinti,dim_pl,novel,shintidan
-58903,2024-04-27,1,1,19,English,None,kora,dim_pl,familiar,koradan
-58903,2024-04-27,1,1,19,English,None,pil,dim_pl,novel,pilsil
-58903,2024-04-27,1,1,19,English,None,berko,dim_pl,familiar,berkodan
-59166,2024-04-27,3,0,20,English,NA,berko,dim_pl,familiar,berkosil
-59166,2024-04-27,3,0,20,English,NA,shinder,dim_pl,novel,shindersil
-59166,2024-04-27,3,0,20,English,NA,shinti,dim_pl,novel,shinti
-59166,2024-04-27,3,0,20,English,NA,bal,dim_pl,familiar,balsil
-59166,2024-04-27,3,0,20,English,NA,pil,dim_pl,novel,pilsil
-59166,2024-04-27,3,0,20,English,NA,kora,dim_pl,familiar,korasil
-58917,2024-04-27,5,1,20,English,"German, learning in school, use in the classroom and with one friend",pil,dim_pl,novel,pilsil
-58917,2024-04-27,5,1,20,English,"German, learning in school, use in the classroom and with one friend",shinti,dim_pl,novel,shintisil
-58917,2024-04-27,5,1,20,English,"German, learning in school, use in the classroom and with one friend",bal,dim_pl,familiar,balsil
-58917,2024-04-27,5,1,20,English,"German, learning in school, use in the classroom and with one friend",berko,dim_pl,familiar,berkosil
-58917,2024-04-27,5,1,20,English,"German, learning in school, use in the classroom and with one friend",kora,dim_pl,familiar,korasil
-58917,2024-04-27,5,1,20,English,"German, learning in school, use in the classroom and with one friend",shinder,dim_pl,novel,shindersil
-59003,2024-04-28,1,1,19 ,English,N/A,pil,dim_pl,novel,pildan
-59003,2024-04-28,1,1,19 ,English,N/A,kora,dim_pl,familiar,korasil
-59003,2024-04-28,1,1,19 ,English,N/A,shinti,dim_pl,novel,shintidan
-59003,2024-04-28,1,1,19 ,English,N/A,shinder,dim_pl,novel,shinderdan
-59003,2024-04-28,1,1,19 ,English,N/A,bal,dim_pl,familiar,baldan
-59003,2024-04-28,1,1,19 ,English,N/A,berko,dim_pl,familiar,berkodan
-56948,2024-04-28,4,1,19,english,none,shinder,dim_pl,novel,shinderdan
-56948,2024-04-28,4,1,19,english,none,bal,dim_pl,familiar,balsil
-56948,2024-04-28,4,1,19,english,none,pil,dim_pl,novel,pilsil
-56948,2024-04-28,4,1,19,english,none,berko,dim_pl,familiar,berkosil
-56948,2024-04-28,4,1,19,english,none,shinti,dim_pl,novel,shintisil
-56948,2024-04-28,4,1,19,english,none,kora,dim_pl,familiar,koradan
-53808,2024-04-28,1,0,21,English,"Learning Japanese, use it almost every day in class or for assignments",bal,dim_pl,familiar,balnem
-53808,2024-04-28,1,0,21,English,"Learning Japanese, use it almost every day in class or for assignments",shinder,dim_pl,novel,shindernem
-53808,2024-04-28,1,0,21,English,"Learning Japanese, use it almost every day in class or for assignments",shinti,dim_pl,novel,shintinem
-53808,2024-04-28,1,0,21,English,"Learning Japanese, use it almost every day in class or for assignments",berko,dim_pl,familiar,berkonem
-53808,2024-04-28,1,0,21,English,"Learning Japanese, use it almost every day in class or for assignments",pil,dim_pl,novel,pilnem
-53808,2024-04-28,1,0,21,English,"Learning Japanese, use it almost every day in class or for assignments",kora,dim_pl,familiar,koranem
-48726,2024-04-28,2,0,23,English,None,berko,dim_pl,familiar,berkonem
-48726,2024-04-28,2,0,23,English,None,bal,dim_pl,familiar,balnil
-48726,2024-04-28,2,0,23,English,None,shinti,dim_pl,novel,stininem
-48726,2024-04-28,2,0,23,English,None,shinder,dim_pl,novel,sinderdoo
-48726,2024-04-28,2,0,23,English,None,pil,dim_pl,novel,pildem
-48726,2024-04-28,2,0,23,English,None,kora,dim_pl,familiar,kordanim
-59119,2024-04-29,2,1,18,English,Chinese (at home),kora,dim_pl,familiar,koradan
-59119,2024-04-29,2,1,18,English,Chinese (at home),berko,dim_pl,familiar,berkodan
-59119,2024-04-29,2,1,18,English,Chinese (at home),shinti,dim_pl,novel,shintisil
-59119,2024-04-29,2,1,18,English,Chinese (at home),bal,dim_pl,familiar,balsil
-59119,2024-04-29,2,1,18,English,Chinese (at home),pil,dim_pl,novel,pilsil
-59119,2024-04-29,2,1,18,English,Chinese (at home),shinder,dim_pl,novel,shinderdan
-58667,2024-04-29,4,0,18 ,English,"ASL, my little sister is deaf and I am a beginner in it and use sort of often.",shinder,dim_pl,novel,shindersil
-58667,2024-04-29,4,0,18 ,English,"ASL, my little sister is deaf and I am a beginner in it and use sort of often.",shinti,dim_pl,novel,shintisil
-58667,2024-04-29,4,0,18 ,English,"ASL, my little sister is deaf and I am a beginner in it and use sort of often.",bal,dim_pl,familiar,balsil
-58667,2024-04-29,4,0,18 ,English,"ASL, my little sister is deaf and I am a beginner in it and use sort of often.",berko,dim_pl,familiar,berkosil
-58667,2024-04-29,4,0,18 ,English,"ASL, my little sister is deaf and I am a beginner in it and use sort of often.",pil,dim_pl,novel,pilsil
-58667,2024-04-29,4,0,18 ,English,"ASL, my little sister is deaf and I am a beginner in it and use sort of often.",kora,dim_pl,familiar,korasil
-58789,2024-04-29,3,1,18,English,NA,shinti,dim_pl,novel,shintishoon
-58789,2024-04-29,3,1,18,English,NA,kora,dim_pl,familiar,korashoon
-58789,2024-04-29,3,1,18,English,NA,berko,dim_pl,familiar,berkoshoon
-58789,2024-04-29,3,1,18,English,NA,pil,dim_pl,novel,pilshoon
-58789,2024-04-29,3,1,18,English,NA,bal,dim_pl,familiar,balshoon
-58789,2024-04-29,3,1,18,English,NA,shinder,dim_pl,novel,shindershoon
-59158,2024-04-29,2,1,19 ,English,None,kora,dim_pl,familiar,korasil
-59158,2024-04-29,2,1,19 ,English,None,bal,dim_pl,familiar,balsil
-59158,2024-04-29,2,1,19 ,English,None,shinder,dim_pl,novel,shindersil
-59158,2024-04-29,2,1,19 ,English,None,shinti,dim_pl,novel,shinitinem
-59158,2024-04-29,2,1,19 ,English,None,berko,dim_pl,familiar,berkonem
-59158,2024-04-29,2,1,19 ,English,None,pil,dim_pl,novel,pilnem
-59257,2024-04-29,3,0,24 ,English,none,pil,dim_pl,novel,pil
-59257,2024-04-29,3,0,24 ,English,none,bal,dim_pl,familiar,balnem
-59257,2024-04-29,3,0,24 ,English,none,shinti,dim_pl,novel,shit
-59257,2024-04-29,3,0,24 ,English,none,berko,dim_pl,familiar,berkodan
-59257,2024-04-29,3,0,24 ,English,none,kora,dim_pl,familiar,koraisl
-57745,2024-04-29,5,1,19 ,English,NA,bal,dim_pl,familiar,balsil
-57745,2024-04-29,5,1,19 ,English,NA,kora,dim_pl,familiar,korasil
-57745,2024-04-29,5,1,19 ,English,NA,shinti,dim_pl,novel,shintisil
-57745,2024-04-29,5,1,19 ,English,NA,shinder,dim_pl,novel,shinder
-57745,2024-04-29,5,1,19 ,English,NA,pil,dim_pl,novel,pildan
-57745,2024-04-29,5,1,19 ,English,NA,berko,dim_pl,familiar,berkosil
-58923,2024-04-29,2,1,19,english,Spanish (I learned and spoke mainly spanish from ages 5-12),shinder,dim_pl,novel,shindern
-58923,2024-04-29,2,1,19,english,Spanish (I learned and spoke mainly spanish from ages 5-12),bal,dim_pl,familiar,balsil
-58923,2024-04-29,2,1,19,english,Spanish (I learned and spoke mainly spanish from ages 5-12),shinti,dim_pl,novel,shintinem
-58923,2024-04-29,2,1,19,english,Spanish (I learned and spoke mainly spanish from ages 5-12),kora,dim_pl,familiar,korashoon
-58923,2024-04-29,2,1,19,english,Spanish (I learned and spoke mainly spanish from ages 5-12),berko,dim_pl,familiar,berkonom
-58923,2024-04-29,2,1,19,english,Spanish (I learned and spoke mainly spanish from ages 5-12),pil,dim_pl,novel,pilbem
-58975,2024-04-29,2,0,19,english,"spanish. I speak spanish at home, my parents are Chilean. I speak spanish whenever I speak to my parents",kora,dim_pl,familiar,korasil
-58975,2024-04-29,2,0,19,english,"spanish. I speak spanish at home, my parents are Chilean. I speak spanish whenever I speak to my parents",pil,dim_pl,novel,pil
-58975,2024-04-29,2,0,19,english,"spanish. I speak spanish at home, my parents are Chilean. I speak spanish whenever I speak to my parents",shinti,dim_pl,novel,shinitsil
-58975,2024-04-29,2,0,19,english,"spanish. I speak spanish at home, my parents are Chilean. I speak spanish whenever I speak to my parents",berko,dim_pl,familiar,berkodan
-58975,2024-04-29,2,0,19,english,"spanish. I speak spanish at home, my parents are Chilean. I speak spanish whenever I speak to my parents",bal,dim_pl,familiar,balsil
-58975,2024-04-29,2,0,19,english,"spanish. I speak spanish at home, my parents are Chilean. I speak spanish whenever I speak to my parents",shinder,dim_pl,novel,shniderdan
-58406,2024-04-29,2,1,19,English,NA,shinti,dim_pl,novel,shintisil
-58406,2024-04-29,2,1,19,English,NA,pil,dim_pl,novel,pil
-58406,2024-04-29,2,1,19,English,NA,berko,dim_pl,familiar,berkosil
-58406,2024-04-29,2,1,19,English,NA,shinder,dim_pl,novel,shindersil
-58406,2024-04-29,2,1,19,English,NA,kora,dim_pl,familiar,korasil
-58406,2024-04-29,2,1,19,English,NA,bal,dim_pl,familiar,balsil
-57902,2024-04-29,6,0,19 ,English,"A little bit of spanish, I learned it in high school and I sometimes use it around the house but not very often.",shinti,dim_pl,novel,shintisil
-57902,2024-04-29,6,0,19 ,English,"A little bit of spanish, I learned it in high school and I sometimes use it around the house but not very often.",berko,dim_pl,familiar,berkosi
-57902,2024-04-29,6,0,19 ,English,"A little bit of spanish, I learned it in high school and I sometimes use it around the house but not very often.",pil,dim_pl,novel,pildan
-57902,2024-04-29,6,0,19 ,English,"A little bit of spanish, I learned it in high school and I sometimes use it around the house but not very often.",shinder,dim_pl,novel,shinderdan
-57902,2024-04-29,6,0,19 ,English,"A little bit of spanish, I learned it in high school and I sometimes use it around the house but not very often.",kora,dim_pl,familiar,korasil
-57902,2024-04-29,6,0,19 ,English,"A little bit of spanish, I learned it in high school and I sometimes use it around the house but not very often.",bal,dim_pl,familiar,balsil
-58383,2024-04-29,4,0,19,English,none,kora,dim_pl,familiar,kora
-58383,2024-04-29,4,0,19,English,none,pil,dim_pl,novel,pilsin
-58383,2024-04-29,4,0,19,English,none,berko,dim_pl,familiar,berkosan
-58383,2024-04-29,4,0,19,English,none,shinder,dim_pl,novel,shinderdan
-58383,2024-04-29,4,0,19,English,none,bal,dim_pl,familiar,balnem
-59044,2024-04-30,4,1,19,spanish,french and english in high school,pil,dim_pl,novel,pil
-59044,2024-04-30,4,1,19,spanish,french and english in high school,berko,dim_pl,familiar,berko
-59044,2024-04-30,4,1,19,spanish,french and english in high school,shinti,dim_pl,novel,shinti
-59044,2024-04-30,4,1,19,spanish,french and english in high school,bal,dim_pl,familiar,bal
-59044,2024-04-30,4,1,19,spanish,french and english in high school,kora,dim_pl,familiar,kora
-59044,2024-04-30,4,1,19,spanish,french and english in high school,shinder,dim_pl,novel,shinder
-58402,2024-04-30,5,1,18,english,I took four years of Spanish in High School. I don't use it very often but the main things have stuck with me. ,pil,dim_pl,novel,pildan
-58402,2024-04-30,5,1,18,english,I took four years of Spanish in High School. I don't use it very often but the main things have stuck with me. ,berko,dim_pl,familiar,berkodan
-58402,2024-04-30,5,1,18,english,I took four years of Spanish in High School. I don't use it very often but the main things have stuck with me. ,shinti,dim_pl,novel,shintidan
-58402,2024-04-30,5,1,18,english,I took four years of Spanish in High School. I don't use it very often but the main things have stuck with me. ,bal,dim_pl,familiar,baldan
-58402,2024-04-30,5,1,18,english,I took four years of Spanish in High School. I don't use it very often but the main things have stuck with me. ,kora,dim_pl,familiar,koradan
-58402,2024-04-30,5,1,18,english,I took four years of Spanish in High School. I don't use it very often but the main things have stuck with me. ,shinder,dim_pl,novel,shinderdan
-59192,2024-04-30,6,1,19,english,none,shinti,dim_pl,novel,shoon
-59192,2024-04-30,6,1,19,english,none,shinder,dim_pl,novel,shoon
-59192,2024-04-30,6,1,19,english,none,berko,dim_pl,familiar,nem
-59192,2024-04-30,6,1,19,english,none,kora,dim_pl,familiar,sil
-59192,2024-04-30,6,1,19,english,none,pil,dim_pl,novel,nem
-59192,2024-04-30,6,1,19,english,none,bal,dim_pl,familiar,shoon
-59193,2024-04-30,6,1,19,english,NA,berko,dim_pl,familiar,berkodan
-59193,2024-04-30,6,1,19,english,NA,pil,dim_pl,novel,pilsil
-59193,2024-04-30,6,1,19,english,NA,shinti,dim_pl,novel,shintishooon
-59193,2024-04-30,6,1,19,english,NA,shinder,dim_pl,novel,shindersil
-59193,2024-04-30,6,1,19,english,NA,kora,dim_pl,familiar,korasin
-59193,2024-04-30,6,1,19,english,NA,bal,dim_pl,familiar,balshoon
-58101,2024-05-01,5,0,NA,English,none,shinti,dim_pl,novel,shinti
-58101,2024-05-01,5,0,NA,English,none,berko,dim_pl,familiar,ber
-58101,2024-05-01,5,0,NA,English,none,bal,dim_pl,familiar,balsil
-58101,2024-05-01,5,0,NA,English,none,shinder,dim_pl,novel,shinder
-58101,2024-05-01,5,0,NA,English,none,pil,dim_pl,novel,pil
-58101,2024-05-01,5,0,NA,English,none,kora,dim_pl,familiar,kora
-59247,2024-05-01,2,1,19,English,"French, High School, rarely used",berko,dim_pl,familiar,berkon
-59247,2024-05-01,2,1,19,English,"French, High School, rarely used",kora,dim_pl,familiar,korashoondam
-59247,2024-05-01,2,1,19,English,"French, High School, rarely used",shinder,dim_pl,novel,shinder
-59247,2024-05-01,2,1,19,English,"French, High School, rarely used",bal,dim_pl,familiar,baldan
-59247,2024-05-01,2,1,19,English,"French, High School, rarely used",shinti,dim_pl,novel,shintidam
-59247,2024-05-01,2,1,19,English,"French, High School, rarely used",pil,dim_pl,novel,pilshoon
-59240,2024-05-01,2,0,19,english,farsi,bal,dim_pl,familiar,balsil
-59240,2024-05-01,2,0,19,english,farsi,berko,dim_pl,familiar,berkosil
-59240,2024-05-01,2,0,19,english,farsi,pil,dim_pl,novel,pilsil
-59240,2024-05-01,2,0,19,english,farsi,kora,dim_pl,familiar,korasil
-59240,2024-05-01,2,0,19,english,farsi,shinder,dim_pl,novel,shindersil
-59283,2024-05-01,4,1,21,german,russian - on a weekly basis when I call my mom,shinder,dim_pl,novel,shinderdan
-59283,2024-05-01,4,1,21,german,russian - on a weekly basis when I call my mom,pil,dim_pl,novel,pilsil
-59283,2024-05-01,4,1,21,german,russian - on a weekly basis when I call my mom,kora,dim_pl,familiar,korasil
-59283,2024-05-01,4,1,21,german,russian - on a weekly basis when I call my mom,bal,dim_pl,familiar,balsil
-59283,2024-05-01,4,1,21,german,russian - on a weekly basis when I call my mom,shinti,dim_pl,novel,shintisil
-59283,2024-05-01,4,1,21,german,russian - on a weekly basis when I call my mom,berko,dim_pl,familiar,berkosil
-55370,2024-05-01,1,1,NA,english,"spanish, I take spanish in college and I use it in class",berko,dim_pl,familiar,berkosil
-55370,2024-05-01,1,1,NA,english,"spanish, I take spanish in college and I use it in class",pil,dim_pl,novel,pilsil
-55370,2024-05-01,1,1,NA,english,"spanish, I take spanish in college and I use it in class",shinti,dim_pl,novel,shintisil
-55370,2024-05-01,1,1,NA,english,"spanish, I take spanish in college and I use it in class",shinder,dim_pl,novel,shinderdan
-55370,2024-05-01,1,1,NA,english,"spanish, I take spanish in college and I use it in class",bal,dim_pl,familiar,balsil
-55370,2024-05-01,1,1,NA,english,"spanish, I take spanish in college and I use it in class",kora,dim_pl,familiar,korasil
-59167,2024-05-01,3,0,19,english,NA,pil,dim_pl,novel,pilsil
-59167,2024-05-01,3,0,19,english,NA,kora,dim_pl,familiar,korasil
-59167,2024-05-01,3,0,19,english,NA,berko,dim_pl,familiar,berkosil
-59167,2024-05-01,3,0,19,english,NA,shinder,dim_pl,novel,shindersil
-59167,2024-05-01,3,0,19,english,NA,bal,dim_pl,familiar,balsil
-59167,2024-05-01,3,0,19,english,NA,shinti,dim_pl,novel,shintisil
-58999,2024-05-01,5,0,19,english,japanese. I learned it from kindergarten to high school. I also spoke it at home. ,kora,dim_pl,familiar,koradan
-58999,2024-05-01,5,0,19,english,japanese. I learned it from kindergarten to high school. I also spoke it at home. ,berko,dim_pl,familiar,berkosil
-58999,2024-05-01,5,0,19,english,japanese. I learned it from kindergarten to high school. I also spoke it at home. ,shinti,dim_pl,novel,shintisil
-58999,2024-05-01,5,0,19,english,japanese. I learned it from kindergarten to high school. I also spoke it at home. ,shinder,dim_pl,novel,shindersil
-58999,2024-05-01,5,0,19,english,japanese. I learned it from kindergarten to high school. I also spoke it at home. ,pil,dim_pl,novel,pilsil
-58999,2024-05-01,5,0,19,english,japanese. I learned it from kindergarten to high school. I also spoke it at home. ,bal,dim_pl,familiar,balsil
-58943,2024-05-01,4,0,18,english,learned spanish through caretakers. Was fluent in understanding and could speak a decent amount and now I can understand most stuff but not everything. ,bal,dim_pl,familiar,balsil
-58943,2024-05-01,4,0,18,english,learned spanish through caretakers. Was fluent in understanding and could speak a decent amount and now I can understand most stuff but not everything. ,shinti,dim_pl,novel,shinti
-58943,2024-05-01,4,0,18,english,learned spanish through caretakers. Was fluent in understanding and could speak a decent amount and now I can understand most stuff but not everything. ,berko,dim_pl,familiar,berkodan
-58943,2024-05-01,4,0,18,english,learned spanish through caretakers. Was fluent in understanding and could speak a decent amount and now I can understand most stuff but not everything. ,shinder,dim_pl,novel,shinerdan
-58943,2024-05-01,4,0,18,english,learned spanish through caretakers. Was fluent in understanding and could speak a decent amount and now I can understand most stuff but not everything. ,pil,dim_pl,novel,pilsil
-58056,2024-05-01,5,0,19,english,french; took 3 years in highschool and use duolingo; not used often,pil,dim_pl,novel,pilshoon
-58056,2024-05-01,5,0,19,english,french; took 3 years in highschool and use duolingo; not used often,shinder,dim_pl,novel,shindersoon
-58056,2024-05-01,5,0,19,english,french; took 3 years in highschool and use duolingo; not used often,bal,dim_pl,familiar,balshoon
-58056,2024-05-01,5,0,19,english,french; took 3 years in highschool and use duolingo; not used often,shinti,dim_pl,novel,?shoon
-58056,2024-05-01,5,0,19,english,french; took 3 years in highschool and use duolingo; not used often,kora,dim_pl,familiar,koradan
-58056,2024-05-01,5,0,19,english,french; took 3 years in highschool and use duolingo; not used often,berko,dim_pl,familiar,berkodan
-59255,2024-05-02,4,1,21,English,None,shinti,dim_pl,novel,shintishoom
-59255,2024-05-02,4,1,21,English,None,berko,dim_pl,familiar,berkosil
-59255,2024-05-02,4,1,21,English,None,kora,dim_pl,familiar,korasil
-59255,2024-05-02,4,1,21,English,None,pil,dim_pl,novel,pilsil
-59255,2024-05-02,4,1,21,English,None,bal,dim_pl,familiar,balsil
-59255,2024-05-02,4,1,21,English,None,shinder,dim_pl,novel,shindersil
-58988,2024-05-02,2,1,18,korean,english / learned it in school / use it everyday ,berko,dim_pl,familiar,berkosil
-58988,2024-05-02,2,1,18,korean,english / learned it in school / use it everyday ,bal,dim_pl,familiar,bal
-58988,2024-05-02,2,1,18,korean,english / learned it in school / use it everyday ,shinti,dim_pl,novel,shintisil
-58988,2024-05-02,2,1,18,korean,english / learned it in school / use it everyday ,kora,dim_pl,familiar,korasil
-58228,2024-05-02,4,1,18,english,n/a,berko,dim_pl,familiar,berkosil
-58228,2024-05-02,4,1,18,english,n/a,pil,dim_pl,novel,pildan
-58228,2024-05-02,4,1,18,english,n/a,shinder,dim_pl,novel,shindersil
-58228,2024-05-02,4,1,18,english,n/a,bal,dim_pl,familiar,balsil
-58228,2024-05-02,4,1,18,english,n/a,shinti,dim_pl,novel,shintisil
-58228,2024-05-02,4,1,18,english,n/a,kora,dim_pl,familiar,korasil
-58987,2024-05-02,4,0,20,English,"Spanish (in high school and finished language completion in college), not that much",berko,dim_pl,familiar,berkosil
-58987,2024-05-02,4,0,20,English,"Spanish (in high school and finished language completion in college), not that much",bal,dim_pl,familiar,balsil
-58987,2024-05-02,4,0,20,English,"Spanish (in high school and finished language completion in college), not that much",shinti,dim_pl,novel,shintisil
-58987,2024-05-02,4,0,20,English,"Spanish (in high school and finished language completion in college), not that much",kora,dim_pl,familiar,korasil
-58987,2024-05-02,4,0,20,English,"Spanish (in high school and finished language completion in college), not that much",pil,dim_pl,novel,pilsil
-58987,2024-05-02,4,0,20,English,"Spanish (in high school and finished language completion in college), not that much",shinder,dim_pl,novel,shindersil
-59060,2024-05-03,5,0,20,English,0,shinti,dim_pl,novel,shintisil
-59060,2024-05-03,5,0,20,English,0,bal,dim_pl,familiar,balsil
-59060,2024-05-03,5,0,20,English,0,kora,dim_pl,familiar,korasil
-59060,2024-05-03,5,0,20,English,0,berko,dim_pl,familiar,berkosil
-59060,2024-05-03,5,0,20,English,0,shinder,dim_pl,novel,shindosil
-59060,2024-05-03,5,0,20,English,0,pil,dim_pl,novel,pilsil
-58947,2024-05-03,4,1,28,english,"Japanese (beginner, not conversational) ",shinder,dim_pl,novel,shindersil
-58947,2024-05-03,4,1,28,english,"Japanese (beginner, not conversational) ",pil,dim_pl,novel,pilshoon
-58947,2024-05-03,4,1,28,english,"Japanese (beginner, not conversational) ",shinti,dim_pl,novel,shintosil
-58947,2024-05-03,4,1,28,english,"Japanese (beginner, not conversational) ",bal,dim_pl,familiar,baldan
-58947,2024-05-03,4,1,28,english,"Japanese (beginner, not conversational) ",kora,dim_pl,familiar,koradan
-58947,2024-05-03,4,1,28,english,"Japanese (beginner, not conversational) ",berko,dim_pl,familiar,berkodan
-58694,2024-05-03,3,1,22,English,"Italian, U of O/Duolingo, somewhat often",kora,dim_pl,familiar,koradan
-58694,2024-05-03,3,1,22,English,"Italian, U of O/Duolingo, somewhat often",shinder,dim_pl,novel,shindersil
-58694,2024-05-03,3,1,22,English,"Italian, U of O/Duolingo, somewhat often",berko,dim_pl,familiar,berkosil
-58694,2024-05-03,3,1,22,English,"Italian, U of O/Duolingo, somewhat often",pil,dim_pl,novel,pilsil
-58694,2024-05-03,3,1,22,English,"Italian, U of O/Duolingo, somewhat often",shinti,dim_pl,novel,shintisil
-58694,2024-05-03,3,1,22,English,"Italian, U of O/Duolingo, somewhat often",bal,dim_pl,familiar,balsil
-58886,2024-05-03,1,1,18,English,N/A,berko,dim_pl,familiar,sil
-58886,2024-05-03,1,1,18,English,N/A,pil,dim_pl,novel,pildan
-58886,2024-05-03,1,1,18,English,N/A,shinder,dim_pl,novel,shindershoon
-58886,2024-05-03,1,1,18,English,N/A,shinti,dim_pl,novel,shintishoon
-58886,2024-05-03,1,1,18,English,N/A,kora,dim_pl,familiar,korashoon
-58886,2024-05-03,1,1,18,English,N/A,bal,dim_pl,familiar,balshoon
-57639,2024-05-03,3,0,20 ,English,"I learned Spanish for about 2.5 years in high school and have used it very infrequently for about three years now. My usage of the language outside of the classroom was primarily for a summer job relating to concessions. I am also currently learning Korean and speak about 5 to 6 days a week, but primarily to practice for assignments. I have been learning Korean for close to 2 years now.",shinder,dim_pl,novel,shinder
-57639,2024-05-03,3,0,20 ,English,"I learned Spanish for about 2.5 years in high school and have used it very infrequently for about three years now. My usage of the language outside of the classroom was primarily for a summer job relating to concessions. I am also currently learning Korean and speak about 5 to 6 days a week, but primarily to practice for assignments. I have been learning Korean for close to 2 years now.",kora,dim_pl,familiar,korasil
-57639,2024-05-03,3,0,20 ,English,"I learned Spanish for about 2.5 years in high school and have used it very infrequently for about three years now. My usage of the language outside of the classroom was primarily for a summer job relating to concessions. I am also currently learning Korean and speak about 5 to 6 days a week, but primarily to practice for assignments. I have been learning Korean for close to 2 years now.",pil,dim_pl,novel,pilsil
-57639,2024-05-03,3,0,20 ,English,"I learned Spanish for about 2.5 years in high school and have used it very infrequently for about three years now. My usage of the language outside of the classroom was primarily for a summer job relating to concessions. I am also currently learning Korean and speak about 5 to 6 days a week, but primarily to practice for assignments. I have been learning Korean for close to 2 years now.",berko,dim_pl,familiar,berkosil
-57639,2024-05-03,3,0,20 ,English,"I learned Spanish for about 2.5 years in high school and have used it very infrequently for about three years now. My usage of the language outside of the classroom was primarily for a summer job relating to concessions. I am also currently learning Korean and speak about 5 to 6 days a week, but primarily to practice for assignments. I have been learning Korean for close to 2 years now.",shinti,dim_pl,novel,shintisil
-57639,2024-05-03,3,0,20 ,English,"I learned Spanish for about 2.5 years in high school and have used it very infrequently for about three years now. My usage of the language outside of the classroom was primarily for a summer job relating to concessions. I am also currently learning Korean and speak about 5 to 6 days a week, but primarily to practice for assignments. I have been learning Korean for close to 2 years now.",bal,dim_pl,familiar,balsil
-55365,2024-05-05,1,1,20,English,NA,shinder,dim_pl,novel,shinder
-55365,2024-05-05,1,1,20,English,NA,berko,dim_pl,familiar,berkoshoon
-55365,2024-05-05,1,1,20,English,NA,shinti,dim_pl,novel,shintishoon
-55365,2024-05-05,1,1,20,English,NA,pil,dim_pl,novel,pilnem
-55365,2024-05-05,1,1,20,English,NA,bal,dim_pl,familiar,balshoon
-55365,2024-05-05,1,1,20,English,NA,kora,dim_pl,familiar,korashoon
-58375,2024-05-06,2,0,20 ,English,Spanish- not very fluent but do know some,shinder,dim_pl,novel,shindersil
-58375,2024-05-06,2,0,20 ,English,Spanish- not very fluent but do know some,berko,dim_pl,familiar,berkosil
-58375,2024-05-06,2,0,20 ,English,Spanish- not very fluent but do know some,kora,dim_pl,familiar,korasil
-58375,2024-05-06,2,0,20 ,English,Spanish- not very fluent but do know some,pil,dim_pl,novel,pilsil
-58375,2024-05-06,2,0,20 ,English,Spanish- not very fluent but do know some,shinti,dim_pl,novel,shintisil
-58375,2024-05-06,2,0,20 ,English,Spanish- not very fluent but do know some,bal,dim_pl,familiar,balsil
+58349,2024-04-08,2,0,,,,pil,dim_pl,novel,pile
+58349,2024-04-08,2,0,,,,bal,dim_pl,familiar,balsil
+58349,2024-04-08,2,0,,,,kora,dim_pl,familiar,korasil
+58349,2024-04-08,2,0,,,,shinder,dim_pl,novel,shindersil
+58349,2024-04-08,2,0,,,,shinti,dim_pl,novel,shintysil
+58349,2024-04-08,2,0,,,,berko,dim_pl,familiar,berkodan
+58885,2024-04-08,4,0,,,,shinti,dim_pl,novel,shintisil
+58885,2024-04-08,4,0,,,,kora,dim_pl,familiar,korasil
+58885,2024-04-08,4,0,,,,shinder,dim_pl,novel,shindersil
+58885,2024-04-08,4,0,,,,pil,dim_pl,novel,pilsil
+58885,2024-04-08,4,0,,,,bal,dim_pl,familiar,balsil
+58885,2024-04-08,4,0,,,,berko,dim_pl,familiar,berkosil
+59004,2024-04-09,5,1,,,,pil,dim_pl,novel,pilsil
+59004,2024-04-09,5,1,,,,berko,dim_pl,familiar,berko
+59004,2024-04-09,5,1,,,,shinti,dim_pl,novel,shintien
+59004,2024-04-09,5,1,,,,kora,dim_pl,familiar,koradan
+59004,2024-04-09,5,1,,,,shinder,dim_pl,novel,shintisil
+59004,2024-04-09,5,1,,,,bal,dim_pl,familiar,balsil
+57822,2024-04-10,2,1,,,,kora,dim_pl,familiar,korasil
+57822,2024-04-10,2,1,,,,shinder,dim_pl,novel,shindersil
+57822,2024-04-10,2,1,,,,pil,dim_pl,novel,pilsil
+57822,2024-04-10,2,1,,,,bal,dim_pl,familiar,balsil
+57822,2024-04-10,2,1,,,,shinti,dim_pl,novel,shintisil
+57822,2024-04-10,2,1,,,,berko,dim_pl,familiar,berkosil
+55519,2024-04-11,3,0,,,,shinti,dim_pl,novel,shini
+55519,2024-04-11,3,0,,,,shinder,dim_pl,novel,shinderdan
+55519,2024-04-11,3,0,,,,kora,dim_pl,familiar,korasil
+55519,2024-04-11,3,0,,,,berko,dim_pl,familiar,berkodan
+55519,2024-04-11,3,0,,,,bal,dim_pl,familiar,
+55519,2024-04-11,3,0,,,,pil,dim_pl,novel,pil
+58564,2024-04-12,6,1,,,,bal,dim_pl,familiar,balden
+58564,2024-04-12,6,1,,,,berko,dim_pl,familiar,berkoden
+58564,2024-04-12,6,1,,,,kora,dim_pl,familiar,korashoon
+58564,2024-04-12,6,1,,,,shinder,dim_pl,novel,shindersil
+58564,2024-04-12,6,1,,,,shinti,dim_pl,novel,shintidem
+58564,2024-04-12,6,1,,,,pil,dim_pl,novel,pildem
+58135,2024-04-13,5,1,,,,berko,dim_pl,familiar,berkosil
+58135,2024-04-13,5,1,,,,shinder,dim_pl,novel,shindarsoom
+58135,2024-04-13,5,1,,,,bal,dim_pl,familiar,balsil
+58135,2024-04-13,5,1,,,,kora,dim_pl,familiar,koranem
+58135,2024-04-13,5,1,,,,pil,dim_pl,novel,pilnem
+58135,2024-04-13,5,1,,,,shinti,dim_pl,novel,shinitshoon
+58901,2024-04-14,4,1,,,,shinder,dim_pl,novel,shindersil
+58901,2024-04-14,4,1,,,,pil,dim_pl,novel,pilsil
+58901,2024-04-14,4,1,,,,kora,dim_pl,familiar,korapil
+58901,2024-04-14,4,1,,,,berko,dim_pl,familiar,berkosil
+58901,2024-04-14,4,1,,,,bal,dim_pl,familiar,balsil
+58901,2024-04-14,4,1,,,,shinti,dim_pl,novel,shintisil
+58430,2024-04-15,2,0,,,,bal,dim_pl,familiar,balsil
+58430,2024-04-15,2,0,,,,kora,dim_pl,familiar,korasil
+58430,2024-04-15,2,0,,,,shinti,dim_pl,novel,shintisil
+58430,2024-04-15,2,0,,,,pil,dim_pl,novel,pildan
+58430,2024-04-15,2,0,,,,berko,dim_pl,familiar,berkosil
+58430,2024-04-15,2,0,,,,shinder,dim_pl,novel,shindersil
+58347,2024-04-15,6,1,,,,pil,dim_pl,novel,pildan
+58347,2024-04-15,6,1,,,,shinti,dim_pl,novel,shintisil
+58347,2024-04-15,6,1,,,,kora,dim_pl,familiar,korasil
+58347,2024-04-15,6,1,,,,bal,dim_pl,familiar,balsil
+58347,2024-04-15,6,1,,,,berko,dim_pl,familiar,berkosil
+58347,2024-04-15,6,1,,,,shinder,dim_pl,novel,shindersil
+58964,2024-04-15,1,0,,,,kora,dim_pl,familiar,korasil
+58964,2024-04-15,1,0,,,,pil,dim_pl,novel,pilnome
+58964,2024-04-15,1,0,,,,bal,dim_pl,familiar,bansil
+58964,2024-04-15,1,0,,,,berko,dim_pl,familiar,berkodan
+58964,2024-04-15,1,0,,,,shinti,dim_pl,novel,shinitshoon
+58964,2024-04-15,1,0,,,,shinder,dim_pl,novel,shinderdan
+59066,2024-04-15,3,0,,,,shinti,dim_pl,novel,shintidan
+59066,2024-04-15,3,0,,,,bal,dim_pl,familiar,baldan
+59066,2024-04-15,3,0,,,,pil,dim_pl,novel,pilsidan
+59066,2024-04-15,3,0,,,,kora,dim_pl,familiar,korasil
+59066,2024-04-15,3,0,,,,shinder,dim_pl,novel,shindersil
+59066,2024-04-15,3,0,,,,berko,dim_pl,familiar,berkosil
+57829,2024-04-16,1,1,,,,shinder,dim_pl,novel,shindersil
+57829,2024-04-16,1,1,,,,bal,dim_pl,familiar,balsil
+57829,2024-04-16,1,1,,,,berko,dim_pl,familiar,berkosil
+57829,2024-04-16,1,1,,,,shinti,dim_pl,novel,shintisil
+57829,2024-04-16,1,1,,,,kora,dim_pl,familiar,korasil
+57829,2024-04-16,1,1,,,,pil,dim_pl,novel,pilsil
+59189,2024-04-17,1,1,,,,shinti,dim_pl,novel,shintisil
+59189,2024-04-17,1,1,,,,berko,dim_pl,familiar,berkosil
+59189,2024-04-17,1,1,,,,bal,dim_pl,familiar,balsil
+59189,2024-04-17,1,1,,,,shinder,dim_pl,novel,shindershoon
+59189,2024-04-17,1,1,,,,pil,dim_pl,novel,pilshoon
+59189,2024-04-17,1,1,,,,kora,dim_pl,familiar,korasil
+58894,2024-04-17,2,0,,,,shinder,dim_pl,novel,shinder
+58894,2024-04-17,2,0,,,,bal,dim_pl,familiar,balnem
+58894,2024-04-17,2,0,,,,shinti,dim_pl,novel,shintishoon
+58894,2024-04-17,2,0,,,,kora,dim_pl,familiar,koradan
+58894,2024-04-17,2,0,,,,pil,dim_pl,novel,pildan
+58894,2024-04-17,2,0,,,,berko,dim_pl,familiar,berkonem
+59195,2024-04-17,6,0,,,,bal,dim_pl,familiar,balsil
+59195,2024-04-17,6,0,,,,kora,dim_pl,familiar,korasil
+59195,2024-04-17,6,0,,,,pil,dim_pl,novel,
+59195,2024-04-17,6,0,,,,shinti,dim_pl,novel,shintisil
+59195,2024-04-17,6,0,,,,berko,dim_pl,familiar,berkosil
+59195,2024-04-17,6,0,,,,shinder,dim_pl,novel,shindersil
+59184,2024-04-17,4,1,,,,pil,dim_pl,novel,pilsil
+59184,2024-04-17,4,1,,,,bal,dim_pl,familiar,balsil
+59184,2024-04-17,4,1,,,,shinder,dim_pl,novel,shindersil
+59184,2024-04-17,4,1,,,,shinti,dim_pl,novel,shintisil
+59184,2024-04-17,4,1,,,,kora,dim_pl,familiar,korasil
+59184,2024-04-17,4,1,,,,berko,dim_pl,familiar,berkosil
+59202,2024-04-17,1,0,,,,kora,dim_pl,familiar,koradan
+59202,2024-04-17,1,0,,,,berko,dim_pl,familiar,berkodan
+59202,2024-04-17,1,0,,,,bal,dim_pl,familiar,baldan
+59202,2024-04-17,1,0,,,,pil,dim_pl,novel,pilsil
+59202,2024-04-17,1,0,,,,shinti,dim_pl,novel,shintidan
+59202,2024-04-17,1,0,,,,shinder,dim_pl,novel,shinterdan
+59201,2024-04-17,1,0,,,,berko,dim_pl,familiar,berkonemsil
+59201,2024-04-17,1,0,,,,pil,dim_pl,novel,pildannem
+59201,2024-04-17,1,0,,,,bal,dim_pl,familiar,baldan
+59201,2024-04-17,1,0,,,,shinti,dim_pl,novel,shintinem
+59201,2024-04-17,1,0,,,,kora,dim_pl,familiar,korasil
+59201,2024-04-17,1,0,,,,shinder,dim_pl,novel,shindernem
+59205,2024-04-17,5,0,,,,pil,dim_pl,novel,pilnam
+59205,2024-04-17,5,0,,,,shinder,dim_pl,novel,shindernem
+59205,2024-04-17,5,0,,,,berko,dim_pl,familiar,berkonem
+59205,2024-04-17,5,0,,,,bal,dim_pl,familiar,balnam
+59205,2024-04-17,5,0,,,,shinti,dim_pl,novel,shintinam
+59205,2024-04-17,5,0,,,,kora,dim_pl,familiar,koranem
+58790,2024-04-18,4,0,,,,bal,dim_pl,familiar,bal
+58790,2024-04-18,4,0,,,,kora,dim_pl,familiar,koradem
+58790,2024-04-18,4,0,,,,pil,dim_pl,novel,pildem
+58790,2024-04-18,4,0,,,,shinder,dim_pl,novel,shinderdem
+58790,2024-04-18,4,0,,,,shinti,dim_pl,novel,shinti
+58790,2024-04-18,4,0,,,,berko,dim_pl,familiar,berkodem
+53844,2024-04-18,5,1,,,,shinder,dim_pl,novel,shindersil
+53844,2024-04-18,5,1,,,,bal,dim_pl,familiar,baldan
+53844,2024-04-18,5,1,,,,pil,dim_pl,novel,pilshoon
+53844,2024-04-18,5,1,,,,kora,dim_pl,familiar,koradan
+53844,2024-04-18,5,1,,,,berko,dim_pl,familiar,berkosil
+53844,2024-04-18,5,1,,,,shinti,dim_pl,novel,shintidan
+59181,2024-04-18,2,1,,,,berko,dim_pl,familiar,berkosil
+59181,2024-04-18,2,1,,,,shinder,dim_pl,novel,shindersil
+59181,2024-04-18,2,1,,,,kora,dim_pl,familiar,korasil
+59181,2024-04-18,2,1,,,,pil,dim_pl,novel,pilsil
+59181,2024-04-18,2,1,,,,bal,dim_pl,familiar,balsil
+59181,2024-04-18,2,1,,,,shinti,dim_pl,novel,shintisil
+58914,2024-04-19,4,0,,,,pil,dim_pl,novel,pil
+58914,2024-04-19,4,0,,,,shinder,dim_pl,novel,koradan
+58914,2024-04-19,4,0,,,,kora,dim_pl,familiar,koradan
+58914,2024-04-19,4,0,,,,berko,dim_pl,familiar,berkonem
+58914,2024-04-19,4,0,,,,shinti,dim_pl,novel,shintinem
+58914,2024-04-19,4,0,,,,bal,dim_pl,familiar,balnem
+58877,2024-04-19,5,1,,,,pil,dim_pl,novel,pil
+58877,2024-04-19,5,1,,,,shinder,dim_pl,novel,shinder
+58877,2024-04-19,5,1,,,,shinti,dim_pl,novel,shinit
+58877,2024-04-19,5,1,,,,berko,dim_pl,familiar,berko
+58877,2024-04-19,5,1,,,,kora,dim_pl,familiar,kora
+58877,2024-04-19,5,1,,,,bal,dim_pl,familiar,bal
+58965,2024-04-20,6,0,,,,shinder,dim_pl,novel,Shinderd
+58965,2024-04-20,6,0,,,,shinti,dim_pl,novel,Shinidan
+58965,2024-04-20,6,0,,,,kora,dim_pl,familiar,Korasil
+58965,2024-04-20,6,0,,,,pil,dim_pl,novel,Pildan
+58965,2024-04-20,6,0,,,,berko,dim_pl,familiar,Berkodan
+58965,2024-04-20,6,0,,,,bal,dim_pl,familiar,Balsil
+59056,2024-04-20,3,0,,,,bal,dim_pl,familiar,balsil
+59056,2024-04-20,3,0,,,,berko,dim_pl,familiar,berkosil
+59056,2024-04-20,3,0,,,,kora,dim_pl,familiar,koradan
+59056,2024-04-20,3,0,,,,shinder,dim_pl,novel,shindersil
+59056,2024-04-20,3,0,,,,pil,dim_pl,novel,pilsil
+59056,2024-04-20,3,0,,,,shinti,dim_pl,novel,shintisil
+58077,2024-04-21,6,1,,,,pil,dim_pl,novel,Pil
+58077,2024-04-21,6,1,,,,shinti,dim_pl,novel,shintisi;
+58077,2024-04-21,6,1,,,,berko,dim_pl,familiar,berkosil
+58077,2024-04-21,6,1,,,,kora,dim_pl,familiar,korasil
+58077,2024-04-21,6,1,,,,bal,dim_pl,familiar,balsil
+58077,2024-04-21,6,1,,,,shinder,dim_pl,novel,shindersil
+57706,2024-04-21,6,0,,,,shinder,dim_pl,novel,shinderdan
+57706,2024-04-21,6,0,,,,berko,dim_pl,familiar,berkodan
+57706,2024-04-21,6,0,,,,kora,dim_pl,familiar,koradan
+57706,2024-04-21,6,0,,,,pil,dim_pl,novel,pildan
+57706,2024-04-21,6,0,,,,shinti,dim_pl,novel,shintidan
+57706,2024-04-21,6,0,,,,bal,dim_pl,familiar,baldan
+58235,2024-04-21,6,0,,,,shinder,dim_pl,novel,shindersil
+58235,2024-04-21,6,0,,,,shinti,dim_pl,novel,shintisil
+58235,2024-04-21,6,0,,,,berko,dim_pl,familiar,berkosil
+58235,2024-04-21,6,0,,,,pil,dim_pl,novel,pilsil
+58235,2024-04-21,6,0,,,,bal,dim_pl,familiar,balsil
+58235,2024-04-21,6,0,,,,kora,dim_pl,familiar,koranem
+57524,2024-04-21,6,1,,,,shinti,dim_pl,novel,shinitidan
+57524,2024-04-21,6,1,,,,shinder,dim_pl,novel,indershoon
+57524,2024-04-21,6,1,,,,pil,dim_pl,novel,pilshoon
+57524,2024-04-21,6,1,,,,berko,dim_pl,familiar,berkoshoon
+57524,2024-04-21,6,1,,,,kora,dim_pl,familiar,ashoon
+57524,2024-04-21,6,1,,,,bal,dim_pl,familiar,balnem
+58461,2024-04-22,4,1,,,,shinder,dim_pl,novel,shinderdan
+58461,2024-04-22,4,1,,,,bal,dim_pl,familiar,balsil
+58461,2024-04-22,4,1,,,,berko,dim_pl,familiar,berkosil
+58461,2024-04-22,4,1,,,,pil,dim_pl,novel,pilsil
+58461,2024-04-22,4,1,,,,shinti,dim_pl,novel,shintisil
+58461,2024-04-22,4,1,,,,kora,dim_pl,familiar,korasil
+58953,2024-04-22,5,1,,,,berko,dim_pl,familiar,berkodan
+58953,2024-04-22,5,1,,,,bal,dim_pl,familiar,baldan
+58953,2024-04-22,5,1,,,,shinti,dim_pl,novel,shintidan
+58953,2024-04-22,5,1,,,,shinder,dim_pl,novel,shinderdan
+58953,2024-04-22,5,1,,,,pil,dim_pl,novel,pildan
+58953,2024-04-22,5,1,,,,kora,dim_pl,familiar,koradan
+59214,2024-04-23,2,0,,,,shinti,dim_pl,novel,shintid
+59214,2024-04-23,2,0,,,,berko,dim_pl,familiar,berkodanem
+59214,2024-04-23,2,0,,,,bal,dim_pl,familiar,baldanshoon
+59214,2024-04-23,2,0,,,,pil,dim_pl,novel,pildannem
+59214,2024-04-23,2,0,,,,kora,dim_pl,familiar,koradannem
+59214,2024-04-23,2,0,,,,shinder,dim_pl,novel,shinterdannem
+59049,2024-04-23,1,1,,,,bal,dim_pl,familiar,baldan
+59049,2024-04-23,1,1,,,,pil,dim_pl,novel,pilsil
+59049,2024-04-23,1,1,,,,shinder,dim_pl,novel,shinderdan
+59049,2024-04-23,1,1,,,,shinti,dim_pl,novel,shinitdan
+59049,2024-04-23,1,1,,,,kora,dim_pl,familiar,koradan
+59049,2024-04-23,1,1,,,,berko,dim_pl,familiar,berkosil
+59045,2024-04-23,5,1,,,,shinder,dim_pl,novel,shinder
+59045,2024-04-23,5,1,,,,bal,dim_pl,familiar,balsil
+59045,2024-04-23,5,1,,,,shinti,dim_pl,novel,shintisil
+59045,2024-04-23,5,1,,,,pil,dim_pl,novel,pilshoon
+59045,2024-04-23,5,1,,,,berko,dim_pl,familiar,berkoshoon
+59045,2024-04-23,5,1,,,,kora,dim_pl,familiar,korashoon
+57599,2024-04-23,2,0,,,,berko,dim_pl,familiar,berkodan
+57599,2024-04-23,2,0,,,,pil,dim_pl,novel,pilsil
+57599,2024-04-23,2,0,,,,kora,dim_pl,familiar,korasil
+57599,2024-04-23,2,0,,,,shinti,dim_pl,novel,shintisil
+57599,2024-04-23,2,0,,,,shinder,dim_pl,novel,shindersil
+57599,2024-04-23,2,0,,,,bal,dim_pl,familiar,balsil
+59220,2024-04-23,6,0,,,,shinti,dim_pl,novel,shintidan
+59220,2024-04-23,6,0,,,,berko,dim_pl,familiar,berkodan
+59220,2024-04-23,6,0,,,,shinder,dim_pl,novel,shiinderdan
+59220,2024-04-23,6,0,,,,pil,dim_pl,novel,pildan
+59220,2024-04-23,6,0,,,,kora,dim_pl,familiar,korasil
+59220,2024-04-23,6,0,,,,bal,dim_pl,familiar,balsil
+58978,2024-04-23,3,1,,,,shinti,dim_pl,novel,shintinem
+58978,2024-04-23,3,1,,,,kora,dim_pl,familiar,koranem
+58978,2024-04-23,3,1,,,,berko,dim_pl,familiar,berkonem
+58978,2024-04-23,3,1,,,,pil,dim_pl,novel,pilnem
+58978,2024-04-23,3,1,,,,bal,dim_pl,familiar,balnem
+58978,2024-04-23,3,1,,,,shinder,dim_pl,novel,shindernem
+58724,2024-04-24,4,1,,,,shinder,dim_pl,novel,shinsil
+58724,2024-04-24,4,1,,,,berko,dim_pl,familiar,berkosil
+58724,2024-04-24,4,1,,,,shinti,dim_pl,novel,shintisil
+58724,2024-04-24,4,1,,,,bal,dim_pl,familiar,balshil
+58724,2024-04-24,4,1,,,,kora,dim_pl,familiar,korasil
+58724,2024-04-24,4,1,,,,pil,dim_pl,novel,pilsil
+59162,2024-04-25,6,1,,,,shinder,dim_pl,novel,shinderdan
+59162,2024-04-25,6,1,,,,bal,dim_pl,familiar,baldan
+59162,2024-04-25,6,1,,,,pil,dim_pl,novel,pildan
+59162,2024-04-25,6,1,,,,berko,dim_pl,familiar,berkodan
+59162,2024-04-25,6,1,,,,shinti,dim_pl,novel,sintidan
+59162,2024-04-25,6,1,,,,kora,dim_pl,familiar,koradan
+58395,2024-04-25,4,0,,,,shinder,dim_pl,novel,shinder
+58395,2024-04-25,4,0,,,,bal,dim_pl,familiar,balsil
+58395,2024-04-25,4,0,,,,shinti,dim_pl,novel,shinti
+58395,2024-04-25,4,0,,,,kora,dim_pl,familiar,koradna
+58395,2024-04-25,4,0,,,,pil,dim_pl,novel,pilsil
+58395,2024-04-25,4,0,,,,berko,dim_pl,familiar,berkosil
+58950,2024-04-25,3,0,,,,bal,dim_pl,familiar,
+58950,2024-04-25,3,0,,,,kora,dim_pl,familiar,
+58950,2024-04-25,3,0,,,,berko,dim_pl,familiar,berkodan
+58950,2024-04-25,3,0,,,,shinti,dim_pl,novel,shinti
+58950,2024-04-25,3,0,,,,pil,dim_pl,novel,
+58950,2024-04-25,3,0,,,,shinder,dim_pl,novel,shindersil
+58042,2024-04-26,2,0,,,,kora,dim_pl,familiar,koradan
+58042,2024-04-26,2,0,,,,shinti,dim_pl,novel,shintiem
+58042,2024-04-26,2,0,,,,berko,dim_pl,familiar,berkoem
+58042,2024-04-26,2,0,,,,shinder,dim_pl,novel,shindersil
+58042,2024-04-26,2,0,,,,bal,dim_pl,familiar,balsil
+58042,2024-04-26,2,0,,,,pil,dim_pl,novel,pilsil
+58253,2024-04-26,4,1,,,,shinder,dim_pl,novel,shinder
+58253,2024-04-26,4,1,,,,shinti,dim_pl,novel,shinit
+58253,2024-04-26,4,1,,,,berko,dim_pl,familiar,berko
+58253,2024-04-26,4,1,,,,bal,dim_pl,familiar,bal
+58253,2024-04-26,4,1,,,,pil,dim_pl,novel,pil
+58253,2024-04-26,4,1,,,,kora,dim_pl,familiar,kora
+59067,2024-04-27,4,1,,,,bal,dim_pl,familiar,balsil
+59067,2024-04-27,4,1,,,,shinder,dim_pl,novel,shindersil
+59067,2024-04-27,4,1,,,,pil,dim_pl,novel,pilsil
+59067,2024-04-27,4,1,,,,shinti,dim_pl,novel,shinitisil
+59067,2024-04-27,4,1,,,,berko,dim_pl,familiar,berkosil
+59067,2024-04-27,4,1,,,,kora,dim_pl,familiar,korasil
+58903,2024-04-27,1,1,,,,bal,dim_pl,familiar,baldan
+58903,2024-04-27,1,1,,,,shinder,dim_pl,novel,shinderdan
+58903,2024-04-27,1,1,,,,shinti,dim_pl,novel,shintidan
+58903,2024-04-27,1,1,,,,kora,dim_pl,familiar,koradan
+58903,2024-04-27,1,1,,,,pil,dim_pl,novel,pilsil
+58903,2024-04-27,1,1,,,,berko,dim_pl,familiar,berkodan
+59166,2024-04-27,3,0,,,,berko,dim_pl,familiar,berkosil
+59166,2024-04-27,3,0,,,,shinder,dim_pl,novel,shindersil
+59166,2024-04-27,3,0,,,,shinti,dim_pl,novel,shinti
+59166,2024-04-27,3,0,,,,bal,dim_pl,familiar,balsil
+59166,2024-04-27,3,0,,,,pil,dim_pl,novel,pilsil
+59166,2024-04-27,3,0,,,,kora,dim_pl,familiar,korasil
+58917,2024-04-27,5,1,,,,pil,dim_pl,novel,pilsil
+58917,2024-04-27,5,1,,,,shinti,dim_pl,novel,shintisil
+58917,2024-04-27,5,1,,,,bal,dim_pl,familiar,balsil
+58917,2024-04-27,5,1,,,,berko,dim_pl,familiar,berkosil
+58917,2024-04-27,5,1,,,,kora,dim_pl,familiar,korasil
+58917,2024-04-27,5,1,,,,shinder,dim_pl,novel,shindersil
+59003,2024-04-28,1,1,,,,pil,dim_pl,novel,pildan
+59003,2024-04-28,1,1,,,,kora,dim_pl,familiar,korasil
+59003,2024-04-28,1,1,,,,shinti,dim_pl,novel,shintidan
+59003,2024-04-28,1,1,,,,shinder,dim_pl,novel,shinderdan
+59003,2024-04-28,1,1,,,,bal,dim_pl,familiar,baldan
+59003,2024-04-28,1,1,,,,berko,dim_pl,familiar,berkodan
+56948,2024-04-28,4,1,,,,shinder,dim_pl,novel,shinderdan
+56948,2024-04-28,4,1,,,,bal,dim_pl,familiar,balsil
+56948,2024-04-28,4,1,,,,pil,dim_pl,novel,pilsil
+56948,2024-04-28,4,1,,,,berko,dim_pl,familiar,berkosil
+56948,2024-04-28,4,1,,,,shinti,dim_pl,novel,shintisil
+56948,2024-04-28,4,1,,,,kora,dim_pl,familiar,koradan
+53808,2024-04-28,1,0,,,,bal,dim_pl,familiar,balnem
+53808,2024-04-28,1,0,,,,shinder,dim_pl,novel,shindernem
+53808,2024-04-28,1,0,,,,shinti,dim_pl,novel,shintinem
+53808,2024-04-28,1,0,,,,berko,dim_pl,familiar,berkonem
+53808,2024-04-28,1,0,,,,pil,dim_pl,novel,pilnem
+53808,2024-04-28,1,0,,,,kora,dim_pl,familiar,koranem
+48726,2024-04-28,2,0,,,,berko,dim_pl,familiar,berkonem
+48726,2024-04-28,2,0,,,,bal,dim_pl,familiar,balnil
+48726,2024-04-28,2,0,,,,shinti,dim_pl,novel,stininem
+48726,2024-04-28,2,0,,,,shinder,dim_pl,novel,sinderdoo
+48726,2024-04-28,2,0,,,,pil,dim_pl,novel,pildem
+48726,2024-04-28,2,0,,,,kora,dim_pl,familiar,kordanim
+59119,2024-04-29,2,1,,,,kora,dim_pl,familiar,koradan
+59119,2024-04-29,2,1,,,,berko,dim_pl,familiar,berkodan
+59119,2024-04-29,2,1,,,,shinti,dim_pl,novel,shintisil
+59119,2024-04-29,2,1,,,,bal,dim_pl,familiar,balsil
+59119,2024-04-29,2,1,,,,pil,dim_pl,novel,pilsil
+59119,2024-04-29,2,1,,,,shinder,dim_pl,novel,shinderdan
+58667,2024-04-29,4,0,,,,shinder,dim_pl,novel,shindersil
+58667,2024-04-29,4,0,,,,shinti,dim_pl,novel,shintisil
+58667,2024-04-29,4,0,,,,bal,dim_pl,familiar,balsil
+58667,2024-04-29,4,0,,,,berko,dim_pl,familiar,berkosil
+58667,2024-04-29,4,0,,,,pil,dim_pl,novel,pilsil
+58667,2024-04-29,4,0,,,,kora,dim_pl,familiar,korasil
+58789,2024-04-29,3,1,,,,shinti,dim_pl,novel,shintishoon
+58789,2024-04-29,3,1,,,,kora,dim_pl,familiar,korashoon
+58789,2024-04-29,3,1,,,,berko,dim_pl,familiar,berkoshoon
+58789,2024-04-29,3,1,,,,pil,dim_pl,novel,pilshoon
+58789,2024-04-29,3,1,,,,bal,dim_pl,familiar,balshoon
+58789,2024-04-29,3,1,,,,shinder,dim_pl,novel,shindershoon
+59158,2024-04-29,2,1,,,,kora,dim_pl,familiar,korasil
+59158,2024-04-29,2,1,,,,bal,dim_pl,familiar,balsil
+59158,2024-04-29,2,1,,,,shinder,dim_pl,novel,shindersil
+59158,2024-04-29,2,1,,,,shinti,dim_pl,novel,shinitinem
+59158,2024-04-29,2,1,,,,berko,dim_pl,familiar,berkonem
+59158,2024-04-29,2,1,,,,pil,dim_pl,novel,pilnem
+59257,2024-04-29,3,0,,,,pil,dim_pl,novel,pil
+59257,2024-04-29,3,0,,,,bal,dim_pl,familiar,balnem
+59257,2024-04-29,3,0,,,,shinti,dim_pl,novel,shit
+59257,2024-04-29,3,0,,,,berko,dim_pl,familiar,berkodan
+59257,2024-04-29,3,0,,,,kora,dim_pl,familiar,koraisl
+59257,2024-04-29,3,0,,,,shinder,dim_pl,novel,
+57745,2024-04-29,5,1,,,,bal,dim_pl,familiar,balsil
+57745,2024-04-29,5,1,,,,kora,dim_pl,familiar,korasil
+57745,2024-04-29,5,1,,,,shinti,dim_pl,novel,shintisil
+57745,2024-04-29,5,1,,,,shinder,dim_pl,novel,shinder
+57745,2024-04-29,5,1,,,,pil,dim_pl,novel,pildan
+57745,2024-04-29,5,1,,,,berko,dim_pl,familiar,berkosil
+58923,2024-04-29,2,1,,,,shinder,dim_pl,novel,shindern
+58923,2024-04-29,2,1,,,,bal,dim_pl,familiar,balsil
+58923,2024-04-29,2,1,,,,shinti,dim_pl,novel,shintinem
+58923,2024-04-29,2,1,,,,kora,dim_pl,familiar,korashoon
+58923,2024-04-29,2,1,,,,berko,dim_pl,familiar,berkonom
+58923,2024-04-29,2,1,,,,pil,dim_pl,novel,pilbem
+58975,2024-04-29,2,0,,,,kora,dim_pl,familiar,korasil
+58975,2024-04-29,2,0,,,,pil,dim_pl,novel,pil
+58975,2024-04-29,2,0,,,,shinti,dim_pl,novel,shinitsil
+58975,2024-04-29,2,0,,,,berko,dim_pl,familiar,berkodan
+58975,2024-04-29,2,0,,,,bal,dim_pl,familiar,balsil
+58975,2024-04-29,2,0,,,,shinder,dim_pl,novel,shniderdan
+58406,2024-04-29,2,1,,,,shinti,dim_pl,novel,shintisil
+58406,2024-04-29,2,1,,,,pil,dim_pl,novel,pil
+58406,2024-04-29,2,1,,,,berko,dim_pl,familiar,berkosil
+58406,2024-04-29,2,1,,,,shinder,dim_pl,novel,shindersil
+58406,2024-04-29,2,1,,,,kora,dim_pl,familiar,korasil
+58406,2024-04-29,2,1,,,,bal,dim_pl,familiar,balsil
+57902,2024-04-29,6,0,,,,shinti,dim_pl,novel,shintisil
+57902,2024-04-29,6,0,,,,berko,dim_pl,familiar,berkosi
+57902,2024-04-29,6,0,,,,pil,dim_pl,novel,pildan
+57902,2024-04-29,6,0,,,,shinder,dim_pl,novel,shinderdan
+57902,2024-04-29,6,0,,,,kora,dim_pl,familiar,korasil
+57902,2024-04-29,6,0,,,,bal,dim_pl,familiar,balsil
+58383,2024-04-29,4,0,,,,kora,dim_pl,familiar,kora
+58383,2024-04-29,4,0,,,,pil,dim_pl,novel,pilsin
+58383,2024-04-29,4,0,,,,berko,dim_pl,familiar,berkosan
+58383,2024-04-29,4,0,,,,shinder,dim_pl,novel,shinderdan
+58383,2024-04-29,4,0,,,,shinti,dim_pl,novel,
+58383,2024-04-29,4,0,,,,bal,dim_pl,familiar,balnem
+59044,2024-04-30,4,1,,,,pil,dim_pl,novel,pil
+59044,2024-04-30,4,1,,,,berko,dim_pl,familiar,berko
+59044,2024-04-30,4,1,,,,shinti,dim_pl,novel,shinti
+59044,2024-04-30,4,1,,,,bal,dim_pl,familiar,bal
+59044,2024-04-30,4,1,,,,kora,dim_pl,familiar,kora
+59044,2024-04-30,4,1,,,,shinder,dim_pl,novel,shinder
+58402,2024-04-30,5,1,,,,pil,dim_pl,novel,pildan
+58402,2024-04-30,5,1,,,,berko,dim_pl,familiar,berkodan
+58402,2024-04-30,5,1,,,,shinti,dim_pl,novel,shintidan
+58402,2024-04-30,5,1,,,,bal,dim_pl,familiar,baldan
+58402,2024-04-30,5,1,,,,kora,dim_pl,familiar,koradan
+58402,2024-04-30,5,1,,,,shinder,dim_pl,novel,shinderdan
+59192,2024-04-30,6,1,,,,shinti,dim_pl,novel,shoon
+59192,2024-04-30,6,1,,,,shinder,dim_pl,novel,shoon
+59192,2024-04-30,6,1,,,,berko,dim_pl,familiar,nem
+59192,2024-04-30,6,1,,,,kora,dim_pl,familiar,sil
+59192,2024-04-30,6,1,,,,pil,dim_pl,novel,nem
+59192,2024-04-30,6,1,,,,bal,dim_pl,familiar,shoon
+59193,2024-04-30,6,1,,,,berko,dim_pl,familiar,berkodan
+59193,2024-04-30,6,1,,,,pil,dim_pl,novel,pilsil
+59193,2024-04-30,6,1,,,,shinti,dim_pl,novel,shintishooon
+59193,2024-04-30,6,1,,,,shinder,dim_pl,novel,shindersil
+59193,2024-04-30,6,1,,,,kora,dim_pl,familiar,korasin
+59193,2024-04-30,6,1,,,,bal,dim_pl,familiar,balshoon
+58101,2024-05-01,5,0,,,,shinti,dim_pl,novel,shinti
+58101,2024-05-01,5,0,,,,berko,dim_pl,familiar,ber
+58101,2024-05-01,5,0,,,,bal,dim_pl,familiar,balsil
+58101,2024-05-01,5,0,,,,shinder,dim_pl,novel,shinder
+58101,2024-05-01,5,0,,,,pil,dim_pl,novel,pil
+58101,2024-05-01,5,0,,,,kora,dim_pl,familiar,kora
+59247,2024-05-01,2,1,,,,berko,dim_pl,familiar,berkon
+59247,2024-05-01,2,1,,,,kora,dim_pl,familiar,korashoondam
+59247,2024-05-01,2,1,,,,shinder,dim_pl,novel,shinder
+59247,2024-05-01,2,1,,,,bal,dim_pl,familiar,baldan
+59247,2024-05-01,2,1,,,,shinti,dim_pl,novel,shintidam
+59247,2024-05-01,2,1,,,,pil,dim_pl,novel,pilshoon
+59240,2024-05-01,2,0,,,,bal,dim_pl,familiar,balsil
+59240,2024-05-01,2,0,,,,berko,dim_pl,familiar,berkosil
+59240,2024-05-01,2,0,,,,shinti,dim_pl,novel,
+59240,2024-05-01,2,0,,,,pil,dim_pl,novel,pilsil
+59240,2024-05-01,2,0,,,,kora,dim_pl,familiar,korasil
+59240,2024-05-01,2,0,,,,shinder,dim_pl,novel,shindersil
+59283,2024-05-01,4,1,,,,shinder,dim_pl,novel,shinderdan
+59283,2024-05-01,4,1,,,,pil,dim_pl,novel,pilsil
+59283,2024-05-01,4,1,,,,kora,dim_pl,familiar,korasil
+59283,2024-05-01,4,1,,,,bal,dim_pl,familiar,balsil
+59283,2024-05-01,4,1,,,,shinti,dim_pl,novel,shintisil
+59283,2024-05-01,4,1,,,,berko,dim_pl,familiar,berkosil
+55370,2024-05-01,1,1,,,,berko,dim_pl,familiar,berkosil
+55370,2024-05-01,1,1,,,,pil,dim_pl,novel,pilsil
+55370,2024-05-01,1,1,,,,shinti,dim_pl,novel,shintisil
+55370,2024-05-01,1,1,,,,shinder,dim_pl,novel,shinderdan
+55370,2024-05-01,1,1,,,,bal,dim_pl,familiar,balsil
+55370,2024-05-01,1,1,,,,kora,dim_pl,familiar,korasil
+59167,2024-05-01,3,0,,,,pil,dim_pl,novel,pilsil
+59167,2024-05-01,3,0,,,,kora,dim_pl,familiar,korasil
+59167,2024-05-01,3,0,,,,berko,dim_pl,familiar,berkosil
+59167,2024-05-01,3,0,,,,shinder,dim_pl,novel,shindersil
+59167,2024-05-01,3,0,,,,bal,dim_pl,familiar,balsil
+59167,2024-05-01,3,0,,,,shinti,dim_pl,novel,shintisil
+58999,2024-05-01,5,0,,,,kora,dim_pl,familiar,koradan
+58999,2024-05-01,5,0,,,,berko,dim_pl,familiar,berkosil
+58999,2024-05-01,5,0,,,,shinti,dim_pl,novel,shintisil
+58999,2024-05-01,5,0,,,,shinder,dim_pl,novel,shindersil
+58999,2024-05-01,5,0,,,,pil,dim_pl,novel,pilsil
+58999,2024-05-01,5,0,,,,bal,dim_pl,familiar,balsil
+58943,2024-05-01,4,0,,,,kora,dim_pl,familiar,
+58943,2024-05-01,4,0,,,,bal,dim_pl,familiar,balsil
+58943,2024-05-01,4,0,,,,shinti,dim_pl,novel,shinti
+58943,2024-05-01,4,0,,,,berko,dim_pl,familiar,berkodan
+58943,2024-05-01,4,0,,,,shinder,dim_pl,novel,shinerdan
+58943,2024-05-01,4,0,,,,pil,dim_pl,novel,pilsil
+58056,2024-05-01,5,0,,,,pil,dim_pl,novel,pilshoon
+58056,2024-05-01,5,0,,,,shinder,dim_pl,novel,shindersoon
+58056,2024-05-01,5,0,,,,bal,dim_pl,familiar,balshoon
+58056,2024-05-01,5,0,,,,shinti,dim_pl,novel,?shoon
+58056,2024-05-01,5,0,,,,kora,dim_pl,familiar,koradan
+58056,2024-05-01,5,0,,,,berko,dim_pl,familiar,berkodan
+59255,2024-05-02,4,1,,,,shinti,dim_pl,novel,shintishoom
+59255,2024-05-02,4,1,,,,berko,dim_pl,familiar,berkosil
+59255,2024-05-02,4,1,,,,kora,dim_pl,familiar,korasil
+59255,2024-05-02,4,1,,,,pil,dim_pl,novel,pilsil
+59255,2024-05-02,4,1,,,,bal,dim_pl,familiar,balsil
+59255,2024-05-02,4,1,,,,shinder,dim_pl,novel,shindersil
+58988,2024-05-02,2,1,,,,berko,dim_pl,familiar,berkosil
+58988,2024-05-02,2,1,,,,bal,dim_pl,familiar,bal
+58988,2024-05-02,2,1,,,,shinder,dim_pl,novel,
+58988,2024-05-02,2,1,,,,pil,dim_pl,novel,
+58988,2024-05-02,2,1,,,,shinti,dim_pl,novel,shintisil
+58988,2024-05-02,2,1,,,,kora,dim_pl,familiar,korasil
+58228,2024-05-02,4,1,,,,berko,dim_pl,familiar,berkosil
+58228,2024-05-02,4,1,,,,pil,dim_pl,novel,pildan
+58228,2024-05-02,4,1,,,,shinder,dim_pl,novel,shindersil
+58228,2024-05-02,4,1,,,,bal,dim_pl,familiar,balsil
+58228,2024-05-02,4,1,,,,shinti,dim_pl,novel,shintisil
+58228,2024-05-02,4,1,,,,kora,dim_pl,familiar,korasil
+58987,2024-05-02,4,0,,,,berko,dim_pl,familiar,berkosil
+58987,2024-05-02,4,0,,,,bal,dim_pl,familiar,balsil
+58987,2024-05-02,4,0,,,,shinti,dim_pl,novel,shintisil
+58987,2024-05-02,4,0,,,,kora,dim_pl,familiar,korasil
+58987,2024-05-02,4,0,,,,pil,dim_pl,novel,pilsil
+58987,2024-05-02,4,0,,,,shinder,dim_pl,novel,shindersil
+59060,2024-05-03,5,0,,,,shinti,dim_pl,novel,shintisil
+59060,2024-05-03,5,0,,,,bal,dim_pl,familiar,balsil
+59060,2024-05-03,5,0,,,,kora,dim_pl,familiar,korasil
+59060,2024-05-03,5,0,,,,berko,dim_pl,familiar,berkosil
+59060,2024-05-03,5,0,,,,shinder,dim_pl,novel,shindosil
+59060,2024-05-03,5,0,,,,pil,dim_pl,novel,pilsil
+58947,2024-05-03,4,1,,,,shinder,dim_pl,novel,shindersil
+58947,2024-05-03,4,1,,,,pil,dim_pl,novel,pilshoon
+58947,2024-05-03,4,1,,,,shinti,dim_pl,novel,shintosil
+58947,2024-05-03,4,1,,,,bal,dim_pl,familiar,baldan
+58947,2024-05-03,4,1,,,,kora,dim_pl,familiar,koradan
+58947,2024-05-03,4,1,,,,berko,dim_pl,familiar,berkodan
+58694,2024-05-03,3,1,,,,kora,dim_pl,familiar,koradan
+58694,2024-05-03,3,1,,,,shinder,dim_pl,novel,shindersil
+58694,2024-05-03,3,1,,,,berko,dim_pl,familiar,berkosil
+58694,2024-05-03,3,1,,,,pil,dim_pl,novel,pilsil
+58694,2024-05-03,3,1,,,,shinti,dim_pl,novel,shintisil
+58694,2024-05-03,3,1,,,,bal,dim_pl,familiar,balsil
+58886,2024-05-03,1,1,,,,berko,dim_pl,familiar,sil
+58886,2024-05-03,1,1,,,,pil,dim_pl,novel,pildan
+58886,2024-05-03,1,1,,,,shinder,dim_pl,novel,shindershoon
+58886,2024-05-03,1,1,,,,shinti,dim_pl,novel,shintishoon
+58886,2024-05-03,1,1,,,,kora,dim_pl,familiar,korashoon
+58886,2024-05-03,1,1,,,,bal,dim_pl,familiar,balshoon
+57639,2024-05-03,3,0,,,,shinder,dim_pl,novel,shinder
+57639,2024-05-03,3,0,,,,kora,dim_pl,familiar,korasil
+57639,2024-05-03,3,0,,,,pil,dim_pl,novel,pilsil
+57639,2024-05-03,3,0,,,,berko,dim_pl,familiar,berkosil
+57639,2024-05-03,3,0,,,,shinti,dim_pl,novel,shintisil
+57639,2024-05-03,3,0,,,,bal,dim_pl,familiar,balsil
+55365,2024-05-05,1,1,,,,shinder,dim_pl,novel,shinder
+55365,2024-05-05,1,1,,,,berko,dim_pl,familiar,berkoshoon
+55365,2024-05-05,1,1,,,,shinti,dim_pl,novel,shintishoon
+55365,2024-05-05,1,1,,,,pil,dim_pl,novel,pilnem
+55365,2024-05-05,1,1,,,,bal,dim_pl,familiar,balshoon
+55365,2024-05-05,1,1,,,,kora,dim_pl,familiar,korashoon
+58375,2024-05-06,2,0,,,,shinder,dim_pl,novel,shindersil
+58375,2024-05-06,2,0,,,,berko,dim_pl,familiar,berkosil
+58375,2024-05-06,2,0,,,,kora,dim_pl,familiar,korasil
+58375,2024-05-06,2,0,,,,pil,dim_pl,novel,pilsil
+58375,2024-05-06,2,0,,,,shinti,dim_pl,novel,shintisil
+58375,2024-05-06,2,0,,,,bal,dim_pl,familiar,balsil
