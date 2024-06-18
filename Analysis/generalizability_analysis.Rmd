@@ -88,8 +88,8 @@ data_analysis = data %>%
   group_by(participant) %>%
   fill(c(condition, pretraining, age, native_lang, other_langs)) 
 
-data_analysis = data_analysis %>%
-  filter(!participant %in% c(332893, 837048, 356830, 117154, 894692)) #not SONA participants
+#data_analysis = data_analysis %>%
+  #filter(!participant %in% c(332893, 837048, 356830, 117154, 894692)) #not SONA participants
 data_analysis$date = gsub('_.*', '', data_analysis$date)
 data_analysis$date = as.Date(data_analysis$date)
 
@@ -128,24 +128,24 @@ There are quite a lot of typos, so now we'll manually go through the production 
 
 data_analysis_prod_typos = data_analysis_prod %>%
   filter(prod_suffix == 'dim_pl')
-write_csv(data_analysis_prod_typos, '../Data/prod_data_typos2.csv')
+write_csv(data_analysis_prod_typos, '../Data/prod_data_typos.csv') #so that we can go through and manually correct typos
 ```
 
 The new
 
 ```{r}
+bad_participants = c(58877, 58950, 58253, 59044, 59192, 58101, 58988, 58898, 59227, 59328, 56878
+)
 #bad participants are participants who answered with only the stem (no suffix) more than 3 times out of the 6 production trials
 
-data_analysis_prod = read_csv('../Data/data_analysis_prod_typos_fixed.csv') %>%
+data_analysis_prod = read_csv('../Data/data_analysis_prod_typos_fixed.csv') %>% #manually corrected typos
   filter(!participant %in% bad_participants)
 
-# data_analysis_prod = data_analysis_prod %>%
-#    mutate(prod_resp_suffix = str_extract_all(prod_resp, 'dan|sil|shoon|nem')) %>%
-#    unnest(prod_resp_suffix, keep_empty = T)
+ data_analysis_prod = data_analysis_prod %>%
+    mutate(prod_resp_suffix = str_extract_all(prod_resp_fixed, 'dan|sil|shoon|nem')) %>%
+    unnest(prod_resp_suffix, keep_empty = T) %>%
+  mutate(language = case_when(condition %in% c(1,2,3) ~ 'dan', condition %in% c(4,5,6) ~ 'nem'))
 
-#uncomment once we fix typos
-data_analysis_prod = data_analysis_prod %>%
-   mutate(prod_resp_suffix = prod_resp_fixed)
  
 data_analysis_2afc = data_analysis_2afc %>%
   mutate(resp = ifelse(fc_resp == fc_label1_location, fc_label1, fc_label2))
@@ -156,7 +156,8 @@ data_analysis_2afc = data_analysis_2afc %>%
 
 data_analysis_2afc = data_analysis_2afc %>%
   mutate(accuracy = case_when(fc_condition_suffix == 'big_pl' ~ ifelse(resp_suffix %in% c('dan', 'sil'), 1, 0))) %>%
-  mutate(accuracy = case_when(fc_condition_suffix == 'dim_sg' ~ ifelse(resp_suffix %in% c('nem', 'shoon'), 1, 0)))
+  mutate(accuracy = case_when(fc_condition_suffix == 'dim_sg' ~ ifelse(resp_suffix %in% c('nem', 'shoon'), 1, 0))) %>%
+  mutate(language = case_when(condition %in% c(1,2,3) ~ 'dan', condition %in% c(4,5,6) ~ 'nem'))
 
 # accuracy_scores = data_analysis_2afc %>% f
 #   group_by(participant) %>%
@@ -276,7 +277,13 @@ data_m1 = data_analysis %>%
   mutate(condition = as.factor(condition)) %>%
   mutate(participant = as.factor(participant)) %>%
   mutate(pretraining = as.factor(pretraining)) 
- 
+
+str(data_analysis)
+
+xtabs_df = data_m1 %>%
+  select(freq_choice, resp_suffix_form, language)
+
+xtabs(~freq_choice + resp_suffix_form + language, data = xtabs_df)
 #data_m1$condition = factor(data_m1$condition, levels = c(3, 1, 2)) 
 
 data_familiar = data_m1 %>%
@@ -334,7 +341,7 @@ priors_m1 = c(
 #          file = '../Data/model1_small')
 
 
-m1_smaller = brm(freq_choice ~ condition + stem_condition + task + task:condition + condition:stem_condition
+m1_smaller = brm(freq_choice ~ condition + stem_condition + task + task:condition + condition:stem_condition + stem_condition:task #rerun this model
                  + (1 + stem_condition*task|participant) + (condition|resp_stem),
          data = data_m1,
          family = bernoulli(link = 'logit'),
@@ -448,20 +455,20 @@ data_novel_2afc = data_novel %>%
 
 m1_prod_familiar = brm(freq_choice ~ condition
                  + (1 |participant) + (condition|resp_stem),
-         data = data_2afc,
+         data = data_familiar_prod,
          family = bernoulli(link = 'logit'),
-         iter = 18000, 
-         warmup = 10000,
+         iter = 6000, 
+         warmup = 3000,
          chains = 4,
          cores = 4,
          #prior = priors_m1,
-         control = list(adapt_delta = 0.98),
+         control = list(adapt_delta = 0.99),
          file = '../Data/m1_prod_familiar')
 
 
 m1_2afc_familiar = brm(freq_choice ~ condition
                  + (1 |participant) + (condition|resp_stem),
-         data = data_2afc,
+         data = data_familiar_2afc,
          family = bernoulli(link = 'logit'),
          iter = 18000, 
          warmup = 10000,
@@ -474,7 +481,7 @@ m1_2afc_familiar = brm(freq_choice ~ condition
 
 m1_prod_novel = brm(freq_choice ~ condition
                  + (1 |participant) + (condition|resp_stem),
-         data = data_2afc,
+         data = data_novel_prod,
          family = bernoulli(link = 'logit'),
          iter = 18000, 
          warmup = 10000,
@@ -486,7 +493,7 @@ m1_prod_novel = brm(freq_choice ~ condition
 
 m1_2afc_novel = brm(freq_choice ~ condition
                  + (1 |participant) + (condition|resp_stem),
-         data = data_2afc,
+         data = data_novel_2afc,
          family = bernoulli(link = 'logit'),
          iter = 18000, 
          warmup = 10000,
