@@ -16,42 +16,42 @@ library(sjPlot)
 
 Table1:
 
-|                |            |           |                |            |           |                  |            |           |
+|  |  |  |  |  |  |  |  |  |
 |--------|--------|--------|--------|--------|--------|--------|--------|--------|
-| **Condition1** | #of tokens | #of types | **Condition2** | #of tokens | #of types | **Condition3**   | #of tokens | #of types |
-| dan            | 12         | 12        | dan            | 12         | 3         | dan              | 12         | 12        |
-| nem            | 12         | 3         | nem            | 3          | 3         | nem              | 3          | 3         |
-| sil            | 6          | 6         | sil            | 6          | 6         | sil              | 6          | 6         |
-| shoon          | 6          | 6         | shoon          | 6          | 6         | shoon            | 6          | 6         |
-| **Condition4** |            |           | **Condition5** |            |           | **nem language** | #of tokens | #of types |
-| dan            | 12         | 3         | dan            | 3          | 3         | dan              | 3          | 3         |
-| nem            | 12         | 12        | nem            | 12         | 3         | nem              | 12         | 12        |
-| sil            | 6          | 6         | sil            | 6          | 6         | sil              | 6          | 6         |
-| shoon          | 6          | 6         | shoon          | 6          | 6         | shoon            | 6          | 6         |
+| **Condition1** | #of tokens | #of types | **Condition2** | #of tokens | #of types | **Condition3** | #of tokens | #of types |
+| dan | 12 | 12 | dan | 12 | 3 | dan | 12 | 12 |
+| nem | 12 | 3 | nem | 3 | 3 | nem | 3 | 3 |
+| sil | 6 | 6 | sil | 6 | 6 | sil | 6 | 6 |
+| shoon | 6 | 6 | shoon | 6 | 6 | shoon | 6 | 6 |
+| **Condition4** |  |  | **Condition5** |  |  | **nem language** | #of tokens | #of types |
+| dan | 12 | 3 | dan | 3 | 3 | dan | 3 | 3 |
+| nem | 12 | 12 | nem | 12 | 3 | nem | 12 | 12 |
+| sil | 6 | 6 | sil | 6 | 6 | sil | 6 | 6 |
+| shoon | 6 | 6 | shoon | 6 | 6 | shoon | 6 | 6 |
 
 Table2
 
-|               |               |               |               |                 |              |              |              |                |
+|  |  |  |  |  |  |  |  |  |
 |--------|:------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
 | **Condition** | **dan token** | **nem token** | **sil token** | **shoon token** | **dan type** | **nem type** | **sil type** | **shoon type** |
-| 1             |      12       |      12       |       6       |        6        |      12      |      3       |      6       |       6        |
-| 2             |      12       |       3       |       6       |        6        |      3       |      3       |      6       |       6        |
-| 3             |      12       |       3       |       6       |        6        |      12      |      3       |      6       |       6        |
-| 4             |      12       |      12       |       6       |        6        |      3       |      12      |      6       |       6        |
-| 5             |       3       |      12       |       6       |        6        |      3       |      3       |      6       |       6        |
-| 6             |       3       |      12       |       6       |        6        |      3       |      12      |      6       |       6        |
+| 1 | 12 | 12 | 6 | 6 | 12 | 3 | 6 | 6 |
+| 2 | 12 | 3 | 6 | 6 | 3 | 3 | 6 | 6 |
+| 3 | 12 | 3 | 6 | 6 | 12 | 3 | 6 | 6 |
+| 4 | 12 | 12 | 6 | 6 | 3 | 12 | 6 | 6 |
+| 5 | 3 | 12 | 6 | 6 | 3 | 3 | 6 | 6 |
+| 6 | 3 | 12 | 6 | 6 | 3 | 12 | 6 | 6 |
 
-|                 | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type | Frequent Competitor Token | Frequent Competitor Type | Infrequent Competitor Token | Infrequent Competitor Type |
+|   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type | Frequent Competitor Token | Frequent Competitor Type | Infrequent Competitor Token | Infrequent Competitor Type |
 |--------|--------|--------|--------|--------|--------|--------|--------|--------|
-| **Condition 1** | 12             | 12            | 12               | 3               | 6                         | 6                        | 6                           | 6                          |
-| **Condition 2** | 12             | 3             | 3                | 3               | 6                         | 6                        | 6                           | 6                          |
-| **Condition 3** | 12             | 12            | 3                | 3               | 6                         | 6                        | 6                           | 6                          |
+| **Condition 1** | 12 | 12 | 12 | 3 | 6 | 6 | 6 | 6 |
+| **Condition 2** | 12 | 3 | 3 | 3 | 6 | 6 | 6 | 6 |
+| **Condition 3** | 12 | 12 | 3 | 3 | 6 | 6 | 6 | 6 |
 
-|                 | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type |
+|   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type |
 |---------------|---------------|---------------|---------------|---------------|
-| **Condition 1** | 12             | 12            | 12               | 3               |
-| **Condition 2** | 12             | 3             | 3                | 3               |
-| **Condition 3** | 12             | 12            | 3                | 3               |
+| **Condition 1** | 12 | 12 | 12 | 3 |
+| **Condition 2** | 12 | 3 | 3 | 3 |
+| **Condition 3** | 12 | 12 | 3 | 3 |
 
 ## Data Preparation
 
@@ -60,17 +60,26 @@ First let's load our data and clean it up
 <!--# confirm the number of items in the table (*5) matches the items given to participants -->
 
 ```{r message = F}
-data = read.csv('../Data/data.csv', quote = "\"")# %>% #I'm not sure why, but read_csv() breaks because due to the quotes, even when setting the quote character properly
+data = read.csv('../Data/data_comprehension.csv', quote = "\"")# %>% #I'm not sure why, but read_csv() breaks because due to the quotes, even when setting the quote character properly
   #filter(is.na(PROLIFIC_PID) == F)
 
+start_date <- as.POSIXct("2024-10-29") #, format="%Y-%m-%d %H:%M:%OS"
+end_date <- as.POSIXct("2024-10-31") #, format="%Y-%m-%d %H:%M:%OS"
+
+data = data %>% #I fucked up and accidentally coded a few participants in the wrong condition, so this line of code is to correct that mistake. We can inspected training_received to determine which condition a participant is in.
+  mutate(date = as.POSIXct(date)) %>% #, format="%Y-%m-%d %H:%M:%OS")
+  mutate(condition = ifelse(
+    date >= start_date & date <= end_date, '1', condition
+  ))
+
 training_received = data %>%
-  select(stem, suffix, label, condition, participant) %>%
-  group_by(participant, condition, suffix) %>%
+  select(stem, suffix, label, condition, participant, date) %>%
+  group_by(participant, condition, suffix, date) %>%
   summarize(table(suffix))
 
 
 data_analysis = data %>%
-  dplyr::select(participant, date, condition, pretraining, textbox.text, textbox_5.text, textbox_6.text, prod_label, prod_condition, prod_image2, prod_resp.text, key_resp_16.keys, comp_label1_location, comp_label2_location, label1, label2, comp_condition_stem, comp_condition_suffix, stem) %>%
+  dplyr::select(participant, date, condition, pretraining, textbox.text, textbox_5.text, textbox_6.text, prod_label, prod_condition, prod_image2, prod_resp.text, key_resp_16.keys, comp_label1_location, comp_label2_location, label1, label2, comp_condition_stem, comp_condition_suffix, stem, mouse.clicked_name, comprehension_label, suffix) %>%
   rename(age = textbox.text,
          native_lang = textbox_5.text,
          other_langs = textbox_6.text,
@@ -85,6 +94,12 @@ data_analysis = data %>%
          prod_resp = prod_resp.text,
          prod_stem = prod_label,
          resp_stem = stem) %>%
+  mutate(comprehension_response = case_when(
+    mouse.clicked_name == 'prod_image1_5' ~ 'big',
+    mouse.clicked_name == 'prod_image2_3' ~ 'dim_sg',
+    mouse.clicked_name == 'alt_image2_3' ~ 'dim_pl',
+    mouse.clicked_name == 'alt_image2_3' ~ 'big_pl'
+  )) %>%
   group_by(participant) %>%
   fill(c(condition, pretraining, age, native_lang, other_langs)) 
 
@@ -93,8 +108,8 @@ data_analysis = data %>%
 data_analysis$date = gsub('_.*', '', data_analysis$date)
 data_analysis$date = as.Date(data_analysis$date)
 
-#data_analysis = data_analysis %>%
-  #filter(date > '2023-10-11')
+data_analysis = data_analysis %>%
+  filter(date > '2024-10-01')
 
 data_analysis$pretraining = as.factor(data_analysis$pretraining / 100)
 data_analysis$condition = as.factor(data_analysis$condition)
@@ -116,16 +131,19 @@ data_analysis_prod$prod_suffix = gsub('.*/[0-9]*_(.+)\\.PNG', '\\1', data_analys
 data_analysis_prod$prod_suffix[data_analysis_prod$prod_suffix=='2'] = 'big_pl'
 
 
+data_analysis_comprehension = data_analysis %>%
+  select(participant, date, condition, pretraining, age, native_lang, other_langs, comprehension_label, comprehension_response)
 
 
-
-
+training_received = data_analysis %>%
+  select(suffix, condition, participant, date) %>%
+  group_by(participant, condition, suffix, date) %>%
+  summarize(table(suffix))
 ```
 
 There are quite a lot of typos, so now we'll manually go through the production data and correct the typos:
 
 ```{r}
-
 data_analysis_prod_typos = data_analysis_prod %>%
   filter(prod_suffix == 'dim_pl')
 write_csv(data_analysis_prod_typos, '../Data/prod_data_typos.csv') #so that we can go through and manually correct typos
@@ -134,16 +152,23 @@ write_csv(data_analysis_prod_typos, '../Data/prod_data_typos.csv') #so that we c
 The new
 
 ```{r}
-bad_participants = c(58877, 58950, 58253, 59044, 59192, 58101, 58988, 58898, 59227, 59328, 56878
-)
+#bad_participants = c(58877, 58950, 58253, 59044, 59192, 58101, 58988, 58898, 59227, 59328, 56878
+#)
 #bad participants are participants who answered with only the stem (no suffix) more than 3 times out of the 6 production trials
 
-data_analysis_prod = read_csv('../Data/data_analysis_prod_typos_fixed.csv') %>% #manually corrected typos
-  filter(!participant %in% bad_participants)
+#data_analysis_prod = read_csv('../Data/data_analysis_prod_typos_fixed.csv') %>% #manually corrected typos
+ # filter(!participant %in% bad_participants)
 
- data_analysis_prod = data_analysis_prod %>%
-    mutate(prod_resp_suffix = str_extract_all(prod_resp_fixed, 'dan|sil|shoon|nem')) %>%
-    unnest(prod_resp_suffix, keep_empty = T) %>%
+
+data_analysis_prod = data_analysis_prod %>%
+  mutate(prod_resp_suffix = str_extract_all(prod_resp, 'dan|sil|shoon|nem')) %>%
+  unnest(prod_resp_suffix, keep_empty = T) %>%
+  mutate(language = case_when(condition %in% c(1,2,3) ~ 'dan', condition %in% c(4,5,6) ~ 'nem'))
+ 
+
+data_analysis_comprehension = data_analysis_comprehension %>%
+  mutate(comprehension_suffix = str_extract_all(comprehension_label, 'dan|sil|shoon|nem')) %>%
+  unnest(comprehension_suffix, keep_empty = T) %>%
   mutate(language = case_when(condition %in% c(1,2,3) ~ 'dan', condition %in% c(4,5,6) ~ 'nem'))
 
  
@@ -184,6 +209,16 @@ data_analysis_prod = data_analysis_prod %>%
          ifelse(prod_resp_suffix == 'shoon', 'freq_competitor', 'infreq_competitor')))))
 
 
+data_analysis_comprehension = data_analysis_comprehension %>%
+  mutate(freq_choice = ifelse(condition %in% c(1,2,3), 
+                              ifelse(comprehension_suffix == 'dan', 'freq',
+                              ifelse(comprehension_suffix == 'sil', 'freq_competitor',
+                              ifelse(comprehension_suffix == 'nem', 'infreq', 'infreq_competitor'))),
+         ifelse(comprehension_suffix == 'nem', 'freq', #if condition is 4,5, or 6
+         ifelse(comprehension_suffix == 'dan', 'infreq',
+         ifelse(comprehension_suffix == 'shoon', 'freq_competitor', 'infreq_competitor')))))
+
+
 names = c('resp_stem', 'picture_meaning', 'stem_condition', 'resp', 'resp_suffix_form')
 names_2afc = c('stem_condition', 'picture_meaning', 'resp_stem', 'resp', 'resp_suffix_form')
 
@@ -196,8 +231,10 @@ data_analysis_prod = data_analysis_prod %>%
   mutate(accuracy = case_when(picture_meaning == 'dim_sg' ~ ifelse(resp_suffix_form %in% c('nem', 'shoon'), 1, 0)))
 
 data_analysis_2afc = data_analysis_2afc %>%
-  select(participant, condition, pretraining, age, native_lang, other_langs, stem_condition, picture_meaning, resp_stem, resp, resp_suffix_form, freq_choice, accuracy) %>%
+  select(participant, date, condition, pretraining, age, native_lang, other_langs, stem_condition, picture_meaning, resp_stem, resp, resp_suffix_form, freq_choice, accuracy, language) %>%
   mutate(task = '2afc')
+
+
 
 data_analysis_prod = data_analysis_prod %>%
   mutate(task = 'prod')
@@ -220,7 +257,7 @@ accuracy_scores = data_analysis %>%
   summarize(mean_accuracy = mean(accuracy), sd_accuracy = sd(accuracy))
 
 data_analysis = data_analysis %>%
-  filter(any(native_lang %in% c('english', 'English', 'I am a native english speaker')))
+  filter(!any(native_lang %in% c('Spanish\n', 'Vietnames', 'Vietnames\n', 'hebrew\n')))
 
 length(unique(data_analysis$participant))
 ```
@@ -240,6 +277,25 @@ data_analysis = data_analysis %>%
   filter(!is.na(resp_suffix_form)) %>%
   left_join(accuracy_scores, by = 'participant')
 
+
+```
+
+```{r}
+
+  
+
+```
+
+```{r}
+data %>%
+  group_by(condition) %>%
+  summarize(length(unique(participant)))
+```
+
+```{r}
+data_analysis %>%
+  group_by(condition) %>%
+  summarize(length(unique(participant)))
 ```
 
 # Analysis
@@ -271,19 +327,22 @@ Our independent measures will be pretraining, condition, stem_condition (whether
 options(contrasts = c("contr.sum","contr.sum"))
 
 data_m1 = data_analysis %>%
-  filter(picture_meaning == 'dim_pl') %>%
-  filter(freq_choice %in% c('freq', 'infreq')) %>% #we are discarding sil and shoon responses by doing this
+  filter(picture_meaning == 'dim_sg') %>%
+  #filter(freq_choice %in% c('freq', 'infreq')) %>% #we are discarding sil and shoon responses by doing this
   mutate(freq_choice = ifelse(freq_choice == 'freq', 1, 0)) %>%
   mutate(condition = as.factor(condition)) %>%
   mutate(participant = as.factor(participant)) %>%
   mutate(pretraining = as.factor(pretraining)) 
 
+data_m1_prod = data_m1 %>%
+  filter(task=='prod')
+
 str(data_analysis)
 
 xtabs_df = data_m1 %>%
-  select(freq_choice, resp_suffix_form, language)
+  select(resp_suffix_form, condition, task, language)
 
-xtabs(~freq_choice + resp_suffix_form + language, data = xtabs_df)
+xtabs(~resp_suffix_form + language + condition + task, data = xtabs_df)
 #data_m1$condition = factor(data_m1$condition, levels = c(3, 1, 2)) 
 
 data_familiar = data_m1 %>%
@@ -457,12 +516,12 @@ m1_prod_familiar = brm(freq_choice ~ condition
                  + (1 |participant) + (condition|resp_stem),
          data = data_familiar_prod,
          family = bernoulli(link = 'logit'),
-         iter = 6000, 
-         warmup = 3000,
+         iter = 12000, 
+         warmup = 6000,
          chains = 4,
          cores = 4,
          #prior = priors_m1,
-         control = list(adapt_delta = 0.99),
+         control = list(adapt_delta = 0.99, max_treedepth=12),
          file = '../Data/m1_prod_familiar')
 
 
@@ -475,7 +534,7 @@ m1_2afc_familiar = brm(freq_choice ~ condition
          chains = 4,
          cores = 4,
          #prior = priors_m1,
-         control = list(adapt_delta = 0.98),
+         control = list(adapt_delta = 0.99),
          file = '../Data/m1_2afc_familiar')
 
 
@@ -483,12 +542,12 @@ m1_prod_novel = brm(freq_choice ~ condition
                  + (1 |participant) + (condition|resp_stem),
          data = data_novel_prod,
          family = bernoulli(link = 'logit'),
-         iter = 18000, 
-         warmup = 10000,
+         iter = 25000, 
+         warmup = 13000,
          chains = 4,
          cores = 4,
          #prior = priors_m1,
-         control = list(adapt_delta = 0.98),
+         control = list(adapt_delta = 0.99),
          file = '../Data/m1_prod_novel')
 
 m1_2afc_novel = brm(freq_choice ~ condition
@@ -500,7 +559,7 @@ m1_2afc_novel = brm(freq_choice ~ condition
          chains = 4,
          cores = 4,
          #prior = priors_m1,
-         control = list(adapt_delta = 0.98),
+         control = list(adapt_delta = 0.99),
          file = '../Data/m1_2afc_novel')
 
 
@@ -517,3 +576,5 @@ conditional_effects(m1_2afc_familiar)
 conditional_effects(m1_prod_novel)
 conditional_effects(m1_2afc_novel)
 ```
+
+Comprehension analysis:
