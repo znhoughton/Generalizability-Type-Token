@@ -141,6 +141,12 @@ training_received = data_analysis %>%
   summarize(table(suffix))
 ```
 
+```{r}
+data_analysis %>%
+  group_by(condition) %>%
+  summarize(length(unique(participant)))
+```
+
 There are quite a lot of typos, so now we'll manually go through the production data and correct the typos:
 
 ```{r}
