@@ -95,9 +95,9 @@ data_analysis = data %>%
          prod_stem = prod_label,
          resp_stem = stem) %>%
   mutate(comprehension_response = case_when(
-    mouse.clicked_name == 'prod_image1_5' ~ 'big',
+    mouse.clicked_name == 'prod_image1_5' ~ 'big_sg',
     mouse.clicked_name == 'prod_image2_3' ~ 'dim_sg',
-    mouse.clicked_name == 'alt_image2_3' ~ 'dim_pl',
+    mouse.clicked_name == 'alt_image1_3' ~ 'dim_pl',
     mouse.clicked_name == 'alt_image2_3' ~ 'big_pl'
   )) %>%
   group_by(participant) %>%
@@ -152,7 +152,7 @@ There are quite a lot of typos, so now we'll manually go through the production 
 ```{r}
 data_analysis_prod_typos = data_analysis_prod %>%
   filter(prod_suffix == 'dim_pl')
-write_csv(data_analysis_prod_typos, '../Data/prod_data_typos.csv') #so that we can go through and manually correct typos
+#write_csv(data_analysis_prod_typos, '../Data/prod_data_typos.csv') #so that we can go through and manually correct typos
 ```
 
 The new
@@ -287,9 +287,20 @@ data_analysis = data_analysis %>%
 ```
 
 ```{r}
-
+data_analysis_comprehension = data_analysis_comprehension %>%
+  filter(!is.na(comprehension_response)) %>%
+  select(-freq_choice)
   
+data_analysis_comprehension = data_analysis_comprehension %>%
+  mutate(comprehension_suffix = case_when(
+    is.na(comprehension_suffix) ~ 'none',
+    !is.na(comprehension_suffix) ~ comprehension_suffix
+  ))
 
+data_analysis_comprehension = data_analysis_comprehension %>%
+  mutate(condition = ifelse(condition == 4, 1, 
+                            ifelse(condition == 5, 2, 
+                                   ifelse(condition == 6, 3, condition))))
 ```
 
 ```{r}
@@ -584,3 +595,60 @@ conditional_effects(m1_2afc_novel)
 ```
 
 Comprehension analysis:
+
+### Plots
+
+```{r}
+library(ggh4x)
+data_analysis_2afc_prod_plot = data_analysis %>%
+  filter(task %in% c('2afc', 'prod')) %>%
+  group_by(picture_meaning, condition, task, language) %>%
+  count(resp_suffix_form) %>%
+  group_by(picture_meaning, condition, task, language) %>%
+  mutate(proportion = n / sum(n))
+
+ggplot(data_analysis_2afc_prod_plot, aes(x=picture_meaning, y = proportion, fill = resp_suffix_form)) +
+  geom_col(position='dodge') +
+  facet_nested(condition~task+language) +
+  theme_bw()
+```
+
+```{r}
+data_analysis_2afc_prod_plot2 = data_analysis %>%
+  filter(task %in% c('2afc', 'prod')) %>%
+  filter(picture_meaning=='dim_pl') %>%
+  group_by(picture_meaning, condition, task) %>%
+  count(freq_choice) %>%
+  mutate(proportion = n / sum(n))
+
+ggplot(data_analysis_2afc_prod_plot2, aes(fill=freq_choice, y = proportion, x = factor(condition))) +
+  geom_col(position='dodge') +
+  facet_wrap(~task) +
+  theme_bw()
+```
+
+```{r}
+data_analysis_2afc_prod_plot3 = data_analysis %>%
+  filter(task %in% c('2afc', 'prod')) %>%
+  filter(picture_meaning=='dim_pl') %>%
+  group_by(condition, task, language) %>%
+  count(resp_suffix_form) %>%
+  mutate(proportion = n / sum(n))
+
+ggplot(data_analysis_2afc_prod_plot3, aes(fill=resp_suffix_form, y = proportion, x = language)) +
+  geom_col(position='dodge') +
+  facet_nested(condition~task) +
+  theme_bw()
+```
+
+```{r}
+data_analysis_comprehension_plot1 = data_analysis_comprehension %>%
+  group_by(condition, language, comprehension_suffix) %>%
+  count(comprehension_response) %>%
+  mutate(proportion = n / sum(n))
+
+ggplot(data_analysis_comprehension_plot1, aes(x=comprehension_suffix, y = proportion, fill = comprehension_response)) +
+  geom_col(position='dodge') +
+  facet_nested(condition~language) +
+  theme_bw()
+```
