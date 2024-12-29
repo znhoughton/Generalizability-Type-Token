@@ -72,14 +72,9 @@ data = data %>% #I fucked up and accidentally coded a few participants in the wr
     date >= start_date & date <= end_date, '1', condition
   ))
 
-training_received = data %>%
-  select(stem, suffix, label, condition, participant, date) %>%
-  group_by(participant, condition, suffix, date) %>%
-  summarize(table(suffix))
-
 
 data_analysis = data %>%
-  dplyr::select(participant, date, condition, pretraining, textbox.text, textbox_5.text, textbox_6.text, prod_label, prod_condition, prod_image2, prod_resp.text, key_resp_16.keys, comp_label1_location, comp_label2_location, label1, label2, comp_condition_stem, comp_condition_suffix, stem, mouse.clicked_name, comprehension_label, suffix) %>%
+  dplyr::select(participant, date, condition, pretraining, textbox.text, textbox_5.text, textbox_6.text, prod_label, prod_condition, prod_image2, prod_resp.text, key_resp_16.keys, comp_label1_location, comp_label2_location, label1, label2, comp_condition_stem, comp_condition_suffix, stem, stem_condition, mouse.clicked_name, comprehension_label, suffix) %>%
   rename(age = textbox.text,
          native_lang = textbox_5.text,
          other_langs = textbox_6.text,
@@ -136,9 +131,16 @@ data_analysis_comprehension = data_analysis %>%
 
 
 training_received = data_analysis %>%
-  select(suffix, condition, participant, date) %>%
-  group_by(participant, condition, suffix, date) %>%
+  select(suffix, condition, participant, date, stem_condition) %>%
+  group_by(participant, condition, stem_condition, suffix, date) %>%
   summarize(table(suffix))
+
+training_received2 = data_analysis %>%
+  filter(comprehension_label == '' & !suffix == '') %>%
+  select(suffix, condition) %>%
+  group_by(participant, condition, suffix) %>%
+  summarize(table(suffix)) %>%
+  arrange(condition, participant, suffix)
 ```
 
 ```{r}
@@ -149,10 +151,28 @@ data_analysis %>%
 
 There are quite a lot of typos, so now we'll manually go through the production data and correct the typos:
 
+training_con1 = training_received %\>%
+
+filter(condition==1)
+
+training_con4 = training_received %\>%
+
+filter(condition==4)
+
+xtabs(\~stem_condition + suffix, data = training_con1)
+
 ```{r}
-data_analysis_prod_typos = data_analysis_prod %>%
-  filter(prod_suffix == 'dim_pl')
+#data_analysis_prod_typos = data_analysis_prod %>%
+#  filter(prod_suffix == 'dim_pl')
 #write_csv(data_analysis_prod_typos, '../Data/prod_data_typos.csv') #so that we can go through and manually correct typos
+training_con1 = training_received %>%
+  filter(condition==1)
+
+training_con4 = training_received %>%
+  filter(condition==4)
+
+#xtabs(~stem_condition + suffix, data = training_con1)
+
 ```
 
 The new
@@ -160,11 +180,17 @@ The new
 ```{r}
 #bad_participants = c(58877, 58950, 58253, 59044, 59192, 58101, 58988, 58898, 59227, 59328, 56878
 #)
-#bad participants are participants who answered with only the stem (no suffix) more than 3 times out of the 6 production trials
+bad_participants = c(59819, 59913, 59915, 59795, 57882, 59703, 58913, 59530, 59955, 59406, 59423, 59901,59555, 59436, 59967, 58681, 59983, 57551, 59981, 59785, 59414, 59947, 59535, 59577, 59973, 59533, 59969, 59556, 60097, 59971, 59453, 59890, 59858, 60146, 60011, 59761, 58184, 59950, 59871, 60163, 60181, 59479, 59476, 59828, 60201, 59953, 59741, 59710, 59574, 59862, 59927, 60222, 60122, 59473
+)
+#bad participants are participants who answered with only the stem (no suffix) more than half the dim_pl trials
 
 #data_analysis_prod = read_csv('../Data/data_analysis_prod_typos_fixed.csv') %>% #manually corrected typos
- # filter(!participant %in% bad_participants)
+# filter(!participant %in% bad_participants)
 
+#data_analysis_prod = data_analysis_prod %>%
+#  filter(!participants %in% bad_participants)
+
+data_analysis_prod$date = as.Date(data_analysis_prod$date)
 
 data_analysis_prod = data_analysis_prod %>%
   mutate(prod_resp_suffix = str_extract_all(prod_resp, 'dan|sil|shoon|nem')) %>%
@@ -175,11 +201,13 @@ data_analysis_prod = data_analysis_prod %>%
 data_analysis_comprehension = data_analysis_comprehension %>%
   mutate(comprehension_suffix = str_extract_all(comprehension_label, 'dan|sil|shoon|nem')) %>%
   unnest(comprehension_suffix, keep_empty = T) %>%
-  mutate(language = case_when(condition %in% c(1,2,3) ~ 'dan', condition %in% c(4,5,6) ~ 'nem'))
+  mutate(language = case_when(condition %in% c(1,2,3) ~ 'dan', condition %in% c(4,5,6) ~ 'nem')) %>%
+  filter(!participant %in% bad_participants)
 
  
 data_analysis_2afc = data_analysis_2afc %>%
-  mutate(resp = ifelse(fc_resp == fc_label1_location, fc_label1, fc_label2))
+  mutate(resp = ifelse(fc_resp == fc_label1_location, fc_label1, fc_label2)) %>%
+  filter(!participant %in% bad_participants)
 
 data_analysis_2afc = data_analysis_2afc %>%
   mutate(resp_suffix = str_extract_all(resp, 'dan|sil|shoon|nem')) %>%
@@ -266,6 +294,12 @@ data_analysis = data_analysis %>%
   filter(!any(native_lang %in% c('Spanish\n', 'Vietnames', 'Vietnames\n', 'hebrew\n')))
 
 length(unique(data_analysis$participant))
+
+parts_above_75_acc = accuracy_scores %>%
+  filter(mean_accuracy >= 0.75)
+
+data_analysis2 = data_analysis %>%
+  filter(participant %in% parts_above_75_acc$participant)
 ```
 
 ```{r}
@@ -275,6 +309,12 @@ data_analysis = data_analysis %>%
                               ifelse(picture_meaning == 'dim_sg', 'infreq', 'novel')),
          ifelse(picture_meaning == 'big_pl', 'infreq', #if condition is 4,5, or 6
          ifelse(picture_meaning == 'dim_sg', 'freq', 'novel'))))
+
+data_analysis = data_analysis %>%
+  mutate(language = case_when(
+    condition %in% c(1,2,3) ~ 'dan',
+    condition %in% c(4,5,6) ~ 'nem'
+  ))
 
 data_analysis = data_analysis %>%
   mutate(condition = ifelse(condition == 4, 1, 
@@ -301,6 +341,10 @@ data_analysis_comprehension = data_analysis_comprehension %>%
   mutate(condition = ifelse(condition == 4, 1, 
                             ifelse(condition == 5, 2, 
                                    ifelse(condition == 6, 3, condition))))
+
+
+data_analysis2 = data_analysis %>%
+  filter(mean_accuracy >= 0.75)
 ```
 
 ```{r}
@@ -344,9 +388,10 @@ Our independent measures will be pretraining, condition, stem_condition (whether
 options(contrasts = c("contr.sum","contr.sum"))
 
 data_m1 = data_analysis %>%
-  filter(picture_meaning == 'dim_sg') %>%
+  filter(picture_meaning == 'dim_pl') %>%
   #filter(freq_choice %in% c('freq', 'infreq')) %>% #we are discarding sil and shoon responses by doing this
-  mutate(freq_choice = ifelse(freq_choice == 'freq', 1, 0)) %>%
+  mutate(freq_choice = case_when(freq_choice == 'freq' ~ 1,
+                                 freq_choice == 'infreq' ~ 0))%>%
   mutate(condition = as.factor(condition)) %>%
   mutate(participant = as.factor(participant)) %>%
   mutate(pretraining = as.factor(pretraining)) 
@@ -426,13 +471,13 @@ m1_smaller = brm(freq_choice ~ condition + stem_condition + task + task:conditio
          chains = 4,
          cores = 4,
          prior = priors_m1,
-         control = list(adapt_delta = 0.98),
+         control = list(adapt_delta = 0.99),
          file = '../Data/model1_small')
 
 fixef(m1_smaller)
 # 
-# test = glmer(freq_choice ~ pretraining + condition + stem_condition + task + task:condition + pretraining:condition + condition:stem_condition + pretraining:stem_condition 
-#                  + (1 + stem_condition*task|participant) + (pretraining*condition|resp_stem),
+# test = glmer(freq_choice ~ condition + stem_condition + task + task:condition + condition:stem_condition + stem_condition:task #rerun this model
+#                  + (1 + stem_condition*task|participant) + (condition|resp_stem),
 #          data = data_m1,
 #          family = "binomial")
 
@@ -469,6 +514,8 @@ fixef(m1_only_novel_stems)
 conditional_effects(m1_smaller)
 conditional_effects(m1_only_familiar_stems)
 conditional_effects(m1_only_novel_stems)
+
+
 ```
 
 ```{r}
@@ -529,53 +576,66 @@ data_novel_2afc = data_novel %>%
   filter(task == '2afc')
 
 
-m1_prod_familiar = brm(freq_choice ~ condition
+def_priors = data.frame(get_prior(freq_choice ~ condition
                  + (1 |participant) + (condition|resp_stem),
          data = data_familiar_prod,
+         family = bernoulli(link = 'logit')))
+
+priors_m1 = c(
+  prior(student_t(3, 0, 0.5), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 0.5), class = 'b'),
+  prior(student_t(3, 0, 0.5), class = 'sd'))#,
+  #prior(lkj_corr_cholesky(2), class = 'cor'))
+
+m1_prod_familiar = brm(freq_choice ~ condition
+                 + (1 |participant), #+ (condition|resp_stem),
+         data = data_familiar_prod,
          family = bernoulli(link = 'logit'),
-         iter = 12000, 
-         warmup = 6000,
+         iter = 18000, 
+         warmup = 9000,
          chains = 4,
          cores = 4,
-         #prior = priors_m1,
+         prior = priors_m1,
          control = list(adapt_delta = 0.99, max_treedepth=12),
          file = '../Data/m1_prod_familiar')
 
 
 m1_2afc_familiar = brm(freq_choice ~ condition
-                 + (1 |participant) + (condition|resp_stem),
+                 + (1 |participant), #+ (condition|resp_stem),
          data = data_familiar_2afc,
          family = bernoulli(link = 'logit'),
-         iter = 18000, 
-         warmup = 10000,
+         iter = 22000, 
+         warmup = 11000,
          chains = 4,
          cores = 4,
-         #prior = priors_m1,
+         prior = priors_m1,
          control = list(adapt_delta = 0.99),
          file = '../Data/m1_2afc_familiar')
 
 
 m1_prod_novel = brm(freq_choice ~ condition
-                 + (1 |participant) + (condition|resp_stem),
+                 + (1 |participant), #+ (condition|resp_stem),
          data = data_novel_prod,
          family = bernoulli(link = 'logit'),
-         iter = 25000, 
-         warmup = 13000,
+         iter = 30000, 
+         warmup = 15000,
          chains = 4,
          cores = 4,
-         #prior = priors_m1,
+         prior = priors_m1,
          control = list(adapt_delta = 0.99),
          file = '../Data/m1_prod_novel')
 
+
+
 m1_2afc_novel = brm(freq_choice ~ condition
-                 + (1 |participant) + (condition|resp_stem),
+                 + (1 |participant), #+ (condition|resp_stem),
          data = data_novel_2afc,
          family = bernoulli(link = 'logit'),
-         iter = 18000, 
-         warmup = 10000,
+         iter = 30000, 
+         warmup = 15000,
          chains = 4,
          cores = 4,
-         #prior = priors_m1,
+         prior = priors_m1,
          control = list(adapt_delta = 0.99),
          file = '../Data/m1_2afc_novel')
 
@@ -592,6 +652,12 @@ conditional_effects(m1_prod_familiar)
 conditional_effects(m1_2afc_familiar)
 conditional_effects(m1_prod_novel)
 conditional_effects(m1_2afc_novel)
+
+ranef(m1_prod_familiar)
+ranef(m1_2afc_familiar)
+ranef(m1_prod_novel)
+ranef(m1_2afc_novel)
+
 ```
 
 Comprehension analysis:
@@ -601,20 +667,35 @@ Comprehension analysis:
 ```{r}
 library(ggh4x)
 data_analysis_2afc_prod_plot = data_analysis %>%
-  filter(task %in% c('2afc', 'prod')) %>%
-  group_by(picture_meaning, condition, task, language) %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning%in% c('big_pl', 'dim_sg')) %>%
+  group_by(picture_meaning, condition, stem_condition, language) %>%
   count(resp_suffix_form) %>%
-  group_by(picture_meaning, condition, task, language) %>%
+  group_by(picture_meaning, condition, stem_condition, language) %>%
   mutate(proportion = n / sum(n))
 
 ggplot(data_analysis_2afc_prod_plot, aes(x=picture_meaning, y = proportion, fill = resp_suffix_form)) +
   geom_col(position='dodge') +
-  facet_nested(condition~task+language) +
+  facet_nested(condition~stem_condition+language) +
   theme_bw()
 ```
 
 ```{r}
-data_analysis_2afc_prod_plot2 = data_analysis %>%
+data_analysis_2afc_prod_plot2 = data_analysis2 %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning%in% c('big_pl', 'dim_sg')) %>%
+  group_by(picture_meaning, condition, task) %>%
+  count(freq_choice) %>%
+  mutate(proportion = n / sum(n))
+
+ggplot(data_analysis_2afc_prod_plot2, aes(fill=freq_choice, y = proportion, x = factor(condition))) +
+  geom_col(position='dodge') +
+  facet_wrap(~task) +
+  theme_bw()
+```
+
+```{r}
+data_analysis_2afc_prod_plot2 = data_analysis2 %>%
   filter(task %in% c('2afc', 'prod')) %>%
   filter(picture_meaning=='dim_pl') %>%
   group_by(picture_meaning, condition, task) %>%
@@ -628,15 +709,32 @@ ggplot(data_analysis_2afc_prod_plot2, aes(fill=freq_choice, y = proportion, x = 
 ```
 
 ```{r}
-data_analysis_2afc_prod_plot3 = data_analysis %>%
+data_analysis_2afc_prod_plot2 = data_analysis2 %>%
   filter(task %in% c('2afc', 'prod')) %>%
-  filter(picture_meaning=='dim_pl') %>%
-  group_by(condition, task, language) %>%
-  count(resp_suffix_form) %>%
+  filter(picture_meaning=='dim_pl' | stem_condition == 'novel') %>%
+  group_by(condition, task) %>%
+  count(freq_choice) %>%
   mutate(proportion = n / sum(n))
 
+ggplot(data_analysis_2afc_prod_plot2, aes(fill=freq_choice, y = proportion, x = factor(condition))) +
+  geom_col(position='dodge', color='black') +
+  facet_wrap(~task) +
+  theme_bw()
+```
+
+```{r}
+data_analysis_2afc_prod_plot3 = data_analysis2 %>%
+  filter(task %in% c('2afc', 'prod')) %>%
+  filter(picture_meaning=='dim_pl' & stem_condition == 'novel') %>%
+  group_by(condition, task, language) %>%
+  count(resp_suffix_form, .drop = F) %>%
+  mutate(proportion = n / sum(n)) %>%
+  ungroup() %>%
+  # Add missing combinations
+  complete(condition, task, language, resp_suffix_form, fill = list(n = 0))
+
 ggplot(data_analysis_2afc_prod_plot3, aes(fill=resp_suffix_form, y = proportion, x = language)) +
-  geom_col(position='dodge') +
+  geom_col(position='dodge', color='black') +
   facet_nested(condition~task) +
   theme_bw()
 ```
@@ -651,4 +749,135 @@ ggplot(data_analysis_comprehension_plot1, aes(x=comprehension_suffix, y = propor
   geom_col(position='dodge') +
   facet_nested(condition~language) +
   theme_bw()
+```
+
+```{r}
+data_analysis_subjects_prod_plot = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  mutate(meaning_condition = case_when(picture_meaning == 'dim_pl' ~ 'new meaning',
+                   picture_meaning %in% c('big_pl', 'dim_sg') ~ 'original meaning (minus big_sg)')) %>%
+  ungroup() %>%
+  group_by(participant, condition, meaning_condition) %>%
+  filter(resp_suffix_form %in% c('nem', 'dan')) %>%
+  count(resp_suffix_form, .drop = F) %>%
+  ungroup() %>%
+  complete(participant, meaning_condition, resp_suffix_form, fill = list(n = 0)) %>%
+  group_by(participant) %>%
+  mutate(condition = ifelse(is.na(condition), 
+                            unique(condition[!is.na(condition)]),
+                            condition)) %>%
+  ungroup() %>%
+  group_by(participant, condition, meaning_condition, resp_suffix_form) %>%
+  summarize(total_value = sum(n, na.rm = T)) %>%
+  summarize(proportion = total_value[resp_suffix_form=='dan'] / (total_value[resp_suffix_form=='dan'] + total_value[resp_suffix_form=='nem']))
+
+data_analysis_subjects_prod_plot = data_analysis_subjects_prod_plot %>%
+  pivot_wider(names_from = meaning_condition, values_from = proportion)
+
+p1 = ggplot(data_analysis_subjects_prod_plot, aes(x=`new meaning`, y = `original meaning (minus big_sg)`)) +
+  geom_point() +
+  geom_smooth(method='lm', formula= y~x) +
+  facet_wrap(~condition) +
+  theme_bw() +
+  ggtitle('dan vs nem')
+```
+
+```{r}
+data_analysis_subjects_prod_plot2 = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  mutate(meaning_condition = case_when(picture_meaning == 'dim_pl' ~ 'new meaning',
+                   picture_meaning %in% c('big_pl', 'dim_sg') ~ 'original meaning (minus big_sg)')) %>%
+  ungroup() %>%
+  group_by(participant, condition, meaning_condition) %>%
+  filter(resp_suffix_form %in% c('sil', 'shoon')) %>%
+  count(resp_suffix_form, .drop = F) %>%
+  ungroup() %>%
+  complete(participant, meaning_condition, resp_suffix_form, fill = list(n = 0)) %>%
+  group_by(participant) %>%
+  mutate(condition = ifelse(is.na(condition), 
+                            unique(condition[!is.na(condition)]),
+                            condition)) %>%
+  ungroup() %>%
+  group_by(participant, condition, meaning_condition, resp_suffix_form) %>%
+  summarize(total_value = sum(n, na.rm = T)) %>%
+  summarize(proportion = total_value[resp_suffix_form=='sil'] / (total_value[resp_suffix_form=='sil'] + total_value[resp_suffix_form=='shoon']))
+
+data_analysis_subjects_prod_plot2 = data_analysis_subjects_prod_plot2 %>%
+  pivot_wider(names_from = meaning_condition, values_from = proportion)
+
+p2 = ggplot(data_analysis_subjects_prod_plot2, aes(x=`new meaning`, y = `original meaning (minus big_sg)`)) +
+  geom_point() +
+  geom_smooth(method='lm', formula= y~x) + 
+  facet_wrap(~condition) +
+  theme_bw() +
+  ggtitle('sil vs shoon')
+```
+
+```{r}
+library(ggpubr)
+ggarrange(p1, p2, nrow = 2)
+```
+
+```{r}
+data_analysis_subjects_prod_plot3 = data_analysis %>%
+  filter(task %in% c('prod')) %>% 
+  ungroup() %>%
+  group_by(participant, language, condition, picture_meaning) %>%
+  count(resp_suffix_form, .drop = F) %>%
+  ungroup() %>%
+  complete(participant, language, condition, picture_meaning, resp_suffix_form, fill = list(n = 0)) %>%
+  group_by(participant) %>%
+  mutate(condition = ifelse(is.na(condition), 
+                            unique(condition[!is.na(condition)]),
+                            condition)) %>%
+  ungroup() %>%
+  group_by(participant, language, condition, picture_meaning, resp_suffix_form) %>%
+  summarize(total_value = sum(n, na.rm = T)) %>%
+  summarize(proportion = case_when(
+    language=='dan' & picture_meaning == 'big_pl' ~ total_value[resp_suffix_form=='sil'] / (total_value[resp_suffix_form=='sil'] + total_value[resp_suffix_form=='dan']),
+    language=='dan' & picture_meaning == 'dim_pl' ~ total_value[resp_suffix_form=='sil'] / (total_value[resp_suffix_form=='sil'] + total_value[resp_suffix_form=='dan']),
+    language=='nem' & picture_meaning == 'dim_sg' ~ total_value[resp_suffix_form=='shoon'] / (total_value[resp_suffix_form=='shoon'] + total_value[resp_suffix_form=='nem']),
+    language == 'nem' & picture_meaning == 'dim_pl' ~ total_value[resp_suffix_form=='shoon'] / (total_value[resp_suffix_form=='shoon'] + total_value[resp_suffix_form=='nem']))) %>%
+  distinct()
+
+
+data_analysis_subjects_prod_plot3 = data_analysis_subjects_prod_plot3 %>%
+  na.omit()
+
+length(unique(data_analysis_subjects_prod_plot3$participant))
+
+data_analysis_subjects_prod_plot3 = data_analysis_subjects_prod_plot3 %>%
+  group_by(participant, language, condition, picture_meaning) %>%
+  mutate('key' = case_when(
+    language == 'dan' & picture_meaning == 'big_pl' ~ 'x-axis',
+    language == 'nem' & picture_meaning == 'dim_sg' ~ 'x-axis',
+    language == 'dan' & picture_meaning == 'dim_pl' ~ 'y-axis',
+    language == 'nem' & picture_meaning == 'dim_pl' ~ 'y-axis'
+  ))
+
+data_analysis_subjects_prod_plot3 = data_analysis_subjects_prod_plot3 %>%
+  ungroup() %>%
+  group_by(participant) %>%
+  filter(n() == 2) %>%
+  ungroup
+
+
+
+data_analysis_subjects_prod_plot3 = data_analysis_subjects_prod_plot3 %>%
+  group_by(participant, key) %>%  # Group by participant and axis type
+  summarize(proportion = sum(proportion), .groups = 'drop') %>%  # Sum proportions within each group
+  pivot_wider(
+    names_from = key,   # Create separate columns for x-axis and y-axis
+    values_from = proportion,    # Use proportion values for the new columns
+    values_fill = list(proportion = 0)  # Fill missing values with 0
+  )
+
+p3 = ggplot(data_analysis_subjects_prod_plot3, aes(x=`x-axis`, y = `y-axis`)) +
+  geom_point() +
+  geom_smooth(method='lm', formula= y~x) + 
+  #facet_wrap(~condition) +
+  theme_bw() #+
+  #ggtitle('sil vs shoon')
+
+p3
 ```
