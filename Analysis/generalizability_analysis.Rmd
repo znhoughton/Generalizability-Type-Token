@@ -2419,51 +2419,60 @@ ggplot(fixed_effects_df_comprehension, aes(x = Meaning, y = Prob, fill = Frequen
 ##### Full plot
 
 ```{r}
+# 
+# fixed_effects_df_all = fixed_effects_df %>%
+#   full_join(fixed_effects_df_2afc) %>%
+#   full_join(fixed_effects_df_comprehension)
 
-fixed_effects_df_all = fixed_effects_df %>%
-  full_join(fixed_effects_df_2afc) %>%
-  full_join(fixed_effects_df_comprehension)
+#write_csv(fixed_effects_df_all, '../Data/fixed_effects_df_all.csv')
+#write_csv(subject_effects, '../Data/subject_effects.csv')
 
-write_csv(fixed_effects_df_all, '../Data/fixed_effects_df_all.csv')
-write_csv(subject_effects, '../Data/subject_effects.csv')
+fixed_effects_df_all = read_csv('../Data/fixed_effects_df_all.csv')
+subject_effects = read_csv('../Data/subject_effects.csv')
+
+fixed_effects_df_all$Task = factor(fixed_effects_df_all$Task, levels = c('prod', '2afc', 'comprehension'))
+
+subject_effects$Task = factor(subject_effects$Task, levels = c('prod', '2afc', 'comprehension'))
+
+condition_labels = c("cond1" = "Condition 1", 
+                      "cond2" = "Condition 2", 
+                      "cond3" = "Condition 3")
+task_labels = c("prod" = "Production",
+                "2afc" = "Form Choice",
+                "comprehension" = "Comprehension")
+
+fixed_effects_df_all$Meaning = factor(fixed_effects_df_all$Meaning, 
+                                  levels = c("original", "novel"), 
+                                  labels = c("Original", "Novel"))
+
+subject_effects$Meaning = factor(subject_effects$Meaning, 
+                                  levels = c("original", "novel"), 
+                                  labels = c("Original", "Novel"))
+
+fixed_effects_df_all$Frequency = factor(fixed_effects_df_all$Frequency, 
+                                  levels = c("freq", "infreq"), 
+                                  labels = c("Frequent", "Infrequent"))
+
+subject_effects$Frequency = factor(subject_effects$Frequency, 
+                                  levels = c("freq", "infreq"), 
+                                  labels = c("Frequent", "Infrequent"))
+
 
 ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Frequency)) +
   geom_col(position = position_dodge(width = 0.9)) + 
   geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
   geom_point(data = subject_effects, 
-             aes(x = Meaning, y = subj_values),  
-             color = "black",  
+             aes(x = Meaning, y = subj_values, fill = Frequency, color = Frequency),  # Map fill and color
+             shape = 21,   # Hollow circle with fill and outline
              position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), 
-             size = 1, alpha = 0.2, 
-             show.legend = FALSE) +  # Hides the points from the legend
-  facet_grid(Task ~ Condition) + 
+             size = 2, stroke = 0.7, alpha = 0.7,  # Adjust size, border thickness, and transparency
+             show.legend = FALSE) +  # Hides points from legend
+  scale_fill_manual(values = c("Frequent" = "#66c2a5", "Infrequent" = "#8da0cb")) +  # Bar & point fill colors
+  scale_color_manual(values = c("Frequent" = "#1b7837", "Infrequent" = "#2b8cbe")) +  # Darker border colors for points
+  facet_grid(Task ~ Condition, labeller = labeller(Condition = condition_labels, Task = task_labels)) + 
   theme_bw() +
-  ggtitle('All Tasks') +
+  ggtitle('Results by condition for each task') +
   xlab('Condition') +
   ylab('Probability of Producing a Form') +
   ylim(0, 1)
-
-
-```
-
-```{r}
-original_meaning_freq_comprehension_model_cond1
-
-
-
-extract_fixed_effects = function(model, model_name) {
-  as.data.frame(fixef(model)) %>%
-    tibble::rownames_to_column("Term") %>%
-    mutate(Prob = plogis(Estimate),
-           Lower = plogis(Q2.5),         
-           Upper = plogis(Q97.5), 
-           Model = model_name)
-}
-
-fixed_effects_df_comprehension = map2_dfr(list_of_models, names(list_of_models), extract_fixed_effects)
-
-fixed_effects_df_comprehension = fixed_effects_df_comprehension %>%
-  separate(Model, into = c("Meaning", "ignore1", "Frequency", "Task", "ignore2", "Condition"), sep = "_", remove = FALSE) %>%
-  select(-ignore1, -ignore2)  # Remove the unnecessary columns
-
 ```

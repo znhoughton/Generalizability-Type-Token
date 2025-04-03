@@ -5,6 +5,40 @@ editor: visual
 bibliography: references.bib
 ---
 
+```{r}
+
+fixed_effects_df_all = read_csv('../Data/fixed_effects_df_all.csv')
+subject_effects = read_csv('../Data/subject_effects.csv')
+
+fixed_effects_df_all$Task = factor(fixed_effects_df_all$Task, levels = c('prod', '2afc', 'comprehension'))
+
+subject_effects$Task = factor(subject_effects$Task, levels = c('prod', '2afc', 'comprehension'))
+
+condition_labels = c("cond1" = "Condition 1", 
+                      "cond2" = "Condition 2", 
+                      "cond3" = "Condition 3")
+task_labels = c("prod" = "Production",
+                "2afc" = "Form Choice",
+                "comprehension" = "Comprehension")
+
+fixed_effects_df_all$Meaning = factor(fixed_effects_df_all$Meaning, 
+                                  levels = c("original", "novel"), 
+                                  labels = c("Original", "Novel"))
+
+subject_effects$Meaning = factor(subject_effects$Meaning, 
+                                  levels = c("original", "novel"), 
+                                  labels = c("Original", "Novel"))
+
+fixed_effects_df_all$Frequency = factor(fixed_effects_df_all$Frequency, 
+                                  levels = c("freq", "infreq"), 
+                                  labels = c("Frequent", "Infrequent"))
+
+subject_effects$Frequency = factor(subject_effects$Frequency, 
+                                  levels = c("freq", "infreq"), 
+                                  labels = c("Frequent", "Infrequent"))
+
+```
+
 # Methods
 
 Following @harmonPuttingOldTools2017, two artificial languages were used: Dan and Nem [See @fig-fig1]. In each language, the same four suffixes were used: -*sil~PL~*, *-dan~PL~*, *-nem~DIM~*, and -*shoon~DIM~*. Notably, in our language *-dan* and *-sil* overlap in meaning (they both occur in plural contexts) as do -*nem* and *-shoon* (which both occur in diminutive contexts).
@@ -16,7 +50,7 @@ During the exposure phase, the suffixes were paired with an image. The suffixes 
 Our Experiment comprised of three different conditions (see @tbl-conditionslist), one in which the type frequency of the frequent language's suffix was manipulated (Condition 1), one in which the token frequency was manipulate3d (Condition 2), and one in which both were manipulated (Condition 3).
 
 |   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type |
-|----|----|----|----|----|
+|---------------|---------------|---------------|---------------|---------------|
 | **Condition 1** | 12 | 12 | 12 | 3 |
 | **Condition 2** | 12 | 3 | 3 | 3 |
 | **Condition 3** | 12 | 12 | 3 | 3 |
@@ -49,8 +83,28 @@ Finally, participants were presented with a comprehension task. In this task, pa
 
 In order to examine the effect of type/token frequency on semantic extension, we examined instances where the image was diminutive plural.
 
-```{r}
+```{r, echo = F, out.width = '80%', fig.align = 'center', warning = F, message = F}
+#| label: fig-fullresults
+#| fig-cap: "Plot of our results. Points indicate individual subject values."
 
+
+ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Frequency)) +
+  geom_col(position = position_dodge(width = 0.9)) + 
+  geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
+  geom_point(data = subject_effects, 
+             aes(x = Meaning, y = subj_values, fill = Frequency, color = Frequency),  # Map fill and color
+             shape = 21,   # Hollow circle with fill and outline
+             position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), 
+             size = 2, stroke = 0.7, alpha = 0.7,  # Adjust size, border thickness, and transparency
+             show.legend = FALSE) +  # Hides points from legend
+  scale_fill_manual(values = c("Frequent" = "#66c2a5", "Infrequent" = "#8da0cb")) +  # Bar & point fill colors
+  scale_color_manual(values = c("Frequent" = "#1b7837", "Infrequent" = "#2b8cbe")) +  # Darker border colors for points
+  facet_grid(Task ~ Condition, labeller = labeller(Condition = condition_labels, Task = task_labels)) + 
+  theme_bw() +
+  ggtitle('Results by condition for each task') +
+  xlab('Condition') +
+  ylab('Probability of Producing a Form') +
+  ylim(0, 1)
 ```
 
 ## Form Choice Task
