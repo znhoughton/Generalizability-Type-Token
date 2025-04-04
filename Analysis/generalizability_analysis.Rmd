@@ -903,6 +903,263 @@ percent_greater_zero_prod
 percent_greater_zero_2afc
 ```
 
+## Models for Paper
+
+### Prep Data
+
+```{r}
+options(contrasts = c("contr.sum","contr.sum"))
+## Production
+#2x2 model for condition1
+#original vs novel; frequent vs infrequent
+data_prod = data_analysis %>%
+  filter(task == 'prod') %>%
+  filter(resp_suffix_form %in% c('dan', 'nem'))
+
+data_2afc = data_analysis %>%
+  filter(task == '2afc') %>%
+  filter(resp_suffix_form %in% c('dan', 'nem'))
+
+data_prod = data_prod %>%
+  mutate('meaning' = case_when(picture_meaning != 'dim_pl' ~ 'original',
+                               .default = 'novel'
+  )) %>%
+  mutate(frequent = case_when(
+    language == 'dan' & picture_meaning == 'big_pl' ~ 1,
+    language == 'nem' & picture_meaning == 'dim_sg' ~ 1,
+    picture_meaning == 'dim_pl' ~ 1,
+    .default = 0)) %>%
+  mutate(infrequent = case_when(
+    language == 'nem' & picture_meaning == 'big_pl' ~ 1,
+    language == 'dan' & picture_meaning == 'dim_sg' ~ 1,
+    picture_meaning == 'dim_pl' ~ 1,
+    .default = 0)) %>%
+  rowwise() %>%
+  mutate(frequency = case_when(
+    frequent == 1 & infrequent == 0 ~ 'frequent',
+    infrequent == 1 & frequent == 0 ~ 'infrequent',
+    frequent == 1 & infrequent == 1 ~ NA_character_,  # We will handle this case later
+    TRUE ~ NA_character_
+  )) %>%
+  ungroup() 
+
+data_prod = data_prod %>%
+  filter(!is.na(frequency)) %>%
+  bind_rows(
+    data_prod %>%
+      filter(frequent == 1 & infrequent == 1) %>%
+      mutate(frequency = 'frequent'),
+    data_prod %>%
+      filter(frequent == 1 & infrequent == 1) %>%
+      mutate(frequency = 'infrequent')
+  ) %>%
+  mutate('freq_choice_dv' = case_when(
+    freq_choice == 'freq' & frequency == 'frequent' ~ 1,
+    freq_choice == 'infreq' & frequency == 'infrequent' ~ 1, 
+    #freq_choice %in% c('freq', 'infreq') ~ 1,
+                       .default = 0)
+  )
+
+data_prod$participant = factor(data_prod$participant)
+data_prod$participant = factor(data_prod$condition)
+
+data_2afc = data_2afc %>%
+  mutate('meaning' = case_when(picture_meaning != 'dim_pl' ~ 'original',
+                               .default = 'novel'
+  )) %>%
+  mutate(frequent = case_when(
+    language == 'dan' & picture_meaning == 'big_pl' ~ 1,
+    language == 'nem' & picture_meaning == 'dim_sg' ~ 1,
+    picture_meaning == 'dim_pl' ~ 1,
+    .default = 0)) %>%
+  mutate(infrequent = case_when(
+    language == 'nem' & picture_meaning == 'big_pl' ~ 1,
+    language == 'dan' & picture_meaning == 'dim_sg' ~ 1,
+    picture_meaning == 'dim_pl' ~ 1,
+    .default = 0)) %>%
+  rowwise() %>%
+  mutate(frequency = case_when(
+    frequent == 1 & infrequent == 0 ~ 'frequent',
+    infrequent == 1 & frequent == 0 ~ 'infrequent',
+    frequent == 1 & infrequent == 1 ~ NA_character_,  # We will handle this case later
+    TRUE ~ NA_character_
+  )) %>%
+  ungroup() 
+
+data_2afc = data_2afc %>%
+  filter(!is.na(frequency)) %>%
+  bind_rows(
+    data_2afc %>%
+      filter(frequent == 1 & infrequent == 1) %>%
+      mutate(frequency = 'frequent'),
+    data_2afc %>%
+      filter(frequent == 1 & infrequent == 1) %>%
+      mutate(frequency = 'infrequent')
+  ) %>%
+  mutate('freq_choice_dv' = case_when(
+    freq_choice == 'freq' & frequency == 'frequent' ~ 1,
+    freq_choice == 'infreq' & frequency == 'infrequent' ~ 1, 
+    #freq_choice %in% c('freq', 'infreq') ~ 1,
+                       .default = 0)
+  )
+
+  
+original_meaning_freq_prod_data = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'dan' & picture_meaning == 'big_pl') | (language == 'nem' & picture_meaning == 'dim_sg')) %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  )) %>%
+  mutate(meaning = 'original', frequency = 'frequent')
+    
+novel_meaning_freq_prod_data = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl')) %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) %>%
+  mutate(meaning = 'novel', frequency = 'frequent')
+
+original_meaning_infreq_prod_data = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'nem' & picture_meaning == 'big_pl') | (language == 'dan' & picture_meaning == 'dim_sg')) %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'infreq' ~ 1,
+    .default = 0
+  )) %>%
+  mutate(meaning = 'original', frequency = 'infrequent')
+
+novel_meaning_infreq_prod_data = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') ) %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'infreq', 1, 0)) %>%
+  mutate(meaning = 'novel', frequency = 'infrequent')
+  
+  
+data_test_all = original_meaning_freq_prod_data %>%
+  full_join(novel_meaning_freq_prod_data) %>%
+  full_join(original_meaning_infreq_prod_data) %>%
+  full_join(novel_meaning_infreq_prod_data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+data_prod_cond1 = data_prod %>% filter(condition == 1)
+data_prod_cond2 = data_prod %>% filter(condition == 2)
+data_prod_cond3 = data_prod %>% filter(condition == 3)
+
+data_2afc_cond1 = data_2afc %>% filter(condition == 1)
+data_2afc_cond2 = data_2afc %>% filter(condition == 2)
+data_2afc_cond3 = data_2afc %>% filter(condition == 3)
+
+data_analysis_comprehension_cond1 = data_analysis_comprehension %>% filter(condition == 1)
+data_analysis_comprehension_cond2 = data_analysis_comprehension %>% filter(condition == 2)
+data_analysis_comprehension_cond3 = data_analysis_comprehension %>% filter(condition == 3)
+
+
+
+# 
+# data_prod_test = data_prod %>%
+#   #filter(!is.na(frequency)) %>%
+#   group_by(condition, meaning, frequency) %>%
+#   summarize(Prob = mean(freq_choice_dv, sd = sd(freq_choice_dv)))
+# 
+# 
+# data_prod_test2 = data_test_all %>%
+#   #filter(!is.na(frequency)) %>%
+#   group_by(condition, meaning, frequency) %>%
+#   summarize(Prob = mean(freq_choice_dv, sd = sd(freq_choice_dv)))
+
+# ggplot(data_prod_test2, aes(x = meaning, y = Prob, fill = frequency)) +
+#   geom_col(position = position_dodge(width = 0.9)) + 
+#   #geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
+#   #geom_point(data = subject_effects_prod, 
+#              #aes(x = Meaning, y = subj_values),  
+#              #color = "black",  
+#              #position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), 
+#              #size = 2, alpha = 0.2, 
+#              #show.legend = FALSE) +  # Hides the points from the legend
+#   facet_grid(~ condition) + 
+#   theme_bw() +
+#   ggtitle('Production') +
+#   xlab('Condition') +
+#   ylab('Probability of Producing a Form') +
+#   ylim(0, 1)
+
+
+```
+
+### Models
+
+```{r}
+
+
+priors_m1 = c(
+  prior(student_t(3, 0, 0.5), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 0.5), class = 'b'),
+  prior(student_t(3, 0, 0.5), class = 'sd'))
+
+
+full_model_production_for_paper = brm(freq_choice_dv ~ frequency*meaning*condition + (frequency*meaning | participant) + (frequency*meaning*condition | resp_stem),
+                                       data = data_prod,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 8000, 
+                                       warmup = 4000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/full_model_production_for_paper')
+
+cond1_model_production_for_paper = brm(freq_choice_dv ~ frequency*meaning + (frequency*meaning | participant) + (frequency*meaning | resp_stem),
+                                       data = data_prod_cond1,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/cond1_model_production_for_paper')
+
+cond2_model_production_for_paper = brm(freq_choice_dv ~ frequency*meaning + (frequency*meaning | participant) + (frequency*meaning | resp_stem),
+                                       data = data_prod_cond2,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/cond2_model_production_for_paper')
+
+cond3_model_production_for_paper = brm(freq_choice_dv ~ frequency*meaning + (frequency*meaning | participant) + (frequency*meaning | resp_stem),
+                                       data = data_prod_cond3,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/cond3_model_production_for_paper')
+
+
+```
+
 ### Plots
 
 ```{r}
@@ -1287,6 +1544,7 @@ p3
 options(contrasts = c("contr.sum","contr.sum"))
 data_analysis$condition = factor(data_analysis$condition)
 
+
 original_meaning_freq_prod_data_cond1 = data_analysis %>%
   filter(task %in% c('prod')) %>%
   filter((language == 'dan' & picture_meaning == 'big_pl') | (language == 'nem' & picture_meaning == 'dim_sg') & condition == 1) %>%
@@ -1295,12 +1553,14 @@ original_meaning_freq_prod_data_cond1 = data_analysis %>%
     freq_choice == 'freq' ~ 1,
     .default = 0
   ))
-    
+  
+  
 novel_meaning_freq_prod_data_cond1 = data_analysis %>%
   filter(task %in% c('prod')) %>%
   filter(picture_meaning %in% c('dim_pl') & condition == 1) %>%
   ungroup() %>%
-  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0))
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) #freq, infreq, freq_competitor, infrequent_competitor
+
 
 original_meaning_infreq_prod_data_cond1 = data_analysis %>%
   filter(task %in% c('prod')) %>%
@@ -2069,13 +2329,13 @@ data_analysis_comprehension = data_analysis_comprehension %>%
     .default = 'infreq'
   )) %>%
   mutate(original_meaning = case_when(
-    language == 'dan' & comprehension_response == 'big_pl' ~ 1,
-    language == 'nem' & comprehension_response == 'dim_sg' ~ 1,
+    comprehension_suffix == 'dan' & comprehension_response == 'big_pl' ~ 1,
+    comprehension_suffix == 'nem' & comprehension_response == 'dim_sg' ~ 1,
     .default = 0
   )) %>%
   mutate(novel_meaning = case_when(
-    language == 'dan' & comprehension_response == 'dim_pl' ~ 1,
-    language == 'nem' & comprehension_response == 'dim_pl' ~ 1,
+    comprehension_suffix == 'dan' & comprehension_response == 'dim_pl' ~ 1,
+    comprehension_suffix == 'nem' & comprehension_response == 'dim_pl' ~ 1,
     .default = 0
   )) %>%
   filter(novel_meaning == 1 | original_meaning == 1)
@@ -2356,8 +2616,8 @@ original_meaning_infreq_comprehension_model_cond3 = brm(freq_choice_dv ~ 1 + (1 
 novel_meaning_infreq_comprehension_model_cond3 = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
                                        data = novel_meaning_infreq_comprehension_data_cond3,
                                        family = bernoulli(link = 'logit'),
-                                       iter = 10000, 
-                                       warmup = 5000,
+                                       iter = 12000, 
+                                       warmup = 6000,
                                        chains = 4,
                                        cores = 4,
                                        prior = priors_m1,
@@ -2420,9 +2680,9 @@ ggplot(fixed_effects_df_comprehension, aes(x = Meaning, y = Prob, fill = Frequen
 
 ```{r}
 # 
-# fixed_effects_df_all = fixed_effects_df %>%
-#   full_join(fixed_effects_df_2afc) %>%
-#   full_join(fixed_effects_df_comprehension)
+ fixed_effects_df_all = fixed_effects_df %>%
+   full_join(fixed_effects_df_2afc) %>%
+   full_join(fixed_effects_df_comprehension)
 
 #write_csv(fixed_effects_df_all, '../Data/fixed_effects_df_all.csv')
 #write_csv(subject_effects, '../Data/subject_effects.csv')
@@ -2464,15 +2724,465 @@ ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Frequency)) +
   geom_point(data = subject_effects, 
              aes(x = Meaning, y = subj_values, fill = Frequency, color = Frequency),  # Map fill and color
              shape = 21,   # Hollow circle with fill and outline
-             position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), 
-             size = 2, stroke = 0.7, alpha = 0.7,  # Adjust size, border thickness, and transparency
+             position = position_jitterdodge(jitter.width = 0.3, dodge.width = 0.9), 
+             size = 2, stroke = 0.7, alpha = 0.1,  # Adjust size, border thickness, and transparency
              show.legend = FALSE) +  # Hides points from legend
   scale_fill_manual(values = c("Frequent" = "#66c2a5", "Infrequent" = "#8da0cb")) +  # Bar & point fill colors
   scale_color_manual(values = c("Frequent" = "#1b7837", "Infrequent" = "#2b8cbe")) +  # Darker border colors for points
   facet_grid(Task ~ Condition, labeller = labeller(Condition = condition_labels, Task = task_labels)) + 
   theme_bw() +
   ggtitle('Results by condition for each task') +
+  xlab('Meaning') +
+  ylab('Response Probability') +
+  ylim(0, 1)
+```
+
+### sil shoon removed from prod
+
+```{r}
+options(contrasts = c("contr.sum","contr.sum"))
+data_analysis$condition = factor(data_analysis$condition)
+
+data_analysis_no_sil_shoon = data_analysis %>%
+  filter(resp_suffix_form %in% c('dan', 'nem')) %>%
+  mutate(meaning = case_when(
+    picture_meaning %in% c('big_pl', 'dim_sg') ~ 'original',
+    picture_meaning == 'dim_pl' ~ 'novel')
+  )
+
+
+original_meaning_freq_prod_data_cond1_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 1) %>%
+  filter(meaning == 'original') %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+original_meaning_infreq_prod_data_cond1_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 1) %>%
+  filter(meaning == 'original') %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'infreq' ~ 1,
+    .default = 0
+  ))
+
+  
+novel_meaning_freq_prod_data_cond1_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 1) %>%
+  filter(meaning == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) #freq, infreq, freq_competitor, infrequent_competitor
+
+novel_meaning_infreq_prod_data_cond1_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 1) %>%
+  filter(meaning == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'infreq', 1, 0))
+
+
+
+original_meaning_freq_prod_data_cond1_subj_means_no_sil_shoon = original_meaning_freq_prod_data_cond1_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_freq_prod_model_cond1')
+
+novel_meaning_freq_prod_data_cond1_subj_means_no_sil_shoon = novel_meaning_freq_prod_data_cond1_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_freq_prod_model_cond1')
+
+
+original_meaning_infreq_prod_data_cond1_subj_means_no_sil_shoon = original_meaning_infreq_prod_data_cond1_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_infreq_prod_model_cond1')
+
+novel_meaning_infreq_prod_data_cond1_subj_means_no_sil_shoon = novel_meaning_infreq_prod_data_cond1_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_infreq_prod_model_cond1')
+
+
+####cond2
+
+original_meaning_freq_prod_data_cond2_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 2) %>%
+  filter(meaning == 'original') %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+original_meaning_infreq_prod_data_cond2_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 2) %>%
+  filter(meaning == 'original') %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'infreq' ~ 1,
+    .default = 0
+  ))
+
+  
+novel_meaning_freq_prod_data_cond2_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 2) %>%
+  filter(meaning == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) #freq, infreq, freq_competitor, infrequent_competitor
+
+novel_meaning_infreq_prod_data_cond2_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 2) %>%
+  filter(meaning == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'infreq', 1, 0))
+
+
+
+
+original_meaning_freq_prod_data_cond2_subj_means_no_sil_shoon = original_meaning_freq_prod_data_cond2_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_freq_prod_model_cond2')
+
+novel_meaning_freq_prod_data_cond2_subj_means_no_sil_shoon = novel_meaning_freq_prod_data_cond2_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_freq_prod_model_cond2')
+
+
+original_meaning_infreq_prod_data_cond2_subj_means_no_sil_shoon = original_meaning_infreq_prod_data_cond2_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_infreq_prod_model_cond2')
+
+novel_meaning_infreq_prod_data_cond2_subj_means_no_sil_shoon = novel_meaning_infreq_prod_data_cond2_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_infreq_prod_model_cond2')
+
+#### cond3
+
+original_meaning_freq_prod_data_cond3_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 3) %>%
+  filter(meaning == 'original') %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+original_meaning_infreq_prod_data_cond3_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 3) %>%
+  filter(meaning == 'original') %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'infreq' ~ 1,
+    .default = 0
+  ))
+
+  
+novel_meaning_freq_prod_data_cond3_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 3) %>%
+  filter(meaning == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) #freq, infreq, freq_competitor, infrequent_competitor
+
+novel_meaning_infreq_prod_data_cond3_no_sil_shoon = data_analysis_no_sil_shoon %>%
+  filter(task %in% c('prod') & condition == 3) %>%
+  filter(meaning == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'infreq', 1, 0))
+
+
+
+original_meaning_freq_prod_data_cond3_subj_means_no_sil_shoon = original_meaning_freq_prod_data_cond3_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_freq_prod_model_cond3')
+
+novel_meaning_freq_prod_data_cond3_subj_means_no_sil_shoon = novel_meaning_freq_prod_data_cond3_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_freq_prod_model_cond3')
+
+
+original_meaning_infreq_prod_data_cond3_subj_means_no_sil_shoon = original_meaning_infreq_prod_data_cond3_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_infreq_prod_model_cond3')
+
+novel_meaning_infreq_prod_data_cond3_subj_means_no_sil_shoon = novel_meaning_infreq_prod_data_cond3_no_sil_shoon %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_infreq_prod_model_cond3')
+
+
+
+### models
+
+priors_m1 = c(
+  prior(student_t(3, 0, 0.5), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 0.5), class = 'sd'))
+  
+###cond 1
+
+original_meaning_freq_prod_model_cond1_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_freq_prod_data_cond1_no_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_freq_prod_model_cond1_no_sil_shoon'
+                                                                     )
+
+novel_meaning_freq_prod_model_cond1_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_freq_prod_data_cond1_no_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_freq_prod_model_cond1_no_sil_shoon'
+                                                                     )
+
+original_meaning_infreq_prod_model_cond1_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_infreq_prod_data_cond1_no_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_infreq_prod_model_cond1_no_sil_shoon'
+                                                                     )
+
+novel_meaning_infreq_prod_model_cond1_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_infreq_prod_data_cond1_no_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_infreq_prod_model_cond1_no_sil_shoon'
+                                                                     )
+
+
+#### cond2
+
+
+original_meaning_freq_prod_model_cond2_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_freq_prod_data_cond2_no_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_freq_prod_model_cond2_no_sil_shoon'
+                                                                     )
+
+novel_meaning_freq_prod_model_cond2_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_freq_prod_data_cond2_no_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       #prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_freq_prod_model_cond2_no_sil_shoon'
+                                                                     )
+
+original_meaning_infreq_prod_model_cond2_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_infreq_prod_data_cond2_no_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_infreq_prod_model_cond2_no_sil_shoon'
+                                                                     )
+
+novel_meaning_infreq_prod_model_cond2_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_infreq_prod_data_cond2_no_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_infreq_prod_model_cond2_no_sil_shoon'
+                                                                     )
+
+#### cond3
+
+
+original_meaning_freq_prod_model_cond3_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_freq_prod_data_cond3_no_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_freq_prod_model_cond3_no_sil_shoon'
+                                                                     )
+
+novel_meaning_freq_prod_model_cond3_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_freq_prod_data_cond3,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_freq_prod_model_cond3_no_sil_shoon'
+                                                                     )
+
+original_meaning_infreq_prod_model_cond3_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_infreq_prod_data_cond3_no_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_infreq_prod_model_cond3_no_sil_shoon'
+                                                                     )
+
+novel_meaning_infreq_prod_model_cond3_no_sil_shoon = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_infreq_prod_data_cond3_no_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 6000, 
+                                       warmup = 3000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_infreq_prod_model_cond3_no_sil_shoon'
+                                                                     )
+
+
+
+model_names = c('original_meaning_freq_prod_model_cond1_no_sil_shoon', 'novel_meaning_freq_prod_model_cond1_no_sil_shoon', 'original_meaning_infreq_prod_model_cond1_no_sil_shoon', 'novel_meaning_infreq_prod_model_cond1_no_sil_shoon', 'original_meaning_freq_prod_model_cond2_no_sil_shoon', 'novel_meaning_freq_prod_model_cond2_no_sil_shoon', 'original_meaning_infreq_prod_model_cond2_no_sil_shoon', 'novel_meaning_infreq_prod_model_cond2_no_sil_shoon', 'original_meaning_freq_prod_model_cond3_no_sil_shoon', 'novel_meaning_freq_prod_model_cond3_no_sil_shoon', 'original_meaning_infreq_prod_model_cond3_no_sil_shoon', 'novel_meaning_infreq_prod_model_cond3_no_sil_shoon')
+
+list_of_models = mget(model_names)
+
+extract_fixed_effects = function(model, model_name) {
+  as.data.frame(fixef(model)) %>%
+    tibble::rownames_to_column("Term") %>%
+    mutate(Prob = plogis(Estimate),
+           Lower = plogis(Q2.5),         
+           Upper = plogis(Q97.5), 
+           Model = model_name)
+}
+
+fixed_effects_df_no_sil_shoon = map2_dfr(list_of_models, names(list_of_models), extract_fixed_effects)
+
+fixed_effects_df_no_sil_shoon = fixed_effects_df_no_sil_shoon %>%
+  separate(Model, into = c("Meaning", "ignore1", "Frequency", "Task", "ignore2", "Condition"), sep = "_", remove = FALSE) %>%
+  select(-ignore1, -ignore2)  # Remove the unnecessary columns
+
+
+subj_effect_names_no_sil_shoon = ls(pattern = "_subj_means_no_sil_shoon$")
+subject_effects_no_sil_shoon = bind_rows(mget(subj_effect_names_no_sil_shoon), .id = 'source')
+
+subject_effects_no_sil_shoon = subject_effects_no_sil_shoon %>%
+  separate(Model, into = c("Meaning", "ignore1", "Frequency", "Task", "ignore2", "Condition"), sep = "_", remove = FALSE) %>%
+  select(-ignore1, -ignore2) 
+
+subject_effects_prod_no_sil_shoon = subject_effects_no_sil_shoon %>%  # Remove the unnecessary columns 
+  filter(Task == 'prod')
+
+
+#write_csv(fixed_effects_df_no_sil_shoon, '../Data/fixed_effects_df_no_sil_shoon.csv')
+#write_csv(subject_effects_no_sil_shoon, '../Data/subject_effects_no_sil_shoon.csv')
+
+ggplot(fixed_effects_df_no_sil_shoon, aes(x = Meaning, y = Prob, fill = Frequency)) +
+  geom_col(position = position_dodge(width = 0.9)) + 
+  geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
+  geom_point(data = subject_effects_prod_no_sil_shoon, 
+             aes(x = Meaning, y = subj_values),  
+             color = "black",  
+             position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), 
+             size = 2, alpha = 0.2, 
+             show.legend = FALSE) +  # Hides the points from the legend
+  facet_grid(~ Condition) + 
+  theme_bw() +
+  ggtitle('Production') +
   xlab('Condition') +
   ylab('Probability of Producing a Form') +
+  ylim(0, 1)
+
+
+```
+
+```{r}
+fixed_effects_df_all_no_sil_no_shoon = fixed_effects_df_no_sil_shoon %>%
+   full_join(fixed_effects_df_2afc) %>%
+   full_join(fixed_effects_df_comprehension)
+
+#write_csv(fixed_effects_df_all_no_sil_no_shoon, '../Data/fixed_effects_df_all_no_sil_no_shoon.csv')
+#write_csv(subject_effects_prod_no_sil_shoon, '../Data/subject_effects_prod_no_sil_shoon.csv')
+
+fixed_effects_df_all_no_sil_no_shoon = read_csv('../Data/fixed_effects_df_all_no_sil_no_shoon.csv')
+subject_effects = read_csv('../Data/subject_effects_prod_no_sil_shoon.csv')
+
+fixed_effects_df_all_no_sil_no_shoon$Task = factor(fixed_effects_df_all_no_sil_no_shoon$Task, levels = c('prod', '2afc', 'comprehension'))
+
+subject_effects$Task = factor(subject_effects$Task, levels = c('prod', '2afc', 'comprehension'))
+
+condition_labels = c("cond1" = "Condition 1", 
+                      "cond2" = "Condition 2", 
+                      "cond3" = "Condition 3")
+task_labels = c("prod" = "Production",
+                "2afc" = "Form Choice",
+                "comprehension" = "Comprehension")
+
+fixed_effects_df_all_no_sil_no_shoon$Meaning = factor(fixed_effects_df_all_no_sil_no_shoon$Meaning, 
+                                  levels = c("original", "novel"), 
+                                  labels = c("Original", "Novel"))
+
+subject_effects$Meaning = factor(subject_effects$Meaning, 
+                                  levels = c("original", "novel"), 
+                                  labels = c("Original", "Novel"))
+
+fixed_effects_df_all_no_sil_no_shoon$Frequency = factor(fixed_effects_df_all_no_sil_no_shoon$Frequency, 
+                                  levels = c("freq", "infreq"), 
+                                  labels = c("Frequent", "Infrequent"))
+
+subject_effects$Frequency = factor(subject_effects$Frequency, 
+                                  levels = c("freq", "infreq"), 
+                                  labels = c("Frequent", "Infrequent"))
+
+
+ggplot(fixed_effects_df_all_no_sil_no_shoon, aes(x = Meaning, y = Prob, fill = Frequency)) +
+  geom_col(position = position_dodge(width = 0.9)) + 
+  geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
+  geom_point(data = subject_effects, 
+             aes(x = Meaning, y = subj_values, fill = Frequency, color = Frequency),  # Map fill and color
+             shape = 21,   # Hollow circle with fill and outline
+             position = position_jitterdodge(jitter.width = 0.3, dodge.width = 0.9), 
+             size = 2, stroke = 0.7, alpha = 0.1,  # Adjust size, border thickness, and transparency
+             show.legend = FALSE) +  # Hides points from legend
+  scale_fill_manual(values = c("Frequent" = "#66c2a5", "Infrequent" = "#8da0cb")) +  # Bar & point fill colors
+  scale_color_manual(values = c("Frequent" = "#1b7837", "Infrequent" = "#2b8cbe")) +  # Darker border colors for points
+  facet_grid(Task ~ Condition, labeller = labeller(Condition = condition_labels, Task = task_labels)) + 
+  theme_bw() +
+  ggtitle('Results by condition for each task') +
+  xlab('Meaning') +
+  ylab('Response Probability') +
   ylim(0, 1)
 ```

@@ -95,7 +95,7 @@ ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Frequency)) +
              aes(x = Meaning, y = subj_values, fill = Frequency, color = Frequency),  # Map fill and color
              shape = 21,   # Hollow circle with fill and outline
              position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), 
-             size = 2, stroke = 0.7, alpha = 0.7,  # Adjust size, border thickness, and transparency
+             size = 2, stroke = 0.7, alpha = 0.1,  # Adjust size, border thickness, and transparency
              show.legend = FALSE) +  # Hides points from legend
   scale_fill_manual(values = c("Frequent" = "#66c2a5", "Infrequent" = "#8da0cb")) +  # Bar & point fill colors
   scale_color_manual(values = c("Frequent" = "#1b7837", "Infrequent" = "#2b8cbe")) +  # Darker border colors for points
@@ -103,7 +103,7 @@ ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Frequency)) +
   theme_bw() +
   ggtitle('Results by condition for each task') +
   xlab('Condition') +
-  ylab('Probability of Producing a Form') +
+  ylab('Response Probability') +
   ylim(0, 1)
 ```
 
