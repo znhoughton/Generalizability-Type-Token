@@ -18,7 +18,7 @@ options(contrasts = c("contr.sum","contr.sum"))
 Table1:
 
 |  |  |  |  |  |  |  |  |  |
-|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+|----|----|----|----|----|----|----|----|----|
 | **Condition1** | #of tokens | #of types | **Condition2** | #of tokens | #of types | **Condition3** | #of tokens | #of types |
 | dan | 12 | 12 | dan | 12 | 3 | dan | 12 | 12 |
 | nem | 12 | 3 | nem | 3 | 3 | nem | 3 | 3 |
@@ -33,7 +33,7 @@ Table1:
 Table2
 
 |  |  |  |  |  |  |  |  |  |
-|--------|:------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
+|----|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 | **Condition** | **dan token** | **nem token** | **sil token** | **shoon token** | **dan type** | **nem type** | **sil type** | **shoon type** |
 | 1 | 12 | 12 | 6 | 6 | 12 | 3 | 6 | 6 |
 | 2 | 12 | 3 | 6 | 6 | 3 | 3 | 6 | 6 |
@@ -43,13 +43,13 @@ Table2
 | 6 | 3 | 12 | 6 | 6 | 3 | 12 | 6 | 6 |
 
 |   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type | Frequent Competitor Token | Frequent Competitor Type | Infrequent Competitor Token | Infrequent Competitor Type |
-|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+|----|----|----|----|----|----|----|----|----|
 | **Condition 1** | 12 | 12 | 12 | 3 | 6 | 6 | 6 | 6 |
 | **Condition 2** | 12 | 3 | 3 | 3 | 6 | 6 | 6 | 6 |
 | **Condition 3** | 12 | 12 | 3 | 3 | 6 | 6 | 6 | 6 |
 
 |   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type |
-|---------------|---------------|---------------|---------------|---------------|
+|----|----|----|----|----|
 | **Condition 1** | 12 | 12 | 12 | 3 |
 | **Condition 2** | 12 | 3 | 3 | 3 |
 | **Condition 3** | 12 | 12 | 3 | 3 |
@@ -920,157 +920,87 @@ data_2afc = data_analysis %>%
   filter(task == '2afc') %>%
   filter(resp_suffix_form %in% c('dan', 'nem'))
 
-data_prod = data_prod %>%
-  mutate('meaning' = case_when(picture_meaning != 'dim_pl' ~ 'original',
-                               .default = 'novel'
-  )) %>%
-  mutate(frequent = case_when(
-    language == 'dan' & picture_meaning == 'big_pl' ~ 1,
-    language == 'nem' & picture_meaning == 'dim_sg' ~ 1,
-    picture_meaning == 'dim_pl' ~ 1,
-    .default = 0)) %>%
-  mutate(infrequent = case_when(
-    language == 'nem' & picture_meaning == 'big_pl' ~ 1,
-    language == 'dan' & picture_meaning == 'dim_sg' ~ 1,
-    picture_meaning == 'dim_pl' ~ 1,
-    .default = 0)) %>%
-  rowwise() %>%
-  mutate(frequency = case_when(
-    frequent == 1 & infrequent == 0 ~ 'frequent',
-    infrequent == 1 & frequent == 0 ~ 'infrequent',
-    frequent == 1 & infrequent == 1 ~ NA_character_,  # We will handle this case later
-    TRUE ~ NA_character_
-  )) %>%
-  ungroup() 
 
-data_prod = data_prod %>%
-  filter(!is.na(frequency)) %>%
-  bind_rows(
-    data_prod %>%
-      filter(frequent == 1 & infrequent == 1) %>%
-      mutate(frequency = 'frequent'),
-    data_prod %>%
-      filter(frequent == 1 & infrequent == 1) %>%
-      mutate(frequency = 'infrequent')
+data_prod_no_sil_shoon = data_prod %>%
+  mutate(meaning = case_when(
+    picture_meaning %in% c('big_pl', 'dim_sg') ~ 'original',
+    picture_meaning == 'dim_pl' ~ 'novel'),
+    frequency = case_when(
+      freq_choice == 'freq' ~ 1,
+      freq_choice == 'infreq' ~ 0,
+      .default = NA
+    )
   ) %>%
-  mutate('freq_choice_dv' = case_when(
-    freq_choice == 'freq' & frequency == 'frequent' ~ 1,
-    freq_choice == 'infreq' & frequency == 'infrequent' ~ 1, 
-    #freq_choice %in% c('freq', 'infreq') ~ 1,
-                       .default = 0)
-  )
+  filter((accuracy == 1) %>% replace_na(TRUE))
 
-data_prod$participant = factor(data_prod$participant)
-data_prod$participant = factor(data_prod$condition)
 
 data_2afc = data_2afc %>%
-  mutate('meaning' = case_when(picture_meaning != 'dim_pl' ~ 'original',
-                               .default = 'novel'
-  )) %>%
-  mutate(frequent = case_when(
-    language == 'dan' & picture_meaning == 'big_pl' ~ 1,
-    language == 'nem' & picture_meaning == 'dim_sg' ~ 1,
-    picture_meaning == 'dim_pl' ~ 1,
-    .default = 0)) %>%
-  mutate(infrequent = case_when(
-    language == 'nem' & picture_meaning == 'big_pl' ~ 1,
-    language == 'dan' & picture_meaning == 'dim_sg' ~ 1,
-    picture_meaning == 'dim_pl' ~ 1,
-    .default = 0)) %>%
-  rowwise() %>%
-  mutate(frequency = case_when(
-    frequent == 1 & infrequent == 0 ~ 'frequent',
-    infrequent == 1 & frequent == 0 ~ 'infrequent',
-    frequent == 1 & infrequent == 1 ~ NA_character_,  # We will handle this case later
-    TRUE ~ NA_character_
-  )) %>%
-  ungroup() 
-
-data_2afc = data_2afc %>%
-  filter(!is.na(frequency)) %>%
-  bind_rows(
-    data_2afc %>%
-      filter(frequent == 1 & infrequent == 1) %>%
-      mutate(frequency = 'frequent'),
-    data_2afc %>%
-      filter(frequent == 1 & infrequent == 1) %>%
-      mutate(frequency = 'infrequent')
+  filter(resp_suffix_form %in% c('dan', 'nem')) %>%
+  mutate(meaning = case_when(
+    picture_meaning %in% c('big_pl', 'dim_sg') ~ 'original',
+    picture_meaning == 'dim_pl' ~ 'novel'),
+    frequency = case_when(
+      freq_choice == 'freq' ~ 1,
+      freq_choice == 'infreq' ~ 0,
+      .default = NA
+    )
   ) %>%
-  mutate('freq_choice_dv' = case_when(
-    freq_choice == 'freq' & frequency == 'frequent' ~ 1,
-    freq_choice == 'infreq' & frequency == 'infrequent' ~ 1, 
-    #freq_choice %in% c('freq', 'infreq') ~ 1,
-                       .default = 0)
-  )
+  filter((accuracy == 1) %>% replace_na(TRUE))
+data_2afc$condition = factor(data_2afc$condition)
 
-  
-original_meaning_freq_prod_data = data_analysis %>%
-  filter(task %in% c('prod')) %>%
-  filter((language == 'dan' & picture_meaning == 'big_pl') | (language == 'nem' & picture_meaning == 'dim_sg')) %>%
-  ungroup() %>%
-  mutate(freq_choice_dv = case_when(
-    freq_choice == 'freq' ~ 1,
+
+data_prod_no_sil_shoon$participant = factor(data_prod_no_sil_shoon$participant)
+data_prod_no_sil_shoon$condition = factor(data_prod_no_sil_shoon$condition)
+
+
+data_prod_original = data_prod_no_sil_shoon %>%
+  filter(meaning == 'original')
+
+data_prod_novel = data_prod_no_sil_shoon %>%
+  filter(meaning == 'novel')
+
+data_2afc_original = data_2afc %>%
+  filter(meaning == 'original')
+
+data_2afc_novel = data_2afc %>%
+  filter(meaning == 'novel')
+
+data_analysis_comprehension$condition = factor(data_analysis_comprehension$condition)
+data_analysis_comprehension = data_analysis_comprehension %>%
+  mutate(freq_suffix = case_when(
+    language == 'dan' & comprehension_suffix == 'dan' ~ 'freq',
+    language == 'nem' & comprehension_suffix == 'nem' ~ 'freq',
+    .default = 'infreq'
+  )) %>%
+  mutate(original_meaning = case_when(
+    comprehension_suffix == 'dan' & comprehension_response == 'big_pl' ~ 1,
+    comprehension_suffix == 'nem' & comprehension_response == 'dim_sg' ~ 1,
     .default = 0
   )) %>%
-  mutate(meaning = 'original', frequency = 'frequent')
-    
-novel_meaning_freq_prod_data = data_analysis %>%
-  filter(task %in% c('prod')) %>%
-  filter(picture_meaning %in% c('dim_pl')) %>%
-  ungroup() %>%
-  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) %>%
-  mutate(meaning = 'novel', frequency = 'frequent')
-
-original_meaning_infreq_prod_data = data_analysis %>%
-  filter(task %in% c('prod')) %>%
-  filter((language == 'nem' & picture_meaning == 'big_pl') | (language == 'dan' & picture_meaning == 'dim_sg')) %>%
-  ungroup() %>%
-  mutate(freq_choice_dv = case_when(
-    freq_choice == 'infreq' ~ 1,
+  mutate(novel_meaning = case_when(
+    comprehension_suffix == 'dan' & comprehension_response == 'dim_pl' ~ 1,
+    comprehension_suffix == 'nem' & comprehension_response == 'dim_pl' ~ 1,
     .default = 0
   )) %>%
-  mutate(meaning = 'original', frequency = 'infrequent')
+  filter(novel_meaning == 1 | original_meaning == 1)
 
-novel_meaning_infreq_prod_data = data_analysis %>%
-  filter(task %in% c('prod')) %>%
-  filter(picture_meaning %in% c('dim_pl') ) %>%
-  ungroup() %>%
-  mutate(freq_choice_dv = ifelse(freq_choice == 'infreq', 1, 0)) %>%
-  mutate(meaning = 'novel', frequency = 'infrequent')
-  
-  
-data_test_all = original_meaning_freq_prod_data %>%
-  full_join(novel_meaning_freq_prod_data) %>%
-  full_join(original_meaning_infreq_prod_data) %>%
-  full_join(novel_meaning_infreq_prod_data)
+data_analysis_comprehension = data_analysis_comprehension %>%
+  mutate(frequent = case_when(
+    language == 'dan' & comprehension_suffix == 'dan' ~ 1,
+    language == 'nem' & comprehension_suffix == 'nem' ~ 1,
+    .default = 0
+  ),
+  meaning = case_when(
+    comprehension_suffix == 'dan' & comprehension_response == 'big_pl' ~ 'original',
+    comprehension_suffix == 'nem' & comprehension_response == 'dim_sg' ~ 'original',
+    comprehension_response == 'dim_pl' ~ 'novel',
+    .default = NA
+  ))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-data_prod_cond1 = data_prod %>% filter(condition == 1)
-data_prod_cond2 = data_prod %>% filter(condition == 2)
-data_prod_cond3 = data_prod %>% filter(condition == 3)
-
-data_2afc_cond1 = data_2afc %>% filter(condition == 1)
-data_2afc_cond2 = data_2afc %>% filter(condition == 2)
-data_2afc_cond3 = data_2afc %>% filter(condition == 3)
-
-data_analysis_comprehension_cond1 = data_analysis_comprehension %>% filter(condition == 1)
-data_analysis_comprehension_cond2 = data_analysis_comprehension %>% filter(condition == 2)
-data_analysis_comprehension_cond3 = data_analysis_comprehension %>% filter(condition == 3)
-
-
-
+data_comprehension_freq = data_analysis_comprehension %>%
+  filter(frequent == 1)
+data_comprehension_infreq = data_analysis_comprehension %>%
+  filter(frequent == 0)
 # 
 # data_prod_test = data_prod %>%
 #   #filter(!is.na(frequency)) %>%
@@ -1108,54 +1038,158 @@ data_analysis_comprehension_cond3 = data_analysis_comprehension %>% filter(condi
 
 
 priors_m1 = c(
+  prior(student_t(3, 0, 1), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 1), class = 'b'),
+  prior(student_t(3, 0, 1), class = 'sd'))
+
+model_prod_original = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
+                                       data = data_prod_original,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_prod_original')
+
+model_prod_novel = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
+                                       data = data_prod_novel,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_prod_novel')
+
+fixef(model_prod_original)
+fixef(model_prod_novel)
+
+hypothesis(model_prod_original, "-c(condition1 + condition2) = 0")
+hypothesis(model_prod_novel, "-c(condition1 + condition2) = 0")
+
+
+percent_greater_zero_original = data.frame(fixef(model_prod_original, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero_original_cond3 = data.frame(fixef(model_prod_original, summary = F)) %>%
+  summarize(sum(condition1 + condition2 > 0) / n() * 100, sum(condition1 + condition2 > 0), n())
+
+
+percent_greater_zero_novel = data.frame(fixef(model_prod_novel, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+  
+percent_greater_zero_novel_cond3 = data.frame(fixef(model_prod_novel, summary = F)) %>%
+  summarize(sum(condition1 + condition2 > 0) / n() * 100, sum(condition1 + condition2 > 0), n())
+```
+
+2afc
+
+```{r}
+
+priors_m1 = c(
   prior(student_t(3, 0, 0.5), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
   prior(student_t(3, 0, 0.5), class = 'b'),
   prior(student_t(3, 0, 0.5), class = 'sd'))
 
 
-full_model_production_for_paper = brm(freq_choice_dv ~ frequency*meaning*condition + (frequency*meaning | participant) + (frequency*meaning*condition | resp_stem),
-                                       data = data_prod,
+model_2afc_original = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
+                                       data = data_2afc_original,
                                        family = bernoulli(link = 'logit'),
-                                       iter = 8000, 
-                                       warmup = 4000,
+                                       iter = 20000, 
+                                       warmup = 10000,
                                        chains = 4,
                                        cores = 4,
                                        prior = priors_m1,
-                                       #control = list(adapt_delta = 0.99),
-                                       file = '../Data/full_model_production_for_paper')
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_2afc_original')
 
-cond1_model_production_for_paper = brm(freq_choice_dv ~ frequency*meaning + (frequency*meaning | participant) + (frequency*meaning | resp_stem),
-                                       data = data_prod_cond1,
-                                       family = bernoulli(link = 'logit'),
-                                       iter = 6000, 
-                                       warmup = 3000,
-                                       chains = 4,
-                                       cores = 4,
-                                       prior = priors_m1,
-                                       #control = list(adapt_delta = 0.99),
-                                       file = '../Data/cond1_model_production_for_paper')
 
-cond2_model_production_for_paper = brm(freq_choice_dv ~ frequency*meaning + (frequency*meaning | participant) + (frequency*meaning | resp_stem),
-                                       data = data_prod_cond2,
+model_2afc_novel = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
+                                       data = data_2afc_novel,
                                        family = bernoulli(link = 'logit'),
-                                       iter = 6000, 
-                                       warmup = 3000,
+                                       iter = 30000, 
+                                       warmup = 15000,
                                        chains = 4,
                                        cores = 4,
                                        prior = priors_m1,
-                                       #control = list(adapt_delta = 0.99),
-                                       file = '../Data/cond2_model_production_for_paper')
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_2afc_novel')
 
-cond3_model_production_for_paper = brm(freq_choice_dv ~ frequency*meaning + (frequency*meaning | participant) + (frequency*meaning | resp_stem),
-                                       data = data_prod_cond3,
+fixef(model_2afc_original)
+fixef(model_2afc_novel)
+
+hypothesis(model_2afc_original, "-c(condition1 + condition2) = 0")
+hypothesis(model_2afc_novel, "-c(condition1 + condition2) = 0")
+
+
+percent_greater_zero_original_2afc = data.frame(fixef(model_2afc_original, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero_original_cond3_2afc = data.frame(fixef(model_2afc_original, summary = F)) %>%
+  summarize(sum(condition1 + condition2 > 0) / n() * 100, sum(condition1 + condition2 > 0), n())
+
+
+percent_greater_zero_novel_2afc = data.frame(fixef(model_2afc_novel, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+  
+percent_greater_zero_novel_cond3_2afc = data.frame(fixef(model_2afc_novel, summary = F)) %>%
+  summarize(sum(condition1 + condition2 > 0) / n() * 100, sum(condition1 + condition2 > 0), n())
+```
+
+Comprehension
+
+```{r}
+priors_m1 = c(
+  prior(student_t(3, 0, 1), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 1), class = 'b'),
+  prior(student_t(3, 0, 1), class = 'sd'))
+data_analysis_comprehension$frequent = factor(data_analysis_comprehension$frequent)
+
+data_analysis_comprehension$condition = factor(data_analysis_comprehension$condition)
+
+data_analysis_comprehension = data_analysis_comprehension %>%
+  mutate(meaning = case_when(
+    meaning == 'novel' ~ 1,
+    meaning == 'original' ~ 0
+  ))
+data_analysis_comprehension$meaning = factor(data_analysis_comprehension$meaning)
+levels(data_analysis_comprehension$meaning)
+
+model_comprehension = brm(meaning ~ condition*frequent + (1 + frequent | participant),
+                                       data = data_analysis_comprehension,
                                        family = bernoulli(link = 'logit'),
-                                       iter = 6000, 
-                                       warmup = 3000,
+                                       iter = 10000, 
+                                       warmup = 5000,
                                        chains = 4,
                                        cores = 4,
                                        prior = priors_m1,
                                        #control = list(adapt_delta = 0.99),
-                                       file = '../Data/cond3_model_production_for_paper')
+                                       file = '../Data/model_comprehension')
+
+
+fixef(model_comprehension)
+
+hypothesis(model_comprehension, "-c(condition1 + condition2) = 0")
+
+
+percent_greater_zero_comprehension = data.frame(fixef(model_comprehension, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero_comprehension_cond3 = data.frame(fixef(model_comprehension, summary = F)) %>%
+  summarize(sum(condition1 + condition2 > 0) / n() * 100, sum(condition1 + condition2 > 0), n())
 
 
 ```
