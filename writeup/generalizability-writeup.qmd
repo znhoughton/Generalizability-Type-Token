@@ -1,6 +1,10 @@
 ---
 title: "generalizability-writeup"
 format: pdf
+
+header-includes:
+- \usepackage{amsmath}
+
 editor: visual
 bibliography: references.bib
 ---
@@ -10,6 +14,7 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
 library(brms)
+library(sjPlot)
 
 fixed_effects_df_all = read_csv('../Data/fixed_effects_df_all.csv')
 subject_effects = read_csv('../Data/subject_effects.csv')
@@ -42,8 +47,32 @@ subject_effects$Frequency = factor(subject_effects$Frequency,
                                   labels = c("Frequent", "Infrequent"))
 
 
-model_prod_original = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
-                                       data = data_prod_original,
+# model_prod_original = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
+#                                        data = data_prod_original,
+#                                        family = bernoulli(link = 'logit'),
+#                                        iter = 14000, 
+#                                        warmup = 7000,
+#                                        chains = 4,
+#                                        cores = 4,
+#                                        prior = priors_m1,
+#                                        control = list(adapt_delta = 0.99),
+#                                        file = '../Data/model_prod_original')
+# 
+# model_prod_novel = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
+#                                        data = data_prod_novel,
+#                                        family = bernoulli(link = 'logit'),
+#                                        iter = 14000, 
+#                                        warmup = 7000,
+#                                        chains = 4,
+#                                        cores = 4,
+#                                        prior = priors_m1,
+#                                        control = list(adapt_delta = 0.99),
+#                                        file = '../Data/model_prod_novel')
+
+
+
+model_prod_both = brm(frequency ~ condition*meaning + (1 + meaning | participant),
+                                       data = data_prod_both,
                                        family = bernoulli(link = 'logit'),
                                        iter = 14000, 
                                        warmup = 7000,
@@ -51,10 +80,30 @@ model_prod_original = brm(frequency ~ condition + (1 | participant) + (condition
                                        cores = 4,
                                        prior = priors_m1,
                                        control = list(adapt_delta = 0.99),
-                                       file = '../Data/model_prod_original')
+                                       file = '../Data/model_prod_both')
 
-model_prod_novel = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
-                                       data = data_prod_novel,
+
+
+percent_greater_zero_both = data.frame(fixef(model_prod_both, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero_both = percent_greater_zero_both %>%
+  arrange(match(beta_coefficient, c('Intercept', 'condition1', 'condition2', 'meaning1', 'condition1:meaning1', 'condition2:meaning1')))
+
+
+fixefs_model_prod_both = as.data.frame(fixef(model_prod_both)) %>%
+    mutate(percent_greater_zero = percent_greater_zero_both$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
+    mutate_if(is.numeric,
+            formatC,
+            format = 'f', 
+            digits = 3) %>%
+    rename('% Samples > 0' = `percent_greater_zero`)
+
+
+model_prod_both_stems = brm(frequency ~ condition*meaning + (1 + meaning | participant),
+                                       data = data_prod_both,
                                        family = bernoulli(link = 'logit'),
                                        iter = 14000, 
                                        warmup = 7000,
@@ -62,132 +111,72 @@ model_prod_novel = brm(frequency ~ condition + (1 | participant) + (condition | 
                                        cores = 4,
                                        prior = priors_m1,
                                        control = list(adapt_delta = 0.99),
-                                       file = '../Data/model_prod_novel')
+                                       file = '../Data/model_prod_both_stem')
 
 
-model_prod_original_cond3 = hypothesis(model_prod_original, "-c(condition1 + condition2) = 0")
-model_prod_novel_cond3 = hypothesis(model_prod_novel, "-c(condition1 + condition2) = 0")
 
-
-percent_greater_zero_original = data.frame(fixef(model_prod_original, summary = F)) %>%
+percent_greater_zero_both_stems = data.frame(fixef(model_prod_both_stems, summary = F)) %>%
   pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
   group_by(beta_coefficient) %>%
   summarize((sum(estimate > 0) / length(estimate)) * 100)
 
-percent_greater_zero_original_cond3 = data.frame(fixef(model_prod_original, summary = F)) %>%
-  summarize(sum(condition1 + condition2 > 0) / n() * 100, sum(condition1 + condition2 > 0), n())
+percent_greater_zero_both_stems = percent_greater_zero_both_stems %>%
+  arrange(match(beta_coefficient, c('Intercept', 'condition1', 'condition2', 'meaning1', 'condition1:meaning1', 'condition2:meaning1')))
 
 
-percent_greater_zero_novel = data.frame(fixef(model_prod_novel, summary = F)) %>%
-  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
-  group_by(beta_coefficient) %>%
-  summarize((sum(estimate > 0) / length(estimate)) * 100)
-  
-percent_greater_zero_novel_cond3 = data.frame(fixef(model_prod_novel, summary = F)) %>%
-  summarize(sum(condition1 + condition2 > 0) / n() * 100, sum(condition1 + condition2 > 0), n())
-
-
-fixefs_model_prod_original = as.data.frame(fixef(model_prod_original)) %>%
-    mutate(percent_greater_zero = percent_greater_zero_original$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
-  add_row(Estimate = model_prod_original_cond3$hypothesis$Estimate, Est.Error = model_prod_original_cond3$hypothesis$Est.Error, Q2.5 = model_prod_original_cond3$hypothesis$CI.Lower, Q97.5 = model_prod_original_cond3$hypothesis$CI.Upper, percent_greater_zero = percent_greater_zero_original_cond3$`sum(condition1 + condition2 > 0)/n() * 100`) %>%
-  mutate_if(is.numeric,
+fixefs_model_prod_both_stems = as.data.frame(fixef(model_prod_both_stems)) %>%
+    mutate(percent_greater_zero = percent_greater_zero_both_stems$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
+    mutate_if(is.numeric,
             formatC,
             format = 'f', 
             digits = 3) %>%
-    rename('% Samples > 0' = `percent_greater_zero`) %>%
-  mutate(meaning = 'Original')
-
-rownames(fixefs_model_prod_original) = c('Intercept', 'Type Frequency', 'Token Frequency', 'Type-Token Frequency')
+    rename('% Samples > 0' = `percent_greater_zero`)
 
 
-
-fixefs_model_prod_novel = as.data.frame(fixef(model_prod_novel)) %>%
-    mutate(percent_greater_zero = percent_greater_zero_novel$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
-  add_row(Estimate = model_prod_novel_cond3$hypothesis$Estimate, Est.Error = model_prod_novel_cond3$hypothesis$Est.Error, Q2.5 = model_prod_novel_cond3$hypothesis$CI.Lower, Q97.5 = model_prod_novel_cond3$hypothesis$CI.Upper, percent_greater_zero = percent_greater_zero_novel_cond3$`sum(condition1 + condition2 > 0)/n() * 100`) %>%
-  mutate_if(is.numeric,
-            formatC,
-            format = 'f', 
-            digits = 3) %>%
-    rename('% Samples > 0' = `percent_greater_zero`) %>%
-  mutate(meaning = 'Novel')
-
-rownames(fixefs_model_prod_novel) = c('Intercept', 'Type Frequency', 'Token Frequency', 'Type-Token Frequency')
+rownames(fixefs_model_prod_both_stems) = c('Intercept', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Novel Stem', 'Type Frequency:Novel Meaning', 'Token Frequency:Novel Meaning', 'Type Frequency:Novel Stem', 'Token Frequency:Novel Stem', 'Novel Meaning:Novel Stem', 'Type Frequency:Novel Meaning:Novel Stem', 'Token Frequency:Novel Meaning:Novel Stem')
 
 
-
-model_2afc_original = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
-                                       data = data_2afc_original,
+model_2afc_both = brm(frequency ~ condition*meaning + (1 + meaning | participant),
+                                       data = data_prod_both,
                                        family = bernoulli(link = 'logit'),
-                                       iter = 20000, 
-                                       warmup = 10000,
+                                       iter = 14000, 
+                                       warmup = 7000,
                                        chains = 4,
                                        cores = 4,
                                        prior = priors_m1,
                                        control = list(adapt_delta = 0.99),
-                                       file = '../Data/model_2afc_original')
+                                       file = '../Data/model_2afc_both')
 
 
-model_2afc_novel = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
-                                       data = data_2afc_novel,
-                                       family = bernoulli(link = 'logit'),
-                                       iter = 30000, 
-                                       warmup = 15000,
-                                       chains = 4,
-                                       cores = 4,
-                                       prior = priors_m1,
-                                       control = list(adapt_delta = 0.99),
-                                       file = '../Data/model_2afc_novel')
 
 
-model_2afc_original_cond3 = hypothesis(model_2afc_original, "-c(condition1 + condition2) = 0")
-model_2afc_novel_cond3 = hypothesis(model_2afc_novel, "-c(condition1 + condition2) = 0")
 
-
-percent_greater_zero_original_2afc = data.frame(fixef(model_2afc_original, summary = F)) %>%
+percent_greater_zero_both = data.frame(fixef(model_2afc_both, summary = F)) %>%
   pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
   group_by(beta_coefficient) %>%
   summarize((sum(estimate > 0) / length(estimate)) * 100)
 
-percent_greater_zero_original_cond3_2afc = data.frame(fixef(model_2afc_original, summary = F)) %>%
-  summarize(sum(condition1 + condition2 > 0) / n() * 100, sum(condition1 + condition2 > 0), n())
+percent_greater_zero_both = percent_greater_zero_both %>%
+  arrange(match(beta_coefficient, c('Intercept', 'condition1', 'condition2', 'meaning1', 'condition1:meaning1', 'condition2:meaning1')))
 
 
-percent_greater_zero_novel_2afc = data.frame(fixef(model_2afc_novel, summary = F)) %>%
-  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
-  group_by(beta_coefficient) %>%
-  summarize((sum(estimate > 0) / length(estimate)) * 100)
-  
-percent_greater_zero_novel_cond3_2afc = data.frame(fixef(model_2afc_novel, summary = F)) %>%
-  summarize(sum(condition1 + condition2 > 0) / n() * 100, sum(condition1 + condition2 > 0), n())
-
-
-fixefs_model_2afc_original = as.data.frame(fixef(model_2afc_original)) %>%
-    mutate(percent_greater_zero = percent_greater_zero_original_2afc$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
-  add_row(Estimate = model_2afc_original_cond3$hypothesis$Estimate, Est.Error = model_2afc_original_cond3$hypothesis$Est.Error, Q2.5 = model_2afc_original_cond3$hypothesis$CI.Lower, Q97.5 = model_2afc_original_cond3$hypothesis$CI.Upper, percent_greater_zero = percent_greater_zero_original_cond3_2afc$`sum(condition1 + condition2 > 0)/n() * 100`) %>%
-  mutate_if(is.numeric,
+fixefs_model_2afc_both = as.data.frame(fixef(model_2afc_both)) %>%
+    mutate(percent_greater_zero = percent_greater_zero_both$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
+    mutate_if(is.numeric,
             formatC,
             format = 'f', 
             digits = 3) %>%
-    rename('% Samples > 0' = `percent_greater_zero`) %>%
-  mutate(meaning = 'Original')
-
-rownames(fixefs_model_2afc_original) = c('Intercept', 'Type Frequency', 'Token Frequency', 'Type-Token Frequency')
+    rename('% Samples > 0' = `percent_greater_zero`)
 
 
 
-fixefs_model_2afc_novel = as.data.frame(fixef(model_2afc_novel)) %>%
-    mutate(percent_greater_zero = percent_greater_zero_novel_2afc$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
-  add_row(Estimate = model_2afc_novel_cond3$hypothesis$Estimate, Est.Error = model_2afc_novel_cond3$hypothesis$Est.Error, Q2.5 = model_2afc_novel_cond3$hypothesis$CI.Lower, Q97.5 = model_2afc_novel_cond3$hypothesis$CI.Upper, percent_greater_zero = percent_greater_zero_novel_cond3_2afc$`sum(condition1 + condition2 > 0)/n() * 100`) %>%
-  mutate_if(is.numeric,
-            formatC,
-            format = 'f', 
-            digits = 3) %>%
-    rename('% Samples > 0' = `percent_greater_zero`) %>%
-  mutate(meaning = 'Novel')
+rownames(fixefs_model_2afc_both) = c('Intercept', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Type Frequency:Novel', 'Token Frequency:Novel')
 
-rownames(fixefs_model_2afc_novel) = c('Intercept', 'Type Frequency', 'Token Frequency', 'Type-Token Frequency')
 
-model_comprehension = brm(meaning ~ condition*frequent + (1 + frequent | participant),
+
+
+
+model_comprehension_numeric = brm(meaning ~ condition_numeric + (1 | participant),
                                        data = data_analysis_comprehension,
                                        family = bernoulli(link = 'logit'),
                                        iter = 10000, 
@@ -196,42 +185,23 @@ model_comprehension = brm(meaning ~ condition*frequent + (1 + frequent | partici
                                        cores = 4,
                                        prior = priors_m1,
                                        #control = list(adapt_delta = 0.99),
-                                       file = '../Data/model_comprehension')
+                                       file = '../Data/model_comprehension_numeric')
 
-
-
-
-model_comprehension_cond3 = hypothesis(model_comprehension, "-c(condition1 + condition2) = 0")
-model_comprehension_cond3_freq1 = hypothesis(model_comprehension, "-c(condition1:frequent1 + condition2:frequent1 = 0)")
-
-percent_greater_zero_comprehension = data.frame(fixef(model_comprehension, summary = F)) %>%
+percent_greater_zero_comprehension_numeric = data.frame(fixef(model_comprehension_numeric, summary = F)) %>%
   pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
   group_by(beta_coefficient) %>%
   summarize((sum(estimate > 0) / length(estimate)) * 100)
 
-percent_greater_zero_comprehension_cond3 = data.frame(fixef(model_comprehension, summary = F)) %>%
-  summarize(sum(condition1 + condition2 > 0) / n() * 100, sum(condition1 + condition2 > 0), n())
 
-percent_greater_zero_comprehension_cond3_freq1 = data.frame(fixef(model_comprehension, summary = F)) %>%
-  summarize(sum(`condition1.frequent1` + `condition2.frequent1` > 0) / n() * 100, sum(`condition1.frequent1` + `condition2.frequent1` > 0), n())
-
-fixefs_model_comprehension = as.data.frame(fixef(model_comprehension)) %>%
-    mutate(percent_greater_zero = percent_greater_zero_comprehension$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
-  add_row(Estimate = model_comprehension_cond3$hypothesis$Estimate, Est.Error = model_comprehension_cond3$hypothesis$Est.Error, Q2.5 = model_comprehension_cond3$hypothesis$CI.Lower, Q97.5 = model_comprehension_cond3$hypothesis$CI.Upper, percent_greater_zero = percent_greater_zero_comprehension_cond3$`sum(condition1 + condition2 > 0)/n() * 100`) %>%
-  add_row(Estimate = model_comprehension_cond3_freq1$hypothesis$Estimate, Est.Error = model_comprehension_cond3_freq1$hypothesis$Est.Error, Q2.5 = model_comprehension_cond3_freq1$hypothesis$CI.Lower, Q97.5 = model_comprehension_cond3_freq1$hypothesis$CI.Upper, percent_greater_zero = percent_greater_zero_comprehension_cond3_freq1$`sum(condition1.frequent1 + condition2.frequent1 > 0)/n() * 100`) %>%
+fixefs_model_comprehension_numeric = as.data.frame(fixef(model_comprehension_numeric)) %>%
+    mutate(percent_greater_zero = percent_greater_zero_comprehension_numeric$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
   mutate_if(is.numeric,
             formatC,
             format = 'f', 
             digits = 3) %>%
     rename('% Samples > 0' = `percent_greater_zero`)
 
-rownames(fixefs_model_comprehension) = c('Intercept', 'Type Frequency', 'Token Frequency', 'Frequent', 'Type Frequency:Frequent', 'Token Frequency:Frequent', 'Type-Token Frequency', 'Type-Token Frequency:Frequent')
-
-fixefs_model_comprehension = fixefs_model_comprehension %>%
-  mutate(rownum = row_number()) %>%
-  arrange(factor(rownum, levels = c(1, 2, 3, 7, 4, 5, 6, 8))) %>%
-  select(-rownum)
-  
+rownames(fixefs_model_comprehension_numeric) = c('Intercept', '12-12', '3-3')
 
 ```
 
@@ -277,15 +247,15 @@ Following @harmonPuttingOldTools2017, each exposure trial consisted of the prese
 
 ### Production Task
 
-After the exposure phase, participants were presented with a production task. In this task, participants were presented with images and told to produce a label for the image. Specifically, initially the unafixxed form appeared on the screen along with the corresponding image. 2 seconds later, the four different possible images of that creature appeared (a singular big creature, multiple big creatures, a single small creature, and multiple small creatures). Three of these images disappeared after 1.25 seconds, leaving a single image for the participant to produce a label for. Participants had 10 seconds to respond.
+After the exposure phase, participants were presented with a production task. In this task, participants were presented with images and told to produce a label for the image. Specifically, initially the unafixxed form appeared on the screen along with the corresponding image. 2 seconds later, the four different possible images of that creature appeared (a singular big creature, multiple big creatures, a single small creature, and multiple small creatures). Three of these images disappeared after 1.25 seconds, leaving a single image for the participant to produce a label for. Participants had 10 seconds to respond. In the production task, some of the stems were familiar (i.e., seen in training) and others were novel (i.e., not seen in training).
 
 ### Form Choice Task
 
-After the production task, participants were presented with a form choice task. In this task, participants were presented first with the base, unaffixed form and the corresponding image. 2 seconds later four images flashed on the screen, remained on the screen for 1.25 seconds, and disappeared leaving a single image. Along with the single image, participants were also presented with two possible labels for that image, one label on the bottom right of the screen and one label on the bottom left of the screen. Participants were given four seconds to press either the left arrow or the right arrow to choose the corresponding label. The labels were counterbalanced with respect to which side of the screen they appeared on. The goal of this task was to assess whether type and/or token frequency influence the form choice when accessibility differences between frequent and rare forms have been attenuated.
+After the production task, participants were presented with a form choice task. In this task, participants were presented first with the base, unaffixed form and the corresponding image. 2 seconds later four images flashed on the screen, remained on the screen for 1.25 seconds, and disappeared leaving a single image. Along with the single image, participants were also presented with two possible labels for that image, one label on the bottom right of the screen and one label on the bottom left of the screen. Participants were given four seconds to press either the left arrow or the right arrow to choose the corresponding label. The labels were counterbalanced with respect to which side of the screen they appeared on. In the form choice task, some of the stems were familiar (i.e., seen in training) and others were novel (i.e., not seen in training). The goal of this task was to assess whether type and/or token frequency influence the form choice when accessibility differences between frequent and rare forms have been attenuated.
 
 ### Comprehension Task
 
-Finally, participants were presented with a comprehension task. In this task, participants were first given the label and corresponding audio for a given creature. After 0.25 seconds, four images appeared on the screen and participants had 4 seconds to choose one of the images.
+Finally, participants were presented with a comprehension task. In this task, participants were first given the label and corresponding audio for a given creature. After 0.25 seconds, four images appeared on the screen and participants had 4 seconds to choose one of the images. Similar to the before-mentioned tasks, in the comprehension task some of the stems were familiar (i.e., seen in training) and others were novel (i.e., not seen in training).
 
 # Analyses and Results
 
@@ -319,62 +289,123 @@ ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Frequency)) +
 
 <!--# Freq bar in original is choosing dan for big_pl or nem for dim_sg in the dan language and infreq bar is choosing dan for big_pl and nem for dim_sg in the nem language -->
 
-In order to determine whether the effect of frequency on semantic extension differed between conditions, we ran two Bayesian linear mixed-effects models on the production data. For the first analysis, the dependent variable was whether participant's produced the frequent suffix (*dan* in the *dan* language, *nem* in the *nem* language) for the original meanings. A larger estimate indicates that the frequent suffix was more likely to be produced than the infrequent suffix. The independent variables was whether the training consisted of high token frequency, high type-frequency, or both. We also included a random intercept for participant and a random slope for condition by response stem. Our second analysis was analogous except that it examined novel meanings. The equation for our models is included below in @eq-prodmodels:
+In order to determine whether the effect of frequency on semantic extension differed between conditions, we ran a Bayesian linear mixed-effects model on the production data. The dependent variable was whether the participant produced the frequent suffix (*dan* in the *dan* language, *nem* in the *nem* language). A larger estimate indicates that the frequent suffix was more likely to be produced than the infrequent suffix. The independent variables were condition, meaning, and stem (either familiar stem or novel stem). Condition was treatment coded such that the intercept was the high type and high token frequency condition. Meaning was sum coded. We also included a random intercept for participant and a random slope for meaning by participant. The equation for our model is included below in @eq-prodmodels.
 
 $$
-frequent\_suffix \sim condition + (1 | participant) + (condition | resp\_stem)
+\text{frequent\_suffix} \sim \text{condition}*\text{meaning} + (1 + \text{meaning} | \text{participant})
 $$ {#eq-prodmodels}
 
-The results are below in @tbl-prodresults. The results suggest that
+The results are below in @tbl-prodresults. The results suggest that in general the frequent suffix is used more than the infrequent suffix for all conditions. Notably however, we find no meaningful interaction effect for type frequency and novel meaning, suggesting that the effect of meaning is similar for both conditions. We do, however, find an interaction effect between token frequency and novel meaning, suggesting that the frequent suffix is used less for the novel meaning in the token frequency condition. This suggests that there is semantic extension when there is high type and high token frequency as well as the case where there is high type-frequency and low token-frequency, but in the case where there is high token-frequency with a low type-frequency, we see entrenchment in production.
 
 ```{r, echo = F, message = F}
 #| label: tbl-prodresults
 #| tbl-cap: 'Results of the statistical models for the production task.'
 
-prod_both_meanings = bind_rows(fixefs_model_prod_original, fixefs_model_prod_novel, .id = "ID") %>%
-  mutate(term = rep(c('Intercept', 'Type Frequency', 'Token Frequency', 'Type-Token Frequency'), times = 2))
+prod_both_meanings = bind_rows(fixefs_model_prod_both, .id = "ID") %>%
+  mutate(term = rep(c('Intercept', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Type Frequency:Novel', 'Token Frequency:Novel'), times = 1))
 
 
 prod_both_meanings = prod_both_meanings %>%
   mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
 
-groupings=rle(prod_both_meanings$meaning)
+#groupings=rle(prod_both_meanings$meaning)
 
 prod_both_meanings %>%
-  select(term, everything(), -meaning, -ID) %>%
+  select(term, everything(), -ID) %>%
   rename(` ` = term) %>%
   kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
   kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 9, full_width = FALSE) %>%
-  group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
   column_spec(1, bold = T, width = '14em')
 ```
 
+In order to follow up on this, we ran an additional model that included whether the stem was familiar (occurred in training) or novel (did not occur in training). The results are reported in @tbl-prodresultsstem and visualized in @fig-prodresultsstem.
+
+Our follow-up analysis suggests that type-frequency leads to entrenchment with stems that learners have encountered before. However, for novel stems, participants are more likely to use the frequent suffix to convey a novel meaning.
+
+```{r, echo = F, message = F}
+#| label: tbl-prodresultsstem
+#| tbl-cap: 'Results of the statistical models for the production task.'
+
+prod_both_meanings_stems = bind_rows(fixefs_model_prod_both_stems, .id = "ID") %>%
+  mutate(term = rep(c('Intercept', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Novel Stem', 'Type Frequency:Novel Meaning', 'Token Frequency:Novel Meaning', 'Type Frequency:Novel Stem', 'Token Frequency:Novel Stem', 'Novel Meaning:Novel Stem', 'Type Frequency:Novel Meaning:Novel Stem', 'Token Frequency:Novel Meaning:Novel Stem'), times = 1))
+
+
+prod_both_meanings_stems = prod_both_meanings_stems %>%
+  mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
+
+#groupings=rle(prod_both_meanings$meaning)
+
+prod_both_meanings_stems %>%
+  select(term, everything(), -ID) %>%
+  rename(` ` = term) %>%
+  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 9, full_width = FALSE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  row_spec(0, bold = TRUE) %>%
+  column_spec(1, bold = T, width = '18em')
+```
+
+```{r, echo = F, out.width = '100%', fig.align = 'center', warning = F, message = F}
+#| label: fig-prodresultsstem
+#| fig-cap: "Plot of the statistical model estimates for the production task."
+
+
+plot_prod_stem = plot_model(model_prod_both_stems, type = 'int',
+                            axis.title = c('Condition', 'Frequency'),
+                            axis.labels = "condition",
+                            legend.title = 'Meaning',
+                            title = "",
+                            dot.size = 2,
+                            line.size = 1,
+                            colors = c('#298c8c', '#800074'))[[4]] 
+plot_prod_stem[[11]]$linetype = 'Meaning'
+plot_prod_stem[[11]]$shape = 'Meaning'
+
+plot_prod_stem[[1]]$group_col = factor(plot_prod_stem[[1]]$group_col, levels = c('novel', 'original'), labels = c('Novel Meaning', 'Original Meaning'))
+
+plot_prod_stem[[1]]$group = factor(plot_prod_stem[[1]]$group, levels = c('novel', 'original'), labels = c('Novel Meaning', 'Original Meaning'))
+
+plot_prod_stem[[1]]$facet = factor(plot_prod_stem[[1]]$facet, levels = c('novel', 'familiar'), labels = c('Novel Stem', 'Familiar Stem'))
+
+#plot_prod_stem[[1]]$x
+
+plot_prod_stem +
+  scale_x_continuous(breaks = c(1, 2, 3), 
+                     labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency')) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+```
+
 ## Form Choice Task
 
-In order to examine the effects of form-choice, we similarly ran two models analogous to those we ran for the production task (@eq-prodmodels). In the context of the form-choice task, the dependent variable reflects whether participants chose the option with the frequent suffix or the one with the infrequent suffix. Similarly, our first model examined participants' response for original meanings and our second examined responses for novel meanings.
+In order to examine the effects of form-choice, we similarly ran a model analogous to the one we ran for the production task (@eq-prodmodels). In the context of the form-choice task, the dependent variable reflects whether participants chose the option with the frequent suffix or the one with the infrequent suffix.
 
-The results of the form-choice task suggest that when participants are presented with both possible options, there is only an effect of type frequency and only for novel items.
+The results of the form-choice task suggest that when participants are presented with both possible options, for both token-frequency and type-token frequency, participants are equally likely to choose the frequent suffix as the infrequent suffix. Interestingly, for the type-frequency condition, participants were less likely to choose the novel meaning than the original meaning, though the effect size is quite small and still close to chance.[^1]
+
+[^1]: We ran an additional model with stem condition as a fixed-effect (along with its interaction with condition and meaning) and found no effect of stem condition.
 
 ```{r, echo = F, message = F}
 #| label: tbl-2afcresults
 #| tbl-cap: 'Results of the statistical models for the 2afc task.'
 #| 
-tafc_both_meanings = bind_rows(fixefs_model_2afc_original, fixefs_model_2afc_novel, .id = "ID") %>%
-  mutate(term = rep(c('Intercept', 'Type Frequency', 'Token Frequency', 'Type-Token Frequency'), times = 2))
+tafc_both_meanings = bind_rows(fixefs_model_2afc_both, .id = "ID") %>%
+  mutate(term = rep(c('Intercept', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Type Frequency:Novel', 'Token Frequency:Novel'), times = 1))
 
 
 tafc_both_meanings = tafc_both_meanings %>%
   mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
 
-groupings=rle(tafc_both_meanings$meaning)
+#groupings=rle(tafc_both_meanings$meaning)
 
 tafc_both_meanings %>%
-  select(term, everything(), -meaning, -ID) %>%
+  select(term, everything(), -ID) %>%
   rename(` ` = term) %>%
   kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
   kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 9, full_width = FALSE) %>%
-  group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
   column_spec(1, bold = T, width = '14em')
 
@@ -382,27 +413,32 @@ tafc_both_meanings %>%
 
 ## Comprehension Task
 
-Our results for the comprehension task are included below in @tbl-comprehensionresults. For the comprehension task, the dependent variable for our statistical analysis was whether the meaning that participants chose was novel or original. A positive estimate suggests that participants were more likely to choose the novel meaning, a negative estimate suggests that participants were more likely to choose the original meaning. The dependent variables were whether the training comprised of high token frequency, high type frequency, or both, and whether the suffix was frequent or infrequent (as well as their interactions). We also included a by-participant random intercept and a frequency by participant random slope. The model equation is included below in @eq-comprehensionmodel.
+Our results for the comprehension task are included below in @tbl-comprehensionresults. For the comprehension task, the dependent variable for our statistical analysis was whether the meaning that participants chose was novel or original. A positive estimate suggests that participants were more likely to choose the novel meaning, a negative estimate suggests that participants were more likely to choose the original meaning. For comprehension, our independent variables were different from the other tasks. Specifically, to maximize our power, we divided the data up based on whether the token-to-type ratio was 12-12, 12-3, or 3-3. By comparing the 12-3 condition to the 12-12 and 3-3 conditions, we can see how an increase in type-frequency and a decrease in token-frequency affect participants' choice of the novel or original meaning.
+
+We treatment coded condition such that the intercept was the 12-3 condition. The model equation is included below in @eq-comprehensionmodel.
 
 $$
-meaning \sim condition*frequent + (1 + frequent | participant)
+\text{meaning} \sim \text{condition\_numeric} + (1 | \text{participant})
 $$ {#eq-comprehensionmodel}
 
-Our results suggest that the frequent suffix is used more for the original meaning when there is a high type-frequency.
+We find a meaningful effect of condition such increasing type-frequency to be equal to token frequency results in semantic entrenchment in comprehension. We also find that reducing token-frequency to be equal to type-frequency also results in semantic entrenchment. This suggests that it is the relationship between type-frequency and token-frequency (as opposed to simply the raw number of tokens or the raw number of types) that is relevant for semantic entrenchment in comprehension.[^2]
+
+[^2]: Similar to form choice, we also ran a model with stem condition as a fixed-effect and found no effect.
 
 ```{r, echo = F, message = F}
 #| label: tbl-comprehensionresults
 #| tbl-cap: 'Results of the statistical models for the comprehension task.'
 #| 
-fixefs_model_comprehension = fixefs_model_comprehension %>%
-  mutate(term = rep(c('Intercept', 'Type Frequency', 'Token Frequency', 'Type-Token Frequency', 'Frequent', 'Type Frequency:Frequent', 'Token Frequency:Frequent', 'Type-Token Frequency:Frequent'), times = 1))
+
+fixefs_model_comprehension_numeric = fixefs_model_comprehension_numeric %>%
+  mutate(term = rep(c('Intercept', '12-12', '3-3'), times = 1))
 
 
-fixefs_model_comprehension = fixefs_model_comprehension %>%
+fixefs_model_comprehension_numeric = fixefs_model_comprehension_numeric %>%
   mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
 
 
-fixefs_model_comprehension %>%
+fixefs_model_comprehension_numeric %>%
   select(term, everything()) %>%
   rename(` ` = term) %>%
   kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
