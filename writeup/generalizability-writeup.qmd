@@ -1,12 +1,33 @@
 ---
-title: "generalizability-writeup"
-format: pdf
+#title: "generalizability-writeup"
+format: 
+  pdf:
+    fontsize: 12pt
+    mainfont: "Crimson"        # Primary text font
+    CJKmainfont: "Noto Serif KR"  # Font for Korean text
+    geometry:
+      - left=1in
+      - right=1in
+      - top=1in
+      - bottom=1in
+    
 
 header-includes:
 - \usepackage{amsmath}
+- \usepackage{fontspec}    % Ensure font support
+- \usepackage{placeins}
+- \usepackage{float}
+- \usepackage{setspace}
+- \usepackage{indentfirst}
+
+
+echo: false
+warning: false
+message: false
 
 editor: visual
 bibliography: references.bib
+csl: apa.csl
 ---
 
 ```{r, echo = F, warning = F, message = F}
@@ -205,15 +226,21 @@ rownames(fixefs_model_comprehension_numeric) = c('Intercept', '12-12', '3-3')
 
 ```
 
-# Methods
+# The effects of type and token frequency on semantic extension
 
-Following @harmonPuttingOldTools2017, two artificial languages were used: Dan and Nem [See @fig-fig1]. In each language, the same four suffixes were used: -*sil~PL~*, *-dan~PL~*, *-nem~DIM~*, and -*shoon~DIM~*. Notably, in our language *-dan* and *-sil* overlap in meaning (they both occur in plural contexts) as do -*nem* and *-shoon* (which both occur in diminutive contexts).
+\doublespacing
 
-![A description of the suffixes in our artificial languages. The thicker lines denote the more frequent form in each language. The Dan language is on the left, the Nem language is on the right.](fig1.jpg){#fig-fig1}
+\setlength{\parindent}{4em}
 
-During the exposure phase, the suffixes were paired with an image. The suffixes -*sil~PL~* and *-dan~PL~* were always paired with a picture of multiple large pictures. On the other hand, the suffixes *-nem~DIM~* and -*shoon~DIM~* were always paired with a picture of a single small creature. The design of the stimuli result in participants being able to learn that -*sil* and *-dan* are either simply plural or simply non-diminutive. Similarly, *-nem* and *-shoon* can be learned as either simply singular or simply diminutive. Thus the test phase tested this.
+## Methods
 
-Our Experiment comprised of three different conditions (see @tbl-conditionslist), one in which the type frequency of the frequent language's suffix was manipulated (Type Frequency), one in which the token frequency was manipulated (Token Frequency), and one in which both were manipulated (Type-Token Frequency).
+Following @harmonPuttingOldTools2017, two artificial languages were used: Dan and Nem [See @fig-fig1]. In each language, the same four suffixes were used: -*sil~PL~*, *-dan~PL~*, *-nem~DIM~*, and -*shoon~DIM~*. Notably, in our language *-dan* and *-sil* overlap in meaning (they both occur in plural contexts), and -*nem* and *-shoon* also overlap in meaning (they both occur in diminutive contexts). Since all four suffixes are possible candidates for the diminutive plural meaning, we will examine how properties of the language affect which suffixes are extended to express the diminutive plural meaning.
+
+![A description of the suffixes in our artificial languages. The thicker lines denote the more frequent form in each language: the plural -*dan~PL~* in the Dan language and the diminutive -*nem~DIM~* in the Nem language.](languages.pdf){#fig-fig1}
+
+During the exposure phase, each suffix was was paired with an image. The suffixes -*sil~PL~* and *-dan~PL~* were always paired with a picture of multiple large pictures. On the other hand, the suffixes *-nem~DIM~* and -*shoon~DIM~* were always paired with a picture of a single small creature. The design of the stimuli results in participants being able to learn that -*sil* and *-dan* are either simply plural or simply non-diminutive. Similarly, *-nem* and *-shoon* can be learned as either simply singular or simply diminutive.
+
+Our Experiment comprised of three different conditions (see @tbl-conditionslist), one in which the type frequency of the frequent language's suffix was manipulated (Type Frequency), one in which the token frequency was manipulated (Token Frequency), and one in which both were manipulated (Type-Token Frequency). In this context, a higher type-frequency corresponds to the suffix appearing with a larger number of different stems relative to the competing suffix, while a larger token-frequency corresponds to simply appearing a greater number of times relative to the competing suffx, regardless of the number of different stems it occurs with.
 
 ```{r, echo = F, message = F}
 #| label: tbl-conditionslist
@@ -231,42 +258,55 @@ conditionslist %>%
   select(term, everything()) %>%
   rename(` ` = term) %>%
   kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
-  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 10, full_width = FALSE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
   #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
   column_spec(1, bold = T, width = '12em')
 ```
 
-## Procedure
+### Procedure
 
-Each participant was randomly assigned one of the conditions. In each condition, participants were first presented with an exposure phase. After the exposure phase, participants took part in a production task, a form choice task, and a comprehension task. We describe each of these below.
+Each participant was randomly assigned one of the conditions. In each condition, participants were first presented with an exposure phase. After the exposure phase, participants were tested using a production task, a form choice task, and a comprehension task. We describe each of these below.[^1]
 
-### Exposure Phase
+[^1]: Additionally, a demo of the experiment can be found at the following link: <https://run.pavlovia.org/znhoughton/generalizability_demo>.
 
-Following @harmonPuttingOldTools2017, each exposure trial consisted of the presentation of a picture on the computer screen which was subsequently followed with a written label for the image as well as an audio version of that label. Specifically, the image first appeared on the screen and then 1.25 seconds later was followed by both the label of the creatures on the screen as well as the audio for that creature. Participants were instructed to type the name of the creature and press enter. Participants had 4 seconds after presentation of the name of the creature and were given feedback if they typed the wrong name in.
+#### Exposure Phase
 
-### Production Task
+Following @harmonPuttingOldTools2017, each exposure trial consisted of the presentation of a picture on the computer screen which was subsequently followed with a written label for the image as well as an audio presentation of that label. Specifically, the image first appeared on the screen and then 1.25 seconds later was followed by both the label of the creatures on the screen as well as the audio for that creature. Participants were instructed to type the name of the creature and press enter. Participants had 4 seconds to respond after the presentation of the name of the creature and were given feedback as to whether they were correct or not.
+
+Participants saw each trial within the exposure phase 5 times, each in a randomized order.
+
+#### Production Task
 
 After the exposure phase, participants were presented with a production task. In this task, participants were presented with images and told to produce a label for the image. Specifically, initially the unafixxed form appeared on the screen along with the corresponding image. 2 seconds later, the four different possible images of that creature appeared (a singular big creature, multiple big creatures, a single small creature, and multiple small creatures). Three of these images disappeared after 1.25 seconds, leaving a single image for the participant to produce a label for. Participants had 10 seconds to respond. In the production task, some of the stems were familiar (i.e., seen in training) and others were novel (i.e., not seen in training).
 
-### Form Choice Task
+Participants saw each trial within the production task 4 times, each in a randomized order.
+
+#### Form Choice Task
 
 After the production task, participants were presented with a form choice task. In this task, participants were presented first with the base, unaffixed form and the corresponding image. 2 seconds later four images flashed on the screen, remained on the screen for 1.25 seconds, and disappeared leaving a single image. Along with the single image, participants were also presented with two possible labels for that image, one label on the bottom right of the screen and one label on the bottom left of the screen. Participants were given four seconds to press either the left arrow or the right arrow to choose the corresponding label. The labels were counterbalanced with respect to which side of the screen they appeared on. In the form choice task, some of the stems were familiar (i.e., seen in training) and others were novel (i.e., not seen in training). The goal of this task was to assess whether type and/or token frequency influence the form choice when accessibility differences between frequent and rare forms have been attenuated.
 
-### Comprehension Task
+Participants saw each trial within the form choice task 2 times, each in a randomized order.
 
-Finally, participants were presented with a comprehension task. In this task, participants were first given the label and corresponding audio for a given creature. After 0.25 seconds, four images appeared on the screen and participants had 4 seconds to choose one of the images. Similar to the before-mentioned tasks, in the comprehension task some of the stems were familiar (i.e., seen in training) and others were novel (i.e., not seen in training).
+#### Comprehension Task
 
-# Analyses and Results
+Finally, participants were presented with a comprehension task. In this task, participants were first given the label and corresponding audio for a given creature. After 0.25 seconds, four images appeared on the screen and participants had 4 seconds to click one of the images on the screen that corresponded to the label. Similar to the before-mentioned tasks, in the comprehension task some of the stems were familiar (i.e., seen in training) and others were novel (i.e., not seen in training).
 
-## Production Task
+Participants saw each trial within the comprehension task 2 times, each in a randomized order.
 
-In order to examine the effect of type/token frequency on semantic extension, we examined instances where the image was diminutive plural.
+## Analyses and Results
+
+A plot of our model estimates for each task is presented in @fig-fullresults. The points represent individual subject estimates, the bars and credible intervals correspond to estimates from a Bayesian linear mixed-effects regression model.[^2]
+
+[^2]: All data and code for the analyses can be found here: <https://github.com/znhoughton/Generalizability-Type-Token>.
+
+### Production Task
 
 ```{r, echo = F, out.width = '80%', fig.align = 'center', warning = F, message = F}
 #| label: fig-fullresults
 #| fig-cap: "Plot of our results. Points indicate individual subject values."
-
+#| fig-height: 6
+#| fig-width: 7
 
 ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Frequency)) +
   geom_col(position = position_dodge(width = 0.9)) + 
@@ -289,7 +329,7 @@ ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Frequency)) +
 
 <!--# Freq bar in original is choosing dan for big_pl or nem for dim_sg in the dan language and infreq bar is choosing dan for big_pl and nem for dim_sg in the nem language -->
 
-In order to determine whether the effect of frequency on semantic extension differed between conditions, we ran a Bayesian linear mixed-effects model on the production data. The dependent variable was whether the participant produced the frequent suffix (*dan* in the *dan* language, *nem* in the *nem* language). A larger estimate indicates that the frequent suffix was more likely to be produced than the infrequent suffix. The independent variables were condition, meaning, and stem (either familiar stem or novel stem). Condition was treatment coded such that the intercept was the high type and high token frequency condition. Meaning was sum coded. We also included a random intercept for participant and a random slope for meaning by participant. The equation for our model is included below in @eq-prodmodels.
+In order to examine the effects of type and token-frequency on participants choice of suffix, we examined the effects of type and token-frequency on the original meaning as well as the novel meaning (diminutive plural). Specifically, we ran a Bayesian linear mixed-effects model on the production data. The dependent variable was whether the participant produced the frequent suffix (*dan* in the *dan* language, *nem* in the *nem* language). A larger estimate indicates that the frequent suffix was more likely to be produced than the infrequent suffix. The independent variables were condition, meaning, and stem (either familiar stem or novel stem). Condition was treatment coded such that the intercept was the high type and high token frequency condition. Meaning was sum coded. We also included a random intercept for participant and a random slope for meaning by participant. The equation for our model is included below in @eq-prodmodels.
 
 $$
 \text{frequent\_suffix} \sim \text{condition}*\text{meaning} + (1 + \text{meaning} | \text{participant})
@@ -302,7 +342,7 @@ The results are below in @tbl-prodresults. The results suggest that in general t
 #| tbl-cap: 'Results of the statistical models for the production task.'
 
 prod_both_meanings = bind_rows(fixefs_model_prod_both, .id = "ID") %>%
-  mutate(term = rep(c('Intercept', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Type Frequency:Novel', 'Token Frequency:Novel'), times = 1))
+  mutate(term = rep(c('Intercept (Type-Token Frequency)', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Type Frequency:Novel', 'Token Frequency:Novel'), times = 1))
 
 
 prod_both_meanings = prod_both_meanings %>%
@@ -314,10 +354,10 @@ prod_both_meanings %>%
   select(term, everything(), -ID) %>%
   rename(` ` = term) %>%
   kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
-  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 9, full_width = FALSE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
   #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
-  column_spec(1, bold = T, width = '14em')
+  column_spec(1, bold = T, width = '18em')
 ```
 
 In order to follow up on this, we ran an additional model that included whether the stem was familiar (occurred in training) or novel (did not occur in training). The results are reported in @tbl-prodresultsstem and visualized in @fig-prodresultsstem.
@@ -329,7 +369,7 @@ Our follow-up analysis suggests that type-frequency leads to entrenchment with s
 #| tbl-cap: 'Results of the statistical models for the production task.'
 
 prod_both_meanings_stems = bind_rows(fixefs_model_prod_both_stems, .id = "ID") %>%
-  mutate(term = rep(c('Intercept', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Novel Stem', 'Type Frequency:Novel Meaning', 'Token Frequency:Novel Meaning', 'Type Frequency:Novel Stem', 'Token Frequency:Novel Stem', 'Novel Meaning:Novel Stem', 'Type Frequency:Novel Meaning:Novel Stem', 'Token Frequency:Novel Meaning:Novel Stem'), times = 1))
+  mutate(term = rep(c('Intercept (Type-Token Frequency)', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Novel Stem', 'Type Frequency:Novel Meaning', 'Token Frequency:Novel Meaning', 'Type Frequency:Novel Stem', 'Token Frequency:Novel Stem', 'Novel Meaning:Novel Stem', 'Type Frequency:Novel Meaning:Novel Stem', 'Token Frequency:Novel Meaning:Novel Stem'), times = 1))
 
 
 prod_both_meanings_stems = prod_both_meanings_stems %>%
@@ -341,15 +381,17 @@ prod_both_meanings_stems %>%
   select(term, everything(), -ID) %>%
   rename(` ` = term) %>%
   kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
-  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 9, full_width = FALSE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
   #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
-  column_spec(1, bold = T, width = '18em')
+  column_spec(1, bold = T, width = '20em')
 ```
 
 ```{r, echo = F, out.width = '100%', fig.align = 'center', warning = F, message = F}
 #| label: fig-prodresultsstem
 #| fig-cap: "Plot of the statistical model estimates for the production task."
+#| fig-height: 5
+#| fig-width: 7
 
 
 plot_prod_stem = plot_model(model_prod_both_stems, type = 'int',
@@ -374,25 +416,29 @@ plot_prod_stem[[1]]$facet = factor(plot_prod_stem[[1]]$facet, levels = c('novel'
 plot_prod_stem +
   scale_x_continuous(breaks = c(1, 2, 3), 
                      labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency')) +
+  ylab('Proportion of Responses with Frequent Suffix') +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, color = 'black', size = 10),
+        axis.title.x = element_text(size = 11),
+        axis.title.y = element_text(size = 11),
+        axis.text.y = element_text(color = 'black', size = 10)) 
 
 ```
 
-## Form Choice Task
+### Form Choice Task
 
-In order to examine the effects of form-choice, we similarly ran a model analogous to the one we ran for the production task (@eq-prodmodels). In the context of the form-choice task, the dependent variable reflects whether participants chose the option with the frequent suffix or the one with the infrequent suffix.
+In order to examine the effects of form-choice, we similarly ran a model analogous to the first model we ran for the production task (@eq-prodmodels). In the context of the form-choice task, the dependent variable reflects whether participants chose the option with the frequent suffix or the one with the infrequent suffix.
 
-The results of the form-choice task suggest that when participants are presented with both possible options, for both token-frequency and type-token frequency, participants are equally likely to choose the frequent suffix as the infrequent suffix. Interestingly, for the type-frequency condition, participants were less likely to choose the novel meaning than the original meaning, though the effect size is quite small and still close to chance.[^1]
+The results of the form-choice task suggest that when participants are presented with both possible options, for both token-frequency and type-token frequency, participants are equally likely to choose the frequent suffix as the infrequent suffix. Interestingly, for the type-frequency condition, participants were less likely to choose the novel meaning than the original meaning, though the effect size is quite small and their selections were still close to chance.[^3]
 
-[^1]: We ran an additional model with stem condition as a fixed-effect (along with its interaction with condition and meaning) and found no effect of stem condition.
+[^3]: We ran an additional model with stem condition as a fixed-effect (along with its interaction with condition and meaning) and found no effect of stem condition.
 
 ```{r, echo = F, message = F}
 #| label: tbl-2afcresults
 #| tbl-cap: 'Results of the statistical models for the 2afc task.'
 #| 
 tafc_both_meanings = bind_rows(fixefs_model_2afc_both, .id = "ID") %>%
-  mutate(term = rep(c('Intercept', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Type Frequency:Novel', 'Token Frequency:Novel'), times = 1))
+  mutate(term = rep(c('Intercept (Type-Token Frequency)', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Type Frequency:Novel', 'Token Frequency:Novel'), times = 1))
 
 
 tafc_both_meanings = tafc_both_meanings %>%
@@ -404,26 +450,28 @@ tafc_both_meanings %>%
   select(term, everything(), -ID) %>%
   rename(` ` = term) %>%
   kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
-  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 9, full_width = FALSE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
   #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
-  column_spec(1, bold = T, width = '14em')
+  column_spec(1, bold = T, width = '18em')
 
 ```
 
-## Comprehension Task
+### Comprehension Task
 
-Our results for the comprehension task are included below in @tbl-comprehensionresults. For the comprehension task, the dependent variable for our statistical analysis was whether the meaning that participants chose was novel or original. A positive estimate suggests that participants were more likely to choose the novel meaning, a negative estimate suggests that participants were more likely to choose the original meaning. For comprehension, our independent variables were different from the other tasks. Specifically, to maximize our power, we divided the data up based on whether the token-to-type ratio was 12-12, 12-3, or 3-3. By comparing the 12-3 condition to the 12-12 and 3-3 conditions, we can see how an increase in type-frequency and a decrease in token-frequency affect participants' choice of the novel or original meaning.
+Our results for the comprehension task are included below in @tbl-comprehensionresults. For the comprehension task, the dependent variable for our statistical analysis was whether the meaning that participants chose was novel or original. A positive estimate suggests that participants were more likely to choose the novel meaning, a negative estimate suggests that participants were more likely to choose the original meaning.
 
-We treatment coded condition such that the intercept was the 12-3 condition. The model equation is included below in @eq-comprehensionmodel.
+For comprehension, our independent variables were different from the other tasks. Specifically, to maximize our power, we divided the data up based on whether the token-to-type ratio was 12-12, 12-3, or 3-3. For example, in the Type Frequency condition, while the frequent suffix occurs 12 times with 12 different types, the infrequent occurs 12 times in only 3 different types. By comparing the 12-3 condition to the 12-12 and 3-3 conditions, we can see how an increase in type-frequency and a decrease in token-frequency affect participants' choice of the novel or original meaning.
+
+We treatment coded condition such that the intercept was the 12-3 condition. As such, for each condition, a positive coefficient indicates that participants were more likely to choose a novel meaning (relative to the 12-3 condition/intercept). The model equation is included below in @eq-comprehensionmodel.[^4]
+
+[^4]: Similar to form choice, we also ran a model with stem condition as a fixed-effect and found no effect.
 
 $$
 \text{meaning} \sim \text{condition\_numeric} + (1 | \text{participant})
 $$ {#eq-comprehensionmodel}
 
-We find a meaningful effect of condition such increasing type-frequency to be equal to token frequency results in semantic entrenchment in comprehension. We also find that reducing token-frequency to be equal to type-frequency also results in semantic entrenchment. This suggests that it is the relationship between type-frequency and token-frequency (as opposed to simply the raw number of tokens or the raw number of types) that is relevant for semantic entrenchment in comprehension.[^2]
-
-[^2]: Similar to form choice, we also ran a model with stem condition as a fixed-effect and found no effect.
+First, we find a meaningful effect for the intercept (12-3 condition), suggesting that participants are more likely to select the original meaning when there is a high token-to-type ratio. Additionally, we find positive coefficient estimates for both 12-12 and 3-3 suggesting that when there is an equal number of tokens as types, participants are more likely to select the novel meaning. In other words, entrenchment seems to be driven not simply by the raw value of token or type frequency, but rather the proportion of tokens to types. That is, it is the relationship between type-frequency and token-frequency that is relevant for semantic entrenchment in comprehension. This mirrors the results for our production task where a high type and high token frequency leads to semantic extension, but having a high token frequency with low type frequency leads to entrenchment.
 
 ```{r, echo = F, message = F}
 #| label: tbl-comprehensionresults
@@ -431,7 +479,7 @@ We find a meaningful effect of condition such increasing type-frequency to be eq
 #| 
 
 fixefs_model_comprehension_numeric = fixefs_model_comprehension_numeric %>%
-  mutate(term = rep(c('Intercept', '12-12', '3-3'), times = 1))
+  mutate(term = rep(c('Intercept (12-3)', '12-12', '3-3'), times = 1))
 
 
 fixefs_model_comprehension_numeric = fixefs_model_comprehension_numeric %>%
@@ -442,14 +490,18 @@ fixefs_model_comprehension_numeric %>%
   select(term, everything()) %>%
   rename(` ` = term) %>%
   kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
-  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 9, full_width = FALSE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
   #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
   row_spec(0, bold = TRUE) %>%
-  column_spec(1, bold = T, width = '20em')
+  column_spec(1, bold = T, width = '12em')
 
 
 ```
 
 <!--# there's probably a note about storage here -->
 
-\clearpage
+## Discussion
+
+Our results suggest that in production, having a high type and high token frequency (relative to the competitor), along with simply having a high type but equal token frequency (relative to the competitor), leads to semantic extension, while having a high type frequency but low token frequency leads to entrenchment (i.e., using the suffix more with the original meaning than novel meanings). Further, this mirrors what we see in comprehension where participants are more likely to choose the novel meaning when the type and token frequencies are matched, but less likely when the suffix has high token frequency but low type frequency. Further, when both forms are made accessible as in the form choice task, this effect is reduced for all conditions, though less-so for the type-frequency condition.
+
+\newpage

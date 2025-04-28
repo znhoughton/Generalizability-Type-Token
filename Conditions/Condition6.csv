@@ -1,0 +1,25 @@
+stem,suffix,label,stem_filename,file,filepath,image_size,image_location,audio_files
+bal,nem,balnem,1,1_dim_sg.PNG,stems_all/1_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/balnem.wav
+berko,nem,berkonem,2,2_dim_sg.PNG,stems_all/2_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/berkonem.wav
+kora,nem,koranem,3,3_dim_sg.PNG,stems_all/3_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/koranem.wav
+nako,nem,nakonem,4,4_dim_sg.PNG,stems_all/4_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/nakonem.wav
+pipa,nem,pipanem,5,5_dim_sg.PNG,stems_all/5_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/pipanem.wav
+bani,nem,baninem,6,6_dim_sg.PNG,stems_all/6_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/baninem.wav
+chool,nem,choolnem,7,7_dim_sg.PNG,stems_all/7_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/choolnem.wav
+kudom,nem,kudomnem,8,8_dim_sg.PNG,stems_all/8_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/kudomnem.wav
+osto,nem,ostonem,9,9_dim_sg.PNG,stems_all/9_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/ostonem.wav
+vorke,nem,vorkenem,10,10_dim_sg.PNG,stems_all/10_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/vorkenem.wav
+bin,nem,binnem,11,11_dim_sg.PNG,stems_all/11_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/binnem.wav
+mero,nem,meronem,12,12_dim_sg.PNG,stems_all/12_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/meronem.wav
+bal,dan,baldan,1,1_2.PNG,stems_all/1_2.PNG,"[0.35, 0.35]","[-0.2, -0.18]",zara_audio_files/baldan.wav
+berko,dan,berkodan,2,2_2.PNG,stems_all/2_2.PNG,"[0.35, 0.35]","[-0.2, -0.18]",zara_audio_files/berkodan.wav
+kora,dan,koradan,3,3_2.PNG,stems_all/3_2.PNG,"[0.35, 0.35]","[-0.2, -0.18]",zara_audio_files/koradan.wav
+bal,sil,balsil,1,1_2.PNG,stems_all/1_2.PNG,"[0.35, 0.35]","[-0.2, -0.18]",zara_audio_files/balsil.wav
+berko,sil,berkosil,2,2_2.PNG,stems_all/2_2.PNG,"[0.35, 0.35]","[-0.2, -0.18]",zara_audio_files/berkosil.wav
+kora,sil,korasil,3,3_2.PNG,stems_all/3_2.PNG,"[0.35, 0.35]","[-0.2, -0.18]",zara_audio_files/korasil.wav
+bal,shoon,balshoon,1,1_dim_sg.PNG,stems_all/1_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/balshoon.wav
+berko,shoon,berkoshoon,2,2_dim_sg.PNG,stems_all/2_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/berkoshoon.wav
+kora,shoon,korashoon,3,3_dim_sg.PNG,stems_all/3_dim_sg.PNG,"[0.20, 0.20]","[0.2,0.22]",zara_audio_files/korashoon.wav
+bal,none,bal,1,1.PNG,stems_all/1.PNG,"[0.35, 0.35]","[-0.2,0.22]",zara_audio_files/bal.wav
+berko,none,berko,2,2.PNG,stems_all/2.PNG,"[0.35, 0.35]","[-0.2,0.22]",zara_audio_files/berko.wav
+kora,none,kora,3,3.PNG,stems_all/3.PNG,"[0.35, 0.35]","[-0.2,0.22]",zara_audio_files/kora.wav
