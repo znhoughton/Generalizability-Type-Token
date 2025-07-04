@@ -1,0 +1,13 @@
+comprehension_label,stem,suffix,image1,image2,stem_condition,image3,image4,image1_label,image2_label,image3_label,image4_label,audio_files
+balnem,bal,nem,stems_all/1.PNG,stems_all/1_dim_sg.PNG,familiar,stems_all/1_dim_pl.PNG,stems_all/1_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/balnem.wav
+baldan,bal,dan,stems_all/1.PNG,stems_all/1_dim_sg.PNG,familiar,stems_all/1_dim_pl.PNG,stems_all/1_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/baldan.wav
+berkonem,berko,nem,stems_all/2.PNG,stems_all/2_dim_sg.PNG,familiar,stems_all/2_dim_pl.PNG,stems_all/2_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/berkonem.wav
+berkodan,berko,dan,stems_all/2.PNG,stems_all/2_dim_sg.PNG,familiar,stems_all/2_dim_pl.PNG,stems_all/2_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/berkodan.wav
+koranem,kora,nem,stems_all/3.PNG,stems_all/3_dim_sg.PNG,familiar,stems_all/3_dim_pl.PNG,stems_all/3_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/koranem.wav
+koradan,kora,dan,stems_all/3.PNG,stems_all/3_dim_sg.PNG,familiar,stems_all/3_dim_pl.PNG,stems_all/3_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/koradan.wav
+pilnem,pil,nem,stems_all/13.PNG,stems_all/13_dim_sg.PNG,novel,stems_all/13_dim_pl.PNG,stems_all/13_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/pilnem.wav
+pildan,pil,dan,stems_all/13.PNG,stems_all/13_dim_sg.PNG,novel,stems_all/13_dim_pl.PNG,stems_all/13_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/pildan.wav
+shintinem,shinti,nem,stems_all/14.PNG,stems_all/14_dim_sg.PNG,novel,stems_all/14_dim_pl.PNG,stems_all/14_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/shintinem.wav
+shintidan,shinti,dan,stems_all/14.PNG,stems_all/14_dim_sg.PNG,novel,stems_all/14_dim_pl.PNG,stems_all/14_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/shintidan.wav
+meronem,mero,nem,stems_all/12.PNG,stems_all/12_dim_sg.PNG,novel,stems_all/12_dim_pl.PNG,stems_all/12_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/meronem.wav
+merodan,mero,dan,stems_all/12.PNG,stems_all/12_dim_sg.PNG,novel,stems_all/12_dim_pl.PNG,stems_all/12_2.PNG,big_sg,dim_sg,dim_pl,big_pl,zara_audio_files/merodan.wav

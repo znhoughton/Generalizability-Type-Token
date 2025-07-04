@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(brms)
 library(sjPlot)
+library(dplyr)
 options(contrasts = c("contr.sum","contr.sum"))
 ```
 
@@ -18,7 +19,7 @@ options(contrasts = c("contr.sum","contr.sum"))
 Table1:
 
 |  |  |  |  |  |  |  |  |  |
-|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+|----|----|----|----|----|----|----|----|----|
 | **Condition1** | #of tokens | #of types | **Condition2** | #of tokens | #of types | **Condition3** | #of tokens | #of types |
 | dan | 12 | 12 | dan | 12 | 3 | dan | 12 | 12 |
 | nem | 12 | 3 | nem | 3 | 3 | nem | 3 | 3 |
@@ -33,7 +34,7 @@ Table1:
 Table2
 
 |  |  |  |  |  |  |  |  |  |
-|--------|:------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
+|----|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 | **Condition** | **dan token** | **nem token** | **sil token** | **shoon token** | **dan type** | **nem type** | **sil type** | **shoon type** |
 | 1 | 12 | 12 | 6 | 6 | 12 | 3 | 6 | 6 |
 | 2 | 12 | 3 | 6 | 6 | 3 | 3 | 6 | 6 |
@@ -43,13 +44,13 @@ Table2
 | 6 | 3 | 12 | 6 | 6 | 3 | 12 | 6 | 6 |
 
 |   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type | Frequent Competitor Token | Frequent Competitor Type | Infrequent Competitor Token | Infrequent Competitor Type |
-|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+|----|----|----|----|----|----|----|----|----|
 | **Condition 1** | 12 | 12 | 12 | 3 | 6 | 6 | 6 | 6 |
 | **Condition 2** | 12 | 3 | 3 | 3 | 6 | 6 | 6 | 6 |
 | **Condition 3** | 12 | 12 | 3 | 3 | 6 | 6 | 6 | 6 |
 
 |   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type |
-|---------------|---------------|---------------|---------------|---------------|
+|----|----|----|----|----|
 | **Condition 1** | 12 | 12 | 12 | 3 |
 | **Condition 2** | 12 | 3 | 3 | 3 |
 | **Condition 3** | 12 | 12 | 3 | 3 |
@@ -335,6 +336,7 @@ data_analysis = data_analysis %>%
   ))
 
 data_analysis = data_analysis %>%
+  mutate(original_condition = condition) %>%
   mutate(condition = ifelse(condition == 4, 1, 
                             ifelse(condition == 5, 2, 
                                    ifelse(condition == 6, 3, condition)))) %>%
@@ -916,6 +918,8 @@ data_prod = data_analysis %>%
   filter(task == 'prod') %>%
   filter(resp_suffix_form %in% c('dan', 'nem'))
 
+
+
 data_2afc = data_analysis %>%
   filter(task == '2afc') %>%
   filter(resp_suffix_form %in% c('dan', 'nem'))
@@ -953,6 +957,7 @@ data_2afc$condition = factor(data_2afc$condition, levels = c(3, 1, 2))
 data_prod_no_sil_shoon$participant = factor(data_prod_no_sil_shoon$participant)
 data_prod_no_sil_shoon$condition = factor(data_prod_no_sil_shoon$condition, levels = c(3, 1, 2))
 
+#write_csv(data_prod_no_sil_shoon, '../Data/data_prod_no_sil_shoon.csv')
 
 data_prod_original = data_prod_no_sil_shoon %>%
   filter(meaning == 'original')
@@ -1076,7 +1081,7 @@ model_prod_both = brm(frequency ~ condition*meaning + (1 + meaning | participant
                                        file = '../Data/model_prod_both')
 
 
-model_prod_both_stem = brm(frequency ~ condition*meaning*stem_condition + (1 + meaning | participant),
+model_prod_both_stem = brm(frequency ~ condition*meaning*stem_condition + (1 + meaning*stem_condition | participant) + (1 | resp_stem),
                                        data = data_prod_both,
                                        family = bernoulli(link = 'logit'),
                                        iter = 14000, 
@@ -1792,7 +1797,7 @@ p3
 
 ##### Production
 
-```{r}
+```{r eval = F}
 options(contrasts = c("contr.sum","contr.sum"))
 data_analysis$condition = factor(data_analysis$condition)
 
@@ -2144,7 +2149,7 @@ fixed_effects_df = map2_dfr(list_of_models, names(list_of_models), extract_fixed
 
 fixed_effects_df = fixed_effects_df %>%
   separate(Model, into = c("Meaning", "ignore1", "Frequency", "Task", "ignore2", "Condition"), sep = "_", remove = FALSE) %>%
-  select(-ignore1, -ignore2)  # Remove the unnecessary columns
+  dplyr::select(-ignore1, -ignore2)  # Remove the unnecessary columns
 
 
 subj_effect_names = ls(pattern = "_subj_means$")
@@ -2179,7 +2184,7 @@ ggplot(fixed_effects_df, aes(x = Meaning, y = Prob, fill = Frequency)) +
 
 ##### 2afc
 
-```{r}
+```{r eval = F}
 
 options(contrasts = c("contr.sum","contr.sum"))
 data_analysis$condition = factor(data_analysis$condition)
@@ -2571,7 +2576,7 @@ ggplot(fixed_effects_df_2afc, aes(x = Meaning, y = Prob, fill = Frequency)) +
 
 ##### Comprehension
 
-```{r}
+```{r eval = F}
 options(contrasts = c("contr.sum","contr.sum"))
 data_analysis_comprehension$condition = factor(data_analysis_comprehension$condition)
 data_analysis_comprehension = data_analysis_comprehension %>%
@@ -2930,7 +2935,7 @@ ggplot(fixed_effects_df_comprehension, aes(x = Meaning, y = Prob, fill = Frequen
 
 ##### Full plot
 
-```{r}
+```{r eval = F}
 # 
  fixed_effects_df_all = fixed_effects_df %>%
    full_join(fixed_effects_df_2afc) %>%
@@ -2991,7 +2996,7 @@ ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Frequency)) +
 
 ### sil shoon removed from prod
 
-```{r}
+```{r eval = F}
 options(contrasts = c("contr.sum","contr.sum"))
 data_analysis$condition = factor(data_analysis$condition)
 
@@ -3381,7 +3386,7 @@ ggplot(fixed_effects_df_no_sil_shoon, aes(x = Meaning, y = Prob, fill = Frequenc
 
 ```
 
-```{r}
+```{r eval = F}
 fixed_effects_df_all_no_sil_no_shoon = fixed_effects_df_no_sil_shoon %>%
    full_join(fixed_effects_df_2afc) %>%
    full_join(fixed_effects_df_comprehension)
@@ -3431,6 +3436,1990 @@ ggplot(fixed_effects_df_all_no_sil_no_shoon, aes(x = Meaning, y = Prob, fill = F
              show.legend = FALSE) +  # Hides points from legend
   scale_fill_manual(values = c("Frequent" = "#66c2a5", "Infrequent" = "#8da0cb")) +  # Bar & point fill colors
   scale_color_manual(values = c("Frequent" = "#1b7837", "Infrequent" = "#2b8cbe")) +  # Darker border colors for points
+  facet_grid(Task ~ Condition, labeller = labeller(Condition = condition_labels, Task = task_labels)) + 
+  theme_bw() +
+  ggtitle('Results by condition for each task') +
+  xlab('Meaning') +
+  ylab('Response Probability') +
+  ylim(0, 1)
+```
+
+# Observed Frequency Plot
+
+```{r}
+options(contrasts = c("contr.sum","contr.sum"))
+data_analysis$condition = factor(data_analysis$condition)
+
+
+original_meaning_freq_prod_data_cond1_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'dan' & picture_meaning == 'big_pl') | (language == 'nem' & picture_meaning == 'dim_sg') & condition == 1) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+
+original_meaning_freq_prod_data_cond1_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'dan' & picture_meaning == 'big_pl') | (language == 'nem' & picture_meaning == 'dim_sg') & condition == 1) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_freq_prod_data_cond1_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 1) %>%
+  ungroup() %>%
+  filter(stem_condition == 'familiar') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) #freq, infreq, freq_competitor, infrequent_competitor
+
+novel_meaning_freq_prod_data_cond1_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 1) %>%
+  ungroup() %>%
+  filter(stem_condition == 'novel') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) #freq, infreq, freq_competitor, infrequent_competitor
+
+
+original_meaning_infreq_prod_data_cond1_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'nem' & picture_meaning == 'big_pl') | (language == 'dan' & picture_meaning == 'dim_sg') & condition == 1) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'infreq' ~ 1,
+    .default = 0
+  ))
+
+original_meaning_infreq_prod_data_cond1_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'nem' & picture_meaning == 'big_pl') | (language == 'dan' & picture_meaning == 'dim_sg') & condition == 1) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'infreq' ~ 1,
+    .default = 0
+  ))
+
+novel_meaning_infreq_prod_data_cond1_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 1) %>%
+  ungroup() %>%
+  filter(stem_condition == 'familiar') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'infreq', 1, 0))
+
+
+novel_meaning_infreq_prod_data_cond1_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 1) %>%
+  ungroup() %>%
+  filter(stem_condition == 'novel') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'infreq', 1, 0))
+
+# 
+# original_meaning_freq_prod_data_cond1_subj_means = original_meaning_freq_prod_data_cond1 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'original_meaning_freq_prod_model_cond1')
+# 
+# novel_meaning_freq_prod_data_cond1_subj_means = novel_meaning_freq_prod_data_cond1 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'novel_meaning_freq_prod_model_cond1')
+# 
+# 
+# original_meaning_infreq_prod_data_cond1_subj_means = original_meaning_infreq_prod_data_cond1 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'original_meaning_infreq_prod_model_cond1')
+# 
+# novel_meaning_infreq_prod_data_cond1_subj_means = novel_meaning_infreq_prod_data_cond1 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'novel_meaning_infreq_prod_model_cond1')
+
+
+####cond2
+
+original_meaning_freq_prod_data_cond2_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'dan' & picture_meaning == 'big_pl') | (language == 'nem' & picture_meaning == 'dim_sg') & condition == 2) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+
+original_meaning_freq_prod_data_cond2_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'dan' & picture_meaning == 'big_pl') | (language == 'nem' & picture_meaning == 'dim_sg') & condition == 2) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+    
+novel_meaning_freq_prod_data_cond2_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 2) %>%
+  ungroup() %>%
+  filter(stem_condition == 'familiar') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0))
+
+novel_meaning_freq_prod_data_cond2_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 2) %>%
+  ungroup() %>%
+  filter(stem_condition == 'novel') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0))
+
+original_meaning_infreq_prod_data_cond2_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'nem' & picture_meaning == 'big_pl') | (language == 'dan' & picture_meaning == 'dim_sg') & condition == 2) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'infreq' ~ 1,
+    .default = 0
+  ))
+
+original_meaning_infreq_prod_data_cond2_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'nem' & picture_meaning == 'big_pl') | (language == 'dan' & picture_meaning == 'dim_sg') & condition == 2) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'infreq' ~ 1,
+    .default = 0
+  ))
+
+novel_meaning_infreq_prod_data_cond2_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 2) %>%
+  ungroup() %>%
+  filter(stem_condition == 'familiar') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'infreq', 1, 0))
+
+novel_meaning_infreq_prod_data_cond2_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 2) %>%
+  ungroup() %>%
+  filter(stem_condition == 'novel') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'infreq', 1, 0))
+
+
+# original_meaning_freq_prod_data_cond2_subj_means = original_meaning_freq_prod_data_cond2 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'original_meaning_freq_prod_model_cond2')
+# 
+# novel_meaning_freq_prod_data_cond2_subj_means = novel_meaning_freq_prod_data_cond2 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'novel_meaning_freq_prod_model_cond2')
+# 
+# 
+# original_meaning_infreq_prod_data_cond2_subj_means = original_meaning_infreq_prod_data_cond2 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'original_meaning_infreq_prod_model_cond2')
+# 
+# novel_meaning_infreq_prod_data_cond2_subj_means = novel_meaning_infreq_prod_data_cond2 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'novel_meaning_infreq_prod_model_cond2')
+
+#### cond3
+
+original_meaning_freq_prod_data_cond3_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'dan' & picture_meaning == 'big_pl') | (language == 'nem' & picture_meaning == 'dim_sg') & condition == 3) %>%
+  ungroup() %>%
+  filter(stem_condition == 'familiar') %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+
+
+original_meaning_freq_prod_data_cond3_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'dan' & picture_meaning == 'big_pl') | (language == 'nem' & picture_meaning == 'dim_sg') & condition == 3) %>%
+  ungroup() %>%
+  filter(stem_condition == 'novel') %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+    
+novel_meaning_freq_prod_data_cond3_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 3) %>%
+  ungroup() %>%
+  filter(stem_condition == 'familiar') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0))
+    
+novel_meaning_freq_prod_data_cond3_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 3) %>%
+  ungroup() %>%
+  filter(stem_condition == 'novel') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0))
+
+original_meaning_infreq_prod_data_cond3_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'nem' & picture_meaning == 'big_pl') | (language == 'dan' & picture_meaning == 'dim_sg') & condition == 3) %>%
+  ungroup() %>%
+  filter(stem_condition == 'familiar') %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'infreq' ~ 1,
+    .default = 0
+  ))
+
+original_meaning_infreq_prod_data_cond3_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter((language == 'nem' & picture_meaning == 'big_pl') | (language == 'dan' & picture_meaning == 'dim_sg') & condition == 3) %>%
+  ungroup() %>%
+  filter(stem_condition == 'novel') %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'infreq' ~ 1,
+    .default = 0
+  ))
+
+novel_meaning_infreq_prod_data_cond3_familiar_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 3) %>%
+  ungroup() %>%
+  filter(stem_condition == 'familiar') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'infreq', 1, 0))
+
+novel_meaning_infreq_prod_data_cond3_novel_stem = data_analysis %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 3) %>%
+  ungroup() %>%
+  filter(stem_condition == 'novel') %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'infreq', 1, 0))
+
+
+
+# original_meaning_freq_prod_data_cond3_subj_means = original_meaning_freq_prod_data_cond3 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'original_meaning_freq_prod_model_cond3')
+# 
+# novel_meaning_freq_prod_data_cond3_subj_means = novel_meaning_freq_prod_data_cond3 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'novel_meaning_freq_prod_model_cond3')
+# 
+# 
+# original_meaning_infreq_prod_data_cond3_subj_means = original_meaning_infreq_prod_data_cond3 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'original_meaning_infreq_prod_model_cond3')
+# 
+# novel_meaning_infreq_prod_data_cond3_subj_means = novel_meaning_infreq_prod_data_cond3 %>%
+#   group_by(participant) %>%
+#   summarize(subj_values = mean(freq_choice_dv)) %>%
+#   mutate(Model = 'novel_meaning_infreq_prod_model_cond3')
+# 
+# 
+
+### models
+
+priors_m1 = c(
+  prior(student_t(3, 0, 0.5), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 0.5), class = 'sd'))
+  
+###cond 1
+
+original_meaning_freq_prod_model_cond1_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_freq_prod_data_cond1_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_freq_prod_model_cond1_familiar_stem')
+
+original_meaning_freq_prod_model_cond1_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_freq_prod_data_cond1_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_freq_prod_model_cond1_novel_stem')
+
+novel_meaning_freq_prod_model_cond1_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_freq_prod_data_cond1_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_freq_prod_model_cond1_familiar_stem'
+                                                                     )
+
+novel_meaning_freq_prod_model_cond1_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_freq_prod_data_cond1_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_freq_prod_model_cond1_novel_stem'
+                                                                     )
+
+original_meaning_infreq_prod_model_cond1_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_infreq_prod_data_cond1_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_infreq_prod_model_cond1_familiar_stem'
+                                                                     )
+
+original_meaning_infreq_prod_model_cond1_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_infreq_prod_data_cond1_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_infreq_prod_model_cond1_novel_stem'
+                                                                     )
+
+novel_meaning_infreq_prod_model_cond1_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_infreq_prod_data_cond1_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_infreq_prod_model_cond1_familiar_stem'
+                                                                     )
+
+novel_meaning_infreq_prod_model_cond1_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_infreq_prod_data_cond1_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_infreq_prod_model_cond1_novel_stem'
+                                                                     )
+
+
+#### cond2
+
+
+original_meaning_freq_prod_model_cond2_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_freq_prod_data_cond2_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_freq_prod_model_cond2_familiar_stem'
+                                                                     )
+
+
+original_meaning_freq_prod_model_cond2_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_freq_prod_data_cond2_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_freq_prod_model_cond2_novel_stem'
+                                                                     )
+
+novel_meaning_freq_prod_model_cond2_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_freq_prod_data_cond2_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_freq_prod_model_cond2_familiar_stem'
+                                                                     )
+
+
+novel_meaning_freq_prod_model_cond2_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_freq_prod_data_cond2_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_freq_prod_model_cond2_novel_stem'
+                                                                     )
+
+original_meaning_infreq_prod_model_cond2_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_infreq_prod_data_cond2_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_infreq_prod_model_cond2_familiar_stem'
+                                                                     )
+
+original_meaning_infreq_prod_model_cond2_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_infreq_prod_data_cond2_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_infreq_prod_model_cond2_novel_stem'
+                                                                     )
+novel_meaning_infreq_prod_model_cond2_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_infreq_prod_data_cond2_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 20000, 
+                                       warmup = 10000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_infreq_prod_model_cond2_familiar_stem'
+                                                                     )
+
+novel_meaning_infreq_prod_model_cond2_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_infreq_prod_data_cond2_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 30000, 
+                                       warmup = 15000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_infreq_prod_model_cond2_novel_stem'
+                                                                     )
+
+#### cond3
+
+
+original_meaning_freq_prod_model_cond3_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_freq_prod_data_cond3_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_freq_prod_model_cond3_familiar_stem'
+                                                                     )
+
+original_meaning_freq_prod_model_cond3_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_freq_prod_data_cond3_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_freq_prod_model_cond3_novel_stem'
+                                                                     )
+
+novel_meaning_freq_prod_model_cond3_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_freq_prod_data_cond3_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_freq_prod_model_cond3_familiar_stem'
+                                                                     )
+
+novel_meaning_freq_prod_model_cond3_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_freq_prod_data_cond3_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_freq_prod_model_cond3_novel_stem'
+                                                                     )
+
+original_meaning_infreq_prod_model_cond3_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_infreq_prod_data_cond3_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_infreq_prod_model_cond3_familiar_stem'
+                                                                     )
+
+original_meaning_infreq_prod_model_cond3_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_infreq_prod_data_cond3_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_infreq_prod_model_cond3_novel_stem'
+                                                                     )
+
+novel_meaning_infreq_prod_model_cond3_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_infreq_prod_data_cond3_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_infreq_prod_model_cond3_familiar_stem'
+                                                                     )
+
+novel_meaning_infreq_prod_model_cond3_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_infreq_prod_data_cond3_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_infreq_prod_model_cond3_novel_stem'
+                                                                     )
+
+
+
+model_names = c(
+'original_meaning_freq_prod_model_cond1_familiar_stem', 'novel_meaning_freq_prod_model_cond1_familiar_stem', 'original_meaning_infreq_prod_model_cond1_familiar_stem', 'novel_meaning_infreq_prod_model_cond1_familiar_stem', 'original_meaning_freq_prod_model_cond2_familiar_stem', 'novel_meaning_freq_prod_model_cond2_familiar_stem', 'original_meaning_infreq_prod_model_cond2_familiar_stem', 'novel_meaning_infreq_prod_model_cond2_familiar_stem', 'original_meaning_freq_prod_model_cond3_familiar_stem', 'novel_meaning_freq_prod_model_cond3_familiar_stem', 'original_meaning_infreq_prod_model_cond3_familiar_stem', 'novel_meaning_infreq_prod_model_cond3_familiar_stem', 'original_meaning_freq_prod_model_cond1_novel_stem', 
+'novel_meaning_freq_prod_model_cond1_novel_stem', 'original_meaning_infreq_prod_model_cond1_novel_stem', 'novel_meaning_infreq_prod_model_cond1_novel_stem', 'original_meaning_freq_prod_model_cond2_novel_stem', 
+'novel_meaning_freq_prod_model_cond2_novel_stem', 'original_meaning_infreq_prod_model_cond2_novel_stem', 'novel_meaning_infreq_prod_model_cond2_novel_stem', 'original_meaning_freq_prod_model_cond3_novel_stem', 
+'novel_meaning_freq_prod_model_cond3_novel_stem', 'original_meaning_infreq_prod_model_cond3_novel_stem', 'novel_meaning_infreq_prod_model_cond3_novel_stem')
+
+list_of_models = mget(model_names)
+
+extract_fixed_effects = function(model, model_name) {
+  as.data.frame(fixef(model)) %>%
+    tibble::rownames_to_column("Term") %>%
+    mutate(Prob = plogis(Estimate),
+           Lower = plogis(Q2.5),         
+           Upper = plogis(Q97.5), 
+           Model = model_name)
+}
+
+fixed_effects_df = map2_dfr(list_of_models, names(list_of_models), extract_fixed_effects)
+
+fixed_effects_df = fixed_effects_df %>%
+  separate(Model, into = c("Meaning", "ignore1", "Frequency", "Task", "ignore2", "Condition", "Stem", "ignore3"), sep = "_", remove = FALSE) %>%
+  dplyr::select(-ignore1, -ignore2, -ignore3)  # Remove the unnecessary columns
+
+
+# subj_effect_names = ls(pattern = "_subj_means$")
+# subject_effects = bind_rows(mget(subj_effect_names), .id = 'source')
+# 
+# subject_effects = subject_effects %>%
+#   separate(Model, into = c("Meaning", "ignore1", "Frequency", "Task", "ignore2", "Condition"), sep = "_", remove = FALSE) %>%
+#   select(-ignore1, -ignore2) 
+# 
+# subject_effects_prod = subject_effects %>%  # Remove the unnecessary columns 
+#   filter(Task == 'prod')
+
+#write_csv(fixed_effects_df, '../Data/fixed_effects_df.csv')
+
+# ggplot(fixed_effects_df, aes(x = Meaning, y = Prob, fill = Frequency)) +
+#   geom_col(position = position_dodge(width = 0.9)) + 
+#   geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
+#   geom_point(data = subject_effects_prod, 
+#              aes(x = Meaning, y = subj_values),  
+#              color = "black",  
+#              position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), 
+#              size = 2, alpha = 0.2, 
+#              show.legend = FALSE) +  # Hides the points from the legend
+#   facet_grid(~ Condition) + 
+#   theme_bw() +
+#   ggtitle('Production') +
+#   xlab('Condition') +
+#   ylab('Probability of Producing a Form') +
+#   ylim(0, 1)
+
+
+```
+
+# Fixing Plot
+
+## Prod
+
+```{r}
+
+options(contrasts = c("contr.treatment","contr.treatment"))
+data_analysis$condition = factor(data_analysis$condition)
+
+
+data_analysis_plot = data_analysis %>%
+  filter(resp_suffix_form %in% c('dan', 'nem')) %>%
+  filter((accuracy == 1) %>% replace_na(TRUE))
+
+
+### C1
+
+original_meaning_prod_data_cond1_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 1) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_prod_data_cond1_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 1) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+original_meaning_prod_data_cond1_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 1) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_prod_data_cond1_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 1) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+
+
+
+original_meaning_prod_data_cond1_familiar_stem_subj_means = original_meaning_prod_data_cond1_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_prod_data_cond1_familiar_stem')
+
+novel_meaning_prod_data_cond1_familiar_stem_subj_means = novel_meaning_prod_data_cond1_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_prod_data_cond1_familiar_stem')
+
+original_meaning_prod_data_cond1_novel_stem_subj_means = original_meaning_prod_data_cond1_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_prod_data_cond1_novel_stem')
+
+novel_meaning_prod_data_cond1_novel_stem_subj_means = novel_meaning_prod_data_cond1_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_prod_data_cond1_novel_stem')
+
+
+### C2
+
+original_meaning_prod_data_cond2_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 2) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_prod_data_cond2_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 2) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+original_meaning_prod_data_cond2_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 2) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_prod_data_cond2_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 2) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+
+
+
+original_meaning_prod_data_cond2_familiar_stem_subj_means = original_meaning_prod_data_cond2_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_prod_data_cond2_familiar_stem')
+
+novel_meaning_prod_data_cond2_familiar_stem_subj_means = novel_meaning_prod_data_cond2_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_prod_data_cond2_familiar_stem')
+
+original_meaning_prod_data_cond2_novel_stem_subj_means = original_meaning_prod_data_cond2_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_prod_data_cond2_novel_stem')
+
+novel_meaning_prod_data_cond2_novel_stem_subj_means = novel_meaning_prod_data_cond2_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_prod_data_cond2_novel_stem')
+
+
+
+### C3
+
+original_meaning_prod_data_cond3_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 3) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_prod_data_cond3_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 3) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+original_meaning_prod_data_cond3_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 3) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_prod_data_cond3_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('prod')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 3) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+
+
+
+original_meaning_prod_data_cond3_familiar_stem_subj_means = original_meaning_prod_data_cond3_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_prod_data_cond3_familiar_stem')
+
+novel_meaning_prod_data_cond3_familiar_stem_subj_means = novel_meaning_prod_data_cond3_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_prod_data_cond3_familiar_stem')
+
+original_meaning_prod_data_cond3_novel_stem_subj_means = original_meaning_prod_data_cond3_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_prod_data_cond3_novel_stem')
+
+novel_meaning_prod_data_cond3_novel_stem_subj_means = novel_meaning_prod_data_cond3_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_prod_data_cond3_novel_stem')
+
+
+
+###############################
+#Models
+#################################
+
+
+
+priors_m1 = c(
+  prior(student_t(3, 0, 0.5), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 0.5), class = 'sd'))
+  
+###cond 1
+
+original_meaning_prod_model_cond1_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_prod_data_cond1_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_prod_data_cond1_familiar_stem'
+                                                                     )
+
+novel_meaning_prod_model_cond1_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_prod_data_cond1_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_prod_data_cond1_familiar_stem'
+                                                                     )
+
+original_meaning_prod_model_cond1_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_prod_data_cond1_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_prod_data_cond1_novel_stem'
+                                                                     )
+
+novel_meaning_prod_model_cond1_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_prod_data_cond1_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_prod_data_cond1_novel_stem'
+                                                                     )
+
+
+###cond 2
+
+original_meaning_prod_model_cond2_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_prod_data_cond2_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_prod_data_cond2_familiar_stem'
+                                                                     )
+
+novel_meaning_prod_model_cond2_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_prod_data_cond2_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_prod_data_cond2_familiar_stem'
+                                                                     )
+
+original_meaning_prod_model_cond2_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_prod_data_cond2_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_prod_data_cond2_novel_stem'
+                                                                     )
+
+novel_meaning_prod_model_cond2_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_prod_data_cond2_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_prod_data_cond2_novel_stem'
+                                                                     )
+
+
+###cond 3
+
+original_meaning_prod_model_cond3_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_prod_data_cond3_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_prod_data_cond3_familiar_stem'
+                                                                     )
+
+novel_meaning_prod_model_cond3_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_prod_data_cond3_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_prod_data_cond3_familiar_stem'
+                                                                     )
+
+original_meaning_prod_model_cond3_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_prod_data_cond3_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_prod_data_cond3_novel_stem'
+                                                                     )
+
+novel_meaning_prod_model_cond3_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_prod_data_cond3_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_prod_data_cond3_novel_stem'
+       
+                                                              )
+
+
+
+
+
+### Plot
+
+
+
+model_names = c('original_meaning_prod_model_cond1_familiar_stem',
+                'novel_meaning_prod_model_cond1_familiar_stem',
+                'original_meaning_prod_model_cond1_novel_stem',
+                'novel_meaning_prod_model_cond1_novel_stem',
+                'original_meaning_prod_model_cond2_familiar_stem',
+                'novel_meaning_prod_model_cond2_familiar_stem',
+                'original_meaning_prod_model_cond2_novel_stem',
+                'novel_meaning_prod_model_cond2_novel_stem',
+                'original_meaning_prod_model_cond3_familiar_stem',
+                'novel_meaning_prod_model_cond3_familiar_stem',
+                'original_meaning_prod_model_cond3_novel_stem',
+                'novel_meaning_prod_model_cond3_novel_stem')
+
+list_of_models = mget(model_names)
+
+extract_fixed_effects = function(model, model_name) {
+  as.data.frame(fixef(model)) %>%
+    tibble::rownames_to_column("Term") %>%
+    mutate(Prob = plogis(Estimate),
+           Lower = plogis(Q2.5),         
+           Upper = plogis(Q97.5), 
+           Model = model_name)
+}
+
+fixed_effects_df = map2_dfr(list_of_models, names(list_of_models), extract_fixed_effects)
+
+fixed_effects_df = fixed_effects_df %>%
+  separate(Model, into = c("Meaning", "ignore1", "Task", "ignore2", "Condition", 'Stem', 'ignore3'), sep = "_", remove = FALSE) %>%
+  dplyr::select(-ignore1, -ignore2, -ignore3)  # Remove the unnecessary columns
+
+
+subj_effect_names = ls(pattern = "_subj_means$")
+subject_effects = bind_rows(mget(subj_effect_names), .id = 'source')
+
+subject_effects = subject_effects %>%
+  separate(Model, into = c("Meaning", "ignore1", "Task", "ignore2", "Condition", 'Stem', 'ignore3'), sep = "_", remove = FALSE) %>%
+  select(-ignore1, -ignore2, -ignore3) 
+
+subject_effects_prod = subject_effects %>%  # Remove the unnecessary columns 
+  filter(Task == 'prod')
+
+ggplot(fixed_effects_df, aes(x = Meaning, y = Prob, fill = Stem)) +
+  geom_col(position = position_dodge(width = 0.9)) + 
+  geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
+  geom_point(data = subject_effects_prod, 
+             aes(x = Meaning, y = subj_values),  
+             color = "black",  
+             position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), 
+             size = 2, alpha = 0.2, 
+             show.legend = FALSE) +  # Hides the points from the legend
+  facet_grid(~ Condition) + 
+  theme_bw() +
+  ggtitle('Production') +
+  xlab('Meaning') +
+  ylab('Probability of Producing the Frequent Suffix') +
+  ylim(0, 1)
+
+```
+
+## 2afc
+
+```{r}
+#options(contrasts = c("contr.sum","contr.sum"))
+
+### C1
+
+original_meaning_2afc_data_cond1_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 1) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_2afc_data_cond1_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 1) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+original_meaning_2afc_data_cond1_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 1) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_2afc_data_cond1_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 1) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+
+
+
+original_meaning_2afc_data_cond1_familiar_stem_subj_means = original_meaning_2afc_data_cond1_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_2afc_data_cond1_familiar_stem')
+
+novel_meaning_2afc_data_cond1_familiar_stem_subj_means = novel_meaning_2afc_data_cond1_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_2afc_data_cond1_familiar_stem_subj_means')
+
+original_meaning_2afc_data_cond1_novel_stem_subj_means = original_meaning_2afc_data_cond1_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_2afc_data_cond1_novel_stem')
+
+novel_meaning_2afc_data_cond1_novel_stem_subj_means = novel_meaning_2afc_data_cond1_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_2afc_data_cond1_novel_stem')
+
+
+### C2
+
+original_meaning_2afc_data_cond2_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 2) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_2afc_data_cond2_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 2) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+original_meaning_2afc_data_cond2_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 2) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_2afc_data_cond2_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 2) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+
+
+
+original_meaning_2afc_data_cond2_familiar_stem_subj_means = original_meaning_2afc_data_cond2_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_2afc_data_cond2_familiar_stem')
+
+novel_meaning_2afc_data_cond2_familiar_stem_subj_means = novel_meaning_2afc_data_cond2_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_2afc_data_cond2_familiar_stem')
+
+original_meaning_2afc_data_cond2_novel_stem_subj_means = original_meaning_2afc_data_cond2_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_2afc_data_cond2_novel_stem')
+
+novel_meaning_2afc_data_cond2_novel_stem_subj_means = novel_meaning_2afc_data_cond2_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_2afc_data_cond2_novel_stem')
+
+
+
+### C3
+
+original_meaning_2afc_data_cond3_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 3) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_2afc_data_cond3_familiar_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 3) %>%
+  filter(stem_condition == 'familiar') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+original_meaning_2afc_data_cond3_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter((picture_meaning == 'big_pl') | (picture_meaning == 'dim_sg')) %>%
+  filter(condition == 3) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = case_when(
+    freq_choice == 'freq' ~ 1,
+    .default = 0
+  ))
+  
+  
+novel_meaning_2afc_data_cond3_novel_stem = data_analysis_plot %>%
+  filter(task %in% c('2afc')) %>%
+  filter(picture_meaning %in% c('dim_pl') & condition == 3) %>%
+  filter(stem_condition == 'novel') %>%
+  ungroup() %>%
+  mutate(freq_choice_dv = ifelse(freq_choice == 'freq', 1, 0)) 
+
+
+
+
+
+
+original_meaning_2afc_data_cond3_familiar_stem_subj_means = original_meaning_2afc_data_cond3_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_2afc_data_cond3_familiar_stem')
+
+novel_meaning_2afc_data_cond3_familiar_stem_subj_means = novel_meaning_2afc_data_cond3_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_2afc_data_cond3_familiar_stem')
+
+original_meaning_2afc_data_cond3_novel_stem_subj_means = original_meaning_2afc_data_cond3_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_2afc_data_cond3_novel_stem')
+
+novel_meaning_2afc_data_cond3_novel_stem_subj_means = novel_meaning_2afc_data_cond3_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_2afc_data_cond3_novel_stem')
+
+
+
+###############################
+#Models
+#################################
+
+
+
+priors_m1 = c(
+  prior(student_t(3, 0, 0.5), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 0.5), class = 'sd'))
+  
+###cond 1
+
+original_meaning_2afc_model_cond1_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_2afc_data_cond1_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_2afc_data_cond1_familiar_stem'
+                                                                     )
+
+novel_meaning_2afc_model_cond1_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_2afc_data_cond1_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_2afc_data_cond1_familiar_stem'
+                                                                     )
+
+original_meaning_2afc_model_cond1_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_2afc_data_cond1_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_2afc_data_cond1_novel_stem'
+                                                                     )
+
+novel_meaning_2afc_model_cond1_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_2afc_data_cond1_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_2afc_data_cond1_novel_stem'
+                                                                     )
+
+
+###cond 2
+
+original_meaning_2afc_model_cond2_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_2afc_data_cond2_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_2afc_data_cond2_familiar_stem'
+                                                                     )
+
+novel_meaning_2afc_model_cond2_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_2afc_data_cond2_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_2afc_data_cond2_familiar_stem'
+                                                                     )
+
+original_meaning_2afc_model_cond2_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_2afc_data_cond2_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_2afc_data_cond2_novel_stem'
+                                                                     )
+
+novel_meaning_2afc_model_cond2_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_2afc_data_cond2_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_2afc_data_cond2_novel_stem'
+                                                                     )
+
+
+###cond 3
+
+original_meaning_2afc_model_cond3_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_2afc_data_cond3_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_2afc_data_cond3_familiar_stem'
+                                                                     )
+
+novel_meaning_2afc_model_cond3_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_2afc_data_cond3_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_2afc_data_cond3_familiar_stem'
+                                                                     )
+
+original_meaning_2afc_model_cond3_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_2afc_data_cond3_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_2afc_data_cond3_novel_stem'
+                                                                     )
+
+novel_meaning_2afc_model_cond3_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_2afc_data_cond3_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 12000, 
+                                       warmup = 6000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_2afc_data_cond3_novel_stem'
+       
+                                                              )
+
+
+
+
+
+### Plot
+
+
+
+model_names = c('original_meaning_2afc_model_cond1_familiar_stem',
+                'novel_meaning_2afc_model_cond1_familiar_stem',
+                'original_meaning_2afc_model_cond1_novel_stem',
+                'novel_meaning_2afc_model_cond1_novel_stem',
+                'original_meaning_2afc_model_cond2_familiar_stem',
+                'novel_meaning_2afc_model_cond2_familiar_stem',
+                'original_meaning_2afc_model_cond2_novel_stem',
+                'novel_meaning_2afc_model_cond2_novel_stem',
+                'original_meaning_2afc_model_cond3_familiar_stem',
+                'novel_meaning_2afc_model_cond3_familiar_stem',
+                'original_meaning_2afc_model_cond3_novel_stem',
+                'novel_meaning_2afc_model_cond3_novel_stem')
+
+list_of_models = mget(model_names)
+
+extract_fixed_effects = function(model, model_name) {
+  as.data.frame(fixef(model)) %>%
+    tibble::rownames_to_column("Term") %>%
+    mutate(Prob = plogis(Estimate),
+           Lower = plogis(Q2.5),         
+           Upper = plogis(Q97.5), 
+           Model = model_name)
+}
+
+fixed_effects_df_2afc = map2_dfr(list_of_models, names(list_of_models), extract_fixed_effects)
+
+fixed_effects_df_2afc = fixed_effects_df_2afc %>%
+  separate(Model, into = c("Meaning", "ignore1", "Task", "ignore2", "Condition", 'Stem', 'ignore3'), sep = "_", remove = FALSE) %>%
+  dplyr::select(-ignore1, -ignore2, -ignore3)  # Remove the unnecessary columns
+
+
+subj_effect_names = ls(pattern = "_subj_means$")
+subject_effects = bind_rows(mget(subj_effect_names), .id = 'source')
+
+subject_effects = subject_effects %>%
+  separate(Model, into = c("Meaning", "ignore1", "Task", "ignore2", "Condition", 'Stem', 'ignore3'), sep = "_", remove = FALSE) %>%
+  select(-ignore1, -ignore2, -ignore3) 
+
+subject_effects_2afc = subject_effects %>%  # Remove the unnecessary columns 
+  filter(Task == '2afc')
+
+ggplot(fixed_effects_df_2afc, aes(x = Meaning, y = Prob, fill = Stem)) +
+  geom_col(position = position_dodge(width = 0.9)) + 
+  geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
+  geom_point(data = subject_effects_2afc, 
+             aes(x = Meaning, y = subj_values),  
+             color = "black",  
+             position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), 
+             size = 2, alpha = 0.2, 
+             show.legend = FALSE) +  # Hides the points from the legend
+  facet_grid(~ Condition) + 
+  theme_bw() +
+  ggtitle('Forced-Choice Task') +
+  xlab('Meaning') +
+  ylab('Probability of Producing the Frequent Suffix') +
+  ylim(0, 1)
+
+```
+
+## Comprehension
+
+```{r}
+options(contrasts = c("contr.sum","contr.sum"))
+data_analysis_comprehension$condition = factor(data_analysis_comprehension$condition)
+data_analysis_comprehension = data_analysis_comprehension %>%
+  mutate(freq_suffix = case_when(
+    language == 'dan' & comprehension_suffix == 'dan' ~ 'freq',
+    language == 'nem' & comprehension_suffix == 'nem' ~ 'freq',
+    .default = 'infreq'
+  )) %>%
+  mutate(original_meaning = case_when(
+    comprehension_suffix == 'dan' & comprehension_response == 'big_pl' ~ 1,
+    comprehension_suffix == 'nem' & comprehension_response == 'dim_sg' ~ 1,
+    .default = 0
+  )) %>%
+  mutate(novel_meaning = case_when(
+    comprehension_suffix == 'dan' & comprehension_response == 'dim_pl' ~ 1,
+    comprehension_suffix == 'nem' & comprehension_response == 'dim_pl' ~ 1,
+    .default = 0
+  )) %>%
+  filter(novel_meaning == 1 | original_meaning == 1)
+
+
+data_analysis_comprehension = data_analysis_comprehension %>%
+  mutate(resp_stem = str_remove(comprehension_label, comprehension_suffix))
+
+### Cond1
+
+original_meaning_comprehension_data_cond1_familiar_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'familiar' & condition == 1) %>%
+  mutate(freq_choice_dv = ifelse(original_meaning == 1, 1, 0)) 
+
+novel_meaning_comprehension_data_cond1_familiar_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'familiar' & condition == 1) %>%
+  mutate(freq_choice_dv = ifelse(novel_meaning == 1, 1, 0))
+
+original_meaning_comprehension_data_cond1_novel_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'novel' & condition == 1) %>%
+  mutate(freq_choice_dv = ifelse(original_meaning == 1, 1, 0))
+    
+novel_meaning_comprehension_data_cond1_novel_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'novel' & condition == 1) %>%
+  mutate(freq_choice_dv = ifelse(novel_meaning == 1, 1, 0))
+
+
+original_meaning_comprehension_data_cond1_familiar_stem_subj_means = original_meaning_comprehension_data_cond1_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_comprehension_data_cond1_familiar_stem')
+
+novel_meaning_comprehension_data_cond1_familiar_stem_subj_means = novel_meaning_comprehension_data_cond1_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_comprehension_data_cond1_familiar_stem')
+
+
+original_meaning_comprehension_data_cond1_novel_stem_subj_means = original_meaning_comprehension_data_cond1_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_comprehension_data_cond1_novel_stem')
+
+novel_meaning_comprehension_data_cond1_novel_stem_subj_means = novel_meaning_comprehension_data_cond1_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_comprehension_data_cond1_novel_stem')
+
+
+
+
+
+### Cond2
+
+original_meaning_comprehension_data_cond2_familiar_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'familiar' & condition == 2) %>%
+  mutate(freq_choice_dv = ifelse(original_meaning == 1, 1, 0)) 
+
+novel_meaning_comprehension_data_cond2_familiar_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'familiar' & condition == 2) %>%
+  mutate(freq_choice_dv = ifelse(novel_meaning == 1, 1, 0))
+
+original_meaning_comprehension_data_cond2_novel_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'novel' & condition == 2) %>%
+  mutate(freq_choice_dv = ifelse(original_meaning == 1, 1, 0))
+    
+novel_meaning_comprehension_data_cond2_novel_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'novel' & condition == 2) %>%
+  mutate(freq_choice_dv = ifelse(novel_meaning == 1, 1, 0))
+
+
+original_meaning_comprehension_data_cond2_familiar_stem_subj_means = original_meaning_comprehension_data_cond2_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_comprehension_data_cond2_familiar_stem')
+
+novel_meaning_comprehension_data_cond2_familiar_stem_subj_means = novel_meaning_comprehension_data_cond2_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_comprehension_data_cond2_familiar_stem')
+
+
+original_meaning_comprehension_data_cond2_novel_stem_subj_means = original_meaning_comprehension_data_cond2_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_comprehension_data_cond2_novel_stem')
+
+novel_meaning_comprehension_data_cond2_novel_stem_subj_means = novel_meaning_comprehension_data_cond2_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_comprehension_data_cond2_novel_stem')
+
+
+
+
+
+### Cond3
+
+original_meaning_comprehension_data_cond3_familiar_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'familiar' & condition == 3) %>%
+  mutate(freq_choice_dv = ifelse(original_meaning == 1, 1, 0)) 
+
+novel_meaning_comprehension_data_cond3_familiar_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'familiar' & condition == 3) %>%
+  mutate(freq_choice_dv = ifelse(novel_meaning == 1, 1, 0))
+
+original_meaning_comprehension_data_cond3_novel_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'novel' & condition == 3) %>%
+  mutate(freq_choice_dv = ifelse(original_meaning == 1, 1, 0))
+    
+novel_meaning_comprehension_data_cond3_novel_stem = data_analysis_comprehension %>%
+  filter(stem_condition == 'novel' & condition == 3) %>%
+  mutate(freq_choice_dv = ifelse(novel_meaning == 1, 1, 0))
+
+
+original_meaning_comprehension_data_cond3_familiar_stem_subj_means = original_meaning_comprehension_data_cond3_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_comprehension_data_cond3_familiar_stem')
+
+novel_meaning_comprehension_data_cond3_familiar_stem_subj_means = novel_meaning_comprehension_data_cond3_familiar_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_comprehension_data_cond3_familiar_stem')
+
+
+original_meaning_comprehension_data_cond3_novel_stem_subj_means = original_meaning_comprehension_data_cond3_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'original_meaning_comprehension_data_cond3_novel_stem')
+
+novel_meaning_comprehension_data_cond3_novel_stem_subj_means = novel_meaning_comprehension_data_cond3_novel_stem %>%
+  group_by(participant) %>%
+  summarize(subj_values = mean(freq_choice_dv)) %>%
+  mutate(Model = 'novel_meaning_comprehension_data_cond3_novel_stem')
+
+
+
+
+
+
+
+### models
+
+priors_m1 = c(
+  prior(student_t(3, 0, 1), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 1), class = 'sd'))
+  
+###cond 1
+
+original_meaning_comprehension_model_cond1_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_comprehension_data_cond1_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_comprehension_model_cond1_familiar_stem'
+                                                                     )
+
+novel_meaning_comprehension_model_cond1_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_comprehension_data_cond1_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_comprehension_model_cond1_familiar_stem'
+                                                                     )
+
+original_meaning_comprehension_model_cond1_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_comprehension_data_cond1_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_comprehension_model_cond1_novel_stem'
+                                                                     )
+
+novel_meaning_comprehension_model_cond1_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_comprehension_data_cond1_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_comprehension_model_cond1_novel_stem'
+                                                                     )
+
+
+###cond 2
+
+original_meaning_comprehension_model_cond2_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_comprehension_data_cond2_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 30000, 
+                                       warmup = 15000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.999),
+                                       file = '../Data/original_meaning_comprehension_model_cond2_familiar_stem'
+                                                                     )
+
+novel_meaning_comprehension_model_cond2_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_comprehension_data_cond2_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 30000, 
+                                       warmup = 15000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_comprehension_model_cond2_familiar_stem'
+                                                                     )
+
+original_meaning_comprehension_model_cond2_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_comprehension_data_cond2_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 30000, 
+                                       warmup = 15000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_comprehension_model_cond2_novel_stem'
+                                                                     )
+
+novel_meaning_comprehension_model_cond2_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_comprehension_data_cond2_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 30000, 
+                                       warmup = 15000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_comprehension_model_cond2_novel_stem'
+                                                                     )
+
+
+
+###cond 3
+
+original_meaning_comprehension_model_cond3_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_comprehension_data_cond3_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_comprehension_model_cond3_familiar_stem'
+                                                                     )
+
+novel_meaning_comprehension_model_cond3_familiar_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_comprehension_data_cond3_familiar_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_comprehension_model_cond3_familiar_stem'
+                                                                     )
+
+original_meaning_comprehension_model_cond3_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = original_meaning_comprehension_data_cond3_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/original_meaning_comprehension_model_cond3_novel_stem'
+                                                                     )
+
+novel_meaning_comprehension_model_cond3_novel_stem = brm(freq_choice_dv ~ 1 + (1 | participant) + (1 | resp_stem),
+                                       data = novel_meaning_comprehension_data_cond3_novel_stem,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/novel_meaning_comprehension_model_cond3_novel_stem'
+                                                                     )
+
+
+
+
+
+
+model_names = c('original_meaning_comprehension_model_cond1_familiar_stem',
+                'novel_meaning_comprehension_model_cond1_familiar_stem',
+                'original_meaning_comprehension_model_cond1_novel_stem',
+                'novel_meaning_comprehension_model_cond1_novel_stem',
+                'original_meaning_comprehension_model_cond2_familiar_stem',
+                'novel_meaning_comprehension_model_cond2_familiar_stem',
+                'original_meaning_comprehension_model_cond2_novel_stem',
+                'novel_meaning_comprehension_model_cond2_novel_stem',
+                'original_meaning_comprehension_model_cond3_familiar_stem',
+                'novel_meaning_comprehension_model_cond3_familiar_stem',
+                'original_meaning_comprehension_model_cond3_novel_stem',
+                'novel_meaning_comprehension_model_cond3_novel_stem')
+
+list_of_models = mget(model_names)
+
+extract_fixed_effects = function(model, model_name) {
+  as.data.frame(fixef(model)) %>%
+    tibble::rownames_to_column("Term") %>%
+    mutate(Prob = plogis(Estimate),
+           Lower = plogis(Q2.5),         
+           Upper = plogis(Q97.5), 
+           Model = model_name)
+}
+
+fixed_effects_df_comprehension = map2_dfr(list_of_models, names(list_of_models), extract_fixed_effects)
+
+fixed_effects_df_comprehension = fixed_effects_df_comprehension %>%
+  separate(Model, into = c("Meaning", "ignore1", "Task", "ignore2", "Condition", 'Stem', 'ignore3'), sep = "_", remove = FALSE) %>%
+  select(-ignore1, -ignore2, -ignore3)  # Remove the unnecessary columns
+
+
+subj_effect_names = ls(pattern = "_subj_means$")
+subject_effects = bind_rows(mget(subj_effect_names), .id = 'source')
+
+subject_effects = subject_effects %>%
+  separate(Model, into = c("Meaning", "ignore1", "Task", "ignore2", "Condition", 'Stem', 'ignore3'), sep = "_", remove = FALSE) %>%
+  select(-ignore1, -ignore2, -ignore3) 
+
+subject_effects_comprehension = subject_effects %>%
+  filter(Task == 'comprehension')
+
+ggplot(fixed_effects_df_comprehension, aes(x = Meaning, y = Prob, fill = Stem)) +
+  geom_col(position = position_dodge(width = 0.9)) + 
+  geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
+  geom_point(data = subject_effects_comprehension, 
+             aes(x = Meaning, y = subj_values),  
+             color = "black",  
+             position = position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), 
+             size = 2, alpha = 0.2, 
+             show.legend = FALSE) +  # Hides the points from the legend
+  facet_grid(~ Condition) + 
+  theme_bw() +
+  ggtitle('Comprehension') +
+  xlab('Condition') +
+  ylab('Probability of Producing a Form') +
+  ylim(0, 1)
+
+```
+
+## Full plot
+
+```{r}
+fixed_effects_df_all = fixed_effects_df %>%
+   full_join(fixed_effects_df_2afc) %>%
+   full_join(fixed_effects_df_comprehension)
+
+write_csv(fixed_effects_df_all, '../Data/fixed_effects_df_all.csv')
+write_csv(subject_effects, '../Data/subject_effects.csv')
+
+fixed_effects_df_all = read_csv('../Data/fixed_effects_df_all.csv')
+subject_effects = read_csv('../Data/subject_effects.csv')
+
+fixed_effects_df_all$Task = factor(fixed_effects_df_all$Task, levels = c('prod', '2afc', 'comprehension'))
+
+subject_effects$Task = factor(subject_effects$Task, levels = c('prod', '2afc', 'comprehension'))
+
+condition_labels = c("cond1" = "Condition 1", 
+                      "cond2" = "Condition 2", 
+                      "cond3" = "Condition 3")
+task_labels = c("prod" = "Production",
+                "2afc" = "Form Choice",
+                "comprehension" = "Comprehension")
+
+fixed_effects_df_all$Meaning = factor(fixed_effects_df_all$Meaning, 
+                                  levels = c("original", "novel"), 
+                                  labels = c("Original", "Novel"))
+
+subject_effects$Meaning = factor(subject_effects$Meaning, 
+                                  levels = c("original", "novel"), 
+                                  labels = c("Original", "Novel"))
+
+fixed_effects_df_all$Stem = factor(fixed_effects_df_all$Stem, 
+                                  levels = c("familiar", "novel"), 
+                                  labels = c("Familiar", "Novel"))
+
+subject_effects$Stem = factor(subject_effects$Stem, 
+                                  levels = c("familiar", "novel"), 
+                                  labels = c("Familiar", "Novel"))
+
+
+ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Stem)) +
+  geom_col(position = position_dodge(width = 0.9)) + 
+  geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
+  geom_point(data = subject_effects, 
+             aes(x = Meaning, y = subj_values, fill = Stem, color = Stem),  # Map fill and color
+             shape = 21,   # Hollow circle with fill and outline
+             position = position_jitterdodge(jitter.width = 0.3, dodge.width = 0.9), 
+             size = 2, stroke = 0.7, alpha = 0.1,  # Adjust size, border thickness, and transparency
+             show.legend = FALSE) +  # Hides points from legend
+  scale_fill_manual(values = c("Familiar" = "#66c2a5", "Novel" = "#8da0cb")) +  # Bar & point fill colors
+  scale_color_manual(values = c("Familiar" = "#1b7837", "Novel" = "#2b8cbe")) +  # Darker border colors for points
   facet_grid(Task ~ Condition, labeller = labeller(Condition = condition_labels, Task = task_labels)) + 
   theme_bw() +
   ggtitle('Results by condition for each task') +
