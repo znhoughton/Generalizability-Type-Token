@@ -798,45 +798,63 @@ Finally, we present a visualization of the model predictions compared to the hum
 
 ```{r, echo = F, out.width = '80%', fig.align = 'center', warning = F, message = F}
 #| label: fig-rwvshumanpreds
-#| fig-cap: "Plot of the RW predictions versus the human results. The results suggest that the model captures the type frequency and token-frequency conditions well, but predicts an effect of stem familiarity where there is none in the human data for the token frequency condition."
+#| fig-cap: "Plot of the RW predictions versus the human results. The y-axis is the probability of producing the frequent meaning. The top facet is original meanings and the bottom axis is novel meanings. The results suggest that the model captures the type frequency and token-frequency conditions well, but predicts an effect of stem familiarity where there is none in the human data for the token frequency condition."
 #| fig-height: 6
 #| fig-width: 7
 
+# 
+# data_all_conds_logistic2 = read_csv('../Data/data_all_conds_logistic.csv')
+# 
+# data_all_conds_logistic2$prod_condition = factor(data_all_conds_logistic2$prod_condition, levels = c('familiar', 'novel'), labels = c('Familiar', 'Novel'))
+# data_all_conds_logistic2$meaning = factor(data_all_conds_logistic2$meaning, levels = c('original', 'novel'), labels = c('Original', 'Novel'))
+# data_all_conds_logistic2$condition = factor(data_all_conds_logistic2$condition, levels = c(1, 2, 3), labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency'))
 
-data_all_conds_logistic2 = read_csv('../Data/data_all_conds_logistic.csv')
+# 
+# colnames(data_all_conds_logistic2) = c('Meaning', 'Stem', 'Condition', 'Estimate')
+# 
+# data_all_conds_logistic2 = data_all_conds_logistic2 %>%
+#   mutate('Type' = 'Model')
+# 
+# rw_plot = ggplot(data = data_all_conds_logistic2, aes(x = meaning, y = invlogit(mean_freq_diff), fill = prod_condition)) +
+#   geom_col(position = "dodge") +
+#   scale_fill_manual(values = c("Familiar" = "#66c2a5", "Novel" = "#8da0cb")) +
+#   xlab('Meaning') +
+#   ylab('Model Predictions') +
+#   ylim(c(0,1)) +
+#   facet_wrap(~condition)
+# 
+# 
+# #observed estimates:
+# fixed_effects_df = read_csv('../Data/fixed_effects_df_all.csv') %>%
+#   filter(Task == 'prod')
 
-data_all_conds_logistic2$prod_condition = factor(data_all_conds_logistic2$prod_condition, levels = c('familiar', 'novel'), labels = c('Familiar', 'Novel'))
-data_all_conds_logistic2$meaning = factor(data_all_conds_logistic2$meaning, levels = c('original', 'novel'), labels = c('Original', 'Novel'))
-data_all_conds_logistic2$condition = factor(data_all_conds_logistic2$condition, levels = c(1, 2, 3), labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency'))
+# observed_estimates = fixed_effects_df 
+# 
+# observed_estimates$Stem = factor(observed_estimates$Stem, levels = c('familiar', 'novel'), labels = c('Familiar', 'Novel'))
+# observed_estimates$Meaning = factor(observed_estimates$Meaning, levels = c('original', 'novel'), labels = c('Original', 'Novel'))
+# observed_estimates$Condition = factor(observed_estimates$Condition, levels = c('cond1', 'cond2', 'cond3'), labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency'))
+# 
+# observed_estimates = observed_estimates %>%
+#   mutate('Type' = 'Human')
+# 
+# all_data = observed_estimates %>% 
+#   full_join(data_all_conds_logistic2)
+#all_data$Prob = invlogit(all_data$Estimate)
 
-rw_plot = ggplot(data = data_all_conds_logistic2, aes(x = meaning, y = invlogit(mean_freq_diff), fill = prod_condition)) +
+#write_csv(all_data, '../Data/model_preds_and_human_data.csv')
+all_data = read_csv('../Data/model_preds_and_human_data.csv')
+
+observed_vs_model_plot = ggplot(data = all_data, aes(x = Type, y = Prob, fill = Stem)) +
   geom_col(position = "dodge") +
-  scale_fill_manual(values = c("Familiar" = "#66c2a5", "Novel" = "#8da0cb")) +
-  xlab('Meaning') +
-  ylab('Model Predictions') +
-  ylim(c(0,1)) +
-  facet_wrap(~condition)
-
-
-#observed estimates:
-fixed_effects_df = read_csv('../Data/fixed_effects_df_all.csv') %>%
-  filter(Task == 'prod')
-
-observed_estimates = fixed_effects_df 
-
-observed_estimates$Stem = factor(observed_estimates$Stem, levels = c('familiar', 'novel'), labels = c('Familiar', 'Novel'))
-observed_estimates$Meaning = factor(observed_estimates$Meaning, levels = c('original', 'novel'), labels = c('Original', 'Novel'))
-observed_estimates$Condition = factor(observed_estimates$Condition, levels = c('cond1', 'cond2', 'cond3'), labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency'))
-
-observed_estimates_plot = ggplot(data = observed_estimates, aes(x = Meaning, y = Prob, fill = Stem)) +
-  geom_col(position = "dodge") +
-  xlab('Meaning') +
-  ylab('Human Data') +  
+  xlab('Human Data vs Model Predictions') +
+  ylab('Probability of the Frequent Meaning') +  
   scale_fill_manual(values = c("Familiar" = "#66c2a5", "Novel" = "#8da0cb")) +
   ylim(c(0,1)) +
-  facet_wrap(~Condition)
+  facet_grid(Meaning~Condition)
 
-ggarrange(observed_estimates_plot, rw_plot, nrow = 2, common.legend = T)
+observed_vs_model_plot
+
+#ggarrange(observed_estimates_plot, rw_plot, nrow = 2, common.legend = T)
 ```
 
 Overall, the results of our simulations suggest that an error-driven associative learning model, specifically the Rescorla-Wagner model, does a good job of fitting the data. Interestingly, a model with only the activations outperforms (by a large margin) the model that includes stem, condition, and meaning as predictors. This suggests that while the model predicts a linear relationship between stem activations and meaning activations, humans are more sensitive to the meaning activations than the stem activations. Further, our results suggest that participants pay attention to stem identity/familiarity when it is a useful cue (such as in the type frequency condition), but not when it is not a useful cue (such as in the token frequency condition).
