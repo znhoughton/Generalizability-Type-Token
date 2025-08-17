@@ -37,6 +37,7 @@ library(kableExtra)
 library(brms)
 library(sjPlot)
 
+
 fixed_effects_df_all = read_csv('../Data/fixed_effects_df_all.csv')
 subject_effects = read_csv('../Data/subject_effects.csv')
 
@@ -65,7 +66,9 @@ fixed_effects_df_all$Stem = factor(fixed_effects_df_all$Stem,
                                   levels = c("familiar", "novel"), 
                                   labels = c("Familiar", "Novel"))
 
-subject_effects$Stem = factor(subject_effects$Stem, levels = c('Familiar', 'Novel'))
+subject_effects$Stem = factor(subject_effects$Stem, 
+                                  levels = c("familiar", "novel"), 
+                                  labels = c("Familiar", "Novel"))
 
 
 # model_prod_original = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
@@ -396,6 +399,38 @@ observed_estimates_plot = ggplot(data = observed_estimates, aes(x = Meaning, y =
   ylim(c(0,1)) +
   facet_wrap(~Condition)
 
+
+model_human_conf_sem_preds = brm(frequency ~ freq_minus_infreq + (freq_minus_infreq | participant) + (1|resp_stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_sem_alpha,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 22000, 
+                                       warmup = 1100,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_human_conf_sem_preds')
+
+
+percent_greater_zero_model_human_conf_sem_preds = data.frame(fixef(model_human_conf_sem_preds, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+
+percent_greater_zero_model_human_conf_sem_preds = percent_greater_zero_model_human_conf_sem_preds %>%
+  arrange(match(beta_coefficient, c('Intercept', 'freq_minus_infreq_stem', 'freq_minus_infreq_suffix', 'freq_minus_infreq_stem.freq_minus_infreq_suffix')))
+
+
+fixefs_model_model_human_conf_sem_preds = as.data.frame(fixef(model_human_conf_sem_preds)) %>%
+    mutate(percent_greater_zero = percent_greater_zero_model_human_conf_sem_preds$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
+  mutate_if(is.numeric,
+            formatC,
+            format = 'f', 
+            digits = 3) %>%
+    rename('% Samples > 0' = `percent_greater_zero`)
+
 # data_all_conds_logistic2 = read_csv('../Data/data_all_conds_logistic.csv') %>%
 #   mutate(meaning = case_when(
 #     type == 'dim_sg' | type == 'big_pl' ~ 'original',
@@ -451,7 +486,7 @@ conditionslist = conditionslist %>%
   mutate(term = rep(c('Type Frequency', 'Token Frequency', 'Type-Token Frequency'), times = 1))
 
 conditionslist %>%
-  select(term, everything()) %>%
+  dplyr::select(term, everything()) %>%
   rename(` ` = term) %>%
   kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
   kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
@@ -506,7 +541,6 @@ In order to examine the effects of type and token frequency on participants choi
 
 ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Stem)) +
   geom_col(position = position_dodge(width = 0.9)) + 
-  geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
   geom_point(data = subject_effects, 
              aes(x = Meaning, y = subj_values, fill = Stem, color = Stem),  # Map fill and color
              shape = 21,   # Hollow circle with fill and outline
@@ -516,6 +550,7 @@ ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Stem)) +
   scale_fill_manual(values = c("Familiar" = "#66c2a5", "Novel" = "#8da0cb")) +  # Bar & point fill colors
   scale_color_manual(values = c("Familiar" = "#1b7837", "Novel" = "#2b8cbe")) +  # Darker border colors for points
   facet_grid(Task ~ Condition, labeller = labeller(Condition = condition_labels, Task = task_labels)) + 
+  geom_errorbar(aes(ymax = Upper, ymin = Lower), width = 0.2, position = position_dodge(width = 0.9)) +
   theme_bw() +
   ggtitle('Results by condition for each task') +
   xlab('Meaning') +
@@ -728,7 +763,7 @@ For the simulations in this section, $\alpha$ and $\beta$ were set to 0.1, and $
 
 After calculating these cue-outcome associations for each test item, we took the difference between the cue-outcome association for the frequent suffix and the cue-outcome association for the infrequent suffix. Thus for each human response, we now also had the Rescorla-Wagner activation difference between the frequent and infrequent suffix. If the associations are accurate, then the difference between these values should be a good predictor of whether humans chose the frequent suffix or the infrequent suffix on each trial.
 
-In order to test our model predictions, we created three Bayesian models to determine which model predicted the data best. The first model was a simple model that modeled frequency as a function of the Rescorla-Wagner predictions with a random intercept for participant and for stem (@eq-rwmodel1). The second model was analogous, except that we divided the activations into stem and meaning activations. For example, instead of having a single activation for `bal.dim.sg` (which was the association between those cues and the frequent suffix minus the association between those cues and the infrequent suffix) we instead calculated the activations separately for the stem, *bal*, and the meaning, dim.sg (@eq-rwmodel2). Finally, in our third statistical model, we included the original predictors in the human model (stem, condition, and meaning) along with the Rescorla-Wagner predictions (@eq-rwmodel3). In all of our models, frequency is whether the frequent or infrequent suffix was chosen in the human data, meaning is whether the meaning was familiar or novel, stem_condition was whether the stem was familiar or novel, freq_minus_infreq was the difference in predicted associations between the frequent and infrequent suffixes, and resp_stem was the individual stem (e.g., *bal*).
+In order to test our model predictions, we ran three Bayesian models to determine which model predicted the data best. The first model was a simple model that modeled frequency as a function of the Rescorla-Wagner predictions with a random intercept for participant and for stem (@eq-rwmodel1). The second model was analogous, except that we divided the activations into stem and meaning activations. For example, instead of having a single activation for `bal.dim.sg` (which was the association between those cues and the frequent suffix minus the association between those cues and the infrequent suffix) we instead calculated the activations separately for the stem, *bal*, and the meaning, dim.sg (@eq-rwmodel2). Finally, in our third statistical model, we included the original predictors in the human model (stem, condition, and meaning) along with the Rescorla-Wagner predictions (@eq-rwmodel3). In all of our models, frequency is whether the frequent or infrequent suffix was chosen in the human data, meaning is whether the meaning was familiar or novel, stem_condition was whether the stem was familiar or novel, freq_minus_infreq was the difference in predicted associations between the frequent and infrequent suffixes, and resp_stem was the individual stem (e.g., *bal*).
 
 $$
 \text{frequency} \sim \text{freq\_minus\_infreq} + (\text{freq\_minus\_infreq} | \text{participant}) + (1|\text{resp\_stem})
@@ -777,7 +812,6 @@ fixefs_model_rw_preds_stem_suffix_vary = bind_rows(fixefs_model_rw_preds_stem_su
   mutate(term = rep(c('Intercept', 'Stem Activations', 'Suffix Activations', 'Stem:Suffix Activations'), times = 1))
 
 
-
 fixefs_model_rw_preds_stem_suffix_vary = fixefs_model_rw_preds_stem_suffix_vary %>%
   mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
 
@@ -794,70 +828,140 @@ fixefs_model_rw_preds_stem_suffix_vary %>%
 
 ```
 
-Finally, we present a visualization of the model predictions compared to the human data in @fig-rwvshumanpreds. The results demonstrate the the model predictions are quite similar to the human data for the type frequency condition and the type-token frequency condition, however the model predicts an effect of stem familiarity for the token frequency condition that does not appear in the human data. One possible explanation for this difference is that stem identity is a useful predictor of the meaning in the type frequency condition but not in the token frequency condition. That is, in the type frequency condition, certain stems appeared only with one suffix, however in the token frequency condition all the stems occurred with all of the suffixes. This may lead to learners paying attention to the stem identity in the type frequency condition but not in the token frequency condition.
+@fig-rwvshumanpreds provides a visualization of the model predictions compared to the human results. The visualization demonstrates high agreement between the predictions and human results for the type frequency condition and the type-token frequency condition, but falls short in predicting the human results for the token frequency condition. More specifically, the model predicts an effect of stem familiarity for the token frequency condition that does not appear in the human data. One possible explanation for this difference is that humans be sensitive to the fact that stem identity is a useful predictor of the meaning in the type frequency condition but not in the token frequency condition. Specifically, in the type frequency condition, certain stems appeared only with one suffix, however in the token frequency condition all the stems occurred with all of the suffixes. This may lead to learners paying attention to the stem identity in the type frequency condition but not in the token frequency condition. On the other hand, the model learns to associate all of the cues with the present outcomes irregardless of whether that cue occurs with more than one outcome.
 
-```{r, echo = F, out.width = '80%', fig.align = 'center', warning = F, message = F}
+<!--# could test this with eye-tracking if we really wanted to, do people fixate longer on stems in the type frequency condition compared to the token frequency condition? -->
+
+### Additional Simulations
+
+There is evidence that humans learn associations for configural cues that their parts do not have [@kapatsinskiTestingTheoriesLinguistic2009]. For example, in English syllables, rimes are treated as a single constituent (@fig-syllstructure) and @kapatsinskiTestingTheoriesLinguistic2009 demonstrated that native English speakers can learn to associate rimes with an outcome even in cases when the onset and nucleus are associated with different outcomes.
+
+```{r echo = F, fig.align = 'center', warning = F, message = F, out.width = '50%'}
+#| label: fig-syllstructure
+#| fig-cap: "A visualization of English syllable structure."
+#| fig-align: center
+
+knitr::include_graphics("English syllable structure.pdf")
+```
+
+There is also evidence that adult native English speakers show greater reliance on semantic than phonology in production [@culbertson2018childrenprivilegephonological; @hopper2001frequencyemergencelinguistic]. For example, @culbertson2018childrenprivilegephonological demonstrated that in learning an artificial noun class adults rely more on semantic cues than phonological cues (whereas interestingly children rely more on phonological cues than semantic cues).
+
+Thus, in order to further examine the differences between the human and model predictions we made two modifications to the follow-up simulation. First, instead of modeling the suffix meanings (diminutive plural, diminutive singular, big plural, big singular) as two separate cues, we also included a configural cue (analogous to an interaction effect in linear regression) that could be associated with the outcome. This configural cue was simply a combination of the two comprising meanings. For example, given the meaning "big plural", the cues comprised "big", "plural", and "big.plural".
+
+Second, in addition to configural cues, we also increased the alpha value for semantic cues relative to the phonological cues. This results in semantic cues being more associable with outcomes than phonological cues.
+
+In order to evaluate this simulation, we ran a Bayesian regression model similar to previously, with the human response as the dependent variable and the model's predicted activation as the independent variable with random intercepts for participant and stem, and a random slope for the predicted activation by participant. We then examined whether this model was a better fit to the data than the other model predictions using leave-one-out-cross-validation.
+
+The results of our regression model are presented in @tbl-rwconfsem and visualized next to the human data and the RW predictions without configural cues or increased semantic saliency in @fig-rwvshumanpreds. Additionally, the results of the leave-one-out-cross-validation are presented in @tbl-loocv_addsims. These results taken together demonstrate that a model that includes configural cues and an increased sensitivity to semantic cues relative to phonological cues is better able to capture the human data.
+
+<!--# to add: in-depth explanation of the configural cue and semantic  -->
+
+```{r, echo = F, message = F}
+#| label: tbl-rwconfsem 
+#| tbl-cap: 'Results of the statistical analysis containing the predictions from the Rescorla-Wagner logistic model with configural cues and increased saliency for semantic cues.'
+
+fixefs_model_model_human_conf_sem_preds = fixefs_model_model_human_conf_sem_preds %>%
+  mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric)) %>%
+  mutate(term = c('Intercept', 'RW Model Predictions'))
+
+
+fixefs_model_model_human_conf_sem_preds %>%
+  select(term, everything()) %>%
+  rename(` ` = term) %>%
+  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  row_spec(0, bold = TRUE) %>%
+  column_spec(1, bold = T, width = '18em')
+
+```
+
+```{r, echo = F, out.width = '90%', fig.align = 'center', warning = F, message = F}
 #| label: fig-rwvshumanpreds
-#| fig-cap: "Plot of the RW predictions versus the human results. The y-axis is the probability of producing the frequent meaning. The top facet is original meanings and the bottom axis is novel meanings. The results suggest that the model captures the type frequency and token-frequency conditions well, but predicts an effect of stem familiarity where there is none in the human data for the token frequency condition."
+#| fig-cap: "Plot of the original RW simulations and the modified RW simulations versus the human results. The y-axis is the probability of producing the frequent meaning. The top facet is original meanings and the bottom axis is novel meanings. 'Modified Sim' corresponds to the RW simulations with configural cues and increased semantic saliency. 'RW Logistic' corresponds to our original simulations. The results suggest that a model that includes configural cues and increased semantic saliency better predicts the human data."
 #| fig-height: 6
 #| fig-width: 7
 
-# 
-# data_all_conds_logistic2 = read_csv('../Data/data_all_conds_logistic.csv')
-# 
-# data_all_conds_logistic2$prod_condition = factor(data_all_conds_logistic2$prod_condition, levels = c('familiar', 'novel'), labels = c('Familiar', 'Novel'))
-# data_all_conds_logistic2$meaning = factor(data_all_conds_logistic2$meaning, levels = c('original', 'novel'), labels = c('Original', 'Novel'))
-# data_all_conds_logistic2$condition = factor(data_all_conds_logistic2$condition, levels = c(1, 2, 3), labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency'))
+config_mod_sem = read_csv('../Data/rw_plot_configural_mod_alpha.csv') %>%
+  mutate(model_type = 'Modified Sim', Prob = arm::invlogit(mean_freq_diff))
 
-# 
-# colnames(data_all_conds_logistic2) = c('Meaning', 'Stem', 'Condition', 'Estimate')
-# 
-# data_all_conds_logistic2 = data_all_conds_logistic2 %>%
-#   mutate('Type' = 'Model')
-# 
-# rw_plot = ggplot(data = data_all_conds_logistic2, aes(x = meaning, y = invlogit(mean_freq_diff), fill = prod_condition)) +
-#   geom_col(position = "dodge") +
-#   scale_fill_manual(values = c("Familiar" = "#66c2a5", "Novel" = "#8da0cb")) +
-#   xlab('Meaning') +
-#   ylab('Model Predictions') +
-#   ylim(c(0,1)) +
-#   facet_wrap(~condition)
-# 
-# 
-# #observed estimates:
-# fixed_effects_df = read_csv('../Data/fixed_effects_df_all.csv') %>%
-#   filter(Task == 'prod')
+fixed_effects_df = read_csv('../Data/fixed_effects_df_all.csv') %>%
+  filter(Task == 'prod') %>%
+  mutate(model_type = 'Human') %>%
+  rename('meaning' = 'Meaning', 'condition' = 'Condition', 'mean_freq_diff' = 'Estimate', 'prod_condition' = 'Stem') %>%
+  mutate(condition = case_when(
+    condition == 'cond1' ~ 1,
+    condition == 'cond2' ~ 2,
+    condition == 'cond3' ~ 3
+  )) %>%
+  dplyr::select('meaning', 'prod_condition', 'condition', 'Prob', 'model_type')
 
-# observed_estimates = fixed_effects_df 
-# 
-# observed_estimates$Stem = factor(observed_estimates$Stem, levels = c('familiar', 'novel'), labels = c('Familiar', 'Novel'))
-# observed_estimates$Meaning = factor(observed_estimates$Meaning, levels = c('original', 'novel'), labels = c('Original', 'Novel'))
-# observed_estimates$Condition = factor(observed_estimates$Condition, levels = c('cond1', 'cond2', 'cond3'), labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency'))
-# 
-# observed_estimates = observed_estimates %>%
-#   mutate('Type' = 'Human')
-# 
-# all_data = observed_estimates %>% 
-#   full_join(data_all_conds_logistic2)
-#all_data$Prob = invlogit(all_data$Estimate)
+no_config_cues = read_csv('../Data/data_all_conds_logistic.csv') %>%
+  mutate(model_type = 'RW Logistic', Prob = arm::invlogit(mean_freq_diff))
+  
 
-#write_csv(all_data, '../Data/model_preds_and_human_data.csv')
-all_data = read_csv('../Data/model_preds_and_human_data.csv')
+all_data = config_mod_sem %>%
+  full_join(fixed_effects_df) %>%
+  full_join(no_config_cues)
 
-observed_vs_model_plot = ggplot(data = all_data, aes(x = Type, y = Prob, fill = Stem)) +
+#all_data = read_csv('../Data/model_preds_and_human_data.csv')
+
+all_data$Meaning = all_data$meaning
+all_data$Condition = all_data$condition
+all_data$Stem = all_data$prod_condition
+
+
+all_data = all_data %>%
+  mutate(across(where(is.character), str_to_title)) %>%
+  mutate(Condition = case_when(
+    Condition == 1 ~ 'Type Frequency',
+    Condition == 2 ~ 'Token Frequency', 
+    Condition == 3 ~ 'Type-Token Frequency'
+  ))
+
+all_data$Condition = factor(all_data$Condition, levels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency'))
+
+observed_vs_model_plot = ggplot(data = all_data, aes(x = model_type, y = Prob, fill = Stem)) +
   geom_col(position = "dodge") +
   xlab('Human Data vs Model Predictions') +
   ylab('Probability of the Frequent Meaning') +  
   scale_fill_manual(values = c("Familiar" = "#66c2a5", "Novel" = "#8da0cb")) +
   ylim(c(0,1)) +
-  facet_grid(Meaning~Condition)
+  facet_grid(Meaning~Condition) +
+  theme_bw() +
+  theme(
+  axis.text.x = element_text(angle = 45, hjust = 1)
+)
 
 observed_vs_model_plot
 
 #ggarrange(observed_estimates_plot, rw_plot, nrow = 2, common.legend = T)
 ```
 
-Overall, the results of our simulations suggest that an error-driven associative learning model, specifically the Rescorla-Wagner model, does a good job of fitting the data. Interestingly, a model with only the activations outperforms (by a large margin) the model that includes stem, condition, and meaning as predictors. This suggests that while the model predicts a linear relationship between stem activations and meaning activations, humans are more sensitive to the meaning activations than the stem activations. Further, our results suggest that participants pay attention to stem identity/familiarity when it is a useful cue (such as in the type frequency condition), but not when it is not a useful cue (such as in the token frequency condition).
+```{r, echo = F, message = F}
+#| label: tbl-loocv_addsims 
+#| tbl-cap: "Results of the leave-one-out cross-validation for the additional simulation. 'Modified RW' corresponds to the model with configural cues and increased saliency for semantic cues. 'RW Model' refers to the RW logistic model. 'Only Human' refers to the original statistical analysis that contains no model predictions."
+
+
+loo_co_results_add = read_csv('../Data/loo_comparisons_conf_sem.csv') %>%
+  dplyr::select(elpd_diff, se_diff, elpd_loo, se_elpd_loo) %>%
+  mutate(term = c('Modified RW', 'RW', 'Only Human'))
+  
+
+loo_co_results_add %>%
+  dplyr::select(term, everything()) %>%
+  rename(` ` = term) %>%
+  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  row_spec(0, bold = TRUE) %>%
+  column_spec(1, bold = T, width = '22em')
+
+```
+
+Overall, the results of our simulations suggest that an error-driven associative learning model, specifically the Rescorla-Wagner model, fits the human data quite well. Interestingly, a model with only the activations outperforms (by a large margin) the model that includes stem, condition, and meaning as predictors. This suggests that while the model predicts a linear relationship between stem activations and meaning activations, humans are more sensitive to the meaning activations than the stem activations. Further, our results suggest that participants pay attention to stem identity/familiarity when it is a useful cue (such as in the type frequency condition), but not when it is not a useful cue (such as in the token frequency condition).
+
+The results also suggest that a model with configural cues and a higher alpha value for semantic cues relative to phonological cues better fits the human data. This confirms previous findings that have demonstrated that humans learn associations for configural cues and that humans are more sensitive to semantic cues than phonological cues.
 
 ## Discussion
 

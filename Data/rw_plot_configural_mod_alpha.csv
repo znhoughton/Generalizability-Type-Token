@@ -1,0 +1,13 @@
+meaning,prod_condition,condition,mean_freq_diff
+novel,familiar,1,-0.419216182429706
+novel,familiar,2,1.6826094340168658
+novel,familiar,3,1.3442928102157599
+novel,novel,1,0.07117718722796391
+novel,novel,2,1.2835405898783105
+novel,novel,3,1.4234072737401533
+original,familiar,1,-0.3837748645996306
+original,familiar,2,2.1972552647299124
+original,familiar,3,1.9209686020800665
+original,novel,1,0.10661850505803942
+original,novel,2,1.7981864205913567
+original,novel,3,2.00008306560446

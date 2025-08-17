@@ -2481,6 +2481,8 @@ ggarrange(rw_plot, rw_plot_configural, nrow = 2, common.legend = T)
 
 ```{r}
 
+semantic_cues = c('dim', 'pl', 'big', 'sg', 'big.pl', 'big.sg', 'dim.sg', 'dim.pl')
+
 data_cond1_rw_matrix_configural_mod_alpha = map_dfr(1:n_sims, function(i) {
   result = as.data.frame(Rescorla_modified_alpha_for_semantic_cues(cuesOutcomes = data_cond1_configural[sample(1:nrow(data_cond1_configural)), ], logistic = T))
   result = rownames_to_column(result, var = 'cue')
@@ -2806,12 +2808,19 @@ data_all_conds_conf_sem %>%
 data_all_conds_for_comparison_conf_sem = data_all_conds_conf_sem %>%
   dplyr::select(original_condition, stem_condition, resp_stem, picture_meaning, freq_minus_infreq, dan_activations, nem_activations, sil_activations, shoon_activations)
 
+data_all_conds_for_comparison_conf_sem = data_all_conds_for_comparison_conf_sem %>%
+  mutate(picture_meaning = case_when(
+    picture_meaning == 'dim_sg_dim.sg' ~ 'dim_sg',
+    picture_meaning == 'big_pl_big.pl' ~ 'big_pl',
+    .default = picture_meaning
+  ))
+
 human_data_no_sil_no_shoon_plus_rw_preds_sem_alpha = human_data_no_sil_no_shoon %>%
   left_join(data_all_conds_for_comparison_conf_sem)
   
 ```
 
-
+#### model
 ```{r}
 priors_m1 = c(
   prior(student_t(3, 0, 1), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
@@ -2821,16 +2830,28 @@ priors_m1 = c(
 model_human_conf_sem_preds = brm(frequency ~ freq_minus_infreq + (freq_minus_infreq | participant) + (1|resp_stem),
                                        data = human_data_no_sil_no_shoon_plus_rw_preds_sem_alpha,
                                        family = bernoulli(link = 'logit'),
-                                       iter = 15000, 
-                                       warmup = 7500,
+                                       iter = 22000, 
+                                       warmup = 1100,
                                        chains = 4,
                                        cores = 4,
                                        prior = priors_m1,
-                                       #control = list(adapt_delta = 0.99),
+                                       control = list(adapt_delta = 0.99),
                                        save_pars = save_pars(all = TRUE),
                                        file = '../Data/model_human_conf_sem_preds')
 
-# 
+
+model_human_conf_sem_preds = add_criterion(model_human_conf_sem_preds, 'loo')
+
+```
+
+
+#### loo compare with model without conf cues and different semantic salience value
+
+```{r}
+#compare with logistic and human model that don't have configural cues or different semantic salience value
+loo_comparisons_conf_sem = data.frame(loo_compare(model_human_rw_preds, model_human_conf_sem_preds, model_prod_both_stem_simple_humans))
+
+#write_csv(loo_comparisons_conf_sem, '../Data/loo_comparisons_conf_sem.csv')
 ```
 
 
@@ -2869,6 +2890,8 @@ rw_plot_configural_mod_alpha = ggplot(data = data_all_conds_logistic2_configural
   ggtitle('configural cues + mod alpha') +
   facet_wrap(~condition)
 
+
+#write_csv(data_all_conds_logistic2_configural_modified_alpha, 'rw_plot_configural_mod_alpha.csv')
 
 #observed estimates:
 fixed_effects_df = read_csv('../Data/fixed_effects_df_all.csv') %>%
