@@ -941,7 +941,7 @@ priors_m1 = c(
   prior(student_t(3, 0, 1), class = 'b'),
   prior(student_t(3, 0, 1), class = 'sd'))
 
-model_human_rw_preds = brm(frequency ~ freq_minus_infreq + (freq_minus_infreq | participant) + (1|resp_stem),
+model_human_rw_preds = brm(frequency ~ freq_minus_infreq + (1 | participant) + (1 | resp_stem),
                                        data = human_data_no_sil_no_shoon_plus_rw_preds,
                                        family = bernoulli(link = 'logit'),
                                        iter = 15000, 
@@ -972,7 +972,7 @@ human_data_no_sil_no_shoon_plus_rw_preds_stem_suffix_vary = human_data_no_sil_no
   left_join(data_prod_results_for_plotting_stem_suffix_vary)
 
 
-model_prod_rw_stem_suffix_vary = brm(frequency ~ freq_minus_infreq_stem * freq_minus_infreq_suffix + (1 + freq_minus_infreq_stem * freq_minus_infreq_suffix | participant), #resp_stem intercept removed because it's redundant with freq_minus_infreq_stem
+model_prod_rw_stem_suffix_vary = brm(frequency ~ freq_minus_infreq_stem * freq_minus_infreq_suffix + (1 | participant), #resp_stem intercept removed because it's redundant with freq_minus_infreq_stem
                                        data = human_data_no_sil_no_shoon_plus_rw_preds_stem_suffix_vary,
                                        family = bernoulli(link = 'logit'),
                                        iter = 14000, 
@@ -983,6 +983,32 @@ model_prod_rw_stem_suffix_vary = brm(frequency ~ freq_minus_infreq_stem * freq_m
                                        control = list(adapt_delta = 0.99),
                                        save_pars = save_pars(all = TRUE),
                                        file = '../Data/model_prod_rw_stem_suffix_vary')
+
+
+model_prod_rw_stem_suffix_vary_match_human_model = brm(frequency ~ freq_minus_infreq_stem * freq_minus_infreq_suffix * condition * meaning * stem_condition + (1 | participant), #resp_stem intercept removed because it's redundant with freq_minus_infreq_stem
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_stem_suffix_vary,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_prod_rw_stem_suffix_vary_match_human_model')
+
+
+model_prod_rw_stem_suffix_vary_by_condition = brm(frequency ~ freq_minus_infreq_stem * freq_minus_infreq_suffix * condition + (1 | participant), #resp_stem intercept removed because it's redundant with freq_minus_infreq_stem
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_stem_suffix_vary,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_prod_rw_stem_suffix_vary_by_condition')
 
 human_data_no_sil_no_shoon_plus_rw_preds_stem_suffix_vary$condition = factor(human_data_no_sil_no_shoon_plus_rw_preds_stem_suffix_vary$condition, levels = c(3, 1, 2))
 # model_prod_rw_stem_suffix_vary_by_condition = brm(frequency ~ freq_minus_infreq_stem * freq_minus_infreq_suffix * condition + (1 + freq_minus_infreq_stem * freq_minus_infreq_suffix | participant),
@@ -1024,7 +1050,7 @@ priors_m1 = c(
   prior(student_t(3, 0, 1), class = 'sd'))
 
 
-model_prod_both_stem_rw_simple = brm(frequency ~ condition*meaning*stem_condition + freq_minus_infreq + (1 + freq_minus_infreq | participant) + (1 | resp_stem),
+model_prod_both_stem_rw_simple = brm(frequency ~ condition*meaning*stem_condition + freq_minus_infreq + (1 | participant) + (1 | resp_stem),
                                        data = human_data_no_sil_no_shoon_plus_rw_preds,
                                        family = bernoulli(link = 'logit'),
                                        iter = 14000, 
@@ -1036,7 +1062,7 @@ model_prod_both_stem_rw_simple = brm(frequency ~ condition*meaning*stem_conditio
                                        save_pars = save_pars(all = TRUE),
                                        file = '../Data/model_prod_both_stem_rw_simple')
 
-model_prod_both_stem_rw = brm(frequency ~ condition*meaning*stem_condition + freq_minus_infreq + (1 + condition*meaning*stem_condition + freq_minus_infreq | participant) + (1 | resp_stem),
+model_prod_both_stem_rw = brm(frequency ~ condition*meaning*stem_condition + freq_minus_infreq + (1 + condition*meaning*stem_condition | participant) + (1 | resp_stem),
                                        data = human_data_no_sil_no_shoon_plus_rw_preds,
                                        family = bernoulli(link = 'logit'),
                                        iter = 14000, 
@@ -2827,7 +2853,7 @@ priors_m1 = c(
   prior(student_t(3, 0, 1), class = 'b'),
   prior(student_t(3, 0, 1), class = 'sd'))
 
-model_human_conf_sem_preds = brm(frequency ~ freq_minus_infreq + (freq_minus_infreq | participant) + (1|resp_stem),
+model_human_conf_sem_preds = brm(frequency ~ freq_minus_infreq + (1 | participant) + (1 | resp_stem),
                                        data = human_data_no_sil_no_shoon_plus_rw_preds_sem_alpha,
                                        family = bernoulli(link = 'logit'),
                                        iter = 22000, 
@@ -2841,6 +2867,8 @@ model_human_conf_sem_preds = brm(frequency ~ freq_minus_infreq + (freq_minus_inf
 
 
 model_human_conf_sem_preds = add_criterion(model_human_conf_sem_preds, 'loo')
+
+
 
 ```
 

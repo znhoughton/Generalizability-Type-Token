@@ -198,6 +198,43 @@ rownames(fixefs_model_2afc_both) = c('Intercept', 'Type Frequency', 'Token Frequ
 
 
 
+model_2afc_both_stem = brm(frequency ~ condition*meaning*stem_condition + (1 + meaning | participant),
+                                       data = data_2afc_both,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_2afc_both_stem')
+
+
+
+
+percent_greater_zero_both = data.frame(fixef(model_2afc_both_stem, summary = F)) %>%
+  pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
+  group_by(beta_coefficient) %>%
+  summarize((sum(estimate > 0) / length(estimate)) * 100)
+
+percent_greater_zero_both = percent_greater_zero_both %>%
+  arrange(match(beta_coefficient, c('Intercept', 'condition1', 'condition2', 'meaning1', 'stem_condition1', 'condition1.meaning1', 'condition2.meaning1', 'condition1.stem_condition1', 'condition2.stem_condition1', 'meaning1.stem_condition1', 'condition1.meaning1.stem_condition1', 'condition2.meaning1.stem_condition1')))
+
+
+fixefs_model_2afc_both_stem = as.data.frame(fixef(model_2afc_both_stem)) %>%
+    mutate(percent_greater_zero = percent_greater_zero_both$`(sum(estimate > 0)/length(estimate)) * 100`) %>%
+    mutate_if(is.numeric,
+            formatC,
+            format = 'f', 
+            digits = 3) %>%
+    rename('% Samples > 0' = `percent_greater_zero`)
+
+
+
+rownames(fixefs_model_2afc_both_stem) = c('Intercept', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Novel Stem', 'Type Frequency:Novel Meaning', 'Token Frequency:Novel Meaning', 'Type Frequency:Novel Stem', 'Token Frequency:Novel Stem', 'Novel Meaning:Novel Stem', 'Type Frequency:Novel Meaning:Novel Stem', 'Token Frequency:Novel Meaning:Novel Stem')
+
+
+
 
 
 model_comprehension_numeric = brm(meaning ~ condition_numeric + (1 | participant),
@@ -280,7 +317,7 @@ all_cond_estimates_paper2$Condition = factor(all_cond_estimates_paper2$Condition
 
 
 
-model_prod_both_stem_rw = brm(frequency ~ condition*meaning*stem_condition + freq_minus_infreq + (1 + stem_condition*meaning + freq_minus_infreq | participant) + (1 | resp_stem),
+model_prod_both_stem_rw = brm(frequency ~ condition*meaning*stem_condition + freq_minus_infreq + (1 + stem_condition*meaning | participant) + (1 | resp_stem),
                                        data = human_data_no_sil_no_shoon_plus_rw_preds,
                                        family = bernoulli(link = 'logit'),
                                        iter = 14000, 
@@ -316,7 +353,7 @@ fixefs_model_rw_preds = as.data.frame(fixef(model_prod_both_stem_rw)) %>%
 rownames(fixefs_model_rw_preds) = c('Intercept', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Novel Stem', 'Frequent - Infrequent (RW)', 'Type Frequency:Novel Meaning', 'Token Frequency:Novel Meaning', 'Type Frequency:Novel Stem', 'Token Frequency:Novel Stem', 'Novel Meaning:Novel Stem', 'Type Frequency:Novel Meaning:Novel Stem', 'Token Frequency:Novel Meaning:Novel Stem')
 
 
-model_human_rw_preds = brm(frequency ~ freq_minus_infreq + (freq_minus_infreq | participant) + (1|resp_stem),
+model_human_rw_preds = brm(frequency ~ freq_minus_infreq + (1 | participant) + (1|resp_stem),
                                        data = human_data_no_sil_no_shoon_plus_rw_preds,
                                        family = bernoulli(link = 'logit'),
                                        iter = 15000, 
@@ -328,7 +365,7 @@ model_human_rw_preds = brm(frequency ~ freq_minus_infreq + (freq_minus_infreq | 
                                        save_pars = save_pars(all = TRUE),
                                        file = '../Data/model_human_rw_preds')
 
-model_prod_both_stem_rw_simple = brm(frequency ~ condition*meaning*stem_condition + freq_minus_infreq + (1 + freq_minus_infreq | participant) + (1 | resp_stem),
+model_prod_both_stem_rw_simple = brm(frequency ~ condition*meaning*stem_condition + freq_minus_infreq + (1 | participant) + (1 | resp_stem),
                                        data = human_data_no_sil_no_shoon_plus_rw_preds,
                                        family = bernoulli(link = 'logit'),
                                        iter = 14000, 
@@ -353,7 +390,7 @@ model_prod_both_stem_simple_humans = brm(frequency ~ condition*meaning*stem_cond
                                        save_pars = save_pars(all = TRUE),
                                        file = '../Data/model_prod_both_stem_simple_humans')
 
-model_prod_rw_stem_suffix_vary = brm(frequency ~ freq_minus_infreq_stem * freq_minus_infreq_suffix + (1 + freq_minus_infreq_stem * freq_minus_infreq_suffix | participant) + (1 | resp_stem),
+model_prod_rw_stem_suffix_vary = brm(frequency ~ freq_minus_infreq_stem * freq_minus_infreq_suffix + (1 | participant) + (1 | resp_stem),
                                        data = human_data_no_sil_no_shoon_plus_rw_preds_stem_suffix_vary,
                                        family = bernoulli(link = 'logit'),
                                        iter = 14000, 
@@ -385,7 +422,7 @@ fixefs_model_rw_preds_stem_suffix_vary = as.data.frame(fixef(model_prod_rw_stem_
 
 
 loo_co_results = data.frame(loo_compare(model_human_rw_preds, model_prod_rw_stem_suffix_vary, model_prod_both_stem_rw_simple, model_prod_both_stem_simple_humans)) %>%
-  mutate('term' = c('Stem and Suffix Activations as Separate Predictors', 'Original Predictiors Plus RW Activations', 'Only RW Activations', 'Only Original Predictors'))
+  mutate('term' = c('Stem and Meaning Activations as Separate Predictors', 'Original Predictiors Plus RW Activations', 'Only RW Activations', 'Only Original Predictors'))
 
 
 fixed_effects_df = read_csv('../Data/fixed_effects_df_all.csv') %>%
@@ -400,7 +437,7 @@ observed_estimates_plot = ggplot(data = observed_estimates, aes(x = Meaning, y =
   facet_wrap(~Condition)
 
 
-model_human_conf_sem_preds = brm(frequency ~ freq_minus_infreq + (freq_minus_infreq | participant) + (1|resp_stem),
+model_human_conf_sem_preds = brm(frequency ~ freq_minus_infreq + (1 | participant) + (1|resp_stem),
                                        data = human_data_no_sil_no_shoon_plus_rw_preds_sem_alpha,
                                        family = bernoulli(link = 'logit'),
                                        iter = 22000, 
@@ -452,7 +489,17 @@ fixefs_model_model_human_conf_sem_preds = as.data.frame(fixef(model_human_conf_s
 #   ylim(c(0,1)) +
 #   facet_wrap(~condition)
 
-
+model_prod_rw_stem_suffix_vary_match_human_model = brm(frequency ~ freq_minus_infreq_stem * freq_minus_infreq_suffix * condition * meaning * stem_condition + (1 | participant), #resp_stem intercept removed because it's redundant with freq_minus_infreq_stem
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_stem_suffix_vary,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_prod_rw_stem_suffix_vary_match_human_model')
 ```
 
 # The effects of type and token frequency on semantic extension
@@ -527,15 +574,15 @@ Participants saw each trial within the comprehension task 2 times, each in a ran
 
 ## Analyses and Results
 
-### Production Task
-
 In order to examine the effects of type and token frequency on participants choice of suffix, we examined the effects of type and token frequency on the original meaning as well as the novel meaning (diminutive plural).[^2]
 
 [^2]: All data and code for the analyses can be found here: <https://github.com/znhoughton/Generalizability-Type-Token>.
 
+First we report a general plot of our results before going into detail about each task (@fig-fullresults). In order to visualize the results, we subsetted the data by condition (type frequency, token frequency, or type-token frequency), stem (familiar or novel), task (production, form-choice, or comprehension), and meaning (original or novel). We then ran a logistic regression model. For the form-choice and production tasks, the dependent variable was 1 if the participant chose the frequent suffix for that trial or 0 if they chose the infrequent suffix and the independent variable was the intercept with random intercepts for participant and stem identity. For the comprehension task, the dependent variable was 1 if they chose the original meaning for the original meaning portion and 1 if they chose the novel meaning in the novel meaning portion and the independent variable was the intercept with random intercepts for participant and stem identity. For example, the larger estimates for the original meaning in the type frequency condition indicate that participants preferred to select the original meaning for both stem types. As a result, these bars are lower for the novel meaning since the original and novel estimates for a given stem type sum to 1. While this visualization for the comprehension is admittedly a bit awkward, the advantage is it allows us to visualize it alongside the results for production and form-choice tasks.
+
 ```{r, echo = F, out.width = '80%', fig.align = 'center', warning = F, message = F}
 #| label: fig-fullresults
-#| fig-cap: "Plot of our results. Points indicate individual subject values. The x-axis indicates whether the meaning was original or novel. Green coloring corresponds to the frequent suffix while blue corresponds to the infrequent suffix. The y-axis indicates the response probability. For Production and Form-choice, it is the response probability of choosing a form. For Comprehension, it is the response probability of choosing a meaning. Facets indicate condition (type frequency, token frequency, or type-token frequency) and task (production, form-choice, comprehension)."
+#| fig-cap: "Plot of our results. Points indicate individual subject values. The x-axis indicates whether the meaning was original or novel. Green coloring corresponds to the frequent stem while blue corresponds to the infrequent stem. The y-axis indicates the response probability. For Production and Form-choice, it is the response probability of choosing the frequent form. Thus, a value closer to 1 indicates that participants chose the frequent form more than the infrequent form. For Comprehension, it is the response probability of choosing a given meaning. For example, a value closer to 1 for the original meaning with a novel stem indicates that when participants saw a novel stem with *dan*, they were more likely to select the big.pl meaning than the dim.pl meaning (as a result, for a given stem familiarity the original and novel bars sum to 1 in the comprehension condition). Facets indicate condition (type frequency, token frequency, or type-token frequency) and task (production, form-choice, comprehension). The results were obtained by running a separate regression model "
 #| fig-height: 6
 #| fig-width: 7
 
@@ -558,17 +605,23 @@ ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Stem)) +
   ylim(0, 1)
 ```
 
+The plot demonstrates that participants were more likely to produce the frequent suffix with a novel meaning when the frequent suffix had a high type frequency, but were less likely to produce the frequent suffix with a novel meaning when the frequent suffix had a high token frequency. Our results also demonstrate that this effect disappears when both forms are made accessible in the form-choice task. Further, the results also demonstrate that in comprehension, regardless of the condition or stem familiarity, the original meaning is chosen far more than the novel meaning for a given suffix.
+
+We explore the results for each task in depth in the next section.
+
+### Production Task
+
 <!--# Freq bar in original is choosing dan for big_pl or nem for dim_sg in the dan language and infreq bar is choosing dan for big_pl and nem for dim_sg in the nem language -->
 
-In order to determine whether the effect of frequency on semantic extension differed between conditions, we ran a Bayesian linear mixed-effects model on the production data. The dependent variable was whether the participant produced the frequent suffix (*dan* in the *dan* language, *nem* in the *nem* language). A larger Intercept indicates that the frequent suffix was more likely to be produced than the infrequent suffix. A larger coefficient estimate indicates that the frequent form was more likely to be produced relative to the type-token frequency condition. The independent variables were condition, meaning, and stem (either familiar stem or novel stem). Condition was treatment coded such that the intercept was the high type and high token frequency condition. Meaning was sum coded. We also included a random intercept for participant and a random slope for meaning by participant. The syntax for our model is included below in @eq-prodmodels.
+In order to determine whether the effect of frequency on semantic extension differed between conditions, we ran a Bayesian linear mixed-effects model on the production data. The dependent variable was whether the participant produced the frequent suffix (*dan* in the *dan* language, *nem* in the *nem* language). We treatment coded condition such that the intercept was the type-token frequency condition. Thus, a larger Intercept indicates that the frequent suffix was more likely to be produced than the infrequent suffix when it had a high type and token frequency. A larger coefficient estimate indicates that the frequent form was more likely to be produced than the infrequent form in that condition relative to the type-token frequency condition. We also included meaning as a sum-coded variable. Meaning had two values, either original or novel. An original meaning referred to big plural if the suffix was *dan* or diminutive singular if the suffix was *nem*. A meaning was novel if it was diminutive plural regardless of the suffix. We also included a random intercept for participant and a random slope for meaning by participant. The syntax for our model is included below in @eq-prodmodels.
 
 $$
 \text{frequent\_suffix} \sim \text{condition}*\text{meaning} + (1 + \text{meaning} | \text{participant})
 $$ {#eq-prodmodels}
 
-The results are shown in @tbl-prodresults. The results suggest that in general the frequent suffix is used more than the infrequent suffix for all conditions. Notably however, we find no meaningful interaction effect for type frequency and novel meaning, suggesting that the effect of meaning is similar for both conditions in which a suffix had higher type frequency when it was frequent. We do, however, find an interaction effect between token frequency and novel meaning, suggesting that the frequent suffix is used less for the novel meaning when it has higher token frequency but the same type frequency as its competitors.
+The results are shown in @tbl-prodresults. The results suggest that in general the frequent suffix is preferred generally in when there is a high type and high token frequency, but not when there is only a high type frequency or a high token frequency. Notably however, we find no meaningful interaction effect for type frequency and novel meaning. We do, however, find a negative interaction effect between token frequency and novel meaning, suggesting that the frequent suffix is used less for the novel meaning when it has higher token frequency but the same type frequency as its competitors.
 
-These results suggest that participants are more likely to produce the frequent suffix to convey a novel meaning when the suffix has both high type and token frequency, but not when there is high token frequency or high type frequency alone. Further, when a learner is expressing a familiar meaning, a high token frequency increases the probability of the learner producing the more frequent suffix.
+These results suggest that participants are more likely to produce the frequent suffix to convey a novel meaning when the suffix has both high type and token frequency or high type frequency, but not when there is high token frequency alone.
 
 ```{r, echo = F, message = F}
 #| label: tbl-prodresults
@@ -593,11 +646,15 @@ prod_both_meanings %>%
   column_spec(1, bold = T, width = '18em')
 ```
 
-In order to follow up on this, we ran an additional model that included whether the stem was familiar (occurred in training) or novel (did not occur in training). The results are reported in @tbl-prodresultsstem and visualized in @fig-prodresultsstem.
+It is also possible that whether the stem was seen by the participant in training or not also plays a role. As a result, we ran an additional model that included whether the stem was familiar (occurred in training) or novel (did not occur in training). Similar to the previous model, condition was treatment coded with type-token frequency as the reference level, and meaning as well as stem familiarity were sum-coded. We also included a random intercept for participant and a random slope for meaning by participant and stem familiarity by participant. The model syntax is reported in @eq-prodmodelstem. The results are reported in @tbl-prodresultsstem and visualized in @fig-prodresultsstem.
 
-The results demonstrate that there is little effect of stem familiarity for the type-token frequency and token frequency conditions. However, there is a pretty large effect of stem for the type frequency condition. Specifically, learners are more likely to use the frequent suffix in the type frequency condition when the stem is novel, and even more likely to use the frequent suffix when both the stem and meaning are novel.
+$$
+\text{frequent\_suffix} \sim \text{condition}*\text{meaning}*\text{stem} + (1 + \text{meaning} * \text{stem} | \text{participant})
+$$ {#eq-prodmodelstem}
 
-Overall, our results suggest that in production, increased token frequency leads to learners choosing the frequent suffix to express the original meaning more than its competitors. Increased type frequency leads to learners choosing the frequent suffix to express the novel meaning more. Increasing both type and token frequency leads to learners choosing the frequent suffix to express both novel and familiar meanings more.
+We find a meaningful effect for the intercept, suggesting that the frequent suffix is chosen more than the infrequent suffix when there is a high type and high token frequency. We also find a meaningful effect for novel stems, suggesting that in general the frequent suffix is produced more than the infrequent suffix when the stem is novel. Perhaps most interestingly, we find a meaningful interaction between type frequency condition and novel stem, suggesting that in the type frequency condition, there is a preference for the frequent suffix over the infrequent suffix when the stem is novel but not when it is familiar. On the other hand, no such interaction effect is found in the token frequency condition. Further, we find a three-way interaction between type frequency condition, novel meaning, and novel stem, suggesting that learners are more likely to produce a frequent suffix in the type frequency condition when both the stem and meaning are novel.
+
+Overall, our results suggest that in production, learners generally use the frequent suffix more regardless of meaning or stem familiarity if the suffix has both a high type and high token frequency. Additionally, when the frequent suffix has a higher type frequency than the infrequent suffix, learners are more likely to use it if the stem is novel, but not when the stem is familiar. Finally, in general there is no preference to use the frequent suffix more for novel meanings if the suffix simply has a higher token frequency than the infrequent suffix.
 
 ```{r, echo = F, message = F}
 #| label: tbl-prodresultsstem
@@ -662,9 +719,9 @@ plot_prod_stem +
 
 ### Form Choice Task
 
-In order to examine the effects of form-choice, we similarly ran a model analogous to the one we ran for the production task (@eq-prodmodels). In the context of the form-choice task, the dependent variable reflects whether participants chose the option with the frequent suffix or the one with the infrequent suffix.
+In order to examine the effects of form-choice, we similarly ran a model analogous to the one we ran for the production task (@eq-prodmodels). In the context of the form-choice task, the dependent variable reflects whether participants chose the option with the frequent suffix or the one with the infrequent suffix. Analogous to the first production model, the independent variables were condition and meaning, where condition was treatment coded such that type-token frequency was the reference level and meaning was sum-coded.
 
-The results of the form-choice task suggest that when participants are presented with both possible options, for both token frequency and type-token frequency, participants are equally likely to choose the frequent suffix as the infrequent suffix (i.e., token and type frequency don't matter) Interestingly, for the type frequency condition, participants were less likely to choose the frequent suffix for the novel meaning than the infrequent suffix, though the effect size is quite small and their selections were still close to chance. We also ran an additional model with stem condition as a fixed-effect (along with its interaction with condition and meaning) and found no effect of stem condition.
+In general we find no meaningful effects except for a small interaction effect between type frequency and novel meaning, suggesting that there may be a slight preference for the familiar suffix when the frequent suffix has a higher type frequency than the infrequent suffix. However, the lack of any other meaningful effects suggests that when participants are presented with both possible options, for all conditions (except when there is a novel meaning in the type frequency condition), participants are equally likely to choose the frequent suffix as the infrequent suffix (i.e., token and type frequency don't matter).
 
 ```{r, echo = F, message = F}
 #| label: tbl-2afcresults
@@ -690,23 +747,44 @@ tafc_both_meanings %>%
 
 ```
 
+Similar to the production task, we also hypothesized that stem familiarity may also play a role. As a result, we also ran an additional model analogous to the model we ran in the production task. The dependent variable was whether participants chose the option with the frequent suffix, and the dependent variables were stem familiarity, meaning, condition, each two-way interaction effect, and their three-way interaction. We also included a random intercept for participant and random slopes for meaning by participant and stem familiarity by participant.
+
+The model results are presented in @tbl-2afcresultsstem. Overall we find no effect of stem familiarity.
+
+```{r, echo = F, message = F}
+#| label: tbl-2afcresultsstem
+#| tbl-cap: 'Results of the statistical models for the form-choice task.'
+
+c2afc_both_stem = bind_rows(fixefs_model_2afc_both_stem, .id = "ID") %>%
+  mutate(term = rep(c('Intercept (Type-Token Frequency)', 'Type Frequency', 'Token Frequency', 'Novel Meaning', 'Novel Stem', 'Type Frequency:Novel Meaning', 'Token Frequency:Novel Meaning', 'Type Frequency:Novel Stem', 'Token Frequency:Novel Stem', 'Novel Meaning:Novel Stem', 'Type Frequency:Novel Meaning:Novel Stem', 'Token Frequency:Novel Meaning:Novel Stem'), times = 1))
+
+
+c2afc_both_stem = c2afc_both_stem %>%
+  mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
+
+#groupings=rle(prod_both_meanings$meaning)
+
+c2afc_both_stem %>%
+  select(term, everything(), -ID) %>%
+  rename(` ` = term) %>%
+  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  row_spec(0, bold = TRUE) %>%
+  column_spec(1, bold = T, width = '20em')
+```
+
 ### Comprehension Task
 
-Our results for the comprehension task are included below in @tbl-comprehensionresults. For the comprehension task, the dependent variable for our statistical analysis was whether the meaning that participants chose was novel or original. A positive estimate suggests that participants were more likely to choose the novel meaning, a negative estimate suggests that participants were more likely to choose the original meaning.
+In order to examine the results for the comprehension task, similar to the previous tasks we ran a mixed-effects regression model. The dependent variable was whether the meaning that participants selected was novel or original. A positive estimate indicates that participants chose the novel meaning while a negative estimate indicates that participants were more likely to choose the original meaning. Unlike the other tasks, our independent variable was coded quite differently. Specifically, our conditions varied in what the token-to-type frequency was. For example, in the Type Frequency condition, while the frequent suffix occurs 12 times with 12 different types, the infrequent occurs 12 times in only 3 different types. Thus, instead of dividing by condition, we can include token-to-type ratio as a fixed-effect. Thus, to maximize our power, we divided the data up based on whether the token-to-type ratio for the form presented on a given trial was 12-12, 12-3, or 3-3. By comparing the 12-3 condition to the 12-12 and 3-3 conditions, we can see how an increase in type frequency and a decrease in token frequency affect participants' choice of the novel or original meaning.
 
-For comprehension, our independent variables were different from the other tasks. Specifically, to maximize our power, we divided the data up based on whether the token-to-type ratio for the form presented on a given trial was 12-12, 12-3, or 3-3. For example, in the Type Frequency condition, while the frequent suffix occurs 12 times with 12 different types, the infrequent occurs 12 times in only 3 different types. By comparing the 12-3 condition to the 12-12 and 3-3 conditions, we can see how an increase in type frequency and a decrease in token frequency affect participants' choice of the novel or original meaning.
-
-We treatment coded condition such that the intercept was the 12-3 condition. As such, for each condition, a positive coefficient indicates that participants are more likely to choose a novel meaning (relative to the 12-3 condition/intercept). The model syntax is included below in @eq-comprehensionmodel.
+We treatment coded condition (referred to as condition_numeric) such that the intercept was the 12-3 condition. As a result, for each condition, a positive coefficient indicates that participants are more likely to choose a novel meaning (relative to the 12-3 condition/intercept). The model syntax is included below in @eq-comprehensionmodel. Our results for the comprehension task are included in @tbl-comprehensionresults and visualized in @fig-comprehensionresults.
 
 $$
 \text{meaning} \sim \text{condition\_numeric} + (1 | \text{participant})
 $$ {#eq-comprehensionmodel}
 
 First, we find a meaningful effect for the intercept (12-3 condition), suggesting that participants are more likely to select the original meaning when there is a high token-to-type ratio. Additionally, we find positive coefficient estimates for both 12-12 and 3-3 suggesting that when there is an equal number of tokens as types, participants are more likely to select the novel meaning. In other words, entrenchment seems to be driven not simply by the raw value of token or type frequency, but rather the proportion of tokens to types. That is, it is the relationship between type frequency and token frequency that is relevant for semantic entrenchment in comprehension.
-
-Similar to the form-choice task, we also ran a model with stem condition as a main-effect as well as an interaction effect with condition and found no main-effect or interaction effect.
-
-This mirrors what we saw in the results for our production task where having a high type and high token frequency leads to semantic extension, but having a high token frequency with low type frequency leads to entrenchment.
 
 ```{r, echo = F, message = F}
 #| label: tbl-comprehensionresults
@@ -733,7 +811,52 @@ fixefs_model_comprehension_numeric %>%
 
 ```
 
+```{r, echo = F, message = F,  out.width = '100%', fig.align = 'center',}
+#| label: fig-comprehensionresults
+#| fig-cap: 'Plot of the model estimates for the comprehension task.'
+
+plot_comprehension_no_stem = conditional_effects(model_comprehension_numeric)
+plot(plot_comprehension_no_stem, plot = FALSE)[[1]] +
+  theme_bw() +
+  ylab('Probability of Novel Meaning') +
+  xlab('Condition') +
+  ylim(c(0,1)) +
+  geom_errorbar(width = 0.1)
+
+```
+
 <!--# there's probably a note about storage here -->
+
+Similar to the form-choice task, we also ran a model with stem condition. Similar to the previous model, the dependent variable was whether participants chose the original or novel meaning. However in addition to condition, we also included stem as a fixed-effect, along with its interaction with condition. A random intercept for participant was also included.
+
+The results of the model are presented in @tbl-comprehensionresultsstem. Our results show no effect of stem familiarity on comprehension.
+
+```{r, echo = F, message = F}
+#| label: tbl-comprehensionresultsstem
+#| tbl-cap: 'Results of the statistical model for the comprehension task with stem as a fixed-effect.'
+#| 
+
+fixefs_model_comprehension_numeric_stem = fixefs_model_comprehension_numeric_stem %>%
+  mutate(term = rep(c('Intercept (12-3)', '12-12', '3-3'), times = 1))
+
+
+fixefs_model_comprehension_numeric_stem = fixefs_model_comprehension_numeric_stem %>%
+  mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
+
+
+fixefs_model_comprehension_numeric_stem %>%
+  select(term, everything()) %>%
+  rename(` ` = term) %>%
+  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  row_spec(0, bold = TRUE) %>%
+  column_spec(1, bold = T, width = '12em')
+
+
+```
+
+Overall, the comprehension results demonstrate that participants are more likely to select the original meaning when there is a high token-to-type ratio. However, when the token-to-type ratio is equivalent (either 12-12 or 3-3) then participants are more likely to select the novel meaning than when there is a high token-to-type ratio. One caveat is that participants still prefer the original meaning over the novel meaning in general (this is evident because adding the upper CI estimate to the intercept for both conditions still results in a negative estimate). In other words, while decreasing the type-to-token ratio decreases the preference for the original meaning, it does not eliminate it.
 
 ## Rescorla-Wagner Model
 
@@ -741,7 +864,7 @@ In this section we examine whether the Rescorla-Wagner model [@rescorla1972theor
 
 The Rescorla-Wagner model is an associative learning model that has gained a great deal of popularity. Despite its simplicity, it has been shown to account for many phenomena in language learning and processing [@ellisSelectiveAttentionTransfer2006; @olejarczukDistributionalLearningErrordriven2018; @ramscarChildrenValueInformativity2013; @baayen2012demythologizingwordfrequency].
 
-Specifically, the Rescorla-Wagner model is a two-layer feedforward neural network. It takes as its input a set of cues and predicts an outcome [@kapatsinskiLearningFastAvoiding2021]. The Rescorla-Wagner model is defined below in @eq-rwmodel and @eq-rwmodelabsent, which differ in whether the predicted outcome is present or not. The model learns the weight of an association between a present cue and a present outcome. In the equation, $\alpha_C$ denotes the salience of the cue, $\beta^P_O$ denotes the salience of an outcome when it is present, and $\beta^A_O$ denotes the salience of an outcome when it is absent [@kapatsinskiLearningFastAvoiding2021]. $\lambda_{max}$ is the learning rate.
+Specifically, the Rescorla-Wagner model is a two-layer feedforward neural network. It takes as its input a set of cues and predicts an outcome [@rescorla1972theorypavlovianconditioning; @kapatsinskiLearningFastAvoiding2021]. The Rescorla-Wagner model is defined below in @eq-rwmodel and @eq-rwmodelabsent, which differ in whether the predicted outcome is present or not. The model learns the weight of an association between a present cue and a present outcome. In the equation, $\alpha_C$ denotes the salience of the cue, $\beta^P_O$ denotes the salience of an outcome when it is present, and $\beta^A_O$ denotes the salience of an outcome when it is absent [@kapatsinskiLearningFastAvoiding2021]. $\lambda_{max}$ is the learning rate.
 
 $$
 \Delta V_{C\rightarrow O } = \alpha_C\beta^P_O(\lambda_{max}-\alpha_O)
@@ -751,7 +874,7 @@ $$
 \Delta V_{C\rightarrow O } = \alpha_C\beta^A_O(\lambda_{min}-\alpha_O)
 $$ {#eq-rwmodelabsent}
 
-The Rescorla-Wagner model originally uses a linear activation function, however for categorical outcomes a logistic activation performs better because it avoids the prediction of spurious excitement, where a cue becomes associated with an outcome even if never occurring with it [@kapatsinskiLearningFastAvoiding2021]. Following the suggestion in @kapatsinskiLearningFastAvoiding2021, we use a logistic activation function (@eq-rwlogistic) for the simulations in this section.
+While the Rescorla-Wagner model is often used with a linear activation function, in the present simulations we use a logistic activation instead @eq-rwlogistic) . The motivation behind this decision is that the Rescorla-Wagner model with a logistic activation function is much more sensitive to type frequency than the Rescorla-Wagner model with a linear activation function [@caballero2022howagglutinativesearching].
 
 $$
 \alpha_O = logit^{-1}(\sum_cV_{C\rightarrow O})
@@ -759,14 +882,18 @@ $$ {#eq-rwlogistic}
 
 Given the Rescorla-Wagner model's success on a wide variety of linguistic phenomena, it's possible that it is also able to predict the results we see in this paper. Thus in this section we simulate the Rescorla-Wagner predictions for our production data in each exposure condition and compare it to the human data.
 
-For the simulations in this section, $\alpha$ and $\beta$ were set to 0.1, and $\lambda$ was set to 2. Our simulation process was as follows: First, for each of the different exposure conditions, we obtained a matrix of predicted cue-outcome associations using the Rescorla-Wagner model. Then for each of our items in the production task, we summed the associations for each cue-outcome present. For example, given the item *baldan* and the meaning big.pl, we consulted the matrix of cue-outcome associations for *bal* and *dan*, big and *dan*, and pl and *dan*. We then summed these to get the predicted associations for *bal* with the big.pl meaning and *dan*.
+For the simulations in this section, $\alpha$ and $\beta$ were set to 0.1, $\lambda_{min}$ was set to 0, and $\lambda_{max}$ was set to 2. Our simulation process was as follows: First, for each of the different exposure conditions, we obtained a matrix of predicted cue-outcome associations using the Rescorla-Wagner model. This was done by feeding the model each trial of the exposure phase in a random order. The cues were the stem identity along with the meaning (e.g., bal_dim_pl) and the outcome was the suffix that the stem occurred with on that trial (i.e., dan, nem, sil, or shoon). The model then learned associations between each cue and each outcome.
 
-After calculating these cue-outcome associations for each test item, we took the difference between the cue-outcome association for the frequent suffix and the cue-outcome association for the infrequent suffix. Thus for each human response, we now also had the Rescorla-Wagner activation difference between the frequent and infrequent suffix. If the associations are accurate, then the difference between these values should be a good predictor of whether humans chose the frequent suffix or the infrequent suffix on each trial.
+Next, for each of the items in the production task, we summed the associations for each cue-outcome present in that trial. For example, given the item *baldan* and the meaning big plural, we consulted the matrix of cue-outcome associations for *bal* and *dan*, big and *dan*, and pl and *dan*. We then summed these to get the predicted associations for *bal* with the big.pl meaning and *dan*. This resulted in a matrix that included the model's learned association strength for any given cue with each of the four suffixes.
 
-In order to test our model predictions, we ran three Bayesian models to determine which model predicted the data best. The first model was a simple model that modeled frequency as a function of the Rescorla-Wagner predictions with a random intercept for participant and for stem (@eq-rwmodel1). The second model was analogous, except that we divided the activations into stem and meaning activations. For example, instead of having a single activation for `bal.dim.sg` (which was the association between those cues and the frequent suffix minus the association between those cues and the infrequent suffix) we instead calculated the activations separately for the stem, *bal*, and the meaning, dim.sg (@eq-rwmodel2). Finally, in our third statistical model, we included the original predictors in the human model (stem, condition, and meaning) along with the Rescorla-Wagner predictions (@eq-rwmodel3). In all of our models, frequency is whether the frequent or infrequent suffix was chosen in the human data, meaning is whether the meaning was familiar or novel, stem_condition was whether the stem was familiar or novel, freq_minus_infreq was the difference in predicted associations between the frequent and infrequent suffixes, and resp_stem was the individual stem (e.g., *bal*).
+Following this, in order to compare the simulations with the human data, we calculated association strengths depending on whether the meaning was original or familiar. For the original meanings, we subtracted the activation strengths between the original meaning and the appropriate suffix. Specifically, this is the activation strength between the meaning cue big plural and the outcome *dan*, and the meaning cue diminutive singular and the outcome *nem*. If the language was dan (i.e., *dan* was the frequent suffix), then the activation strength between diminutive singular and *nem* was subtracted from the activation strength between big plural and *dan*. If the language was nem (i.e., *nem* was the frequent suffix), then the subtraction was in the opposite direction. To calculate the association strengths for novel meanings, if the frequent suffix was *dan* then the activation strength between diminutive plural and *nem* was subtracted from the activation strength between diminutive plural and *dan*. If the frequent suffix was *nem* then the opposite was done. This results in a single value for each trial that is the model's predicted activation of the frequent suffix relative to the infrequent suffix.
+
+In order to test our model, we evaluated whether the model is a good predictor of the human data. Thus, we ran three Bayesian logistic regression models. In each model, the dependent variable was whether the human learner, for a given trial, selected the frequent suffix or the infrequent suffix. The first model was a simple model that modeled the human data as a function of the Rescorla-Wagner activation strength (referred to as `freq_minus_infreq` in the model syntax), with random intercepts for participant and stem identity, and a random slope for the Rescorla-Wagner model prediction by participant (@eq-rwmodel1). The second model was analogous, except that instead of only using the suffix activations, we included the stem activations as well. For example, instead of having a single activation for `bal.dim.pl` (which was the association between those cues and the frequent suffix minus the association between those cues and the infrequent suffix) we instead calculated the activations separately for the stem, *bal*, and the meaning, dim.sg (@eq-rwmodel2). Finally, in our third model, we included the original predictors in the human model (stem, condition, and meaning) along with the Rescorla-Wagner predictions from the first model (@eq-rwmodel3).
+
+As a brief summary, in all of our models, frequency is whether the frequent or infrequent suffix was chosen in the human data, meaning is whether the meaning was familiar or novel, stem_condition was whether the stem was familiar or novel, freq_minus_infreq was the difference in predicted associations between the frequent and infrequent suffixes, and resp_stem was the individual stem (e.g., *bal*).
 
 $$
-\text{frequency} \sim \text{freq\_minus\_infreq} + (\text{freq\_minus\_infreq} | \text{participant}) + (1|\text{resp\_stem})
+\text{frequency} \sim \text{freq\_minus\_infreq} + (1 | \text{participant}) + (1|\text{resp\_stem})
 $$ {#eq-rwmodel1}
 
 $$
@@ -777,9 +904,84 @@ $$ {#eq-rwmodel2}
 
 $$
 \begin{aligned}
-\text{frequency} &\sim  \text{condition}*\text{meaning}*\text{stem\_condition} + \text{freq\_minus\_infreq} \\ & + (1 + \text{stem\_condition}*meaning + \text{freq\_minus\_infreq} | \text{participant}) \\ & + (1 | \text{resp\_stem})
+\text{frequency} &\sim  \text{condition}*\text{meaning}*\text{stem\_condition} + \text{freq\_minus\_infreq} \\ & + (1 + \text{freq\_minus\_infreq} | \text{participant}) \\ & + (1 | \text{resp\_stem})
 \end{aligned}
 $$ {#eq-rwmodel3}
+
+The results of each model are presented in @tbl-rwsim1, @tbl-rwsim2, and @tbl-rwsim3.
+
+```{r, echo = F, message = F}
+#| label: tbl-rwsim1
+#| tbl-cap: 'Results of the statistical model with only the RW predictions (@eq-rwmodel1).'
+
+
+fixefs_human_rw_preds = as.dataframe(fixef(model_human_rw_preds)) %>%
+  mutate(term = rep(c('Intercept', 'RW Predictions'), times = 1))
+
+
+fixefs_human_rw_preds = fixefs_human_rw_preds %>%
+  mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
+
+
+fixefs_human_rw_preds %>%
+  select(term, everything()) %>%
+  rename(` ` = term) %>%
+  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  row_spec(0, bold = TRUE) %>%
+  column_spec(1, bold = T, width = '12em')
+
+```
+
+```{r, echo = F, message = F}
+#| label: tbl-rwstemmeaning 
+#| tbl-cap: 'Results of the statistical analysis containing the predictions from the Rescorla-Wagner logistic model separated into stem activations and meaning activations. The results demonstrate that the human data is predicted well by suffix activations but not by stem activations.'
+
+fixefs_model_rw_preds_stem_suffix_vary = bind_rows(fixefs_model_rw_preds_stem_suffix_vary, .id = "ID") %>%
+  mutate(term = rep(c('Intercept', 'Stem Activations', 'Meaning Activations', 'Stem:Meaning Activations'), times = 1))
+
+
+fixefs_model_rw_preds_stem_suffix_vary = fixefs_model_rw_preds_stem_suffix_vary %>%
+  mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
+
+#groupings=rle(prod_both_meanings$meaning)
+
+fixefs_model_rw_preds_stem_suffix_vary %>%
+  select(term, everything(), -ID) %>%
+  rename(` ` = term) %>%
+  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  row_spec(0, bold = TRUE) %>%
+  column_spec(1, bold = T, width = '18em')
+
+```
+
+```{r, echo = F, message = F}
+#| label: tbl-rwsim3
+#| tbl-cap: 'Results of the statistical model with the RW predictions alongside the predictors from the human model (@eq-rwmodel3). If the RW predictions are not capturing any additional information they should be rendered nonsignificant.'
+
+
+fixefs_human_and_rw_predictors = as.dataframe(fixef(model_prod_both_stem_rw_simple)) %>%
+  mutate(term = rep(c('Intercept', ), times = 1))
+
+
+fixefs_human_and_rw_predictors = fixefs_human_and_rw_predictors %>%
+  mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
+
+
+fixefs_human_and_rw_predictors %>%
+  select(term, everything()) %>%
+  rename(` ` = term) %>%
+  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
+  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
+  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+  row_spec(0, bold = TRUE) %>%
+  column_spec(1, bold = T, width = '12em')
+```
+
+Overall we find that the model activations are a good predictor of the human data.
 
 In order to compare which model best fit the data, we performed leave-one-out cross-validation using the R package `loo` [@loopackage]. Leave-one-out cross-validation refits the model for each observation in the dataset, leaving out that observation.[^3] For each data point, the expected log predictive density is calculated. Expected log predictive density is the log-likelihood of the held-out observation given the model's parameters (trained without the observation). Each model receives a single expected log predictive density value by summing the log-likelihood of each observation using leave-one-out cross-validation. A higher value indicates the model performs better than the other models. Thus, we compared the expected log predictive density value for each of these three models, along with the model of the human data that does not contain the Rescorla-Wagner predictions.
 
@@ -804,30 +1006,6 @@ loo_co_results %>%
   column_spec(1, bold = T, width = '22em')
 ```
 
-```{r, echo = F, message = F}
-#| label: tbl-rwstemmeaning 
-#| tbl-cap: 'Results of the statistical analysis containing the predictions from the Rescorla-Wagner logistic model separated into stem activations and meaning activations. The results demonstrate that the human data is predicted well by suffix activations but not by stem activations.'
-
-fixefs_model_rw_preds_stem_suffix_vary = bind_rows(fixefs_model_rw_preds_stem_suffix_vary, .id = "ID") %>%
-  mutate(term = rep(c('Intercept', 'Stem Activations', 'Suffix Activations', 'Stem:Suffix Activations'), times = 1))
-
-
-fixefs_model_rw_preds_stem_suffix_vary = fixefs_model_rw_preds_stem_suffix_vary %>%
-  mutate(across(c(Estimate, Est.Error, Q2.5, Q97.5, `% Samples > 0`), as.numeric))
-
-#groupings=rle(prod_both_meanings$meaning)
-
-fixefs_model_rw_preds_stem_suffix_vary %>%
-  select(term, everything(), -ID) %>%
-  rename(` ` = term) %>%
-  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
-  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
-  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
-  row_spec(0, bold = TRUE) %>%
-  column_spec(1, bold = T, width = '18em')
-
-```
-
 @fig-rwvshumanpreds provides a visualization of the model predictions compared to the human results. The visualization demonstrates high agreement between the predictions and human results for the type frequency condition and the type-token frequency condition, but falls short in predicting the human results for the token frequency condition. More specifically, the model predicts an effect of stem familiarity for the token frequency condition that does not appear in the human data. One possible explanation for this difference is that humans be sensitive to the fact that stem identity is a useful predictor of the meaning in the type frequency condition but not in the token frequency condition. Specifically, in the type frequency condition, certain stems appeared only with one suffix, however in the token frequency condition all the stems occurred with all of the suffixes. This may lead to learners paying attention to the stem identity in the type frequency condition but not in the token frequency condition. On the other hand, the model learns to associate all of the cues with the present outcomes irregardless of whether that cue occurs with more than one outcome.
 
 <!--# could test this with eye-tracking if we really wanted to, do people fixate longer on stems in the type frequency condition compared to the token frequency condition? -->
@@ -844,15 +1022,17 @@ There is evidence that humans learn associations for configural cues that their 
 knitr::include_graphics("English syllable structure.pdf")
 ```
 
-There is also evidence that adult native English speakers show greater reliance on semantic than phonology in production [@culbertson2018childrenprivilegephonological; @hopper2001frequencyemergencelinguistic]. For example, @culbertson2018childrenprivilegephonological demonstrated that in learning an artificial noun class adults rely more on semantic cues than phonological cues (whereas interestingly children rely more on phonological cues than semantic cues).
+There is also evidence that adult native English speakers show greater reliance on semantic than phonology in production [@culbertson2018childrenprivilegephonological]. For example, @culbertson2018childrenprivilegephonological demonstrated that in learning an artificial noun class adults rely more on semantic cues than phonological cues (whereas interestingly children rely more on phonological cues than semantic cues).
 
-Thus, in order to further examine the differences between the human and model predictions we made two modifications to the follow-up simulation. First, instead of modeling the suffix meanings (diminutive plural, diminutive singular, big plural, big singular) as two separate cues, we also included a configural cue (analogous to an interaction effect in linear regression) that could be associated with the outcome. This configural cue was simply a combination of the two comprising meanings. For example, given the meaning "big plural", the cues comprised "big", "plural", and "big.plural".
+Thus, in order to further examine the differences between the human and model predictions we made two modifications to the follow-up simulation. First, instead of modeling the suffix meanings (diminutive plural, diminutive singular, big plural, big singular) as two separate cues, we also included a configural cue (analogous to an interaction effect in linear regression) that could be associated with the outcome. This configural cue was simply a combination of the two comprising meanings. For example, given the meaning "big plural", the cues comprised "big", "plural", and "big.plural". Similar to the previous simulations, the model was presented with these cues paired with one of the four suffixes. The model was trained on the same data that the humans were trained on.
 
 Second, in addition to configural cues, we also increased the alpha value for semantic cues relative to the phonological cues. This results in semantic cues being more associable with outcomes than phonological cues.
 
-In order to evaluate this simulation, we ran a Bayesian regression model similar to previously, with the human response as the dependent variable and the model's predicted activation as the independent variable with random intercepts for participant and stem, and a random slope for the predicted activation by participant. We then examined whether this model was a better fit to the data than the other model predictions using leave-one-out-cross-validation.
+Analogous to the previous simulations, we then calculated the model's predicted activation for the frequent suffix. If the meaning was novel, this was simply the difference between the activation strength for the frequent suffix and the activation strength for the infrequent suffix. If the meaning was original, then it was the difference between activation strength of big plural with *dan* and the activation strength of diminutive singular and *nem* if *dan* was the frequent suffix and vice versa if *nem* was the frequent suffix.
 
-The results of our regression model are presented in @tbl-rwconfsem and visualized next to the human data and the RW predictions without configural cues or increased semantic saliency in @fig-rwvshumanpreds. Additionally, the results of the leave-one-out-cross-validation are presented in @tbl-loocv_addsims. These results taken together demonstrate that a model that includes configural cues and an increased sensitivity to semantic cues relative to phonological cues is better able to capture the human data.
+In order to evaluate this simulation, we ran a Bayesian logistic regression model similar to previously, with the human response as the dependent variable (1 if they chose the frequent suffix and 0 if they chose the infrequent suffix) and the model's prediction as the independent variable with random intercepts for participant and stem, and a random slope for the predicted activation by participant. We then examined whether this model was a better fit to the data than the other model predictions using leave-one-out-cross-validation.
+
+The results of our regression model are presented in @tbl-rwconfsem and visualized next to the human data and the RW predictions without configural cues or increased semantic salience in @fig-rwvshumanpreds. Additionally, the results of the leave-one-out-cross-validation are presented in @tbl-loocv_addsims. These results taken together demonstrate that a model that includes configural cues and an increased sensitivity to semantic cues relative to phonological cues is better able to capture the human data.
 
 <!--# to add: in-depth explanation of the configural cue and semantic  -->
 
@@ -959,7 +1139,7 @@ loo_co_results_add %>%
 
 ```
 
-Overall, the results of our simulations suggest that an error-driven associative learning model, specifically the Rescorla-Wagner model, fits the human data quite well. Interestingly, a model with only the activations outperforms (by a large margin) the model that includes stem, condition, and meaning as predictors. This suggests that while the model predicts a linear relationship between stem activations and meaning activations, humans are more sensitive to the meaning activations than the stem activations. Further, our results suggest that participants pay attention to stem identity/familiarity when it is a useful cue (such as in the type frequency condition), but not when it is not a useful cue (such as in the token frequency condition).
+Overall, the results of our simulations suggest that an error-driven associative learning model, specifically the Rescorla-Wagner model, fits the human data better than Interestingly, a model with only the activations outperforms (by a large margin) the model that includes stem, condition, and meaning as predictors. This suggests that while the model predicts a linear relationship between stem activations and meaning activations, humans are more sensitive to the meaning activations than the stem activations. Further, our results suggest that participants pay attention to stem identity/familiarity when it is a useful cue (such as in the type frequency condition), but not when it is not a useful cue (such as in the token frequency condition).
 
 The results also suggest that a model with configural cues and a higher alpha value for semantic cues relative to phonological cues better fits the human data. This confirms previous findings that have demonstrated that humans learn associations for configural cues and that humans are more sensitive to semantic cues than phonological cues.
 
