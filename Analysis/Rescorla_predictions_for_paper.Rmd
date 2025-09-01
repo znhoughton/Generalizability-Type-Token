@@ -2117,7 +2117,7 @@ loo_comparisons = data.frame(loo_compare(model_human_rw_preds, model_prod_rw_ste
 
 ## Configural Cues and Modified Alpha 
 
-### Configural cues
+### Configural cues only
 
 ```{r}
 
@@ -2420,24 +2420,24 @@ data_prod_results_cond1 = data_prod_results_cond1 %>%
   mutate(dv = case_when(
     type == 'dim_pl' ~ freq_minus_infreq,
     type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
-  )) %>%
-  filter(type != 'big_pl_big.pl')
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
 
 data_prod_results_cond2 = data_prod_results_cond2 %>%
   group_by(prod_label) %>%
   mutate(dv = case_when(
     type == 'dim_pl' ~ freq_minus_infreq,
     type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
-  )) %>%
-  filter(type != 'big_pl_big.pl')
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
 
 data_prod_results_cond3 = data_prod_results_cond3 %>%
   group_by(prod_label) %>%
   mutate(dv = case_when(
     type == 'dim_pl' ~ freq_minus_infreq,
     type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
-  )) %>%
-  filter(type != 'big_pl_big.pl')
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
 
 
 data_prod_results_cond4 = data_prod_results_cond4 %>%
@@ -2445,8 +2445,8 @@ data_prod_results_cond4 = data_prod_results_cond4 %>%
   mutate(dv = case_when(
     type == 'dim_pl' ~ freq_minus_infreq,
     type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
-  )) %>%
-  filter(type != 'big_pl_big.pl')
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
 
 
 data_prod_results_cond5 = data_prod_results_cond5 %>%
@@ -2454,8 +2454,8 @@ data_prod_results_cond5 = data_prod_results_cond5 %>%
   mutate(dv = case_when(
     type == 'dim_pl' ~ freq_minus_infreq,
     type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
-  )) %>%
-  filter(type != 'big_pl_big.pl')
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
 
 
 data_prod_results_cond6 = data_prod_results_cond6 %>%
@@ -2463,8 +2463,8 @@ data_prod_results_cond6 = data_prod_results_cond6 %>%
   mutate(dv = case_when(
     type == 'dim_pl' ~ freq_minus_infreq,
     type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
-  )) %>%
-  filter(type != 'big_pl_big.pl')
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
 
 
 data_all_conds_configural = rbind(
@@ -2479,6 +2479,75 @@ data_all_conds_configural = rbind(
 data_all_conds_logistic_configural = data_all_conds_configural
   
 ```
+```{r}
+human_data_no_sil_no_shoon = read_csv('../Data/data_prod_no_sil_shoon.csv')
+```
+
+```{r}
+data_all_conds_conf = data_all_conds_configural %>%
+  rename('picture_meaning' = type) %>%
+  rename('resp_stem' = prod_label) %>%
+  rename('stem_condition' = prod_condition) %>%
+  rename('original_condition' = condition)
+
+data_all_conds_conf %>%
+  mutate(freq_minus_infreq = dv)
+
+data_all_conds_for_comparison_conf = data_all_conds_conf %>%
+  dplyr::select(original_condition, stem_condition, resp_stem, picture_meaning, freq_minus_infreq, dan_activations, nem_activations, sil_activations, shoon_activations)
+
+data_all_conds_for_comparison_conf = data_all_conds_for_comparison_conf %>%
+  mutate(picture_meaning = case_when(
+    picture_meaning == 'dim_sg_dim.sg' ~ 'dim_sg',
+    picture_meaning == 'big_pl_big.pl' ~ 'big_pl',
+    .default = picture_meaning
+  ))
+
+human_data_no_sil_no_shoon_plus_rw_preds_conf = human_data_no_sil_no_shoon %>%
+  left_join(data_all_conds_for_comparison_conf)
+  
+```
+
+####  Models
+```{r}
+priors_m1 = c(
+  prior(student_t(3, 0, 1), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 1), class = 'b'),
+  prior(student_t(3, 0, 1), class = 'sd'))
+
+model_human_conf = brm(frequency ~ freq_minus_infreq + (1 | participant) + (1 | resp_stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_conf,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 22000, 
+                                       warmup = 1100,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_human_conf')
+
+
+model_human_conf = add_criterion(model_human_conf, 'loo')
+
+model_human_conf_original_preds = brm(frequency ~ freq_minus_infreq + condition*meaning*stem_condition + (1 | participant) + (1 | resp_stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_conf,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 22000, 
+                                       warmup = 1100,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_human_conf_original_preds')
+
+
+model_human_conf_original_preds = add_criterion(model_human_conf_original_preds, 'loo')
+```
+
+
+
 
 ```{r}
 
@@ -2896,7 +2965,20 @@ model_human_conf_sem_preds = brm(frequency ~ freq_minus_infreq + (1 | participan
 
 model_human_conf_sem_preds = add_criterion(model_human_conf_sem_preds, 'loo')
 
+model_human_conf_sem_preds_original_preds = brm(frequency ~ freq_minus_infreq + condition*meaning*stem_condition + (1 | participant) + (1 | resp_stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_sem_alpha,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 22000, 
+                                       warmup = 1100,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_human_conf_sem_preds_original_preds')
 
+
+model_human_conf_sem_preds_original_preds = add_criterion(model_human_conf_sem_preds_original_preds, 'loo')
 
 ```
 
@@ -3201,6 +3283,63 @@ data_prod_results_cond6 = data_prod_results_cond6 %>%
          freq_minus_infreq = nem_activations - dan_activations)
 
 
+
+
+data_prod_results_cond1 = data_prod_results_cond1 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+data_prod_results_cond2 = data_prod_results_cond2 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+data_prod_results_cond3 = data_prod_results_cond3 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+
+data_prod_results_cond4 = data_prod_results_cond4 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+
+data_prod_results_cond5 = data_prod_results_cond5 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+
+data_prod_results_cond6 = data_prod_results_cond6 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+data_all_conds_logistic_configural = data_all_conds_configural
+
+
+
 data_all_conds_non_configural_modified_alpha = rbind(
   data_prod_results_cond1,
   data_prod_results_cond2,
@@ -3212,7 +3351,76 @@ data_all_conds_non_configural_modified_alpha = rbind(
 
 data_all_conds_logistic_non_configural_modified_alpha = data_all_conds_non_configural_modified_alpha
 
+
 ```
+
+```{r}
+human_data_no_sil_no_shoon = read_csv('../Data/data_prod_no_sil_shoon.csv')
+```
+
+```{r}
+data_all_conds_mod_sem_alpha = data_all_conds_non_configural_modified_alpha %>%
+  rename('picture_meaning' = type) %>%
+  rename('resp_stem' = prod_label) %>%
+  rename('stem_condition' = prod_condition) %>%
+  rename('original_condition' = condition)
+
+data_all_conds_mod_sem_alpha %>%
+  mutate(freq_minus_infreq = dv)
+
+data_all_conds_for_comparison_mode_sem_alpha = data_all_conds_mod_sem_alpha %>%
+  dplyr::select(original_condition, stem_condition, resp_stem, picture_meaning, freq_minus_infreq, dan_activations, nem_activations, sil_activations, shoon_activations)
+
+data_all_conds_for_comparison_mode_sem_alpha = data_all_conds_for_comparison_mode_sem_alpha %>%
+  mutate(picture_meaning = case_when(
+    picture_meaning == 'dim_sg_dim.sg' ~ 'dim_sg',
+    picture_meaning == 'big_pl_big.pl' ~ 'big_pl',
+    .default = picture_meaning
+  ))
+
+human_data_no_sil_no_shoon_plus_rw_preds_nonconf_sem_alpha = human_data_no_sil_no_shoon %>%
+  left_join(data_all_conds_for_comparison_mode_sem_alpha)
+  
+```
+
+####  Models
+```{r}
+priors_m1 = c(
+  prior(student_t(3, 0, 1), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 1), class = 'b'),
+  prior(student_t(3, 0, 1), class = 'sd'))
+
+model_human_mod_sem_alpha = brm(frequency ~ freq_minus_infreq + (1 | participant) + (1 | resp_stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_nonconf_sem_alpha,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 22000, 
+                                       warmup = 1100,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_human_mod_sem_alpha')
+
+
+model_human_mod_sem_alpha = add_criterion(model_human_mod_sem_alpha, 'loo')
+
+model_human_mod_sem_alpha_original_preds = brm(frequency ~ freq_minus_infreq + condition*meaning*stem_condition + (1 | participant) + (1 | resp_stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_nonconf_sem_alpha,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 22000, 
+                                       warmup = 1100,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_human_mod_sem_alpha_original_preds')
+
+
+model_human_mod_sem_alpha_original_preds = add_criterion(model_human_mod_sem_alpha_original_preds, 'loo')
+```
+
 
 
 #### Plot
