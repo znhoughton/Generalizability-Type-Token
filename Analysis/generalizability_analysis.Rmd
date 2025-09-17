@@ -5429,3 +5429,94 @@ ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Stem)) +
   ylab('Response Probability') +
   ylim(0, 1)
 ```
+
+# Nem/dan 1; sil/shoon zero
+
+```{r}
+
+data_sil_shoon = data_analysis %>%
+  filter(task == 'prod') %>%
+  mutate(participant = as.factor(participant)) 
+
+data_sil_shoon = data_sil_shoon %>%
+  mutate(dv = case_when(
+    resp_suffix_form %in% c('nem', 'dan') ~ 1,
+    resp_suffix_form %in% c('sil', 'shoon') ~ 0
+  ))
+```
+
+```{r}
+options(contrasts = c("contr.treatment","contr.treatment"))
+data_sil_shoon$condition = factor(data_sil_shoon$condition, levels = c(3, 1, 2))
+
+data_sil_shoon$meaning_choice = factor(data_sil_shoon$meaning_choice)
+contrasts(data_sil_shoon$meaning_choice) = contr.sum(levels(data_sil_shoon$meaning_choice))
+
+data_sil_shoon$stem_condition = factor(data_sil_shoon$stem_condition, levels = c('novel', 'familiar'))
+contrasts(data_sil_shoon$stem_condition) = contr.sum(levels(data_sil_shoon$stem_condition))
+
+model_prod_sil_shoon = brm(dv ~ condition + meaning_choice + stem_condition + condition:meaning_choice + condition:stem_condition + (1 + meaning_choice+stem_condition | participant) + (1 | resp_stem),
+                                       data = data_sil_shoon,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 8000, 
+                                       warmup = 4000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_prod_sil_shoon')
+
+
+```
+
+```{r}
+fixef(model_prod_sil_shoon)
+conditional_effects(model_prod_sil_shoon)
+```
+
+## With Frequency
+
+```{r}
+data_sil_shoon_familiar = data_sil_shoon %>%
+  filter(picture_meaning != 'dim_pl') %>%
+  mutate(freq = case_when(
+    language == 'nem' & picture_meaning == 'dim_sg' ~ 'freq',
+    language == 'dan' & picture_meaning == 'big_pl' ~ 'freq',
+    #language == 'nem' & picture_meaning == 'dim.pl' ~ 'freq',
+    #language == 'dan' & picture_meaning == 'dim.pl' ~ 'freq',
+    language == 'nem' & picture_meaning == 'big_pl' ~ 'infreq',
+    language == 'dan' & picture_meaning == 'dim_sg' ~ 'infreq'
+  ))
+```
+
+```{r}
+options(contrasts = c("contr.treatment","contr.treatment"))
+data_sil_shoon_familiar$condition = factor(data_sil_shoon_familiar$condition, levels = c(3, 1, 2))
+
+#data_sil_shoon$meaning_choice = factor(data_sil_shoon$meaning_choice)
+#contrasts(data_sil_shoon$meaning_choice) = contr.sum(levels(data_sil_shoon$meaning_choice))
+
+data_sil_shoon_familiar$stem_condition = factor(data_sil_shoon_familiar$stem_condition, levels = c('novel', 'familiar'))
+contrasts(data_sil_shoon_familiar$stem_condition) = contr.sum(levels(data_sil_shoon_familiar$stem_condition))
+
+data_sil_shoon_familiar$freq = factor(data_sil_shoon_familiar$freq, levels = c('freq', 'infreq'))
+contrasts(data_sil_shoon_familiar$freq) = contr.sum(levels(data_sil_shoon_familiar$freq))
+
+
+
+model_prod_sil_shoon_freq = brm(dv ~ condition+ stem_condition +freq + condition:stem_condition + condition:freq + stem_condition:freq + (freq*stem_condition|participant) + (1 | resp_stem),
+                                       data = data_sil_shoon_familiar,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 4000, 
+                                       warmup = 2000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_prod_sil_shoon_freq')
+```
+
+```{r}
+fixef(model_prod_sil_shoon_freq)
+conditional_effects(model_prod_sil_shoon_freq)
+```

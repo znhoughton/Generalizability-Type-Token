@@ -670,28 +670,69 @@ Following @harmonPuttingOldTools2017, two artificial languages were used: called
 
 During the exposure phase, each suffix was paired with an image. The suffixes -*sil~PL~* and *-dan~PL~* were always paired with a picture of multiple large pictures. On the other hand, the suffixes *-nem~DIM~* and -*shoon~DIM~* were always paired with a picture of a single small creature. The design of the stimuli results in participants being able to learn that -*sil* and *-dan* are either simply plural or simply non-diminutive. Similarly, *-nem* and *-shoon* can be learned as either simply singular or simply diminutive.
 
-Our Experiment comprised of three different conditions (see @tbl-conditionslist), one in which the type frequency of the frequent language's suffix was manipulated (Type Frequency), one in which the token frequency was manipulated (Token Frequency), and one in which both were manipulated (Type-Token Frequency). In this context, a higher type frequency corresponds to the suffix appearing with a larger number of different stems relative to the competing suffix, while a larger token frequency corresponds to simply appearing a greater number of times relative to the competing suffx, regardless of the number of different stems it occurs with.
+Our Experiment comprised of three different conditions (see @tbl-conditionslist), one in which the type frequency of the frequent suffix (i.e., *dan* in Dan and *nem* in Nem) was higher than the type frequency of the infrequent suffix (by a factor of 4 or 12 vs. 3) while the token frequency of the two suffixes was matched and set equal to the type frequency of the frequent suffix (both at 12). We refer to this condition as Type. In the second condition, the token frequency of the frequent suffix was higher than the token frequency of the infrequent suffix (by a factor of 4 or 12 vs. 3) while holding the type frequency of the two suffixes equal to the type frequency of the infrequent suffix (both at 3). We refer to this condition as Token. Finally, in the third condition, we manipulated both the type and token frequency of the frequent suffix such that the token and type frequency of the frequent suffix were both greater than the token and type frequency of the infrequent suffix (by a factor of 4 or 12 vs. 3). We refer to this condition as Type-Token. In this context, a higher type frequency corresponds to the suffix appearing with a larger number of distinct stems relative to the competing suffix, while a larger token frequency corresponds to simply appearing a greater number of times relative to the competing suffix, regardless of the number of different stems it occurs with.
 
 ```{r, echo = F, message = F}
 #| label: tbl-conditionslist
 #| tbl-cap: 'Description of each of our conditions. Note that in Condition 1, there are an equal number of tokens between the frequent and infrequent items, however there are a greater number of types in the frequent items. In Condition 2, the opposite is true: the frequent items occur more, but in the same number of types as the infrequent items. Finally, in Condition 3, the frequent items occur both a greater number of times and in a greater number of different contexts.'
 
-conditionslist = data.frame('Frequent Token' = c(12, 12, 12),
-                            'Frequent Type' = c(12, 3, 12),
-                            'Infrequent Token' = c(12, 3, 3),
-                            'Infrequent Type' = c(3, 3, 3))
+# conditionslist = data.frame('Frequent Token' = c(12, 12, 12),
+#                             'Frequent Type' = c(12, 3, 12),
+#                             'Infrequent Token' = c(12, 3, 3),
+#                             'Infrequent Type' = c(3, 3, 3))
+# 
+# conditionslist = conditionslist %>%
+#   mutate(term = rep(c('Type', 'Token', 'Type-Token'), times = 1))
+# 
+# conditionslist %>%
+#   dplyr::select(term, everything()) %>%
+#   rename(` ` = term) %>%
+#   kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
+#   kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
+#   #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
+#   row_spec(0, bold = TRUE) %>%
+#   column_spec(1, bold = T, width = '12em')
+# 
+# 
 
-conditionslist = conditionslist %>%
-  mutate(term = rep(c('Type Frequency', 'Token Frequency', 'Type-Token Frequency'), times = 1))
+# your data
+conditionslist = data.frame(
+  'Frequent Token'   = c(12, 12, 12),
+  'Frequent Type'    = c(12,  3, 12),
+  'Infrequent Token' = c(12,  3,  3),
+  'Infrequent Type'  = c( 3,  3,  3)
+)
 
-conditionslist %>%
-  dplyr::select(term, everything()) %>%
-  rename(` ` = term) %>%
-  kable(digits = 2, row.names = FALSE, booktabs = TRUE, format = "latex", escape = TRUE) %>%
-  kable_styling(latex_options = c("HOLD_position", "striped"), font_size = 11, full_width = FALSE) %>%
-  #group_rows(index = setNames(groupings$lengths, groupings$values), indent = TRUE) %>%
-  row_spec(0, bold = TRUE) %>%
-  column_spec(1, bold = T, width = '12em')
+# rename/reshape for clarity:
+# - make a "Condition" column with values Type / Token / Type-Token
+# - order columns so headers can group as: Frequent(Type, Token), Infrequent(Type, Token)
+tbl = conditionslist %>%
+  mutate(Condition = c("Type", "Token", "Type-Token")) %>%
+  select(
+    Condition,
+    `Frequent.Type`, `Frequent.Token`,
+    `Infrequent.Type`, `Infrequent.Token`
+  )
+
+# build the table with two header rows
+tbl %>%
+  kable(
+    format = "latex",
+    booktabs = TRUE,
+    digits = 2,
+    row.names = FALSE,
+    escape = FALSE,        # allow LaTeX header spanning
+    col.names = c("Condition", "Type", "Token", "Type", "Token")
+  ) %>%
+  add_header_above(c(" " = 1, "Frequent" = 2, "Infrequent" = 2)) %>%
+  kable_styling(
+    latex_options = c("HOLD_position", "striped"),
+    font_size = 11,
+    full_width = FALSE
+  ) %>%
+  row_spec(0, bold = TRUE) %>%     # header row bold
+  column_spec(1, bold = TRUE, width = "12em")
+
 ```
 
 ### Procedure
@@ -776,9 +817,9 @@ We explore the results for each task in depth in the next sections.[^2]
 
 <!--# Freq bar in original is choosing dan for big_pl or nem for dim_sg in the dan language and infreq bar is choosing dan for big_pl and nem for dim_sg in the nem language -->
 
-In order to determine whether the effect of frequency on semantic extension differed between conditions, we ran a Bayesian linear mixed-effects model on the production data. The dependent variable was whether the participant produced the frequent suffix. The frequent suffix was coded as 1 if the meaning was diminutive plural and the suffix used was the frequent one (*dan* in the Dan language, *nem* in the Nem language). However, if the meaning was big plural or diminutive singular, the frequent suffix was coded as 1 if the suffix chosen was *dan* for big plural and 0 if the suffix chosen was *nem* for diminutive singular in the Dan language, and vice versa in the Nem language.
+In order to determine whether the effect of frequency on semantic extension differed between conditions, we ran a Bayesian linear mixed-effects model on the production data. The dependent variable was whether the participant produced the frequent suffix. The frequent suffix was coded as 1 if participants chose *dan* in the Dan language or chose *nem* in the Nem lan
 
-We treatment coded condition such that the intercept was the type-token frequency condition. Thus, a larger intercept indicates that the frequent suffix was more likely to be produced than the infrequent suffix when it had a high type and token frequency. A larger coefficient estimate indicates that the frequent form was more likely to be produced than the infrequent form in that condition relative to the type-token frequency condition. We also included meaning and stem condition as sum-coded variables. Meaning had two values, either original or novel. An original meaning referred to big plural if the suffix was *dan* or diminutive singular if the suffix was *nem*. A meaning was novel if it was diminutive plural regardless of the suffix. stem condition similarly had two values, familiar or novel. A familiar stem was one that participants saw in training while a novel stem was one that they did not see in training. We also included a random intercept for participant and random slopes for meaning by participant and stem condition by participant. The syntax for our model is included below in @eq-prodmodelstem. The results are reported in @tbl-prodresultsstem and visualized in @fig-prodresultsstem.
+We treatment coded condition such that the intercept was the type-token frequency condition. Thus, a larger intercept indicates that the frequent suffix was more likely to be produced than the infrequent suffix when it had a high type and token frequency. A larger coefficient estimate indicates that the frequent form was more likely to be produced than the infrequent form in that condition relative to the type-token frequency condition. We also included meaning and stem novelty as sum-coded variables. Meaning was a categorical variable with two levels: original and novel. An original meaning referred to big plural if the suffix was *dan* or diminutive singular if the suffix was *nem*. A meaning was novel if it was diminutive plural regardless of the suffix. stem novelty similarly was a categorical variable with two levels, familiar or novel. A familiar stem was one that participants saw in training while a novel stem was one that they did not see in training. We also included a random intercept for participant and random slopes for meaning by participant and stem novelty by participant. The syntax for our model is included below in @eq-prodmodelstem. The results are reported in @tbl-prodresultsstem and visualized in @fig-prodresultsstem.
 
 $$
 \text{frequent\_suffix} \sim \text{condition}*\text{meaning}*\text{stem} + (1 + \text{meaning} * \text{stem} | \text{participant})
@@ -851,7 +892,7 @@ plot_prod_stem +
 
 ### Form Choice Task
 
-In order to examine the effects of form-choice, we similarly ran a model analogous to the one we ran for the production task (@eq-prodmodelstem). In the context of the form-choice task, the dependent variable reflects whether participants chose the option with the frequent suffix or the one with the infrequent suffix. Analogous to the first production model, the independent variables were condition, meaning, and stem condition. Once again, condition was treatment coded such that type-token frequency was the reference level and meaning and stem condition were sum-coded. The random-effects structure was identical to that in @eq_prodmodelstem. The model results are presented in @tbl-2afcresultsstem and visualized in @fig-2afcresultsstem.
+In order to examine the effects of form-choice, we similarly ran a model analogous to the one we ran for the production task (@eq-prodmodelstem). In the context of the form-choice task, the dependent variable reflects whether participants chose the option with the frequent suffix or the one with the infrequent suffix. Analogous to the first production model, the independent variables were condition, meaning, and stem novelty. Once again, condition was treatment coded such that type-token frequency was the reference level and meaning and stem novelty were sum-coded. The random-effects structure was identical to that in @eq-prodmodelstem. The model results are presented in @tbl-2afcresultsstem and visualized in @fig-2afcresultsstem.
 
 ```{r, echo = F, message = F}
 #| label: tbl-2afcresultsstem
@@ -914,20 +955,20 @@ plot_prod_stem +
 ```
 
 
-In general we find no meaningful effects except for a small interaction effect between type frequency and novel meaning, suggesting that there may be a preference for the frequent suffix when it has a higher type frequency than the infrequent suffix. However, the lack of any other meaningful effects suggests that when participants are presented with both possible options, for all conditions (except when there is a novel meaning in the type frequency condition), participants are equally likely to choose the frequent suffix as the infrequent suffix (i.e., token and type frequency don't seem to effect this).
+In general we find no meaningful effects except for an interaction effect between type frequency and novel meaning, suggesting that there may be a preference for the frequent suffix when it has a higher type frequency than the infrequent suffix. However, the lack of any other meaningful effects suggests that when participants are presented with both possible options, for all conditions (except when there is a novel meaning in the type frequency condition), participants are equally likely to choose the frequent suffix as the infrequent suffix (i.e., token and type frequency don't seem to effect this).
 
 
 ### Comprehension Task
 
-In order to examine the results for the comprehension task, similar to the previous tasks we ran a mixed-effects regression model. The dependent variable was whether the meaning that participants selected was novel or original. A positive estimate indicates that participants chose the novel meaning while a negative estimate indicates that participants were more likely to choose the original meaning. Unlike the other tasks, our independent variable was coded quite differently. Specifically, our conditions varied in what the token-to-type frequency was. For example, in the Type Frequency condition, while the frequent suffix occurs 12 times with 12 different types, the infrequent occurs 12 times in only 3 different types. Thus, instead of dividing by condition, we included the token-to-type ratio as a fixed-effect. Since this approach maximizes our power, we divided the data up based on whether the token-to-type ratio for the form presented on a given trial was 12-12, 12-3, or 3-3. By comparing the 12-3 condition to the 12-12 and 3-3 conditions, we can see how an increase in type frequency and a decrease in token frequency affect participants' choice of the novel vs. original meaning.
+In order to examine the results for the comprehension task, similar to the previous tasks we ran a mixed-effects regression model. The dependent variable was whether the meaning that participants selected was novel or original. A positive estimate indicates that participants chose the novel meaning while a negative estimate indicates that participants were more likely to choose the original meaning. Unlike the other tasks, our independent variable was coded quite differently. Specifically, our conditions varied in what the token-to-type frequency was. For example, in the Type Frequency condition, while the frequent suffix occurs 12 times with 12 different types, the infrequent occurs 12 times in only 3 different types. Since this approach maximizes our power, rather than dividing the data based on whether the suffix was frequent or infrequent, we instead divided the data based on the relationship between the type and token frequency of the suffix, regardless of whether it was the frequent suffix or the infrequent suffix. More specifically, we divided the data up based on whether the token-to-type ratio for the form presented on a given trial was 12-12, 12-3, or 3-3. By comparing the 12-3 condition to the 12-12 and 3-3 conditions, we can see how an increase in type frequency and a decrease in token frequency affect participants' choice of the novel vs. original meaning. Thus, hereafter we refer to the 12-3 condition as the Control condition, the 12-12 condition as Higher Type and the 3-3 condition as Lower Token. 
 
-We treatment coded condition (referred to as condition_numeric) such that the intercept was the 12-3 condition. As a result, for each condition, a positive coefficient indicates that participants are more likely to choose a novel meaning (relative to the 12-3 condition/intercept). The model syntax is included below in @eq-comprehensionmodel. Our results for the comprehension task are included in @tbl-comprehensionresults and visualized in @fig-comprehensionresults.
+We treatment coded condition (referred to as condition_numeric) such that the intercept was the Control condition. As a result, for each condition, a positive coefficient indicates that participants are more likely to choose a novel meaning (relative to the Control condition/intercept). The model syntax is included below in @eq-comprehensionmodel. Our results for the comprehension task are included in @tbl-comprehensionresults and visualized in @fig-comprehensionresults.
 
 $$
 \text{meaning} \sim \text{condition\_numeric} + (1 | \text{participant})
 $$ {#eq-comprehensionmodel}
 
-First, we find a meaningful effect for the intercept (12-3 condition), suggesting that participants are more likely to select the original meaning when there is a high token-to-type ratio. Additionally, we find positive coefficient estimates for both 12-12 and 3-3 suggesting that when there is an equal number of tokens as types, participants are more likely to select the novel meaning than when there is a higher token-to-type ratio. In other words, entrenchment seems to be driven not simply by the raw value of token or type frequency, but rather the proportion of tokens to types. That is, it is the relationship between type frequency and token frequency that is relevant for semantic entrenchment in comprehension.
+First, we find a meaningful effect for the Control condition (Intercept), suggesting that participants are more likely to select the original meaning when there is a high token-to-type ratio. Additionally, we find positive coefficient estimates for both Higher Type and Lower Token conditions suggesting that when an increase in type frequency or decrease in token frequency is present, participants are more likely to select the novel meaning than when there is a higher token-to-type ratio. These results suggest that it may not be type or token frequency independently that drives entrenchment, but rather the ratio between type and token frequency. That is, regardless of whether there is an increase in type frequency, or decrease in token frequency, if the token-to-type ratio is lower, participants are more likely to select the novel meaning.
 
 ```{r, echo = F, message = F}
 #| label: tbl-comprehensionresults
@@ -935,7 +976,7 @@ First, we find a meaningful effect for the intercept (12-3 condition), suggestin
 #| 
 
 fixefs_model_comprehension_numeric = fixefs_model_comprehension_numeric %>%
-  mutate(term = rep(c('Intercept (12-3)', '12-12', '3-3'), times = 1))
+  mutate(term = rep(c('Intercept (Control)', 'Higher Type', 'Lower Token'), times = 1))
 
 
 fixefs_model_comprehension_numeric = fixefs_model_comprehension_numeric %>%
@@ -964,13 +1005,15 @@ plot(plot_comprehension_no_stem, plot = FALSE)[[1]] +
   ylab('Probability of Novel Meaning') +
   xlab('Condition') +
   ylim(c(0,1)) +
-  geom_errorbar(width = 0.1)
+  geom_errorbar(width = 0.1) +
+  scale_x_discrete(labels = c("Control", "Higher Type", "Lower Token"))
+
 
 ```
 
 <!--# there's probably a note about storage here -->
 
-Similar to the form-choice task, we also ran a model with stem familiarity as a fixed-effect. The dependent variable remained the same (whether participants chose the original or novel meaning), however in addition to condition, we also included stem condition (familiar or novel) as a fixed-effect, along with its interaction with condition. A random intercept for participant was also included.
+Similar to the form-choice task, we also ran a model with stem familiarity as a fixed-effect. The dependent variable remained the same (whether participants chose the original or novel meaning), however in addition to condition, we also included stem novelty (familiar or novel) as a fixed-effect, along with its interaction with condition. A random intercept for participant was also included.
 
 The results of the model are presented in @tbl-comprehensionresultsstem. Our results show no effect of stem familiarity on comprehension.
 
@@ -999,7 +1042,7 @@ fixefs_model_comprehension_numeric_stem %>%
 
 ```
 
-Overall, the comprehension results demonstrate that participants are more likely to select the original meaning when there is a high token-to-type ratio. However, when the token-to-type ratio is equivalent (either 12-12 or 3-3) then participants are more likely to select the novel meaning than when there is a high token-to-type ratio. One caveat is that participants still prefer the original meaning over the novel meaning in general (this is evident because adding the upper CI estimate to the intercept for both conditions still results in a negative estimate). In other words, while decreasing the type-to-token ratio decreases the preference for the original meaning, it does not eliminate it.
+Overall, the comprehension results demonstrate that participants are more likely to select the original meaning when there is a high token-to-type ratio. However, when the token-to-type ratio is equivalent (either 12-12 or 3-3) then participants are more likely to select the novel meaning than when there is a high token-to-type ratio. One caveat is that participants still prefer the original meaning over the novel meaning in general (this is evident because adding the upper CI estimate to the intercept for both conditions still results in a negative estimate). In other words, while decreasing the token-to-type ratio decreases the preference for the original meaning, it does not eliminate it.
 
 ## Rescorla-Wagner Model
 
@@ -1118,7 +1161,7 @@ fixefs_model_rw_preds_stem_suffix_vary %>%
 ```
 ```{r, echo = F, message = F}
 #| label: tbl-rwsim3 
-#| tbl-cap: 'Results of the statistical analysis containing the separated stem and meaning activations and condition as a fixed-effect (eq-rwmodel3).'
+#| tbl-cap: 'Results of the statistical analysis containing the separated stem and meaning activations and condition as a fixed-effect (@eq-rwmodel3).'
 
 fixefs_model_rw_preds_stem_suffix_vary_by_condition = bind_rows(fixefs_model_rw_preds_stem_suffix_vary_by_condition, .id = "ID") %>%
   mutate(term = rep(c('Intercept', 'Stem Activations', 'Meaning Activations', 'Type Frequency', 'Token Frequency', 'Stem Activations:Type Frequency', 'Stem Activations:Token Frequency', 'Meaning Activations:Type Frequency', 'Meaning Activations:Token Frequency'), times = 1))
@@ -1276,7 +1319,7 @@ Second, in addition to configural cues, we also increased the alpha value for se
 
 Analogous to the previous simulations, we then calculated the model's predicted activation for the frequent suffix. If the meaning was novel, this was simply the difference between the activation strength for the frequent suffix and the activation strength for the infrequent suffix. If the meaning was original, then it was the difference between activation strength of big plural with *dan* and the activation strength of diminutive singular and *nem* if *dan* was the frequent suffix and vice versa if *nem* was the frequent suffix.
 
-In order to evaluate this simulation, we ran a Bayesian logistic regression model with the human response as the dependent variable (1 if they chose the frequent suffix and 0 if they chose the infrequent suffix) and the model's prediction as the independent variable with random intercepts for participant and stem. We ran four models, one with configural cues and modified semantic salience, one with configural cues, increased semantic salience, and the original statistical predictors ($condition*meaning*stem_condition$), one with only configural cues (no modified semantic saleince) and one with only modified semantic salience (no configural cues). We then compared these with the model with only statistical predictors, and the two models from the previous simulations (@eq-rwsim1 and @eq-rwsim3).
+In order to evaluate this simulation, we ran a Bayesian logistic regression model with the human response as the dependent variable (1 if they chose the frequent suffix and 0 if they chose the infrequent suffix) and the model's prediction as the independent variable with random intercepts for participant and stem. We ran four models, one with configural cues and modified semantic salience, one with configural cues, increased semantic salience, and the original statistical predictors ($condition*meaning*stem\_condition$), one with only configural cues (no modified semantic salience) and one with only modified semantic salience (no configural cues). We then compared these with the model with only statistical predictors, and the two models from the previous simulations (@eq-rwmodel1 and @eq-rwmodel3).
 
 We then compared these models using leave-one-out-cross-validation (@tbl-loocv_addsims).
 

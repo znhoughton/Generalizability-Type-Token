@@ -4245,3 +4245,866 @@ ggarrange(rw_plot_configural, rw_plot, nrow = 2)
 ```
 # Final Loo Comparison
 
+
+# RW Training no stem 
+
+```{r}
+n_sims = 1
+
+
+data_cond1_no_stem = data_cond1
+#data_cond1_no_stem$Cues = str_extract(data_cond1_no_stem$Cues, "(?<=#_).*")
+
+data_cond2_no_stem = data_cond2
+data_cond2_no_stem$Cues = str_extract(data_cond2_no_stem$Cues, "(?<=#_).*")
+
+data_cond3_no_stem = data_cond3
+#data_cond3_no_stem$Cues = str_extract(data_cond3_no_stem$Cues, "(?<=#_).*")
+
+data_cond4_no_stem = data_cond4
+#data_cond4_no_stem$Cues = str_extract(data_cond4_no_stem$Cues, "(?<=#_).*")
+
+data_cond5_no_stem = data_cond5
+data_cond5_no_stem$Cues = str_extract(data_cond5_no_stem$Cues, "(?<=#_).*")
+
+data_cond6_no_stem = data_cond6
+#data_cond6_no_stem$Cues = str_extract(data_cond6_no_stem$Cues, "(?<=#_).*")
+
+data_cond1_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond1_no_stem[sample(1:nrow(data_cond1_no_stem)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+  
+data_cond2_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond2_no_stem[sample(1:nrow(data_cond2_no_stem)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond3_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond3_no_stem[sample(1:nrow(data_cond3_no_stem)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond4_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond4_no_stem[sample(1:nrow(data_cond4_no_stem)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+  
+data_cond5_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond5_no_stem[sample(1:nrow(data_cond5_no_stem)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond6_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond6_no_stem[sample(1:nrow(data_cond6_no_stem)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+```
+
+```{r}
+data_prod = read_csv('../Conditions/production_condition.csv')
+```
+
+```{r}
+
+data_prod = data_prod %>%
+  mutate(stem = orthoCoding(prod_label)) %>%
+  mutate(type = case_when(
+    str_detect(file, 'dim_sg') ~ 'dim_sg',
+    str_detect(file, '_2') ~ 'big_pl',
+    str_detect(file, 'dim_pl') ~ 'dim_pl')
+  ) %>%
+  mutate(row_id = row_number())
+   
+
+data_prod_cond1 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond1 = data_prod_cond1 %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond1 = data_prod_cond1 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond1_rw_matrix, by = c("key" = "cue"))
+
+# data_prod_results_cond1 = data_prod_results_cond1 %>%
+#   mutate(is.stem = case_when(
+#     key %in% c('dim', 'big', 'sg', 'pl') ~ 0,
+#     .default = 1
+#   ))
+
+
+data_prod_results_cond1 = data_prod_results_cond1 %>%
+  group_by(row_id) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 1,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+
+##c2
+data_prod_cond2 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond2 = data_prod_cond2 %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond2 = data_prod_cond2 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond2_rw_matrix, by = c("key" = "cue"))
+
+
+data_prod_results_cond2 = data_prod_results_cond2 %>%
+  group_by(row_id) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 2,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+
+
+##c3
+data_prod_cond3 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond3 = data_prod_cond3 %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond3 = data_prod_cond3 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond3_rw_matrix, by = c("key" = "cue"))
+
+
+data_prod_results_cond3 = data_prod_results_cond3 %>%
+  group_by(row_id) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 3,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+
+##c4
+data_prod_cond4 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond4 = data_prod_cond4 %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond4 = data_prod_cond4 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond4_rw_matrix, by = c("key" = "cue"))
+
+
+data_prod_results_cond4 = data_prod_results_cond4 %>%
+  group_by(row_id) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 4,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+
+
+
+##c5
+data_prod_cond5 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond5 = data_prod_cond5 %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond5 = data_prod_cond5 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond5_rw_matrix, by = c("key" = "cue"))
+
+
+data_prod_results_cond5 = data_prod_results_cond5 %>%
+  group_by(row_id) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 5,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+
+
+
+##c6
+data_prod_cond6 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond6 = data_prod_cond6 %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond6 = data_prod_cond6 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond6_rw_matrix, by = c("key" = "cue"))
+
+
+data_prod_results_cond6 = data_prod_results_cond6 %>%
+  group_by(row_id) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 6,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+
+data_prod_results_cond1 = data_prod_results_cond1 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl'][1] - nem_activations[type == 'dim_sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+data_prod_results_cond2 = data_prod_results_cond2 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl'][1] - nem_activations[type == 'dim_sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+data_prod_results_cond3 = data_prod_results_cond3 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl'][1] - nem_activations[type == 'dim_sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+
+data_prod_results_cond4 = data_prod_results_cond4 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg'][1] - dan_activations[type=='big_pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+
+data_prod_results_cond5 = data_prod_results_cond5 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg'][1] - dan_activations[type=='big_pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+
+data_prod_results_cond6 = data_prod_results_cond6 %>%
+  group_by(prod_label) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg'][1] - dan_activations[type=='big_pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+
+data_all_conds = rbind(
+  data_prod_results_cond1,
+  data_prod_results_cond2,
+  data_prod_results_cond3,
+  data_prod_results_cond4,
+  data_prod_results_cond5,
+  data_prod_results_cond6
+  )
+
+data_all_conds_logistic = data_all_conds
+  
+```
+## comparing with human data
+
+```{r}
+human_data_no_sil_no_shoon = read_csv('../Data/data_prod_no_sil_shoon.csv')
+```
+
+```{r}
+data_all_conds = data_all_conds %>%
+  rename('picture_meaning' = type) %>%
+  rename('resp_stem' = prod_label) %>%
+  rename('stem_condition' = prod_condition) %>%
+  rename('original_condition' = condition)
+
+data_all_conds = data_all_conds %>%
+  mutate(freq_minus_infreq = dv)
+
+
+
+data_all_conds_for_comparison = data_all_conds %>%
+  dplyr::select(original_condition, stem_condition, resp_stem, picture_meaning, freq_minus_infreq, dan_activations, nem_activations, sil_activations, shoon_activations)
+
+human_data_no_sil_no_shoon_token_freq_no_stem_activations = human_data_no_sil_no_shoon %>%
+  left_join(data_all_conds_for_comparison)
+
+  
+```
+
+## Plotting
+```{r}
+
+data_prod_cond1_for_plotting = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond1_for_plotting = data_prod_cond1_for_plotting %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond1_for_plotting = data_prod_cond1_for_plotting %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond1_rw_matrix, by = c("key" = "cue"))
+
+data_prod_results_cond1_for_plotting = data_prod_results_cond1_for_plotting %>%
+  mutate(is.stem = case_when(
+    key %in% c('dim', 'big', 'sg', 'pl') ~ 0,
+    .default = 1
+  ))
+
+
+data_prod_results_cond1_for_plotting = data_prod_results_cond1_for_plotting %>%
+  group_by(row_id, is.stem) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 1,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+## c2
+
+data_prod_cond2_for_plotting = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond2_for_plotting = data_prod_cond2_for_plotting %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond2_for_plotting = data_prod_cond2_for_plotting %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond2_rw_matrix, by = c("key" = "cue"))
+
+data_prod_results_cond2_for_plotting = data_prod_results_cond2_for_plotting %>%
+  mutate(is.stem = case_when(
+    key %in% c('dim', 'big', 'sg', 'pl') ~ 0,
+    .default = 1
+  ))
+
+
+data_prod_results_cond2_for_plotting = data_prod_results_cond2_for_plotting %>%
+  group_by(row_id, is.stem) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 2,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+## c3
+
+data_prod_cond3_for_plotting = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond3_for_plotting = data_prod_cond3_for_plotting %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond3_for_plotting = data_prod_cond3_for_plotting %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond3_rw_matrix, by = c("key" = "cue"))
+
+data_prod_results_cond3_for_plotting = data_prod_results_cond3_for_plotting %>%
+  mutate(is.stem = case_when(
+    key %in% c('dim', 'big', 'sg', 'pl') ~ 0,
+    .default = 1
+  ))
+
+
+data_prod_results_cond3_for_plotting = data_prod_results_cond3_for_plotting %>%
+  group_by(row_id, is.stem) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 3,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+# 
+# data_prod_results_cond1_for_plotting = data_prod_results_cond1_for_plotting %>%
+#   group_by(type, prod_condition, is.stem) %>%
+#   summarize(mean(freq_minus_infreq)) %>%
+#   mutate(condition = 1)
+# 
+# data_prod_results_cond2_for_plotting =data_prod_results_cond2_for_plotting %>%
+#   group_by(type, prod_condition, is.stem) %>%
+#   summarize(mean(freq_minus_infreq)) %>%
+#   mutate(condition = 2)
+# 
+# data_prod_results_cond3_for_plotting = data_prod_results_cond3_for_plotting %>%
+#   group_by(type, prod_condition, is.stem) %>%
+#   summarize(mean(freq_minus_infreq)) %>%
+#   mutate(condition = 3)
+# 
+# data_prod_results_for_plotting = rbind(
+#   data_prod_results_cond1_for_plotting,
+#   data_prod_results_cond2_for_plotting,
+#   data_prod_results_cond3_for_plotting
+# )
+
+
+
+
+## c4
+
+data_prod_cond4_for_plotting = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond4_for_plotting = data_prod_cond4_for_plotting %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond4_for_plotting = data_prod_cond4_for_plotting %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond4_rw_matrix, by = c("key" = "cue"))
+
+data_prod_results_cond4_for_plotting = data_prod_results_cond4_for_plotting %>%
+  mutate(is.stem = case_when(
+    key %in% c('dim', 'big', 'sg', 'pl') ~ 0,
+    .default = 1
+  ))
+
+
+data_prod_results_cond4_for_plotting = data_prod_results_cond4_for_plotting %>%
+  group_by(row_id, is.stem) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 4,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+
+
+
+## c5
+
+data_prod_cond5_for_plotting = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond5_for_plotting = data_prod_cond5_for_plotting %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond5_for_plotting = data_prod_cond5_for_plotting %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond5_rw_matrix, by = c("key" = "cue"))
+
+data_prod_results_cond5_for_plotting = data_prod_results_cond5_for_plotting %>%
+  mutate(is.stem = case_when(
+    key %in% c('dim', 'big', 'sg', 'pl') ~ 0,
+    .default = 1
+  ))
+
+
+data_prod_results_cond5_for_plotting = data_prod_results_cond5_for_plotting %>%
+  group_by(row_id, is.stem) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 5,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+
+## c6
+
+data_prod_cond6_for_plotting = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond6_for_plotting = data_prod_cond6_for_plotting %>% 
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond6_for_plotting = data_prod_cond6_for_plotting %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond6_rw_matrix, by = c("key" = "cue"))
+
+data_prod_results_cond6_for_plotting = data_prod_results_cond6_for_plotting %>%
+  mutate(is.stem = case_when(
+    key %in% c('dim', 'big', 'sg', 'pl') ~ 0,
+    .default = 1
+  ))
+
+
+data_prod_results_cond6_for_plotting = data_prod_results_cond6_for_plotting %>%
+  group_by(row_id, is.stem) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 6,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+
+
+
+data_prod_results_cond1_for_plotting = data_prod_results_cond1_for_plotting %>%
+  group_by(prod_label, is.stem) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl'][1] - nem_activations[type == 'dim_sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+data_prod_results_cond2_for_plotting = data_prod_results_cond2_for_plotting %>%
+  group_by(prod_label, is.stem) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl'][1] - nem_activations[type == 'dim_sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+data_prod_results_cond3_for_plotting = data_prod_results_cond3_for_plotting %>%
+  group_by(prod_label, is.stem) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl'][1] - nem_activations[type == 'dim_sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+
+data_prod_results_cond4_for_plotting = data_prod_results_cond4_for_plotting %>%
+  group_by(prod_label, is.stem) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg'][1] - dan_activations[type=='big_pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+
+data_prod_results_cond5_for_plotting = data_prod_results_cond5_for_plotting %>%
+  group_by(prod_label, is.stem) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg'][1] - dan_activations[type=='big_pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+
+data_prod_results_cond6_for_plotting = data_prod_results_cond6_for_plotting %>%
+  group_by(prod_label, is.stem) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg'][1] - dan_activations[type=='big_pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl')
+
+
+
+data_prod_results_for_stem_plot = rbind(
+  data_prod_results_cond1_for_plotting,
+  data_prod_results_cond2_for_plotting,
+  data_prod_results_cond3_for_plotting,
+  data_prod_results_cond4_for_plotting,
+  data_prod_results_cond5_for_plotting,
+  data_prod_results_cond6_for_plotting
+)
+
+data_prod_results_for_stem_plot$freq_minus_infreq = data_prod_results_for_stem_plot$dv
+
+data_prod_results_cond1_for_plotting = data_prod_results_cond1_for_plotting %>%
+  mutate(meaning = case_when(
+    type == 'big_pl' ~ 'original',
+    type == 'dim_pl' ~ 'novel',
+    type == 'dim_sg' ~ 'infrequent'
+  )) %>%
+  group_by(meaning, prod_condition, is.stem) %>%
+  summarize(mean(freq_minus_infreq)) %>%
+  mutate(condition = 1)
+
+data_prod_results_cond2_for_plotting = data_prod_results_cond2_for_plotting %>%
+  mutate(meaning = case_when(
+    type == 'big_pl' ~ 'original',
+    type == 'dim_pl' ~ 'novel',
+    type == 'dim_sg' ~ 'infrequent'
+  )) %>%
+  group_by(meaning, prod_condition, is.stem) %>%
+  summarize(mean(freq_minus_infreq)) %>%
+  mutate(condition = 2)
+
+data_prod_results_cond3_for_plotting = data_prod_results_cond3_for_plotting %>%
+  mutate(meaning = case_when(
+    type == 'big_pl' ~ 'original',
+    type == 'dim_pl' ~ 'novel',
+    type == 'dim_sg' ~ 'infrequent'
+  )) %>%
+  group_by(meaning, prod_condition, is.stem) %>%
+  summarize(mean(freq_minus_infreq)) %>%
+  mutate(condition = 3)
+
+data_prod_results_cond4_for_plotting = data_prod_results_cond4_for_plotting %>%
+  mutate(meaning = case_when(
+    type == 'big_pl' ~ 'infrequent',
+    type == 'dim_pl' ~ 'novel',
+    type == 'dim_sg' ~ 'original'
+  )) %>%
+  group_by(meaning, prod_condition, is.stem) %>%
+  summarize(mean(freq_minus_infreq)) %>%
+  mutate(condition = 4)
+
+data_prod_results_cond5_for_plotting = data_prod_results_cond5_for_plotting %>%
+  mutate(meaning = case_when(
+    type == 'big_pl' ~ 'infrequent',
+    type == 'dim_pl' ~ 'novel',
+    type == 'dim_sg' ~ 'original'
+  )) %>%
+  group_by(meaning, prod_condition, is.stem) %>%
+  summarize(mean(freq_minus_infreq)) %>%
+  mutate(condition = 5)
+
+data_prod_results_cond6_for_plotting = data_prod_results_cond6_for_plotting %>%
+  mutate(meaning = case_when(
+    type == 'big_pl' ~ 'infrequent',
+    type == 'dim_pl' ~ 'novel',
+    type == 'dim_sg' ~ 'original'
+  )) %>%
+  group_by(meaning, prod_condition, is.stem) %>%
+  summarize(mean(freq_minus_infreq)) %>%
+  mutate(condition = 6)
+
+data_prod_results_for_plotting = rbind(
+  data_prod_results_cond1_for_plotting,
+  data_prod_results_cond2_for_plotting,
+  data_prod_results_cond3_for_plotting,
+  data_prod_results_cond4_for_plotting,
+  data_prod_results_cond5_for_plotting,
+  data_prod_results_cond6_for_plotting
+)
+# 
+# library(ggh4x)
+# ggplot(data = data_prod_results_for_plotting, aes(x = factor(is.stem), y = `mean(freq_minus_infreq)`, fill = prod_condition)) +
+#   geom_col(position = "dodge") +
+#   facet_nested(meaning~condition)
+
+
+```
+
+## RW Logistic Statistical Models
+
+```{r}
+options(contrasts = c("contr.treatment","contr.treatment"))
+
+priors_m1 = c(
+  prior(student_t(3, 0, 1), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 1), class = 'b'),
+  prior(student_t(3, 0, 1), class = 'sd'))
+
+model_human_rw_preds_no_stem = brm(frequency ~ freq_minus_infreq + (1 | participant) + (1 | resp_stem),
+                                       data = human_data_no_sil_no_shoon_token_freq_no_stem_activations,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 15000, 
+                                       warmup = 7500,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       #control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_human_rw_preds_no_stem')
+
+
+data_prod_results_for_plotting_stem_suffix_vary_no_stem = data_prod_results_for_stem_plot %>%
+  dplyr::select(-dan_activations, -sil_activations, -nem_activations, -shoon_activations, -dv) %>%
+  ungroup() %>%
+  mutate(label = ifelse(is.stem == 1, 'stem', 'suffix')) %>%
+  dplyr::select(-is.stem) %>%
+  pivot_wider(
+    names_from = label,
+    values_from = freq_minus_infreq,
+    names_glue = 'freq_minus_infreq_{label}') %>%
+  rename('stem_condition' = prod_condition) %>%
+  rename('picture_meaning' = type) %>%
+  rename('original_condition' = condition) %>%
+  rename('resp_stem' = prod_label)
+
+human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary = human_data_no_sil_no_shoon %>%
+  left_join(data_prod_results_for_plotting_stem_suffix_vary_no_stem)
+
+
+model_prod_rw_stem_suffix_vary = brm(frequency ~ freq_minus_infreq_stem + freq_minus_infreq_suffix + (1 | participant) + (1 | resp_stem), #resp_stem intercept removed because it's redundant with freq_minus_infreq_stem
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_prod_rw_stem_suffix_vary')
+
+
+# model_prod_rw_stem_suffix_vary_match_human_model = brm(frequency ~ freq_minus_infreq_stem * freq_minus_infreq_suffix * condition * meaning * stem_condition + (1 | participant) + (1 | resp_stem), #resp_stem intercept removed because it's redundant with freq_minus_infreq_stem
+#                                        data = human_data_no_sil_no_shoon_plus_rw_preds_stem_suffix_vary,
+#                                        family = bernoulli(link = 'logit'),
+#                                        iter = 14000, 
+#                                        warmup = 7000,
+#                                        chains = 4,
+#                                        cores = 4,
+#                                        prior = priors_m1,
+#                                        control = list(adapt_delta = 0.99),
+#                                        save_pars = save_pars(all = TRUE),
+#                                        file = '../Data/model_prod_rw_stem_suffix_vary_match_human_model')
+
+
+human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary$condition = factor(human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary$condition, levels = c(3, 1, 2))
+
+
+
+model_prod_rw_stem_suffix_vary_by_condition = brm(frequency ~ freq_minus_infreq_stem + freq_minus_infreq_suffix + condition + freq_minus_infreq_stem:condition + freq_minus_infreq_suffix:condition + (1 | participant) + (1 | resp_stem), #resp_stem intercept removed because it's redundant with freq_minus_infreq_stem
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_prod_rw_stem_suffix_vary_by_condition')
+
+
+human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary$meaning = factor(human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary$meaning)
+
+contrasts(human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary$meaning) = contr.sum(levels(human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary$meaning))
+
+human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary$stem_condition = factor(human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary$stem_condition, levels = c('novel', 'familiar'))
+
+contrasts(human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary$stem_condition) = contr.sum(levels(human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary$stem_condition))
+
+
+model_prod_rw_stem_suffix_vary_by_condition_original_preds = brm(frequency ~ condition*meaning*stem_condition + freq_minus_infreq_stem + freq_minus_infreq_suffix + freq_minus_infreq_stem:condition + freq_minus_infreq_suffix:condition + (1 | participant) + (1 | resp_stem), #resp_stem intercept removed because it's redundant with freq_minus_infreq_stem
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds_no_stem_suffix_vary,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       save_pars = save_pars(all = TRUE),
+                                       file = '../Data/model_prod_rw_stem_suffix_vary_by_condition_original_preds')
+
+
+# model_prod_rw_stem_suffix_vary_by_condition = brm(frequency ~ freq_minus_infreq_stem * freq_minus_infreq_suffix * condition + (1 + freq_minus_infreq_stem * freq_minus_infreq_suffix | participant),
+#                                        data = human_data_no_sil_no_shoon_plus_rw_preds_stem_suffix_vary,
+#                                        family = bernoulli(link = 'logit'),
+#                                        iter = 14000, 
+#                                        warmup = 7000,
+#                                        chains = 4,
+#                                        cores = 4,
+#                                        prior = priors_m1,
+#                                        control = list(adapt_delta = 0.99),
+#                                        save_pars = save_pars(all = TRUE),
+#                                        file = '../Data/model_prod_rw_stem_suffix_vary_by_condition')
+
+
+
+
+#model_prod_rw_stem_suffix_vary$criteria$loo = NULL
+model_prod_rw_stem_suffix_vary_by_condition = add_criterion(model_prod_rw_stem_suffix_vary_by_condition, 'loo')
+model_prod_rw_stem_suffix_vary = add_criterion(model_prod_rw_stem_suffix_vary, 'loo')
+model_prod_rw_stem_suffix_vary_by_condition_original_preds = add_criterion(model_prod_rw_stem_suffix_vary_by_condition_original_preds, 'loo')
+```
+
+
+
+
+
