@@ -882,6 +882,7 @@ plot_prod_stem +
   scale_x_continuous(breaks = c(1, 2, 3), 
                      labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency')) +
   ylab('Proportion of Responses with Frequent Suffix') +
+  scale_y_continuous(limits=c(0,1), breaks=seq(0, 1, by=0.25)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, color = 'black', size = 10),
         axis.title.x = element_text(size = 11),
@@ -945,6 +946,7 @@ plot_prod_stem[[1]]$facet = factor(plot_prod_stem[[1]]$facet, levels = c('novel'
 plot_prod_stem +
   scale_x_continuous(breaks = c(1, 2, 3), 
                      labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency')) +
+  scale_y_continuous(limits=c(0,1), breaks=seq(0, 1, by=0.25)) +
   ylab('Proportion of Responses with Frequent Suffix') +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, color = 'black', size = 10),
@@ -1006,7 +1008,8 @@ plot(plot_comprehension_no_stem, plot = FALSE)[[1]] +
   xlab('Condition') +
   ylim(c(0,1)) +
   geom_errorbar(width = 0.1) +
-  scale_x_discrete(labels = c("Control", "Higher Type", "Lower Token"))
+  scale_x_discrete(labels = c("Control", "Higher Type", "Lower Token")) +
+  scale_y_continuous(limits=c(0,1), breaks=seq(0, 1, by=0.25))
 
 
 ```
