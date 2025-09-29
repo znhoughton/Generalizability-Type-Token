@@ -1,0 +1,1159 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar 
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\KOMAoption{captions}{tableheading}
+\usepackage{amsmath}
+\usepackage{fontspec}    % Ensure font support
+\usepackage{placeins}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage{indentfirst}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\author{}
+\date{}
+\begin{document}
+
+
+\section{The effects of type and token frequency on semantic
+extension}\label{the-effects-of-type-and-token-frequency-on-semantic-extension}
+
+\doublespacing
+
+\setlength{\parindent}{4em}
+
+\subsection{Introduction}\label{introduction}
+
+\subsection{Methods}\label{methods}
+
+Following Harmon \& Kapatsinski (2017), two artificial languages were
+used: called Dan and Nem (See Figure~\ref{fig-fig1}). In each language,
+the same four suffixes were used: -\emph{sil\textsubscript{PL}},
+\emph{-dan\textsubscript{PL}}, \emph{-nem\textsubscript{DIM}}, and
+-\emph{shoon\textsubscript{DIM}}. Notably, in our language \emph{-dan}
+and \emph{-sil} overlap in meaning (they both occur in plural contexts),
+and -\emph{nem} and \emph{-shoon} also overlap in meaning (they both
+occur in diminutive contexts). Since all four suffixes are possible
+candidates for expressing the diminutive plural meaning, we can examine how
+properties of a suffix distribution (type frequency and token frequency)
+affect its likelihood of being extended to express the diminutive plural
+meaning.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{languages.pdf}}
+
+}
+
+\caption{\label{fig-fig1}A description of the suffixes in our artificial
+languages. The thicker lines denote the more frequent form in each
+language: the plural -\emph{dan\textsubscript{PL}} in the Dan language
+and the diminutive -\emph{nem\textsubscript{DIM}} in the Nem language.}
+
+\end{figure}%
+
+During the exposure phase, each suffix was paired with an image. The
+suffixes -\emph{sil\textsubscript{PL}} and \emph{-dan\textsubscript{PL}}
+were always paired with a picture of multiple large pictures. On the
+other hand, the suffixes \emph{-nem\textsubscript{DIM}} and
+-\emph{shoon\textsubscript{DIM}} were always paired with a picture of a
+single small creature. The design of the stimuli results in participants
+being able to learn that -\emph{sil} and \emph{-dan} are either simply
+plural or simply non-diminutive. Similarly, \emph{-nem} and
+\emph{-shoon} can be learned as either simply singular or simply
+diminutive.
+
+Our Experiment comprised of three different conditions (see
+Table~\ref{tbl-conditionslist}), one in which the type frequency of the
+frequent suffix (i.e., \emph{dan} in Dan and \emph{nem} in Nem) was
+higher than the type frequency of the infrequent suffix (by a factor of
+4 or 12 vs.~3) while the token frequency of the two suffixes was matched
+and set equal to the type frequency of the frequent suffix (both at 12).
+We refer to this condition as Type. In the second condition, the token
+frequency of the frequent suffix was higher than the token frequency of
+the infrequent suffix (by a factor of 4 or 12 vs.~3) while holding the
+type frequency of the two suffixes equal to the type frequency of the
+infrequent suffix (both at 3). We refer to this condition as Token.
+Finally, in the third condition, we manipulated both the type and token
+frequency of the frequent suffix such that the token and type frequency
+of the frequent suffix were both greater than the token and type
+frequency of the infrequent suffix (by a factor of 4 or 12 vs.~3). We
+refer to this condition as Type-Token. In this context, a higher type
+frequency corresponds to the suffix appearing with a larger number of
+distinct stems relative to the competing suffix, while a larger token
+frequency corresponds to simply appearing a greater number of times
+relative to the competing suffix, regardless of the number of different
+stems it occurs with.
+
+\begin{table}
+
+\caption{\label{tbl-conditionslist}Description of each of our
+conditions. Note that in Condition 1, there are an equal number of
+tokens between the frequent and infrequent items, however there are a
+greater number of types in the frequent items. In Condition 2, the
+opposite is true: the frequent items occur more, but in the same number
+of types as the infrequent items. Finally, in Condition 3, the frequent
+items occur both a greater number of times and in a greater number of
+different contexts.}
+
+\centering{
+
+\centering\begingroup\fontsize{11}{13}\selectfont
+
+\begin{tabular}{>{\raggedright\arraybackslash}p{12em}rrrr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Frequent Suffix} & \multicolumn{2}{c}{Infrequent Suffix} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5}
+\textbf{Condition} & \textbf{Type} & \textbf{Token} & \textbf{Type} & \textbf{Token}\\
+\midrule
+\textbf{\cellcolor{gray!6}{Type}} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{12}\\
+\textbf{Token} & 3 & 12 & 3 & 3\\
+\textbf{\cellcolor{gray!6}{Type-Token}} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{3}\\
+\bottomrule
+\end{tabular}
+\endgroup{}
+
+}
+
+\end{table}%
+
+\subsubsection{Procedure}\label{procedure}
+
+Each participant was randomly assigned one of the conditions. In each
+condition, participants were first presented with an exposure phase.
+After the exposure phase, participants were tested using a production
+task, a form choice task, and a comprehension task. We describe each of
+these below.\footnote{Additionally, a demo of the experiment can be
+  found at the following link:
+  \url{https://run.pavlovia.org/znhoughton/generalizability_demo}.}
+
+\paragraph{Exposure Phase}\label{exposure-phase}
+
+Following Harmon \& Kapatsinski (2017), each exposure trial consisted of
+the presentation of a picture on the computer screen which was
+subsequently followed with a written label for the image as well as an
+audio presentation of that label. Specifically, the image first appeared
+on the screen and then 1.25 seconds later was followed by both the label
+of the creatures on the screen as well as the audio for that creature.
+Participants were instructed to type the name of the creature and press
+enter. Participants had 4 seconds to respond after the presentation of
+the name of the creature and were given feedback as to whether they were
+correct or not.
+
+Participants saw each trial within the exposure phase 5 times, each in a
+randomized order.
+
+\paragraph{Production Task}\label{production-task}
+
+After the exposure phase, participants were presented with a production
+task. In this task, participants were presented with images and told to
+produce a label for the image. Specifically, initially the unaffixed
+form appeared on the screen along with the corresponding image. 2
+seconds later, the four different possible images of that creature
+appeared (a singular big creature, multiple big creatures, a single
+small creature, and multiple small creatures). Three of these images
+disappeared after 1.25 seconds, leaving a single image for the
+participant to produce a label for. Participants had 10 seconds to
+respond. In the production task, some of the stems were familiar (i.e.,
+seen in training) and others were novel (i.e., not seen in training).
+
+Participants saw each trial within the production task 4 times, each in
+a randomized order.
+
+\paragraph{Form Choice Task}\label{form-choice-task}
+
+After the production task, participants were presented with a form
+choice task. In this task, participants were presented first with the
+base, unaffixed form and the corresponding image. 2 seconds later four
+images flashed on the screen, remained on the screen for 1.25 seconds,
+and disappeared leaving a single image. Along with the single image,
+participants were also presented with two possible labels (which differed 
+in whether the suffix was \emph{dan} or \emph{nem}) for that
+image, one label on the bottom right of the screen and one label on the
+bottom left of the screen. Participants were given four seconds to press
+either the left arrow or the right arrow to choose the corresponding
+label. The labels were counterbalanced with respect to which side of the
+screen they appeared on. In the form choice task, some of the stems were
+familiar (i.e., seen in training) and others were novel (i.e., not seen
+in training). The goal of this task was to assess whether type and/or
+token frequency influence the form choice when accessibility differences
+between frequent and rare forms have been attenuated.
+
+Participants saw each trial within the form choice task 2 times, each in
+a randomized order.
+
+\paragraph{Comprehension Task}\label{comprehension-task}
+
+Finally, participants were presented with a comprehension task. In this
+task, participants were first given the label and corresponding audio
+for a given creature. After 0.25 seconds, four images appeared on the
+screen and participants had 4 seconds to click one of the images on the
+screen that corresponded to the label. Similar to the before-mentioned
+tasks, in the comprehension task some of the stems were familiar (i.e.,
+seen in training) and others were novel (i.e., not seen in training).
+
+Participants saw each trial within the comprehension task 2 times, each
+in a randomized order.
+
+\subsection{Analyses and Results}\label{analyses-and-results}
+
+We explore the results for each task in depth in the next
+sections.\footnote{All data and code for the analyses can be found here:
+  \url{https://github.com/znhoughton/Generalizability-Type-Token}.}
+
+\subsubsection{Production Task}\label{production-task-1}
+
+In order to determine whether the effect of frequency on semantic
+extension differed between conditions, we ran a Bayesian linear
+mixed-effects model on the production data. The dependent variable was
+whether the participant produced the frequent suffix. The frequent
+suffix was coded as 1 if participants chose \emph{dan} in the Dan
+language or chose \emph{nem} in the Nem lan
+
+We treatment coded condition such that the intercept was the type-token
+frequency condition. Thus, a larger intercept indicates that the
+frequent suffix was more likely to be produced than the infrequent
+suffix when it had a high type and token frequency. A larger coefficient
+estimate indicates that the frequent form was more likely to be produced
+than the infrequent form in that condition relative to the type-token
+frequency condition. We also included meaning and stem novelty as
+sum-coded variables. Meaning was a categorical variable with two levels:
+original and novel. An original meaning referred to big plural if the
+suffix was \emph{dan} or diminutive singular if the suffix was
+\emph{nem}. A meaning was novel if it was diminutive plural regardless
+of the suffix. stem novelty similarly was a categorical variable with
+two levels, familiar or novel. A familiar stem was one that participants
+saw in training while a novel stem was one that they did not see in
+training. We also included a random intercept for participant and random
+slopes for meaning by participant and stem novelty by participant. The
+syntax for our model is included below in
+Equation~\ref{eq-prodmodelstem}. The results are reported in
+Table~\ref{tbl-prodresultsstem} and visualized in
+Figure~\ref{fig-prodresultsstem}.
+
+\begin{equation}\phantomsection\label{eq-prodmodelstem}{
+\text{frequent\_suffix} \sim \text{condition}*\text{meaning}*\text{stem} + (1 + \text{meaning} * \text{stem} | \text{participant})
+}\end{equation}
+
+We find a meaningful effect for the intercept, suggesting that the
+frequent suffix is chosen more than the infrequent suffix when there is
+a high type and high token frequency. We also find a meaningful effect
+for novel stems, suggesting that in general the frequent suffix is
+produced more than the infrequent suffix when the stem is novel. Perhaps
+most interestingly, we find a meaningful interaction between the type
+frequency condition and novel stem, suggesting that in the type
+frequency condition, there is a preference for the frequent suffix over
+the infrequent suffix when the stem is novel but not when it is
+familiar. On the other hand, no such interaction effect is found in the
+token frequency condition. Further, we find a three-way interaction
+between type frequency condition, novel meaning, and novel stem,
+suggesting that learners are more likely to produce a frequent suffix in
+the type frequency condition when both the stem and meaning are novel.
+
+Overall, our results suggest that in production, learners generally use
+the frequent suffix more regardless of meaning or stem familiarity if
+the suffix has both a high type and high token frequency. Additionally,
+when the frequent suffix has a higher type frequency than the infrequent
+suffix, learners are more likely to use it if the stem is novel, but not
+when the stem is familiar. Finally, in general there is no preference to
+use the frequent suffix more for novel meanings if the suffix has only a
+higher token frequency than the infrequent suffix.
+
+\begin{table}
+
+\caption{\label{tbl-prodresultsstem}Results of the statistical models
+for the production task.}
+
+\centering{
+
+\centering\begingroup\fontsize{11}{13}\selectfont
+
+\begin{tabular}{>{\raggedright\arraybackslash}p{20em}rrrrr}
+\toprule
+\textbf{ } & \textbf{Est.} & \textbf{Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+\midrule
+\textbf{\cellcolor{gray!6}{Intercept (Type-Token Frequency)}} & \cellcolor{gray!6}{1.02} & \cellcolor{gray!6}{0.55} & \cellcolor{gray!6}{-0.05} & \cellcolor{gray!6}{2.14} & \cellcolor{gray!6}{96.91}\\
+\textbf{Type Frequency} & -0.74 & 0.71 & -2.20 & 0.58 & 14.57\\
+\textbf{\cellcolor{gray!6}{Token Frequency}} & \cellcolor{gray!6}{-0.22} & \cellcolor{gray!6}{0.68} & \cellcolor{gray!6}{-1.59} & \cellcolor{gray!6}{1.12} & \cellcolor{gray!6}{37.24}\\
+\textbf{Novel Meaning} & 0.09 & 0.33 & -0.54 & 0.74 & 61.03\\
+\textbf{\cellcolor{gray!6}{Novel Stem}} & \cellcolor{gray!6}{0.27} & \cellcolor{gray!6}{0.14} & \cellcolor{gray!6}{-0.01} & \cellcolor{gray!6}{0.56} & \cellcolor{gray!6}{97.06}\\
+\addlinespace
+\textbf{Type Frequency:Novel Meaning} & 0.28 & 0.42 & -0.55 & 1.12 & 74.46\\
+\textbf{\cellcolor{gray!6}{Token Frequency:Novel Meaning}} & \cellcolor{gray!6}{-0.61} & \cellcolor{gray!6}{0.45} & \cellcolor{gray!6}{-1.51} & \cellcolor{gray!6}{0.26} & \cellcolor{gray!6}{8.42}\\
+\textbf{Type Frequency:Novel Stem} & 0.36 & 0.17 & 0.02 & 0.70 & 98.11\\
+\textbf{\cellcolor{gray!6}{Token Frequency:Novel Stem}} & \cellcolor{gray!6}{-0.29} & \cellcolor{gray!6}{0.21} & \cellcolor{gray!6}{-0.70} & \cellcolor{gray!6}{0.12} & \cellcolor{gray!6}{7.86}\\
+\textbf{Novel Meaning:Novel Stem} & -0.01 & 0.13 & -0.26 & 0.25 & 46.68\\
+\addlinespace
+\textbf{\cellcolor{gray!6}{Type Frequency:Novel Meaning:Novel Stem}} & \cellcolor{gray!6}{0.36} & \cellcolor{gray!6}{0.17} & \cellcolor{gray!6}{0.03} & \cellcolor{gray!6}{0.68} & \cellcolor{gray!6}{98.34}\\
+\textbf{Token Frequency:Novel Meaning:Novel Stem} & -0.05 & 0.20 & -0.44 & 0.35 & 40.76\\
+\bottomrule
+\end{tabular}
+\endgroup{}
+
+}
+
+\end{table}%
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{generalizability-writeup_files/figure-latex/fig-prodresultsstem-1.pdf}
+
+}
+
+\caption{\label{fig-prodresultsstem}Plot of the statistical model
+estimates for the production task. The x-axis indicates the condition
+(type frequency, token frequency, or type-token frequency). The y-axis
+corresponds to the proportion of responses with a frequent suffix. Blue
+points indicate that the meaning was novel while purple points
+indicate that the meaning was original. The facet indicates whether the
+stem was novel or familiar.}
+
+\end{figure}%
+
+\subsubsection{Form Choice Task}\label{form-choice-task-1}
+
+In order to examine the effects of form-choice, we similarly ran a model
+analogous to the one we ran for the production task
+(Equation~\ref{eq-prodmodelstem}). In the context of the form-choice
+task, the dependent variable reflects whether participants chose the
+option with the frequent suffix or the one with the infrequent suffix.
+Analogous to the first production model, the independent variables were
+condition, meaning, and stem novelty. Once again, condition was
+treatment coded such that type-token frequency was the reference level
+and meaning and stem novelty were sum-coded. The random-effects
+structure was identical to that in Equation~\ref{eq-prodmodelstem}. The
+model results are presented in Table~\ref{tbl-2afcresultsstem} and
+visualized in Figure~\ref{fig-2afcresultsstem}.
+
+
+\begin{table}
+
+\caption{\label{tbl-2afcresultsstem}Results of the statistical models
+for the form-choice task.}
+
+\centering{
+
+\centering\begingroup\fontsize{11}{13}\selectfont
+
+\begin{tabular}{>{\raggedright\arraybackslash}p{20em}rrrrr}
+\toprule
+\textbf{ } & \textbf{Est.} & \textbf{Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+\midrule
+\textbf{\cellcolor{gray!6}{Intercept (Type-Token Frequency)}} & \cellcolor{gray!6}{-0.01} & \cellcolor{gray!6}{0.07} & \cellcolor{gray!6}{-0.15} & \cellcolor{gray!6}{0.12} & \cellcolor{gray!6}{41.23}\\
+\textbf{Type Frequency} & -0.12 & 0.10 & -0.30 & 0.06 & 10.50\\
+\textbf{\cellcolor{gray!6}{Token Frequency}} & \cellcolor{gray!6}{0.05} & \cellcolor{gray!6}{0.09} & \cellcolor{gray!6}{-0.13} & \cellcolor{gray!6}{0.22} & \cellcolor{gray!6}{70.71}\\
+\textbf{Novel Meaning} & 0.05 & 0.07 & -0.08 & 0.19 & 78.69\\
+\textbf{\cellcolor{gray!6}{Novel Stem}} & \cellcolor{gray!6}{-0.01} & \cellcolor{gray!6}{0.07} & \cellcolor{gray!6}{-0.14} & \cellcolor{gray!6}{0.12} & \cellcolor{gray!6}{45.84}\\
+\addlinespace
+\textbf{Type Frequency:Novel Meaning} & -0.18 & 0.09 & -0.36 & 0.00 & 2.81\\
+\textbf{\cellcolor{gray!6}{Token Frequency:Novel Meaning}} & \cellcolor{gray!6}{-0.05} & \cellcolor{gray!6}{0.09} & \cellcolor{gray!6}{-0.22} & \cellcolor{gray!6}{0.13} & \cellcolor{gray!6}{30.07}\\
+\textbf{Type Frequency:Novel Stem} & -0.03 & 0.09 & -0.21 & 0.15 & 37.80\\
+\textbf{\cellcolor{gray!6}{Token Frequency:Novel Stem}} & \cellcolor{gray!6}{-0.02} & \cellcolor{gray!6}{0.09} & \cellcolor{gray!6}{-0.19} & \cellcolor{gray!6}{0.15} & \cellcolor{gray!6}{41.59}\\
+\textbf{Novel Meaning:Novel Stem} & -0.02 & 0.07 & -0.15 & 0.11 & 38.23\\
+\addlinespace
+\textbf{\cellcolor{gray!6}{Type Frequency:Novel Meaning:Novel Stem}} & \cellcolor{gray!6}{0.12} & \cellcolor{gray!6}{0.09} & \cellcolor{gray!6}{-0.07} & \cellcolor{gray!6}{0.30} & \cellcolor{gray!6}{89.33}\\
+\textbf{Token Frequency:Novel Meaning:Novel Stem} & -0.03 & 0.09 & -0.20 & 0.14 & 35.20\\
+\bottomrule
+\end{tabular}
+\endgroup{}
+
+}
+
+\end{table}%
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{generalizability-writeup_files/figure-latex/fig-2afcresultsstem-1.pdf}
+
+}
+
+\caption{\label{fig-2afcresultsstem}Plot of the statistical model
+estimates for the form-choice task. The x-axis indicates the condition
+(type frequency, token frequency, or type-token frequency). The y-axis
+corresponds to the proportion of responses with a frequent suffix. Blue
+points indicate that the meaning was novel while purple points
+corresponds to the original meaning. The facet indicates whether the
+stem was novel or familiar.}
+
+\end{figure}%
+
+In general we find no reliable effects except for an interaction
+effect between type frequency and novel meaning, suggesting that there
+may be a preference for the frequent suffix when it has a higher type
+frequency than the infrequent suffix. However, the lack of any other
+meaningful effects suggests that when participants are presented with
+both possible options, for all conditions (except when there is a novel
+meaning in the type frequency condition), participants are equally
+likely to choose the frequent suffix as the infrequent suffix (i.e.,
+token and type frequency don't seem to effect this).
+
+\subsubsection{Comprehension Task}\label{comprehension-task-1}
+
+In order to examine the results for the comprehension task, similar to
+the previous tasks we ran a mixed-effects regression model. The
+dependent variable was whether the meaning that participants selected
+was novel or original. A positive estimate indicates that participants
+chose the novel meaning while a negative estimate indicates that
+participants were more likely to choose the original meaning. In production and form-choice, participants are choosing between suffixes that differ in frequency. In comprehension, participants instead are presented with a single affix that has a certain type frequency, token frequency, and token/type ratio, and a frequent suffix from one condition can have the same characteristics as an infrequent suffix from another condition. SInce participants are not comparing suffixes in comprehension, we expect equally distributed suffixes to have the same effect. Thus, the independent variable chosen was the distribution of the presented suffix: 12 tokens and 12 types, 12 tokens and 3 types, or 3 tokens and 3 types. By comparing the 12-3 condition to the 12-12 and 3-3
+conditions, we can see how an increase in type frequency and a decrease
+in token frequency affect participants' choice of the novel vs.~original
+meaning. Thus, hereafter we refer to the 12-3 condition as the baseline distribution, the 12-12 distribution as Higher Type and the 3-3 distribution as Lower Token. Another way to divide the distributions is that the baseline distribution is a suffix that has a higher token/type ratio than the others 94 tokens per type vs 1 token per type).
+
+We treatment coded distribution such
+that the intercept was the baseline condition. As a result, for each
+distribution, a positive coefficient indicates that participants are more
+likely to choose a novel meaning (relative to the baseline
+distribution/intercept). We also included a slope for stem familiarity, a random intercept for participant, and a random slope for stem familiarity by participant.
+The model syntax is included below in
+Equation~\ref{eq-comprehensionmodel}. Our results for the comprehension
+task are included in Table~\ref{tbl-comprehensionresultsstem} and visualized
+in Figure~\ref{fig-comprehensionresults}.
+
+\begin{equation}\phantomsection\label{eq-comprehensionmodel}{
+\text{meaning} \sim \text{condition\_numeric} * \text{stem\_condition} + (1 + \text{stem} | \text{participant})
+}\end{equation}
+
+First, we find a meaningful effect for the baseline distribution (Intercept), suggesting that participants are more likely to select the original meaning than the novel meaning. Additionally, we find positive coefficient estimates for both Higher Type and Lower Token conditions, suggesting that decreasing the token-to-type ratio, whether by increasing type frequency or decreasing token frequency, makes participants more likely to select the novel meaning. These results suggest that it may not be type or token frequency
+independently that drives semantic entrenchment, but rather the ratio between
+type and token frequency. 
+
+
+\begin{table}
+
+\caption{\label{tbl-comprehensionresultsstem}Results of the statistical
+model for the comprehension task with stem as a fixed-effect.}
+
+\centering{
+
+\centering\begingroup\fontsize{11}{13}\selectfont
+
+\begin{tabular}{>{\raggedright\arraybackslash}p{12em}rrrrr}
+\toprule
+\textbf{ } & \textbf{Estimate} & \textbf{Est.Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+\midrule
+\textbf{\cellcolor{gray!6}{Intercept}} & \cellcolor{gray!6}{-2.81} & \cellcolor{gray!6}{0.28} & \cellcolor{gray!6}{-3.38} & \cellcolor{gray!6}{-2.28} & \cellcolor{gray!6}{0.00}\\
+\textbf{12-12} & 1.47 & 0.19 & 1.09 & 1.84 & 100.00\\
+\textbf{\cellcolor{gray!6}{3-3}} & \cellcolor{gray!6}{1.98} & \cellcolor{gray!6}{0.18} & \cellcolor{gray!6}{1.62} & \cellcolor{gray!6}{2.35} & \cellcolor{gray!6}{100.00}\\
+\textbf{Novel Stem} & 0.02 & 0.12 & -0.21 & 0.25 & 57.66\\
+\textbf{\cellcolor{gray!6}{12-12:Novel Stem}} & \cellcolor{gray!6}{-0.03} & \cellcolor{gray!6}{0.16} & \cellcolor{gray!6}{-0.34} & \cellcolor{gray!6}{0.28} & \cellcolor{gray!6}{43.70}\\
+\addlinespace
+\textbf{3-3:Novel Stem} & -0.11 & 0.16 & -0.41 & 0.20 & 25.02\\
+\bottomrule
+\end{tabular}
+\endgroup{}
+
+}
+
+\end{table}%
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{generalizability-writeup_files/figure-latex/fig-comprehensionresults-1.pdf}
+
+}
+
+\caption{\label{fig-comprehensionresults}Plot of the model estimates for
+the comprehension task.}
+
+\end{figure}%
+
+
+Overall, the comprehension results demonstrate that participants are
+more likely to select the original meaning when there is a high
+token-to-type ratio. However, when the token-to-type ratio is equivalent
+(either 12-12 or 3-3) then participants are more likely to select the
+novel meaning than when there is a high token-to-type ratio. One caveat
+is that participants still prefer the original meaning over the novel
+meaning in general (this is evident because adding the upper CI estimate
+to the intercept for both conditions still results in a negative
+estimate). In other words, while decreasing the token-to-type ratio
+decreases the preference for the original meaning, it does not eliminate
+it.
+
+\subsection{Rescorla-Wagner Model}\label{rescorla-wagner-model}
+
+In this section we examine whether the Rescorla-Wagner model (Rescorla
+\& Wagner, 1972), an associative learning model, can accurately predict
+our data or not.
+
+The Rescorla-Wagner model is an associative learning model that has
+gained a great deal of popularity. Despite its simplicity, it has been
+shown to account for many phenomena in language learning and processing
+(Baayen, 2012; Ellis, 2006; Olejarczuk et al., 2018; Ramscar et al.,
+2013).
+
+Specifically, the Rescorla-Wagner model is a two-layer feedforward
+neural network. It takes as its input a set of cues and predicts an
+outcome (Kapatsinski, 2023; Rescorla \& Wagner, 1972). The
+Rescorla-Wagner model is defined below in Equation~\ref{eq-rwmodel} and
+Equation~\ref{eq-rwmodelabsent}, which differ in whether the predicted
+outcome is present or not. The model learns the weight of an association
+between a present cue and a present outcome. In the equation,
+\(\alpha_C\) denotes the salience of the cue, \(\beta^P_O\) denotes the
+salience of an outcome when it is present, and \(\beta^A_O\) denotes the
+salience of an outcome when it is absent (Kapatsinski, 2023).
+\(\lambda_{max}\) is the learning rate.
+
+\begin{equation}\phantomsection\label{eq-rwmodel}{
+\Delta V_{C\rightarrow O } = \alpha_C\beta^P_O(\lambda_{max}-\alpha_O)
+}\end{equation}
+
+\begin{equation}\phantomsection\label{eq-rwmodelabsent}{
+\Delta V_{C\rightarrow O } = \alpha_C\beta^A_O(\lambda_{min}-\alpha_O)
+}\end{equation}
+
+While the Rescorla-Wagner model is often used with a linear activation
+function, in the present simulations we use a logistic activation
+instead (Equation~\ref{eq-rwlogistic}) . The motivation behind this
+decision is that the Rescorla-Wagner model with a logistic activation
+function is more sensitive to type frequency than the Rescorla-Wagner
+model with a linear activation function (Caballero \& Kapatsinski,
+2022). Further, as Kapatsinski (2023) demonstrates, using a logistic
+activation function mitigates spurious excitement, a side-effect of
+using the linear activation function whereby an absent cue and an absent
+outcome become associated with eachother.
+
+\begin{equation}\phantomsection\label{eq-rwlogistic}{
+\alpha_O = logit^{-1}(\sum_cV_{C\rightarrow O})
+}\end{equation}
+
+Given the Rescorla-Wagner model's success on a wide variety of
+linguistic phenomena, it's possible that it is also able to predict the
+results we see in this paper. Thus in this section we simulate the
+Rescorla-Wagner predictions for our production data in each exposure
+condition and compare it to the human data.
+
+For the simulations in this section, \(\alpha\) and \(\beta\) were set
+to 0.1, \(\lambda_{min}\) was set to 0, and \(\lambda_{max}\) was set to
+2. Our simulation process was as follows: First, for each of the
+different exposure conditions, we obtained a matrix of predicted
+cue-outcome associations using the Rescorla-Wagner model. This was done
+by feeding the model each trial of the exposure phase in a random order.
+The cues were the stem identity along with the meaning (e.g.,
+bal\_dim\_pl) and the outcome was the suffix that the stem occurred with
+on that trial (i.e., \emph{dan}, \emph{nem}, \emph{sil}, or
+\emph{shoon}). The model then learned associations between each cue and
+each outcome.
+
+Next, for each of the items in the production task, we summed the
+associations for each cue-outcome present in that trial. For example,
+given the item \emph{baldan} and the meaning big plural, we consulted
+the matrix of cue-outcome associations for \emph{bal} and \emph{dan},
+big and \emph{dan}, and plural and \emph{dan}. We then summed these to
+get the predicted associations for \emph{bal} with the big.pl meaning
+and \emph{dan}. This resulted in a matrix that included the model's
+learned association strength for any given cue with each of the four
+suffixes.
+
+Following this, in order to compare the simulations with the human data,
+we calculated association strengths depending on whether the meaning was
+original or familiar. For the original meanings, we subtracted the
+activation strengths between the original meaning and the appropriate
+suffix. Specifically, this is the difference in activation strength
+between the meaning cue big plural and the outcome \emph{dan}, and the
+meaning cue diminutive singular and the outcome \emph{nem}. If the
+language was dan (i.e., \emph{dan} was the frequent suffix), then the
+activation strength between diminutive singular and \emph{nem} was
+subtracted from the activation strength between big plural and
+\emph{dan}. If the language was nem (i.e., \emph{nem} was the frequent
+suffix), then the subtraction was in the opposite direction. To
+calculate the association strengths for novel meanings, if the frequent
+suffix was \emph{dan} then the activation strength between diminutive
+plural and \emph{nem} was subtracted from the activation strength
+between diminutive plural and \emph{dan}. If the frequent suffix was
+\emph{nem} then the opposite was done. This results in a single value
+for each trial that is the model's predicted activation of the frequent
+suffix relative to the infrequent suffix.
+
+In order to test our model, we evaluated whether the model is a good
+predictor of the human data. Thus, we ran two Bayesian logistic
+regression models. In each model, the dependent variable was whether the
+human learner, for a given trial, selected the frequent suffix or the
+infrequent suffix. The first model was a simple model that modeled the
+human data as a function of the Rescorla-Wagner activation strength
+(referred to as \texttt{freq\_minus\_infreq} in the model syntax), with
+random intercepts for participant and stem identity
+(Equation~\ref{eq-rwmodel1}). In our second model, we calculated
+separately the stem activation and the meaning activation (using the RW
+model). The motivation behind this is that the Rescorla-Wagner model is
+agnostic to whether the cue is a stem or a meaning (because it
+originally has no way of knowing whether a given cue is part of the stem
+or the meaning), but participants may show varying sensitivity to one
+over the other. Modeling it in this manner allows the statistical model
+to fit different slopes for the stem activations and the meaning
+activations. We also included fixed-effect for condition as well as an
+interaction effect between condition and the stem activations, and an
+interaction between the meaning activations and condition
+(Equation~\ref{eq-rwmodel3}).
+
+\begin{equation}\phantomsection\label{eq-rwmodel1}{
+\text{frequency} \sim \text{freq\_minus\_infreq} + (1 | \text{participant}) + (1|\text{resp\_stem})
+}\end{equation}
+
+\begin{equation}\phantomsection\label{eq-rwmodel3}{
+\begin{aligned}
+\text{frequency} & \sim \text{freq\_minus\_infreq\_stem} + \text{freq\_minus\_infreq\_meaning} + \text{condition} \\ & + \text{freq\_minus\_infreq\_stem:condition} + \text{freq\_minus\_infreq\_meaning:condition} \\ & + (1 | \text{participant}) + (1|\text{resp\_stem})
+\end{aligned}
+}\end{equation}
+
+The results of the models are presented in Table~\ref{tbl-rwsim1} and
+Table~\ref{tbl-rwsim3}.
+
+\begin{table}
+
+\caption{\label{tbl-rwsim1}Results of the statistical model with only
+the RW predictions (Equation~\ref{eq-rwmodel1}).}
+
+\centering{
+
+\centering\begingroup\fontsize{11}{13}\selectfont
+
+\begin{tabular}{>{\raggedright\arraybackslash}p{12em}rrrr}
+\toprule
+\textbf{ } & \textbf{Estimate} & \textbf{Est.Error} & \textbf{Q2.5} & \textbf{Q97.5}\\
+\midrule
+\textbf{\cellcolor{gray!6}{Intercept}} & \cellcolor{gray!6}{0.34} & \cellcolor{gray!6}{0.31} & \cellcolor{gray!6}{-0.28} & \cellcolor{gray!6}{0.96}\\
+\textbf{RW Predictions} & 0.38 & 0.09 & 0.20 & 0.56\\
+\bottomrule
+\end{tabular}
+\endgroup{}
+
+}
+
+\end{table}%
+
+\begin{table}
+
+\caption{\label{tbl-rwsim3}Results of the statistical analysis
+containing the separated stem and meaning activations and condition as a
+fixed-effect (Equation~\ref{eq-rwmodel3}).}
+
+\centering{
+
+\centering\begingroup\fontsize{11}{13}\selectfont
+
+\begin{tabular}{>{\raggedright\arraybackslash}p{18em}rrrrr}
+\toprule
+\textbf{ } & \textbf{Est.} & \textbf{Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+\midrule
+\textbf{\cellcolor{gray!6}{Intercept}} & \cellcolor{gray!6}{0.38} & \cellcolor{gray!6}{0.62} & \cellcolor{gray!6}{-0.83} & \cellcolor{gray!6}{1.60} & \cellcolor{gray!6}{73.10}\\
+\textbf{Stem Activations} & 0.60 & 0.45 & -0.26 & 1.51 & 91.60\\
+\textbf{\cellcolor{gray!6}{Meaning Activations}} & \cellcolor{gray!6}{0.33} & \cellcolor{gray!6}{0.48} & \cellcolor{gray!6}{-0.61} & \cellcolor{gray!6}{1.28} & \cellcolor{gray!6}{75.04}\\
+\textbf{Type Frequency} & -0.28 & 0.66 & -1.61 & 0.99 & 33.54\\
+\textbf{\cellcolor{gray!6}{Token Frequency}} & \cellcolor{gray!6}{-1.80} & \cellcolor{gray!6}{0.92} & \cellcolor{gray!6}{-3.72} & \cellcolor{gray!6}{-0.16} & \cellcolor{gray!6}{1.45}\\
+\addlinespace
+\textbf{Stem Activations:Type Frequency} & 0.01 & 0.46 & -0.92 & 0.89 & 51.56\\
+\textbf{\cellcolor{gray!6}{Stem Activations:Token Frequency}} & \cellcolor{gray!6}{-0.66} & \cellcolor{gray!6}{0.47} & \cellcolor{gray!6}{-1.61} & \cellcolor{gray!6}{0.25} & \cellcolor{gray!6}{7.88}\\
+\textbf{Meaning Activations:Type Frequency} & -0.40 & 1.50 & -3.79 & 2.22 & 40.20\\
+\textbf{\cellcolor{gray!6}{Meaning Activations:Token Frequency}} & \cellcolor{gray!6}{2.75} & \cellcolor{gray!6}{0.77} & \cellcolor{gray!6}{1.30} & \cellcolor{gray!6}{4.29} & \cellcolor{gray!6}{99.99}\\
+\bottomrule
+\end{tabular}
+\endgroup{}
+
+}
+
+\end{table}%
+
+Overall we find that the general RW activations for both stem and
+meaning are able to account for the human data. Further, we find that
+when token frequency is high, meaning activations are a better predictor
+(evident by the interaction effect between Meaning Activations and Token
+Frequency in Table~\ref{tbl-rwsim3}).
+
+In order to compare which model best fits the data, we performed
+leave-one-out cross-validation using the R package \texttt{loo} (Vehtari
+et al., 2017). Leave-one-out cross-validation refits the model for each
+observation in the dataset, leaving out that observation.\footnote{More
+  accurately, Bayesian models are computationally expensive to fit many
+  times, so this is approximated using Pareto-smoothed importance
+  sampling instead.} For each data point, the expected log predictive
+density is calculated. Expected log predictive density is the
+log-likelihood of the held-out observation given the model's parameters
+(trained without the observation). Each model receives a single expected
+log predictive density value by summing the log-likelihood of each
+observation using leave-one-out cross-validation. A higher value
+indicates the model performs better than the other models. Thus, we
+compared the expected log predictive density value for each of these
+three models, along with the model of the human data that does not
+contain the Rescorla-Wagner predictions.
+
+We performed leave-one-out cross validation for each of the two models
+with the RW predictors as well as the model with just the human
+predictors. The results of our leave-one-out cross-validation are
+included in Table~\ref{tbl-loocv}. When using leave-one-out
+cross-validation, a model can be considered as outperforming another
+model if the difference in elpd is greater than the standard error of
+the elpd. In the case of our models, because all of the elpd differences
+are less than the standard error of the elpd, it is difficult to draw
+conclusions about which model fits the data best.
+
+\begin{table}
+
+\caption{\label{tbl-loocv}Results of our leave-one-out
+cross-validation.}
+
+\centering{
+
+\centering\begingroup\fontsize{11}{13}\selectfont
+
+\begin{tabular}{>{\raggedright\arraybackslash}p{22em}rrrr}
+\toprule
+\textbf{ } & \textbf{elpd\_diff} & \textbf{se\_diff} & \textbf{elpd\_loo} & \textbf{se\_elpd\_loo}\\
+\midrule
+\textbf{\cellcolor{gray!6}{Original Statistical Predictors}} & \cellcolor{gray!6}{-0.26} & \cellcolor{gray!6}{0.77} & \cellcolor{gray!6}{-1564.93} & \cellcolor{gray!6}{26.05}\\
+\textbf{Stem and Meaning Activations by Condition} & -2.80 & 3.96 & -1567.47 & 25.58\\
+\textbf{\cellcolor{gray!6}{Only RW Activation}} & \cellcolor{gray!6}{-18.47} & \cellcolor{gray!6}{6.41} & \cellcolor{gray!6}{-1583.14} & \cellcolor{gray!6}{24.93}\\
+\bottomrule
+\end{tabular}
+\endgroup{}
+
+}
+
+\end{table}%
+
+\subsubsection{Additional Simulations}\label{additional-simulations}
+
+There is evidence that humans learn associations for configural cues
+that their parts do not have (Kapatsinski, 2009). For example, in
+English syllables, rimes are treated as a single constituent
+(Figure~\ref{fig-syllstructure}) and Kapatsinski (2009) demonstrated
+that native English speakers can learn to associate rimes with an
+outcome even in cases when the onset and nucleus are associated with
+different outcomes.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{English syllable structure.pdf}
+
+}
+
+\caption{\label{fig-syllstructure}A visualization of English syllable
+structure.}
+
+\end{figure}%
+
+There is also evidence that adult native English speakers show greater
+reliance on semantic cues than phonological cues in production
+(Culbertson et al., 2018). For example, Culbertson et al. (2018)
+demonstrated that in learning an artificial noun class adults rely more
+on semantic cues than phonological cues (whereas interestingly children
+rely more on phonological cues than semantic cues).
+
+Thus, in order to further examine the differences between the human and
+model predictions we made two modifications to the simulations. First,
+instead of modeling the suffix meanings (diminutive plural, diminutive
+singular, big plural, big singular) as two separate cues, we also
+included a configural cue (analogous to an interaction effect in linear
+regression) that could be associated with the outcome. This configural
+cue was simply a combination of the two meanings. For example, given the
+meaning ``big plural'', the cues comprised ``big'', ``plural'', and
+``big.plural''. Similar to the previous simulations, the model was
+presented with these cues paired with one of the four suffixes. The
+model was trained on the same data that the humans were trained on.
+
+Second, in addition to configural cues, we also increased the alpha
+value for semantic cues relative to the phonological cues. This results
+in semantic cues being more associable with outcomes than phonological
+cues. Specifically, alpha was 0.05 for phonological cues and 0.25 for
+semantic cues. All other variables remained unchanged.
+
+Analogous to the previous simulations, we then calculated the model's
+predicted activation for the frequent suffix. If the meaning was novel,
+this was simply the difference between the activation strength for the
+frequent suffix and the activation strength for the infrequent suffix.
+If the meaning was original, then it was the difference between
+activation strength of big plural with \emph{dan} and the activation
+strength of diminutive singular and \emph{nem} if \emph{dan} was the
+frequent suffix and vice versa if \emph{nem} was the frequent suffix.
+
+In order to evaluate this simulation, we ran a Bayesian logistic
+regression model with the human response as the dependent variable (1 if
+they chose the frequent suffix and 0 if they chose the infrequent
+suffix) and the model's prediction as the independent variable with
+random intercepts for participant and stem. We ran four models, one with
+configural cues and modified semantic salience, one with configural
+cues, increased semantic salience, and the original statistical
+predictors (\(condition*meaning*stem\_condition\)), one with only
+configural cues (no modified semantic salience) and one with only
+modified semantic salience (no configural cues). We then compared these
+with the model with only statistical predictors, and the two models from
+the previous simulations (Equation~\ref{eq-rwmodel1} and
+Equation~\ref{eq-rwmodel3}).
+
+We then compared these models using leave-one-out-cross-validation
+(Table~\ref{tbl-loocv_addsims}).
+
+\begin{table}
+
+\caption{\label{tbl-loocv_addsims}Results of the leave-one-out
+cross-validation for the additional simulation. `Modified RW'
+corresponds to the model with configural cues and increased saliency for
+semantic cues. `RW Model' refers to the RW logistic model. `Statistical
+Predictors' refers to the original statistical analysis that contains no
+RW model predictions.}
+
+\centering{
+
+\centering\begingroup\fontsize{11}{13}\selectfont
+
+\begin{tabular}{>{\raggedright\arraybackslash}p{22em}rrrr}
+\toprule
+\textbf{ } & \textbf{elpd\_diff} & \textbf{se\_diff} & \textbf{elpd\_loo} & \textbf{se\_elpd\_loo}\\
+\midrule
+\textbf{\cellcolor{gray!6}{Configural Cues and Increased Saliency of Semantic Cues}} & \cellcolor{gray!6}{0.00} & \cellcolor{gray!6}{0.00} & \cellcolor{gray!6}{-285.61} & \cellcolor{gray!6}{19.26}\\
+\textbf{Configural Cues, Increased Saliency of Semantic Cues, and Original Statistical Predictors} & -0.10 & 1.92 & -285.71 & 19.39\\
+\textbf{\cellcolor{gray!6}{Only Increased Saliency of Semantic Cues}} & \cellcolor{gray!6}{-7.03} & \cellcolor{gray!6}{1.88} & \cellcolor{gray!6}{-292.64} & \cellcolor{gray!6}{20.00}\\
+\textbf{Only Configural Cues} & -66.86 & 9.89 & -352.48 & 23.73\\
+\textbf{\cellcolor{gray!6}{Original Statistical Predictors}} & \cellcolor{gray!6}{-1279.44} & \cellcolor{gray!6}{28.05} & \cellcolor{gray!6}{-1565.05} & \cellcolor{gray!6}{26.02}\\
+\addlinespace
+\textbf{Stem and Meaning Activations by Condition} & -1281.86 & 27.85 & -1567.47 & 25.58\\
+\textbf{\cellcolor{gray!6}{Only RW Activation}} & \cellcolor{gray!6}{-1297.53} & \cellcolor{gray!6}{27.22} & \cellcolor{gray!6}{-1583.14} & \cellcolor{gray!6}{24.93}\\
+\bottomrule
+\end{tabular}
+\endgroup{}
+
+}
+
+\end{table}%
+
+The results of leave-one-out cross-validation suggest that the models
+that include configural cues or increased sensitivity to semantic cues
+outperform all the original models as well as the model with only
+statistical predictors. Among those four, any of the models that include
+semantic predictors perform better than the model that includes only
+configural cues. In order to visualize this, we also included a
+side-by-side plot of the human data with the RW activations from the
+model that included both modified semantic salience and configural cues
+(Figure~\ref{fig-rwvshumanpreds}). For comparison, we also plotted the
+activations from the model without modified semantic salience or
+configural cues.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{generalizability-writeup_files/figure-latex/fig-rwvshumanpreds-1.pdf}
+
+}
+
+\caption{\label{fig-rwvshumanpreds}Plot of the original RW suffix
+activations and the modified RW activations (configural cues plus
+modified salience of semantic cues) versus the human results. The y-axis
+is the probability of producing the frequent meaning. The top facet is
+original meanings and the bottom axis is novel meanings. Along the
+x-axis, `Modified Sim' corresponds to the RW simulations with configural
+cues and increased semantic saliency. `RW Logistic' corresponds to our
+original suffix activations. `Human' corresponds to the original human
+data. The visualization shows that the original RW suffix activations
+seem to fall short in predicting the human data for the token frequency
+condition.}
+
+\end{figure}%
+
+Overall, the results of our simulations suggest that an error-driven
+associative learning model, specifically the Rescorla-Wagner model, fits
+the human data well. Further, a model with configural cues and an
+increased salience of semantic cues fits the human data better than even
+the original statistical predictors. This parallels previous findings in
+demonstrating that humans learn associations for configural cues and
+that humans are more sensitive to semantic cues than phonological cues.
+
+\subsection{Discussion}\label{discussion}
+
+Our results suggest that in production, having a high type and high token frequency together lead to a preference for the frequent suffix, and this preference is even stronger if the stem is novel. On the other hand, when there is a high type frequency but not a high token frequency, there is only a preference for the frequent form when the stem and meaning are both novel. Finally, for token frequency there is only a preference for the frequent form when the meaning is original. Overall, these results suggest that type frequency and token frequency both play a role in semantic extension, with a high type frequency encouraging semantic extension while a high token frequency encourages using the suffix to communicate the original meaning. Similar to Harmon
+\& Kapatsinski (2017), these effects are mitigated when both forms are brought into memory.
+
+A similar pattern emerges in comprehension. When there is a high token-to-type ratio, the original meaning is preferred more. However, when there are as many types as there are tokens, there is an increased preference for the novel meaning relative to when there is a high token-to-type ratio.
+
+Our results also demonstrate that the Rescorla-Wagner model with a logistic activation function is able to capture the human data. Further, the model matches the human data best when it includes configural cues and an increased salience for semantic cues relative to phonological cues. 
+
+\newpage
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-baayen2012demythologizingwordfrequency}
+Baayen, H. (2012). \emph{Demythologizing the word frequency effect: A
+discriminative learning perspective} (G. Libben, G. Jarema, \& C.
+Westbury, Eds.; Vol. 47, pp. 171--195). John Benjamins Publishing
+Company. \url{https://doi.org/10.1075/bct.47.10baa}
+
+\bibitem[\citeproctext]{ref-caballero2022howagglutinativesearching}
+Caballero, G., \& Kapatsinski, V. (2022). How agglutinative? Searching
+for cues to meaning in choguita rarámuri (tarahumara) using
+discriminative learning. \emph{Morphological Diversity and Linguistic
+Cognition}, 121160.
+\url{https://www.cambridge.org/core/services/aop-cambridge-core/content/view/E6D16CD11DD783B5AA2B0DEE7C0CC285}
+
+\bibitem[\citeproctext]{ref-culbertson2018childrenprivilegephonological}
+Culbertson, J., Jarvinen, H., Haggarty, F., \& Smith, K. (2018).
+\emph{Do children privilege phonological cues in noun class learning?}
+\emph{40}. \url{https://escholarship.org/uc/item/74g7g684}
+
+\bibitem[\citeproctext]{ref-ellisSelectiveAttentionTransfer2006}
+Ellis, N. C. (2006). Selective attention and transfer phenomena in L2
+acquisition: Contingency, cue competition, salience, interference,
+overshadowing, blocking, and perceptual learning. \emph{Applied
+Linguistics}, \emph{27}(2), 164--194.
+\url{https://doi.org/10.1093/applin/aml015}
+
+\bibitem[\citeproctext]{ref-harmonPuttingOldTools2017}
+Harmon, Z., \& Kapatsinski, V. (2017). Putting old tools to novel uses:
+The role of form accessibility in semantic extension. \emph{Cognitive
+Psychology}, \emph{98}, 22--44.
+\url{https://doi.org/10.1016/j.cogpsych.2017.08.002}
+
+\bibitem[\citeproctext]{ref-kapatsinskiTestingTheoriesLinguistic2009}
+Kapatsinski, V. (2009). Testing theories of linguistic constituency with
+configural learning: The case of the english syllable. \emph{Language},
+\emph{85}(2), 248--277. \url{https://doi.org/10.1353/lan.0.0118}
+
+\bibitem[\citeproctext]{ref-kapatsinskiLearningFastAvoiding2021}
+Kapatsinski, V. (2023). Learning fast while avoiding spurious excitement
+and overcoming cue competition requires setting unachievable goals:
+Reasons for using the logistic activation function in learning to
+predict categorical outcomes. \emph{Language, Cognition and
+Neuroscience}, \emph{0}(0), 1--22.
+\url{https://doi.org/10.1080/23273798.2021.1927120}
+
+\bibitem[\citeproctext]{ref-olejarczukDistributionalLearningErrordriven2018}
+Olejarczuk, P., Kapatsinski, V., \& Baayen, R. H. (2018). Distributional
+learning is error-driven: The role of surprise in the acquisition of
+phonetic categories. \emph{Linguistics Vanguard}, \emph{4}(s2), 1--9.
+\url{https://doi.org/10.1515/lingvan-2017-0020}
+
+\bibitem[\citeproctext]{ref-ramscarChildrenValueInformativity2013}
+Ramscar, M., Dye, M., \& Klein, J. (2013). Children value informativity
+over logic in word learning. \emph{Psychological Science}, \emph{24}(6),
+1017--1023. \url{https://doi.org/10.1177/0956797612460691}
+
+\bibitem[\citeproctext]{ref-rescorla1972theorypavlovianconditioning}
+Rescorla, R. A., \& Wagner, A. (1972). A theory of pavlovian
+conditioning: Variations in the effectiveness of reinforcement and
+non-reinforcement. \emph{Classical Conditioning II, Current Research and
+Theory}, \emph{Vol. 2}.
+
+\bibitem[\citeproctext]{ref-loopackage}
+Vehtari, A., Gelman, A., \& Gabry, J. (2017). Practical bayesian model
+evaluation using leave-one-out cross-validation and WAIC.
+\emph{Statistics and Computing}, \emph{27}, 1413--1432.
+\url{https://doi.org/10.1007/s11222-016-9696-4}
+
+\end{CSLReferences}
+
+
+
+
+\end{document}

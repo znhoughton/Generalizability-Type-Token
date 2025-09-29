@@ -1,0 +1,514 @@
+====== CHANGE DETECTED ======
+
+Original TEX:
+59:     \@ifstar
+
+Edited/Added TEX:
+59:     \@ifstar
+
+Placement hint (raw TEX with line numbers):
+Before:
+   56: \ifx\subparagraph\undefined\else
+   57:   \let\oldsubparagraph\subparagraph
+   58:   \renewcommand{\subparagraph}{
+After:
+   59:     \@ifstar 
+   60:       \xxxSubParagraphStar
+   61:       \xxxSubParagraphNoStar
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+240: candidates for the diminutive plural meaning, we can examine how
+  241: properties of the language (mainly type frequency and token frequency)
+  242: affect which suffixes are extended to express the diminutive plural
+
+Edited/Added TEX:
+240: candidates for expressing the diminutive plural meaning, we can examine how
+  241: properties of a suffix distribution (type frequency and token frequency)
+  242: affect its likelihood of being extended to express the diminutive plural
+
+Placement hint (raw TEX with line numbers):
+Before:
+  237: and \emph{-sil} overlap in meaning (they both occur in plural contexts),
+  238: and -\emph{nem} and \emph{-shoon} also overlap in meaning (they both
+  239: occur in diminutive contexts). Since all four suffixes are possible
+After:
+  240: candidates for expressing the diminutive plural meaning, we can examine how
+  241: properties of a suffix distribution (type frequency and token frequency)
+  242: affect its likelihood of being extended to express the diminutive plural
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+310: \multicolumn{1}{c}{ } & \multicolumn{2}{c}{Frequent} & \multicolumn{2}{c}{Infrequent} \\
+
+Edited/Added TEX:
+310: \multicolumn{1}{c}{ } & \multicolumn{2}{c}{Frequent Suffix} & \multicolumn{2}{c}{Infrequent Suffix} \\
+
+Placement hint (raw TEX with line numbers):
+Before:
+  307: 
+  308: \begin{tabular}{>{\raggedright\arraybackslash}p{12em}rrrr}
+  309: \toprule
+After:
+  310: \multicolumn{1}{c}{ } & \multicolumn{2}{c}{Frequent Suffix} & \multicolumn{2}{c}{Infrequent Suffix} \\
+  311: \cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5}
+  312: \textbf{Condition} & \textbf{Type} & \textbf{Token} & \textbf{Type} & \textbf{Token}\\
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+375: participants were also presented with two possible labels for that
+
+Edited/Added TEX:
+375: participants were also presented with two possible labels (which differed 
+  376: in whether the suffix was \emph{dan} or \emph{nem}) for that
+
+Placement hint (raw TEX with line numbers):
+Before:
+  372: base, unaffixed form and the corresponding image. 2 seconds later four
+  373: images flashed on the screen, remained on the screen for 1.25 seconds,
+  374: and disappeared leaving a single image. Along with the single image,
+After:
+  375: participants were also presented with two possible labels (which differed 
+  376: in whether the suffix was \emph{dan} or \emph{nem}) for that
+  377: image, one label on the bottom right of the screen and one label on the
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+477: \textbf{ } & \textbf{Estimate} & \textbf{Est.Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% Samples > 0}\\
+
+Edited/Added TEX:
+478: \textbf{ } & \textbf{Est.} & \textbf{Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+
+Placement hint (raw TEX with line numbers):
+Before:
+  475: 
+  476: \begin{tabular}{>{\raggedright\arraybackslash}p{20em}rrrrr}
+  477: \toprule
+After:
+  478: \textbf{ } & \textbf{Est.} & \textbf{Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+  479: \midrule
+  480: \textbf{\cellcolor{gray!6}{Intercept (Type-Token Frequency)}} & \cellcolor{gray!6}{1.02} & \cellcolor{gray!6}{0.55} & \cellcolor{gray!6}{-0.05} & \cellcolor{gray!6}{2.14} & \cellcolor{gray!6}{96.91}\\
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+514: corresponds to the original meaning. The facet indicates whether the
+
+Edited/Added TEX:
+515: indicate that the meaning was original. The facet indicates whether the
+
+Placement hint (raw TEX with line numbers):
+Before:
+  512: (type frequency, token frequency, or type-token frequency). The y-axis
+  513: corresponds to the proportion of responses with a frequent suffix. Blue
+  514: points indicate that the meaning was novel while purple points
+After:
+  515: indicate that the meaning was original. The facet indicates whether the
+  516: stem was novel or familiar.}
+  517: 
+----------------------------------------
+
+====== ADDITION DETECTED ======
+
+Edited/Added TEX:
+535:
+
+Placement hint (raw TEX with line numbers):
+Before:
+  532: model results are presented in Table~\ref{tbl-2afcresultsstem} and
+  533: visualized in Figure~\ref{fig-2afcresultsstem}.
+  534: 
+After:
+  534: \begin{table}
+  535: 
+  536: \caption{\label{tbl-2afcresultsstem}Results of the statistical models
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+545: \textbf{ } & \textbf{Estimate} & \textbf{Est.Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% Samples > 0}\\
+
+Edited/Added TEX:
+547: \textbf{ } & \textbf{Est.} & \textbf{Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+
+Placement hint (raw TEX with line numbers):
+Before:
+  544: 
+  545: \begin{tabular}{>{\raggedright\arraybackslash}p{20em}rrrrr}
+  546: \toprule
+After:
+  547: \textbf{ } & \textbf{Est.} & \textbf{Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+  548: \midrule
+  549: \textbf{\cellcolor{gray!6}{Intercept (Type-Token Frequency)}} & \cellcolor{gray!6}{-0.01} & \cellcolor{gray!6}{0.07} & \cellcolor{gray!6}{-0.15} & \cellcolor{gray!6}{0.12} & \cellcolor{gray!6}{41.23}\\
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+587: In general we find no meaningful effects except for an interaction
+
+Edited/Added TEX:
+589: In general we find no reliable effects except for an interaction
+
+Placement hint (raw TEX with line numbers):
+Before:
+  586: 
+  587: \end{figure}%
+  588: 
+After:
+  589: In general we find no reliable effects except for an interaction
+  590: effect between type frequency and novel meaning, suggesting that there
+  591: may be a preference for the frequent suffix when it has a higher type
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+604: participants were more likely to choose the original meaning. Unlike the
+  605: other tasks, our independent variable was coded quite differently.
+  606: Specifically, our conditions varied in what the token-to-type frequency
+  607: was. For example, in the Type Frequency condition, while the frequent
+  608: suffix occurs 12 times with 12 different types, the infrequent occurs 12
+  609: times in only 3 different types. Since this approach maximizes our
+  610: power, rather than dividing the data based on whether the suffix was
+  611: frequent or infrequent, we instead divided the data based on the
+  612: relationship between the type and token frequency of the suffix,
+  613: regardless of whether it was the frequent suffix or the infrequent
+  614: suffix. More specifically, we divided the data up based on whether the
+  615: token-to-type ratio for the form presented on a given trial was 12-12,
+  616: 12-3, or 3-3. By comparing the 12-3 condition to the 12-12 and 3-3
+
+Edited/Added TEX:
+606: participants were more likely to choose the original meaning. In production and form-choice, participants are choosing between suffixes that differ in frequency. In comprehension, participants instead are presented with a single affix that has a certain type frequency, token frequency, and token/type ratio, and a frequent suffix from one condition can have the same characteristics as an infrequent suffix from another condition. SInce participants are not comparing suffixes in comprehension, we expect equally distributed suffixes to have the same effect. Thus, the independent variable chosen was the distribution of the presented suffix: 12 tokens and 12 types, 12 tokens and 3 types, or 3 tokens and 3 types. By comparing the 12-3 condition to the 12-12 and 3-3
+
+Placement hint (raw TEX with line numbers):
+Before:
+  603: dependent variable was whether the meaning that participants selected
+  604: was novel or original. A positive estimate indicates that participants
+  605: chose the novel meaning while a negative estimate indicates that
+After:
+  606: participants were more likely to choose the original meaning. In production and form-choice, participants are choosing between suffixes that differ in frequency. In comprehension, participants instead are presented with a single affix that has a certain type frequency, token frequency, and token/type ratio, and a frequent suffix from one condition can have the same characteristics as an infrequent suffix from another condition. SInce participants are not comparing suffixes in comprehension, we expect equally distributed suffixes to have the same effect. Thus, the independent variable chosen was the distribution of the presented suffix: 12 tokens and 12 types, 12 tokens and 3 types, or 3 tokens and 3 types. By comparing the 12-3 condition to the 12-12 and 3-3
+  607: conditions, we can see how an increase in type frequency and a decrease
+  608: in token frequency affect participants' choice of the novel vs.~original
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+619: meaning. Thus, hereafter we refer to the 12-3 condition as the Control
+  620: condition, the 12-12 condition as Higher Type and the 3-3 condition as
+  621: Lower Token.
+  622: 
+  623: We treatment coded condition (referred to as condition\_numeric) such
+  624: that the intercept was the Control condition. As a result, for each
+  625: condition, a positive coefficient indicates that participants are more
+  626: likely to choose a novel meaning (relative to the Control
+  627: condition/intercept). The model syntax is included below in
+
+Edited/Added TEX:
+609: meaning. Thus, hereafter we refer to the 12-3 condition as the baseline distribution, the 12-12 distribution as Higher Type and the 3-3 distribution as Lower Token. Another way to divide the distributions is that the baseline distribution is a suffix that has a higher token/type ratio than the others 94 tokens per type vs 1 token per type).
+  610: 
+  611: We treatment coded distribution such
+  612: that the intercept was the baseline condition. As a result, for each
+  613: distribution, a positive coefficient indicates that participants are more
+  614: likely to choose a novel meaning (relative to the baseline
+  615: distribution/intercept). We also included a slope for stem familiarity, a random intercept for participant, and a random slope for stem familiarity by participant.
+  616: The model syntax is included below in
+
+Placement hint (raw TEX with line numbers):
+Before:
+  606: participants were more likely to choose the original meaning. In production and form-choice, participants are choosing between suffixes that differ in frequency. In comprehension, participants instead are presented with a single affix that has a certain type frequency, token frequency, and token/type ratio, and a frequent suffix from one condition can have the same characteristics as an infrequent suffix from another condition. SInce participants are not comparing suffixes in comprehension, we expect equally distributed suffixes to have the same effect. Thus, the independent variable chosen was the distribution of the presented suffix: 12 tokens and 12 types, 12 tokens and 3 types, or 3 tokens and 3 types. By comparing the 12-3 condition to the 12-12 and 3-3
+  607: conditions, we can see how an increase in type frequency and a decrease
+  608: in token frequency affect participants' choice of the novel vs.~original
+After:
+  609: meaning. Thus, hereafter we refer to the 12-3 condition as the baseline distribution, the 12-12 distribution as Higher Type and the 3-3 distribution as Lower Token. Another way to divide the distributions is that the baseline distribution is a suffix that has a higher token/type ratio than the others 94 tokens per type vs 1 token per type).
+  610: 
+  611: We treatment coded distribution such
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+629: task are included in Table~\ref{tbl-comprehensionresults} and visualized
+
+Edited/Added TEX:
+618: task are included in Table~\ref{tbl-comprehensionresultsstem} and visualized
+
+Placement hint (raw TEX with line numbers):
+Before:
+  615: distribution/intercept). We also included a slope for stem familiarity, a random intercept for participant, and a random slope for stem familiarity by participant.
+  616: The model syntax is included below in
+  617: Equation~\ref{eq-comprehensionmodel}. Our results for the comprehension
+After:
+  618: task are included in Table~\ref{tbl-comprehensionresultsstem} and visualized
+  619: in Figure~\ref{fig-comprehensionresults}.
+  620: 
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+633: \text{meaning} \sim \text{condition\_numeric} + (1 | \text{participant})
+
+Edited/Added TEX:
+622: \text{meaning} \sim \text{condition\_numeric} * \text{stem\_condition} + (1 + \text{stem} | \text{participant})
+
+Placement hint (raw TEX with line numbers):
+Before:
+  619: in Figure~\ref{fig-comprehensionresults}.
+  620: 
+  621: \begin{equation}\phantomsection\label{eq-comprehensionmodel}{
+After:
+  622: \text{meaning} \sim \text{condition\_numeric} * \text{stem\_condition} + (1 + \text{stem} | \text{participant})
+  623: }\end{equation}
+  624: 
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+636: First, we find a meaningful effect for the Control condition
+  637: (Intercept), suggesting that participants are more likely to select the
+  638: original meaning when there is a high token-to-type ratio. Additionally,
+  639: we find positive coefficient estimates for both Higher Type and Lower
+  640: Token conditions suggesting that when an increase in type frequency or
+  641: decrease in token frequency is present, participants are more likely to
+  642: select the novel meaning than when there is a higher token-to-type
+  643: ratio. These results suggest that it may not be type or token frequency
+  644: independently that drives entrenchment, but rather the ratio between
+  645: type and token frequency. That is, regardless of whether there is an
+  646: increase in type frequency, or decrease in token frequency, if the
+  647: token-to-type ratio is lower, participants are more likely to select the
+  648: novel meaning.
+
+Edited/Added TEX:
+625: First, we find a meaningful effect for the baseline distribution (Intercept), suggesting that participants are more likely to select the original meaning than the novel meaning. Additionally, we find positive coefficient estimates for both Higher Type and Lower Token conditions, suggesting that decreasing the token-to-type ratio, whether by increasing type frequency or decreasing token frequency, makes participants more likely to select the novel meaning. These results suggest that it may not be type or token frequency
+  626: independently that drives semantic entrenchment, but rather the ratio between
+  627: type and token frequency. 
+  628:
+
+Placement hint (raw TEX with line numbers):
+Before:
+  622: \text{meaning} \sim \text{condition\_numeric} * \text{stem\_condition} + (1 + \text{stem} | \text{participant})
+  623: }\end{equation}
+  624: 
+After:
+  625: First, we find a meaningful effect for the baseline distribution (Intercept), suggesting that participants are more likely to select the original meaning than the novel meaning. Additionally, we find positive coefficient estimates for both Higher Type and Lower Token conditions, suggesting that decreasing the token-to-type ratio, whether by increasing type frequency or decreasing token frequency, makes participants more likely to select the novel meaning. These results suggest that it may not be type or token frequency
+  626: independently that drives semantic entrenchment, but rather the ratio between
+  627: type and token frequency. 
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+652: \caption{\label{tbl-comprehensionresults}Results of the statistical
+  653: model for the comprehension task.}
+
+Edited/Added TEX:
+632: \caption{\label{tbl-comprehensionresultsstem}Results of the statistical
+  633: model for the comprehension task with stem as a fixed-effect.}
+
+Placement hint (raw TEX with line numbers):
+Before:
+  629: 
+  630: \begin{table}
+  631: 
+After:
+  632: \caption{\label{tbl-comprehensionresultsstem}Results of the statistical
+  633: model for the comprehension task with stem as a fixed-effect.}
+  634: 
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+661: \textbf{ } & \textbf{Estimate} & \textbf{Est.Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% Samples > 0}\\
+  662: \midrule
+  663: \textbf{\cellcolor{gray!6}{Intercept (Control)}} & \cellcolor{gray!6}{-2.80} & \cellcolor{gray!6}{0.27} & \cellcolor{gray!6}{-3.35} & \cellcolor{gray!6}{-2.28} & \cellcolor{gray!6}{0}\\
+  664: \textbf{Higher Type} & 1.46 & 0.19 & 1.09 & 1.84 & 100\\
+  665: \textbf{\cellcolor{gray!6}{Lower Token}} & \cellcolor{gray!6}{1.98} & \cellcolor{gray!6}{0.18} & \cellcolor{gray!6}{1.62} & \cellcolor{gray!6}{2.34} & \cellcolor{gray!6}{100}\\
+  666: \bottomrule
+  667: \end{tabular}
+  668: \endgroup{}
+  669: 
+  670: }
+  671: 
+  672: \end{table}%
+  673: 
+  674: \begin{figure}
+  675: 
+  676: \centering{
+  677: 
+  678: \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{generalizability-writeup_files/figure-latex/fig-comprehensionresults-1.pdf}
+  679: 
+  680: }
+  681: 
+  682: \caption{\label{fig-comprehensionresults}Plot of the model estimates for
+  683: the comprehension task.}
+  684: 
+  685: \end{figure}%
+  686: 
+  687: Similar to the form-choice task, we also ran a model with stem
+  688: familiarity as a fixed-effect. The dependent variable remained the same
+  689: (whether participants chose the original or novel meaning), however in
+  690: addition to condition, we also included stem novelty (familiar or novel)
+  691: as a fixed-effect, along with its interaction with condition. A random
+  692: intercept for participant was also included.
+  693: 
+  694: The results of the model are presented in
+  695: Table~\ref{tbl-comprehensionresultsstem}. Our results show no effect of
+  696: stem familiarity on comprehension.
+  697: 
+  698: \begin{table}
+  699: 
+  700: \caption{\label{tbl-comprehensionresultsstem}Results of the statistical
+  701: model for the comprehension task with stem as a fixed-effect.}
+  702: 
+  703: \centering{
+  704: 
+  705: \centering\begingroup\fontsize{11}{13}\selectfont
+  706: 
+  707: \begin{tabular}{>{\raggedright\arraybackslash}p{12em}rrrrr}
+  708: \toprule
+  709: \textbf{ } & \textbf{Estimate} & \textbf{Est.Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% Samples > 0}\\
+
+Edited/Added TEX:
+641: \textbf{ } & \textbf{Estimate} & \textbf{Est.Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+
+Placement hint (raw TEX with line numbers):
+Before:
+  638: 
+  639: \begin{tabular}{>{\raggedright\arraybackslash}p{12em}rrrrr}
+  640: \toprule
+After:
+  641: \textbf{ } & \textbf{Estimate} & \textbf{Est.Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+  642: \midrule
+  643: \textbf{\cellcolor{gray!6}{Intercept}} & \cellcolor{gray!6}{-2.81} & \cellcolor{gray!6}{0.28} & \cellcolor{gray!6}{-3.38} & \cellcolor{gray!6}{-2.28} & \cellcolor{gray!6}{0.00}\\
+----------------------------------------
+
+====== ADDITION DETECTED ======
+
+Edited/Added TEX:
+657: 
+  658: \begin{figure}
+  659: 
+  660: \centering{
+  661: 
+  662: \includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{generalizability-writeup_files/figure-latex/fig-comprehensionresults-1.pdf}
+  663: 
+  664: }
+  665: 
+  666: \caption{\label{fig-comprehensionresults}Plot of the model estimates for
+  667: the comprehension task.}
+  668: 
+  669: \end{figure}%
+  670:
+
+Placement hint (raw TEX with line numbers):
+Before:
+  654: }
+  655: 
+  656: \end{table}%
+After:
+  725: 
+  726: Overall, the comprehension results demonstrate that participants are
+  727: more likely to select the original meaning when there is a high
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+902: \textbf{ } & \textbf{Estimate} & \textbf{Est.Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% Samples > 0}\\
+
+Edited/Added TEX:
+848: \textbf{ } & \textbf{Est.} & \textbf{Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+
+Placement hint (raw TEX with line numbers):
+Before:
+  845: 
+  846: \begin{tabular}{>{\raggedright\arraybackslash}p{18em}rrrrr}
+  847: \toprule
+After:
+  848: \textbf{ } & \textbf{Est.} & \textbf{Error} & \textbf{Q2.5} & \textbf{Q97.5} & \textbf{\% > 0}\\
+  849: \midrule
+  850: \textbf{\cellcolor{gray!6}{Intercept}} & \cellcolor{gray!6}{0.38} & \cellcolor{gray!6}{0.62} & \cellcolor{gray!6}{-0.83} & \cellcolor{gray!6}{1.60} & \cellcolor{gray!6}{73.10}\\
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+1102: \includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{generalizability-writeup_files/figure-latex/fig-rwvshumanpreds-1.pdf}
+
+Edited/Added TEX:
+1048: \includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{generalizability-writeup_files/figure-latex/fig-rwvshumanpreds-1.pdf}
+
+Placement hint (raw TEX with line numbers):
+Before:
+ 1045: 
+ 1046: \centering{
+ 1047: 
+After:
+ 1048: \includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{generalizability-writeup_files/figure-latex/fig-rwvshumanpreds-1.pdf}
+ 1049: 
+ 1050: }
+----------------------------------------
+
+====== CHANGE DETECTED ======
+
+Original TEX:
+1130: Our results suggest that in production,
+ 1131: 
+ 1132: Our results suggest that in production, having a high type and high
+ 1133: token frequency together lead to a preference for the frequent suffix,
+ 1134: and this preference is even stronger if the stem is novel. On the other
+ 1135: hand, when there is a high type frequency but not a high token
+ 1136: frequency, there is only a preference for the frequent form when the
+ 1137: stem and meaning are both novel. Finally, for token frequency there is
+ 1138: only a preference for the frequent form when the meaning is original.
+ 1139: Overall, these results suggest that type frequency and token frequency
+ 1140: both play a role in semantic extension, with a high type frequency
+ 1141: encouraging semantic extension while a high token frequency encourages
+ 1142: using the suffix to communicate the original meaning. Similar to Harmon
+ 1143: \& Kapatsinski (2017), these effects are mitigated when both forms are
+ 1144: brought into memory.
+ 1145: 
+ 1146: On the other hand, a similar pattern emerges. When there is a high
+ 1147: token-to-type ratio, the original meaning is preferred more. However,
+ 1148: when there are as many types as there are tokens, there is an increased
+ 1149: preference for the novel meaning relative to when there is a high
+ 1150: token-to-type ratio.
+ 1151: 
+ 1152: Our results also demonstrate that the Rescorla-Wagner model with a
+ 1153: logistic activation function is able to capture the human data. Further,
+ 1154: the model matches the human data best when it includes configural cues
+ 1155: and an increased salience for semantic cues relative to phonological
+ 1156: cues.
+
+Edited/Added TEX:
+1076: Our results suggest that in production, having a high type and high token frequency together lead to a preference for the frequent suffix, and this preference is even stronger if the stem is novel. On the other hand, when there is a high type frequency but not a high token frequency, there is only a preference for the frequent form when the stem and meaning are both novel. Finally, for token frequency there is only a preference for the frequent form when the meaning is original. Overall, these results suggest that type frequency and token frequency both play a role in semantic extension, with a high type frequency encouraging semantic extension while a high token frequency encourages using the suffix to communicate the original meaning. Similar to Harmon
+ 1077: \& Kapatsinski (2017), these effects are mitigated when both forms are brought into memory.
+ 1078: 
+ 1079: A similar pattern emerges in comprehension. When there is a high token-to-type ratio, the original meaning is preferred more. However, when there are as many types as there are tokens, there is an increased preference for the novel meaning relative to when there is a high token-to-type ratio.
+ 1080: 
+ 1081: Our results also demonstrate that the Rescorla-Wagner model with a logistic activation function is able to capture the human data. Further, the model matches the human data best when it includes configural cues and an increased salience for semantic cues relative to phonological cues.
+
+Placement hint (raw TEX with line numbers):
+Before:
+ 1073: 
+ 1074: \subsection{Discussion}\label{discussion}
+ 1075: 
+After:
+ 1076: Our results suggest that in production, having a high type and high token frequency together lead to a preference for the frequent suffix, and this preference is even stronger if the stem is novel. On the other hand, when there is a high type frequency but not a high token frequency, there is only a preference for the frequent form when the stem and meaning are both novel. Finally, for token frequency there is only a preference for the frequent form when the meaning is original. Overall, these results suggest that type frequency and token frequency both play a role in semantic extension, with a high type frequency encouraging semantic extension while a high token frequency encourages using the suffix to communicate the original meaning. Similar to Harmon
+ 1077: \& Kapatsinski (2017), these effects are mitigated when both forms are brought into memory.
+ 1078: 
+----------------------------------------

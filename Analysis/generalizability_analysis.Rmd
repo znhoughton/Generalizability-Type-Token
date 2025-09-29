@@ -19,7 +19,7 @@ options(contrasts = c("contr.sum","contr.sum"))
 Table1:
 
 |  |  |  |  |  |  |  |  |  |
-|----|----|----|----|----|----|----|----|----|
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
 | **Condition1** | #of tokens | #of types | **Condition2** | #of tokens | #of types | **Condition3** | #of tokens | #of types |
 | dan | 12 | 12 | dan | 12 | 3 | dan | 12 | 12 |
 | nem | 12 | 3 | nem | 3 | 3 | nem | 3 | 3 |
@@ -34,7 +34,7 @@ Table1:
 Table2
 
 |  |  |  |  |  |  |  |  |  |
-|----|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+|--------|:------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
 | **Condition** | **dan token** | **nem token** | **sil token** | **shoon token** | **dan type** | **nem type** | **sil type** | **shoon type** |
 | 1 | 12 | 12 | 6 | 6 | 12 | 3 | 6 | 6 |
 | 2 | 12 | 3 | 6 | 6 | 3 | 3 | 6 | 6 |
@@ -44,13 +44,13 @@ Table2
 | 6 | 3 | 12 | 6 | 6 | 3 | 12 | 6 | 6 |
 
 |   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type | Frequent Competitor Token | Frequent Competitor Type | Infrequent Competitor Token | Infrequent Competitor Type |
-|----|----|----|----|----|----|----|----|----|
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
 | **Condition 1** | 12 | 12 | 12 | 3 | 6 | 6 | 6 | 6 |
 | **Condition 2** | 12 | 3 | 3 | 3 | 6 | 6 | 6 | 6 |
 | **Condition 3** | 12 | 12 | 3 | 3 | 6 | 6 | 6 | 6 |
 
 |   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type |
-|----|----|----|----|----|
+|---------------|---------------|---------------|---------------|---------------|
 | **Condition 1** | 12 | 12 | 12 | 3 |
 | **Condition 2** | 12 | 3 | 3 | 3 |
 | **Condition 3** | 12 | 12 | 3 | 3 |
@@ -1227,6 +1227,18 @@ model_2afc_both = brm(frequency ~ condition*meaning + (1 + meaning | participant
                                        control = list(adapt_delta = 0.99),
                                        file = '../Data/model_2afc_both')
 
+data_2afc_both$condition_diff = factor(data_2afc_both$condition, levels = c(1,2,3))
+model_2afc_both_stem_dif_conditions = brm(frequency ~ condition_diff*meaning*stem_condition + (1 + meaning | participant),
+                                       data = data_2afc_both,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_2afc_both_stem_dif_conditions')
+
 model_2afc_both_stem = brm(frequency ~ condition*meaning*stem_condition + (1 + meaning | participant),
                                        data = data_2afc_both,
                                        family = bernoulli(link = 'logit'),
@@ -1237,6 +1249,7 @@ model_2afc_both_stem = brm(frequency ~ condition*meaning*stem_condition + (1 + m
                                        prior = priors_m1,
                                        control = list(adapt_delta = 0.99),
                                        file = '../Data/model_2afc_both_stem')
+
 
 model_2afc_original_cond2_baseline = brm(frequency ~ condition + (1 | participant) + (condition | resp_stem),
                                        data = data_2afc_original_cond2_baseline,
@@ -1285,6 +1298,37 @@ percent_greater_zero_novel_2afc = data.frame(fixef(model_2afc_novel, summary = F
   
 percent_greater_zero_novel_cond3_2afc = data.frame(fixef(model_2afc_novel, summary = F)) %>%
   summarize(sum(condition1 + condition2 > 0) / n() * 100, sum(condition1 + condition2 > 0), n())
+```
+
+```{r}
+
+
+
+plot_prod_stem = plot_model(model_2afc_both_stem_dif_conditions, type = 'int',
+                            axis.title = c('Condition', 'Frequency'),
+                            axis.labels = "condition",
+                            legend.title = 'Meaning',
+                            title = "",
+                            dot.size = 2,
+                            line.size = 1,
+                            colors = c('#298c8c', '#800074'))[[4]] 
+plot_prod_stem[[11]]$linetype = 'Meaning'
+plot_prod_stem[[11]]$shape = 'Meaning'
+
+plot_prod_stem[[1]]$group_col = factor(plot_prod_stem[[1]]$group_col, levels = c('novel', 'original'), labels = c('Novel', 'Original'))
+
+plot_prod_stem[[1]]$group = factor(plot_prod_stem[[1]]$group, levels = c('novel', 'original'), labels = c('Novel', 'Original'))
+
+plot_prod_stem[[1]]$facet = factor(plot_prod_stem[[1]]$facet, levels = c('novel', 'familiar'), labels = c('Novel', 'Familiar'))
+
+#plot_prod_stem[[1]]$x
+
+plot_prod_stem +
+  scale_x_continuous(breaks = c(1, 2, 3), 
+                     labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency')) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(c(0,1))
 ```
 
 Comprehension
@@ -1404,7 +1448,7 @@ data_analysis_comprehension$stem_condition = factor(data_analysis_comprehension$
 
 contrasts(data_analysis_comprehension$stem_condition) = contr.sum(levels(data_analysis_comprehension$stem_condition))
 
-model_comprehension_numeric_stem = brm(meaning ~ condition_numeric*stem_condition + (1 | participant),
+model_comprehension_numeric_stem = brm(meaning ~ condition_numeric*stem_condition + (1 + stem_condition | participant),
                                        data = data_analysis_comprehension,
                                        family = bernoulli(link = 'logit'),
                                        iter = 10000, 
@@ -1413,7 +1457,7 @@ model_comprehension_numeric_stem = brm(meaning ~ condition_numeric*stem_conditio
                                        cores = 4,
                                        prior = priors_m1,
                                        #control = list(adapt_delta = 0.99),
-                                       file = '../Data/model_comprehension_numeric_stem_test')
+                                       file = '../Data/model_comprehension_numeric_stem_test2')
 
 fixef(model_comprehension_numeric)
 fixef(model_comprehension_numeric_stem)
