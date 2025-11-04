@@ -304,7 +304,7 @@ RescorlaWagner = function (cuesOutcomes, traceCue = "h", traceOutcome = "hand",
 }
 
 Rescorla = function (cuesOutcomes,  
-                     Lambda = 2, 
+                     Lambda = 1, 
                      Alpha = 0.1, 
                      Beta = 0.1,logistic=FALSE,sigSlope=1) 
 {
@@ -350,7 +350,7 @@ Rescorla = function (cuesOutcomes,
 }
 
 BushMosteller = function (cuesOutcomes,  
-                     Lambda = 2, 
+                     Lambda = 1, 
                      Alpha = 0.1, 
                      Beta = 0.1,logistic=FALSE,sigSlope=1) 
 {
@@ -397,7 +397,7 @@ BushMosteller = function (cuesOutcomes,
 
 
 Rescorla_modified_alpha_for_semantic_cues = function (cuesOutcomes,  
-                     Lambda = 2, 
+                     Lambda = 1, 
                      Alpha = 0.05,
                      SemAlpha = 0.25,
                      Beta = 0.1,logistic=FALSE,sigSlope=1) 

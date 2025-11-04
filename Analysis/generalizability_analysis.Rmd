@@ -1301,6 +1301,33 @@ percent_greater_zero_novel_cond3_2afc = data.frame(fixef(model_2afc_novel, summa
 ```
 
 ```{r}
+colnames(data_2afc_both)
+colnames(data_prod_both)
+
+data_2afc_both$participant = factor(data_2afc_both$participant)
+data_prod_2afc_both = data_2afc_both %>%
+  full_join(data_prod_both)
+
+data_prod_2afc_both$meaning = factor(data_prod_2afc_both$meaning)
+contrasts(data_prod_2afc_both$meaning) = contr.sum(levels(data_prod_2afc_both$meaning))
+data_prod_2afc_both$stem_condition = factor(data_prod_2afc_both$stem_condition)
+contrasts(data_prod_2afc_both$stem_condition) = contr.sum(levels(data_prod_2afc_both$stem_condition))
+data_prod_2afc_both$task = factor(data_prod_2afc_both$task)
+contrasts(data_prod_2afc_both$task) = contr.sum(levels(data_prod_2afc_both$task))
+
+model_2afc_prod_both_stem = brm(frequency ~ condition*meaning*stem_condition*task + (1 + meaning * task | participant),
+                                       data = data_prod_2afc_both,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 14000, 
+                                       warmup = 7000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_2afc_prod_both_stem')
+```
+
+```{r}
 
 
 
@@ -1431,7 +1458,7 @@ data_analysis_comprehension$condition_numeric = factor(data_analysis_comprehensi
 #12-3 high token low type
 #3-3 low token low type 
 
-
+write_csv(data_analysis_comprehension, '../Data/data_analysis_comprehension.csv')
 
 model_comprehension_numeric = brm(meaning ~ condition_numeric + (1 | participant),
                                        data = data_analysis_comprehension,

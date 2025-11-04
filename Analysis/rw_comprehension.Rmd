@@ -1,0 +1,602 @@
+---
+title: "rw_comprehension"
+author: "Zachary Houghton"
+date: "2025-10-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(brms)
+library(ggpubr)
+library(ggh4x)
+library(arm)
+library(ndl)
+#logistic perceptron from neural net
+source("RescorlaLogistic.R")
+```
+
+## Condition 1 (dan type): 12 token, 12 type (nem 12 tokens 3 types)
+
+
+```{r}
+cond1 = read_csv('../Conditions/Condition1.csv') 
+
+cond1 = cond1 %>%
+    mutate(label = case_when(
+      suffix != 'none' ~ paste0(stem, '_', suffix),
+      suffix == 'none' ~ stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+
+cond1 = cond1 %>%
+  mutate(key = label)
+
+cond1_key = cond1 %>%
+  group_by(key, type) %>%
+  summarize(frequency = table(key))
+
+colnames(cond1_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond1 = cond1_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 2) #%>% 
+  #mutate(Cues = paste0("cx_", Cues))
+
+data_cond1 = data_cond1 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+
+```
+
+## Condition 2 (dan token): 12 tokens, 3 types
+
+```{r}
+
+cond2 = read_csv('../Conditions/Condition2.csv') 
+cond2 = cond2 %>%
+    mutate(label = case_when(
+      suffix != 'none' ~ paste0(stem, '_', suffix),
+      suffix == 'none' ~ stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+
+cond2 = cond2 %>%
+  mutate(key = label)
+
+cond2_key = cond2 %>%
+  group_by(key, type) %>%
+  summarize(frequency = table(key))
+
+colnames(cond2_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond2 = cond2_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 2)# %>% 
+  #mutate(Cues = paste0("cx_", Cues))
+
+data_cond2 = data_cond2 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+```
+
+## Condition 3 (dan type and token): 12 tokens, 12 types (nem 3 tokens, 3 types)
+
+```{r}
+
+cond3 = read_csv('../Conditions/Condition3.csv') 
+cond3 = cond3 %>%
+    mutate(label = case_when(
+      suffix != 'none' ~ paste0(stem, '_', suffix),
+      suffix == 'none' ~ stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+
+cond3 = cond3 %>%
+  mutate(key = label)
+
+cond3_key = cond3 %>%
+  group_by(key, type) %>%
+  summarize(frequency = table(key))
+
+colnames(cond3_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond3 = cond3_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 2)# %>% 
+  #mutate(Cues = paste0("cx_", Cues))
+
+
+data_cond3 = data_cond3 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+```
+
+
+## Condition 4 (nem type): 12 token, 12 type (dan 12 token, 3 type)
+
+```{r}
+
+cond4 = read_csv('../Conditions/Condition4.csv') 
+cond4 = cond4 %>%
+    mutate(label = case_when(
+      suffix != 'none' ~ paste0(stem, '_', suffix),
+      suffix == 'none' ~ stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+
+cond4 = cond4 %>%
+  mutate(key = label)
+
+cond4_key = cond4 %>%
+  group_by(key, type) %>%
+  summarize(frequency = table(key))
+
+colnames(cond4_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond4 = cond4_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 2) 
+
+data_cond4 = data_cond4 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+```
+
+
+
+## Condition 5 (nem token): 12 token, 3 types (dan 3 token, 3 type)
+
+```{r}
+
+cond5 = read_csv('../Conditions/Condition5.csv') 
+cond5 = cond5 %>%
+    mutate(label = case_when(
+      suffix != 'none' ~ paste0(stem, '_', suffix),
+      suffix == 'none' ~ stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+
+cond5 = cond5 %>%
+  mutate(key = label)
+
+cond5_key = cond5 %>%
+  group_by(key, type) %>%
+  summarize(frequency = table(key))
+
+colnames(cond5_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond5 = cond5_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 2)
+
+data_cond5 = data_cond5 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+```
+
+
+
+## Condition 6: (nem type and token) 12 token 12 type (dan 3 token 3 type)
+
+```{r}
+
+cond6 = read_csv('../Conditions/Condition6.csv') 
+cond6 = cond6 %>%
+    mutate(label = case_when(
+      suffix != 'none' ~ paste0(stem, '_', suffix),
+      suffix == 'none' ~ stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+cond6 = cond6 %>%
+  mutate(key = label)
+
+cond6_key = cond6 %>%
+  group_by(key, type) %>%
+  summarize(frequency = table(key))
+
+colnames(cond6_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond6 = cond6_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 2)
+
+data_cond6 = data_cond6 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+```
+
+
+## Rescorla function
+
+```{r}
+n_sims = 1
+
+data_cond1_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond1[sample(1:nrow(data_cond1)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+  
+data_cond2_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond2[sample(1:nrow(data_cond2)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond3_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond3[sample(1:nrow(data_cond3)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond4_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond4[sample(1:nrow(data_cond4)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+  
+data_cond5_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond5[sample(1:nrow(data_cond5)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond6_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond6[sample(1:nrow(data_cond6)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+```
+
+```{r}
+data_comp = read_csv('../Conditions/comprehension_condition.csv')
+```
+
+```{r}
+
+  
+
+data_comp = data_comp %>%
+  mutate(label = case_when(
+      suffix != 'none' ~ paste0(stem, '_', suffix),
+      suffix == 'none' ~ stem)) %>%
+  mutate(row_id = row_number())
+   
+
+data_comp_cond1 = data_comp %>%
+  mutate(key = label) %>%
+  dplyr::select(stem_condition, key)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_comp_cond1 = data_comp_cond1 %>% 
+  mutate(row_id = row_number()) 
+
+data_comp_results_cond1 = data_comp_cond1 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond1_rw_matrix, by = c("key" = "cue"))
+
+# data_prod_results_cond1 = data_prod_results_cond1 %>%
+#   mutate(is.stem = case_when(
+#     key %in% c('dim', 'big', 'sg', 'pl') ~ 0,
+#     .default = 1
+#   ))
+
+
+data_comp_results_cond1 = data_comp_results_cond1 %>%
+  group_by(row_id) %>%
+  summarize(big_activations = sum(big, na.rm = T),
+            pl_activations = sum(pl, na.rm = T),
+            dim_activations = sum(dim, na.rm = T),
+            sg_activations = sum(sg, na.rm = T)) %>%
+  left_join(data_comp) %>%
+  mutate(condition = 1,
+         new_minus_old = case_when(
+           suffix == 'dan' ~ (dim_activations + pl_activations) - (big_activations + pl_activations),
+           suffix == 'nem' ~ (dim_activations + pl_activations) - (dim_activations + sg_activations)))
+
+
+#c2
+
+data_comp_cond2 = data_comp %>%
+  mutate(key = label) %>%
+  dplyr::select(stem_condition, key)
+
+data_comp_cond2 = data_comp_cond2 %>% 
+  mutate(row_id = row_number()) 
+
+data_comp_results_cond2 = data_comp_cond2 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond1_rw_matrix, by = c("key" = "cue"))
+
+
+
+data_comp_results_cond2 = data_comp_results_cond2 %>%
+  group_by(row_id) %>%
+  summarize(big_activations = sum(big, na.rm = T),
+            pl_activations = sum(pl, na.rm = T),
+            dim_activations = sum(dim, na.rm = T),
+            sg_activations = sum(sg, na.rm = T)) %>%
+  left_join(data_comp) %>%
+  mutate(condition = 2,
+         new_minus_old = case_when(
+           suffix == 'dan' ~ (dim_activations + pl_activations) - (big_activations + pl_activations),
+           suffix == 'nem' ~ (dim_activations + pl_activations) - (dim_activations + sg_activations)))
+
+#c3
+
+data_comp_cond3 = data_comp %>%
+  mutate(key = label) %>%
+  dplyr::select(stem_condition, key)
+
+
+data_comp_cond3 = data_comp_cond3 %>%
+  mutate(row_id = row_number())
+data_comp_results_cond3 = data_comp_cond3 %>%
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond1_rw_matrix, by = c("key" = "cue"))
+
+data_comp_results_cond3 = data_comp_results_cond3 %>%
+  group_by(row_id) %>%
+  summarize(big_activations = sum(big, na.rm = T),
+            pl_activations = sum(pl, na.rm = T),
+            dim_activations = sum(dim, na.rm = T),
+            sg_activations = sum(sg, na.rm = T)) %>%
+  left_join(data_comp) %>%
+  mutate(condition = 3,
+         new_minus_old = case_when(
+           suffix == 'dan' ~ (dim_activations + pl_activations) - (big_activations + pl_activations),
+           suffix == 'nem' ~ (dim_activations + pl_activations) - (dim_activations + sg_activations)))
+
+#c4
+
+data_comp_cond4 = data_comp %>%
+  mutate(key = label) %>%
+  dplyr::select(stem_condition, key)
+
+data_comp_cond4 = data_comp_cond4 %>%
+  mutate(row_id = row_number())
+
+data_comp_results_cond4 = data_comp_cond4 %>%
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond1_rw_matrix, by = c("key" = "cue"))
+
+data_comp_results_cond4 = data_comp_results_cond4 %>%
+  group_by(row_id) %>%
+  summarize(big_activations = sum(big, na.rm = T),
+            pl_activations = sum(pl, na.rm = T),
+            dim_activations = sum(dim, na.rm = T),
+            sg_activations = sum(sg, na.rm = T)) %>%
+  left_join(data_comp) %>%
+  mutate(condition = 4,
+         new_minus_old = case_when(
+           suffix == 'dan' ~ (dim_activations + pl_activations) - (big_activations + pl_activations),
+           suffix == 'nem' ~ (dim_activations + pl_activations) - (dim_activations + sg_activations)))
+
+#c5
+
+data_comp_cond5 = data_comp %>%
+  mutate(key = label) %>%
+  dplyr::select(stem_condition, key)
+
+data_comp_cond5 = data_comp_cond5 %>%
+  mutate(row_id = row_number())
+
+data_comp_results_cond5 = data_comp_cond5 %>%
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond1_rw_matrix, by = c("key" = "cue"))
+
+data_comp_results_cond5 = data_comp_results_cond5 %>%
+  group_by(row_id) %>%
+  summarize(big_activations = sum(big, na.rm = T),
+            pl_activations = sum(pl, na.rm = T),
+            dim_activations = sum(dim, na.rm = T),
+            sg_activations = sum(sg, na.rm = T)) %>%
+  left_join(data_comp) %>%
+  mutate(condition = 5,
+         new_minus_old = case_when(
+           suffix == 'dan' ~ (dim_activations + pl_activations) - (big_activations + pl_activations),
+           suffix == 'nem' ~ (dim_activations + pl_activations) - (dim_activations + sg_activations)))
+
+#c6
+
+data_comp_cond6 = data_comp %>%
+  mutate(key = label) %>%
+  dplyr::select(stem_condition, key)
+
+data_comp_cond6 = data_comp_cond6 %>%
+  mutate(row_id = row_number())
+
+data_comp_results_cond6 = data_comp_cond6 %>%
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond1_rw_matrix, by = c("key" = "cue"))
+
+data_comp_results_cond6 = data_comp_results_cond6 %>%
+  group_by(row_id) %>%
+  summarize(big_activations = sum(big, na.rm = T),
+            pl_activations = sum(pl, na.rm = T),
+            dim_activations = sum(dim, na.rm = T),
+            sg_activations = sum(sg, na.rm = T)) %>%
+  left_join(data_comp) %>%
+  mutate(condition = 6,
+         new_minus_old = case_when(
+           suffix == 'dan' ~ (dim_activations + pl_activations) - (big_activations + pl_activations),
+           suffix == 'nem' ~ (dim_activations + pl_activations) - (dim_activations + sg_activations)))
+
+
+
+data_all_conds = rbind(
+  data_comp_results_cond1,
+  data_comp_results_cond2,
+  data_comp_results_cond3,
+  data_comp_results_cond4,
+  data_comp_results_cond5,
+  data_comp_results_cond6
+  )
+
+data_all_conds_logistic = data_all_conds
+  
+```
+## comparing with human data
+
+```{r}
+human_data_no_sil_no_shoon = read_csv('../Data/data_analysis_comprehension.csv')
+```
+
+```{r}
+
+
+human_data_no_sil_no_shoon_plus_rw_preds = human_data_no_sil_no_shoon %>%
+  left_join(data_all_conds)
+
+  
+```
+
+## Models
+
+```{r}
+
+priors_m1 = c(
+  prior(student_t(3, 0, 1), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 1), class = 'b'),
+  prior(student_t(3, 0, 1), class = 'sd'))
+
+human_data_no_sil_no_shoon_plus_rw_preds$meaning = factor(human_data_no_sil_no_shoon_plus_rw_preds$meaning, levels = c(0, 1))
+
+model_comprehension_numeric_rw = brm(meaning ~ new_minus_old + (1 | participant) + (1 | stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 16000, 
+                                       warmup = 8000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       save_pars = save_pars(all = TRUE),
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_comprehension_numeric_rw')
+
+model_comprehension_numeric_rw_by_cond = brm(meaning ~ condition_numeric*new_minus_old + (1 | participant) + (1 | stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 10000, 
+                                       warmup = 5000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       save_pars = save_pars(all = TRUE),
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_comprehension_numeric_rw_by_cond')
+
+human_data_no_sil_no_shoon_plus_rw_preds$stem_condition = factor(human_data_no_sil_no_shoon_plus_rw_preds$stem_condition)
+
+
+contrasts(human_data_no_sil_no_shoon_plus_rw_preds$stem_condition) = contr.sum(levels(human_data_no_sil_no_shoon_plus_rw_preds$stem_condition))
+
+model_comprehension_numeric_stem_rw = brm(meaning ~ condition_numeric*stem_condition*new_minus_old + (1 | participant) + (1 | stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 10000, 
+                                       warmup = 5000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       save_pars = save_pars(all = TRUE),
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_comprehension_numeric_stem_rw')
+
+model_comprehension_stem_rw = brm(meaning ~ stem_condition*new_minus_old + (1 | participant) + (1 | stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 10000, 
+                                       warmup = 5000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       save_pars = save_pars(all = TRUE),
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_comprehension_stem_rw')
+
+fixef(model_comprehension_numeric_rw)
+fixef(model_comprehension_numeric_stem_rw)
+
+
+model_comprehension_numeric_humans = brm(meaning ~ condition_numeric + (1 | participant) + (1 | stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds, #even though this says "plus_rw_plus", we are not using any RW predictors here
+                                       family = bernoulli(link = 'logit'), 
+                                       iter = 10000, 
+                                       warmup = 5000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       save_pars = save_pars(all = TRUE),
+                                       #control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_comprehension_numeric_humans')
+
+model_comprehension_numeric_stem_humans = brm(meaning ~ condition_numeric*stem_condition + (1 | participant) + (1 | stem),
+                                       data = human_data_no_sil_no_shoon_plus_rw_preds,
+                                       family = bernoulli(link = 'logit'),
+                                       iter = 30000, 
+                                       warmup = 15000,
+                                       chains = 4,
+                                       cores = 4,
+                                       prior = priors_m1,
+                                       save_pars = save_pars(all = TRUE),
+                                       control = list(adapt_delta = 0.99),
+                                       file = '../Data/model_comprehension_numeric_stem_humans')
+
+model_comprehension_numeric_rw = add_criterion(model_comprehension_numeric_rw, 'loo')
+model_comprehension_numeric_stem_rw = add_criterion(model_comprehension_numeric_stem_rw, 'loo')
+model_comprehension_numeric_humans = add_criterion(model_comprehension_numeric_humans, 'loo')
+model_comprehension_numeric_stem_humans = add_criterion(model_comprehension_numeric_stem_humans, 'loo')
+model_comprehension_numeric_rw_by_cond = add_criterion(model_comprehension_numeric_rw_by_cond, 'loo')
+model_comprehension_stem_rw = add_criterion(model_comprehension_stem_rw, 'loo')
+
+
+```
+```{r}
+loo_results = data.frame(loo_compare(
+  model_comprehension_numeric_rw,
+  model_comprehension_numeric_stem_rw,
+  model_comprehension_stem_rw,
+  model_comprehension_numeric_humans,
+  model_comprehension_numeric_stem_humans,
+  model_comprehension_numeric_rw_by_cond
+))
+```
+
+```{r}
+loo_results
+```
+
