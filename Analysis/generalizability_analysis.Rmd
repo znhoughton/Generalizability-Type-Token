@@ -19,7 +19,7 @@ options(contrasts = c("contr.sum","contr.sum"))
 Table1:
 
 |  |  |  |  |  |  |  |  |  |
-|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+|----|----|----|----|----|----|----|----|----|
 | **Condition1** | #of tokens | #of types | **Condition2** | #of tokens | #of types | **Condition3** | #of tokens | #of types |
 | dan | 12 | 12 | dan | 12 | 3 | dan | 12 | 12 |
 | nem | 12 | 3 | nem | 3 | 3 | nem | 3 | 3 |
@@ -34,7 +34,7 @@ Table1:
 Table2
 
 |  |  |  |  |  |  |  |  |  |
-|--------|:------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
+|----|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 | **Condition** | **dan token** | **nem token** | **sil token** | **shoon token** | **dan type** | **nem type** | **sil type** | **shoon type** |
 | 1 | 12 | 12 | 6 | 6 | 12 | 3 | 6 | 6 |
 | 2 | 12 | 3 | 6 | 6 | 3 | 3 | 6 | 6 |
@@ -44,13 +44,13 @@ Table2
 | 6 | 3 | 12 | 6 | 6 | 3 | 12 | 6 | 6 |
 
 |   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type | Frequent Competitor Token | Frequent Competitor Type | Infrequent Competitor Token | Infrequent Competitor Type |
-|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+|----|----|----|----|----|----|----|----|----|
 | **Condition 1** | 12 | 12 | 12 | 3 | 6 | 6 | 6 | 6 |
 | **Condition 2** | 12 | 3 | 3 | 3 | 6 | 6 | 6 | 6 |
 | **Condition 3** | 12 | 12 | 3 | 3 | 6 | 6 | 6 | 6 |
 
 |   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type |
-|---------------|---------------|---------------|---------------|---------------|
+|----|----|----|----|----|
 | **Condition 1** | 12 | 12 | 12 | 3 |
 | **Condition 2** | 12 | 3 | 3 | 3 |
 | **Condition 3** | 12 | 12 | 3 | 3 |
@@ -1308,9 +1308,9 @@ data_2afc_both$participant = factor(data_2afc_both$participant)
 data_prod_2afc_both = data_2afc_both %>%
   full_join(data_prod_both)
 
-data_prod_2afc_both$meaning = factor(data_prod_2afc_both$meaning)
+data_prod_2afc_both$meaning = factor(data_prod_2afc_both$meaning, levels = c('novel', 'original'))
 contrasts(data_prod_2afc_both$meaning) = contr.sum(levels(data_prod_2afc_both$meaning))
-data_prod_2afc_both$stem_condition = factor(data_prod_2afc_both$stem_condition)
+data_prod_2afc_both$stem_condition = factor(data_prod_2afc_both$stem_condition, levels = c('novel', 'familiar'))
 contrasts(data_prod_2afc_both$stem_condition) = contr.sum(levels(data_prod_2afc_both$stem_condition))
 data_prod_2afc_both$task = factor(data_prod_2afc_both$task)
 contrasts(data_prod_2afc_both$task) = contr.sum(levels(data_prod_2afc_both$task))

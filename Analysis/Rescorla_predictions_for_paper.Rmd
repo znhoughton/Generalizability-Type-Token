@@ -3025,6 +3025,650 @@ loo_comparisons_conf_sem = data.frame(loo_compare(model_human_rw_preds, model_hu
 ### Modified alpha plot
 
 ```{r}
+n_sims = 100 
+
+semantic_cues = c('dim', 'pl', 'big', 'sg', 'big.pl', 'big.sg', 'dim.sg', 'dim.pl')
+
+data_cond1_rw_matrix_configural_mod_alpha = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla_modified_alpha_for_semantic_cues(cuesOutcomes = data_cond1_configural[sample(1:nrow(data_cond1_configural)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+  
+data_cond2_rw_matrix_configural_mod_alpha = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla_modified_alpha_for_semantic_cues(cuesOutcomes = data_cond2_configural[sample(1:nrow(data_cond2_configural)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond3_rw_matrix_configural_mod_alpha = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla_modified_alpha_for_semantic_cues(cuesOutcomes = data_cond3_configural[sample(1:nrow(data_cond3_configural)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond4_rw_matrix_configural_mod_alpha = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla_modified_alpha_for_semantic_cues(cuesOutcomes = data_cond4_configural[sample(1:nrow(data_cond4_configural)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+  
+data_cond5_rw_matrix_configural_mod_alpha = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla_modified_alpha_for_semantic_cues(cuesOutcomes = data_cond5_configural[sample(1:nrow(data_cond5_configural)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond6_rw_matrix_configural_mod_alpha = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla_modified_alpha_for_semantic_cues(cuesOutcomes = data_cond6_configural[sample(1:nrow(data_cond6_configural)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+```
+
+```{r}
+data_prod = read_csv('../Conditions/production_condition.csv')
+```
+
+```{r}
+
+data_prod = data_prod %>%
+  mutate(stem = orthoCoding(prod_label)) %>%
+  mutate(type = case_when(
+    str_detect(file, 'dim_sg') ~ 'dim_sg',
+    str_detect(file, '_2') ~ 'big_pl',
+    str_detect(file, 'dim_pl') ~ 'dim_pl')
+  ) %>%
+  mutate(row_id = row_number())
+
+data_prod = map_dfr(1:n_sims, ~ mutate(data_prod, sim = .x))   
+
+data_prod = data_prod %>%
+  mutate(type = case_when(
+    type == 'dim_sg' ~ 'dim_sg_dim.sg',
+    type == 'big_pl' ~ 'big_pl_big.pl',
+    type == 'dim_pl' ~ 'dim_pl'
+  ))
+
+data_prod_cond1 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond1 = data_prod_cond1 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond1 = data_prod_cond1 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond1_rw_matrix_configural_mod_alpha , by = c("key" = "cue", 'sim'))
+
+# data_prod_results_cond1 = data_prod_results_cond1 %>%
+#   mutate(is.stem = case_when(
+#     key %in% c('dim', 'big', 'sg', 'pl') ~ 0,
+#     .default = 1
+#   ))
+
+
+data_prod_results_cond1 = data_prod_results_cond1 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 1,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+
+##c2
+data_prod_cond2 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond2 = data_prod_cond2 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond2 = data_prod_cond2 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond2_rw_matrix_configural_mod_alpha , by = c("key" = "cue", 'sim'))
+
+
+data_prod_results_cond2 = data_prod_results_cond2 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 2,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+
+
+##c3
+data_prod_cond3 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond3 = data_prod_cond3 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond3 = data_prod_cond3 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond3_rw_matrix_configural_mod_alpha , by = c("key" = "cue", 'sim'))
+
+
+data_prod_results_cond3 = data_prod_results_cond3 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 3,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+
+##c4
+data_prod_cond4 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond4 = data_prod_cond4 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond4 = data_prod_cond4 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond4_rw_matrix_configural_mod_alpha , by = c("key" = "cue", 'sim'))
+
+
+data_prod_results_cond4 = data_prod_results_cond4 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 4,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+
+
+
+##c5
+data_prod_cond5 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond5 = data_prod_cond5 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond5 = data_prod_cond5 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond5_rw_matrix_configural_mod_alpha , by = c("key" = "cue", 'sim'))
+
+
+data_prod_results_cond5 = data_prod_results_cond5 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 5,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+
+
+
+##c6
+data_prod_cond6 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond6 = data_prod_cond6 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond6 = data_prod_cond6 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond6_rw_matrix_configural_mod_alpha , by = c("key" = "cue", 'sim'))
+
+
+data_prod_results_cond6 = data_prod_results_cond6 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 6,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+data_prod_results_cond1 = data_prod_results_cond1 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+data_prod_results_cond2 = data_prod_results_cond2 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+data_prod_results_cond3 = data_prod_results_cond3 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+
+data_prod_results_cond4 = data_prod_results_cond4 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+
+data_prod_results_cond5 = data_prod_results_cond5 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+
+data_prod_results_cond6 = data_prod_results_cond6 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+
+data_all_conds_configural = rbind(
+  data_prod_results_cond1,
+  data_prod_results_cond2,
+  data_prod_results_cond3,
+  data_prod_results_cond4,
+  data_prod_results_cond5,
+  data_prod_results_cond6
+  )
+
+data_all_conds_configural_modified_alpha = data_all_conds_configural
+
+```
+
+##### pit stop
+
+```{r}
+n_sims = 100 
+
+semantic_cues = c('dim', 'pl', 'big', 'sg', 'big.pl', 'big.sg', 'dim.sg', 'dim.pl')
+
+data_cond1_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond1[sample(1:nrow(data_cond1)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+  
+data_cond2_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond2[sample(1:nrow(data_cond2)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond3_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond3[sample(1:nrow(data_cond3)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond4_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond4[sample(1:nrow(data_cond4)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+  
+data_cond5_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond5[sample(1:nrow(data_cond5)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+data_cond6_rw_matrix = map_dfr(1:n_sims, function(i) {
+  result = as.data.frame(Rescorla(cuesOutcomes = data_cond6[sample(1:nrow(data_cond6)), ], logistic = T))
+  result = rownames_to_column(result, var = 'cue')
+  result$sim = i
+  result
+})
+
+```
+
+```{r}
+data_prod = read_csv('../Conditions/production_condition.csv')
+```
+
+```{r}
+
+data_prod = data_prod %>%
+  mutate(stem = orthoCoding(prod_label)) %>%
+  mutate(type = case_when(
+    str_detect(file, 'dim_sg') ~ 'dim_sg',
+    str_detect(file, '_2') ~ 'big_pl',
+    str_detect(file, 'dim_pl') ~ 'dim_pl')
+  ) %>%
+  mutate(row_id = row_number())
+
+data_prod = map_dfr(1:n_sims, ~ mutate(data_prod, sim = .x))   
+
+data_prod = data_prod %>%
+  mutate(type = case_when(
+    type == 'dim_sg' ~ 'dim_sg_dim.sg',
+    type == 'big_pl' ~ 'big_pl_big.pl',
+    type == 'dim_pl' ~ 'dim_pl'
+  ))
+
+data_prod_cond1 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond1 = data_prod_cond1 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond1 = data_prod_cond1 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond1_rw_matrix, by = c("key" = "cue", 'sim'))
+
+# data_prod_results_cond1 = data_prod_results_cond1 %>%
+#   mutate(is.stem = case_when(
+#     key %in% c('dim', 'big', 'sg', 'pl') ~ 0,
+#     .default = 1
+#   ))
+
+
+data_prod_results_cond1 = data_prod_results_cond1 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 1,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+
+##c2
+data_prod_cond2 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond2 = data_prod_cond2 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond2 = data_prod_cond2 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond2_rw_matrix, by = c("key" = "cue", 'sim'))
+
+
+data_prod_results_cond2 = data_prod_results_cond2 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 2,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+
+
+##c3
+data_prod_cond3 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond3 = data_prod_cond3 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond3 = data_prod_cond3 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond3_rw_matrix, by = c("key" = "cue", 'sim'))
+
+
+data_prod_results_cond3 = data_prod_results_cond3 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 3,
+         freq_minus_infreq = dan_activations - nem_activations)
+
+
+##c4
+data_prod_cond4 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond4 = data_prod_cond4 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond4 = data_prod_cond4 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond4_rw_matrix, by = c("key" = "cue", 'sim'))
+
+
+data_prod_results_cond4 = data_prod_results_cond4 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 4,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+
+
+
+##c5
+data_prod_cond5 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond5 = data_prod_cond5 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond5 = data_prod_cond5 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond5_rw_matrix, by = c("key" = "cue", 'sim'))
+
+
+data_prod_results_cond5 = data_prod_results_cond5 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 5,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+
+
+
+##c6
+data_prod_cond6 = data_prod %>%
+  mutate(key = paste0(stem, '_', type)) %>%
+  dplyr::select(prod_condition, key, sim)
+
+
+
+#colnames(data_prod_cond1) = c('Stem Type', 'Cues')
+
+data_prod_cond6 = data_prod_cond6 %>% 
+  group_by(sim) %>%
+  mutate(row_id = row_number()) 
+
+data_prod_results_cond6 = data_prod_cond6 %>% 
+  separate_rows(key, sep = "_") %>% 
+  left_join(data_cond6_rw_matrix, by = c("key" = "cue", 'sim'))
+
+
+data_prod_results_cond6 = data_prod_results_cond6 %>%
+  group_by(row_id, sim) %>%
+  summarize(dan_activations = sum(dan, na.rm = T),
+            sil_activations = sum(sil, na.rm = T),
+            nem_activations = sum(nem, na.rm = T),
+            shoon_activations = sum(shoon, na.rm = T)) %>%
+  left_join(data_prod) %>%
+  mutate(condition = 6,
+         freq_minus_infreq = nem_activations - dan_activations)
+
+data_prod_results_cond1 = data_prod_results_cond1 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+data_prod_results_cond2 = data_prod_results_cond2 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+data_prod_results_cond3 = data_prod_results_cond3 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~ dan_activations[type=='big_pl_big.pl'][1] - nem_activations[type == 'dim_sg_dim.sg'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+
+data_prod_results_cond4 = data_prod_results_cond4 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+
+data_prod_results_cond5 = data_prod_results_cond5 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+
+data_prod_results_cond6 = data_prod_results_cond6 %>%
+  group_by(prod_label, sim) %>%
+  mutate(dv = case_when(
+    type == 'dim_pl' ~ freq_minus_infreq,
+    type != 'dim_pl' ~  nem_activations[type == 'dim_sg_dim.sg'][1] - dan_activations[type=='big_pl_big.pl'][1]
+  )) #%>%
+  #filter(type != 'big_pl_big.pl')
+
+
+data_all_conds_logistic2 = rbind(
+  data_prod_results_cond1,
+  data_prod_results_cond2,
+  data_prod_results_cond3,
+  data_prod_results_cond4,
+  data_prod_results_cond5,
+  data_prod_results_cond6
+  )
+
+
+
+```
+
+#### back to plot
+
+```{r}
 
 data_all_conds_logistic2_configural_modified_alpha = data_all_conds_configural_modified_alpha %>%
   mutate(meaning = case_when(
@@ -3039,8 +3683,32 @@ data_all_conds_logistic2_configural_modified_alpha = data_all_conds_configural_m
     condition == 5 ~ 2,
     condition == 6 ~ 3
   )) %>%
+  group_by(meaning, prod_condition, condition, sim) %>%
+  summarize(mean_freq_diff = mean(freq_minus_infreq), .groups = 'keep')# %>%
+  
+data_all_conds_logistic2_configural_modified_alpha = data_all_conds_logistic2_configural_modified_alpha %>% 
   group_by(meaning, prod_condition, condition) %>%
-  summarize(mean_freq_diff = mean(freq_minus_infreq), .groups = 'keep')
+  summarize(mean_freq_diff_v2 = mean(mean_freq_diff), ci2.5 = quantile(mean_freq_diff, 0.025, na.rm = T), ci97.5 = quantile(mean_freq_diff, 0.975, na.rm = T), .groups = 'keep')
+
+data_all_conds_logistic2 = data_all_conds_logistic2 %>%
+  mutate(meaning = case_when(
+    type == 'dim_sg_dim.sg' | type == 'big_pl_big.pl' ~ 'original', #maybe need to filter out one of the meanings to avoid duplicates?
+    type == 'dim_pl' ~ 'novel'
+  )) %>%
+  mutate(condition = case_when(
+    condition == 1 ~ 1,
+    condition == 2 ~ 2,
+    condition == 3 ~ 3, 
+    condition == 4 ~ 1, 
+    condition == 5 ~ 2,
+    condition == 6 ~ 3
+  )) %>%
+  group_by(meaning, prod_condition, condition, sim) %>%
+  summarize(mean_freq_diff = mean(freq_minus_infreq), .groups = 'keep')# %>%
+  
+data_all_conds_logistic2 = data_all_conds_logistic2 %>% 
+  group_by(meaning, prod_condition, condition) %>%
+  summarize(mean_freq_diff_v2 = mean(mean_freq_diff), ci2.5 = quantile(mean_freq_diff, 0.025, na.rm = T), ci97.5 = quantile(mean_freq_diff, 0.975, na.rm = T), .groups = 'keep')
 
 #rw plot:
 # data_prod_results_for_plotting2 = data_prod_results_for_plotting %>%
@@ -3058,7 +3726,7 @@ rw_plot_configural_mod_alpha = ggplot(data = data_all_conds_logistic2_configural
   facet_wrap(~condition)
 
 
-#write_csv(data_all_conds_logistic2_configural_modified_alpha, 'rw_plot_configural_mod_alpha.csv')
+#write_csv(data_all_conds_logistic2_configural_modified_alpha, '../Data/rw_plot_configural_mod_alpha.csv')
 
 #observed estimates:
 fixed_effects_df = read_csv('../Data/fixed_effects_df_all.csv') %>%
