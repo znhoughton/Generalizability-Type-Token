@@ -1,0 +1,527 @@
+---
+title: "Grid Search"
+author: "Zachary Houghton"
+date: "2025-11-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+source("RescorlaLogistic.R")
+library(ndl)
+library(arm)
+```
+
+## Condition 1 (dan type): 12 token, 12 type (nem 12 tokens 3 types)
+
+
+```{r}
+cond1 = read_csv('../Conditions/Condition1.csv') 
+
+cond1 = cond1 %>%
+  mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+
+cond1 = cond1 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond1_key = cond1 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond1_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond1 = cond1_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5) #%>% 
+  #mutate(Cues = paste0("cx_", Cues))
+
+data_cond1 = data_cond1 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+
+```
+
+## Condition 2 (dan token): 12 tokens, 3 types
+
+```{r}
+
+cond2 = read_csv('../Conditions/Condition2.csv') 
+cond2 = cond2 %>%
+    mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+
+cond2 = cond2 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond2_key = cond2 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond2_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond2 = cond2_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5)# %>% 
+  #mutate(Cues = paste0("cx_", Cues))
+
+data_cond2 = data_cond2 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+```
+
+## Condition 3 (dan type and token): 12 tokens, 12 types (nem 3 tokens, 3 types)
+
+```{r}
+
+cond3 = read_csv('../Conditions/Condition3.csv') 
+cond3 = cond3 %>%
+    mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+
+cond3 = cond3 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond3_key = cond3 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond3_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond3 = cond3_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5)# %>% 
+  #mutate(Cues = paste0("cx_", Cues))
+
+
+data_cond3 = data_cond3 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+```
+
+
+## Condition 4 (nem type): 12 token, 12 type (dan 12 token, 3 type)
+
+```{r}
+
+cond4 = read_csv('../Conditions/Condition4.csv') 
+cond4 = cond4 %>%
+    mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+
+cond4 = cond4 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond4_key = cond4 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond4_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond4 = cond4_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5) 
+
+data_cond4 = data_cond4 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+```
+
+
+
+## Condition 5 (nem token): 12 token, 3 types (dan 3 token, 3 type)
+
+```{r}
+
+cond5 = read_csv('../Conditions/Condition5.csv') 
+cond5 = cond5 %>%
+    mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+
+cond5 = cond5 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond5_key = cond5 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond5_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond5 = cond5_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5)
+
+data_cond5 = data_cond5 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+```
+
+
+
+## Condition 6: (nem type and token) 12 token 12 type (dan 3 token 3 type)
+
+```{r}
+
+cond6 = read_csv('../Conditions/Condition6.csv') 
+cond6 = cond6 %>%
+    mutate(stem = orthoCoding(stem)) %>%
+  mutate(type = case_when(
+    suffix == 'dan' | suffix == 'sil' ~ 'big_pl',
+    suffix == 'none' ~ 'big_sg',
+    suffix == 'nem' | suffix == 'shoon' ~ 'dim_sg'
+  ))
+  
+cond6 = cond6 %>%
+  mutate(key = paste0(stem, '_', type))
+
+cond6_key = cond6 %>%
+  group_by(key, suffix) %>%
+  summarize(frequency = table(key))
+
+colnames(cond6_key) = c('Cues', 'Outcomes', 'Frequency')
+
+data_cond6 = cond6_key %>%
+  mutate(Frequency = as.numeric(Frequency) * 5)
+
+data_cond6 = data_cond6 %>%
+  uncount(Frequency) %>%
+  mutate(Frequency = 1)
+```
+
+```{r}
+
+data_cond1_configural = data_cond1 %>%
+  mutate(Cues = case_when(
+    str_ends(Cues, "big_pl") ~ paste0(Cues, "_big.pl"),
+    str_ends(Cues, "big_sg") ~ paste0(Cues, "_big.sg"),
+    str_ends(Cues, "dim_sg") ~ paste0(Cues, "_dim.sg"),
+    TRUE ~ Cues  # leave unchanged if none of these endings
+  ))
+
+data_cond2_configural = data_cond2 %>%
+  mutate(Cues = case_when(
+    str_ends(Cues, "big_pl") ~ paste0(Cues, "_big.pl"),
+    str_ends(Cues, "big_sg") ~ paste0(Cues, "_big.sg"),
+    str_ends(Cues, "dim_sg") ~ paste0(Cues, "_dim.sg"),
+    TRUE ~ Cues  # leave unchanged if none of these endings
+  ))
+
+data_cond3_configural = data_cond3 %>%
+  mutate(Cues = case_when(
+    str_ends(Cues, "big_pl") ~ paste0(Cues, "_big.pl"),
+    str_ends(Cues, "big_sg") ~ paste0(Cues, "_big.sg"),
+    str_ends(Cues, "dim_sg") ~ paste0(Cues, "_dim.sg"),
+    TRUE ~ Cues  # leave unchanged if none of these endings
+  ))
+
+data_cond4_configural = data_cond4 %>%
+  mutate(Cues = case_when(
+    str_ends(Cues, "big_pl") ~ paste0(Cues, "_big.pl"),
+    str_ends(Cues, "big_sg") ~ paste0(Cues, "_big.sg"),
+    str_ends(Cues, "dim_sg") ~ paste0(Cues, "_dim.sg"),
+    TRUE ~ Cues  # leave unchanged if none of these endings
+  ))
+
+data_cond5_configural = data_cond5 %>%
+  mutate(Cues = case_when(
+    str_ends(Cues, "big_pl") ~ paste0(Cues, "_big.pl"),
+    str_ends(Cues, "big_sg") ~ paste0(Cues, "_big.sg"),
+    str_ends(Cues, "dim_sg") ~ paste0(Cues, "_dim.sg"),
+    TRUE ~ Cues  # leave unchanged if none of these endings
+  ))
+
+data_cond6_configural = data_cond6 %>%
+  mutate(Cues = case_when(
+    str_ends(Cues, "big_pl") ~ paste0(Cues, "_big.pl"),
+    str_ends(Cues, "big_sg") ~ paste0(Cues, "_big.sg"),
+    str_ends(Cues, "dim_sg") ~ paste0(Cues, "_dim.sg"),
+    TRUE ~ Cues  # leave unchanged if none of these endings
+  ))
+```
+
+
+
+# single function for production
+
+```{r}
+human_data = read_csv('../Data/fixed_effects_df_all.csv') %>%
+  filter(Task == 'prod')
+```
+
+
+```{r}
+semantic_cues = c('dim', 'pl', 'big', 'sg', 'big.pl', 'big.sg', 'dim.sg', 'dim.pl')
+run_rw_production = function(
+  n_sims = 5,
+  Alpha,
+  SemAlpha,
+  Beta,
+  configural_list,
+  prod_file = '../Conditions/production_condition.csv',
+  hum   = human_data
+)
+ {
+
+  library(tidyverse)
+  library(purrr)
+
+  # -----------------------------
+  # 1. helper that runs RW once
+  # -----------------------------
+  run_rw = function(config_data) {
+    map_dfr(1:n_sims, function(i){
+      Rescorla_modified_alpha_for_semantic_cues(
+        cuesOutcomes = config_data[sample(nrow(config_data)),],
+        logistic = TRUE,
+        Alpha = Alpha,
+        SemAlpha = SemAlpha,
+        Beta = Beta
+      ) %>%
+        as.data.frame() %>%
+        tibble::rownames_to_column("cue") %>%
+        mutate(sim = i)
+    })
+  }
+
+  # run RW for each condition
+  rw_results = map(configural_list, run_rw)
+
+  # -----------------------------
+  # 2. Load & preprocess prod file
+  # -----------------------------
+  data_prod = read_csv(prod_file, show_col_types = FALSE) %>%
+    mutate(
+      stem = orthoCoding(prod_label),
+      type = case_when(
+        str_detect(file, "dim_sg") ~ "dim_sg_dim.sg",
+        str_detect(file, "_2")     ~ "big_pl_big.pl",
+        str_detect(file, "dim_pl") ~ "dim_pl",
+        TRUE                       ~ NA_character_
+      ),
+      row_id = row_number()
+    )
+
+  data_prod = map_dfr(1:n_sims, ~ mutate(data_prod, sim = .x))
+
+  # ----------------------------------------------------------
+  # 3. helper that joins & computes activations for one cond
+  # ----------------------------------------------------------
+  process_one_condition = function(prod_data, rw_data, cond_num){
+
+    prod_cond = prod_data %>%
+      mutate(key = paste0(stem, "_", type)) %>%
+      group_by(sim) %>%
+      mutate(row_id = row_number())
+
+    res = prod_cond %>%
+      separate_rows(key, sep = "_") %>%
+      left_join(rw_data, by = c("key" = "cue", "sim")) %>%
+      group_by(row_id, sim) %>%
+      summarize(
+        dan_activations   = sum(dan,   na.rm = TRUE),
+        sil_activations   = sum(sil,   na.rm = TRUE),
+        nem_activations   = sum(nem,   na.rm = TRUE),
+        shoon_activations = sum(shoon, na.rm = TRUE),
+        .groups = "drop"
+      ) %>%
+      left_join(prod_data, by = c("row_id", "sim")) %>%
+      mutate(
+        condition = cond_num,
+        freq_minus_infreq =
+          if (cond_num %in% c(1, 2, 3))
+            dan_activations - nem_activations
+          else
+            nem_activations - dan_activations
+      )
+
+    res
+  }
+
+  # process all conditions
+  cond_ids = seq_along(rw_results)
+
+  prod_results = map2_dfr(
+    cond_ids,
+    rw_results,
+    ~ process_one_condition(data_prod, .y, .x)
+  )
+
+  # ----------------------------------------------------------
+  # 4. compute dv for each condition (vectorised, grouped)
+  # ----------------------------------------------------------
+  prod_results = prod_results %>%
+    group_by(prod_label, sim, condition) %>%
+    mutate(
+      dv = case_when(
+        type == "dim_pl" ~ freq_minus_infreq,
+        condition %in% c(1, 2, 3) ~
+          dan_activations[type == "big_pl_big.pl"][1] -
+          nem_activations[type == "dim_sg_dim.sg"][1],
+        condition %in% c(4, 5, 6) ~
+          nem_activations[type == "dim_sg_dim.sg"][1] -
+          dan_activations[type == "big_pl_big.pl"][1]
+      )
+    )
+
+  # ----------------------------------------------------------
+  # 5. final summarization
+  # ----------------------------------------------------------
+  out = prod_results %>%
+    mutate(
+      meaning = case_when(
+        type %in% c("dim_sg_dim.sg", "big_pl_big.pl") ~ "original",
+        type == "dim_pl"                              ~ "novel",
+        TRUE                                          ~ NA_character_
+      ),
+      # collapse 1/4 → 1, 2/5 → 2, 3/6 → 3
+      condition = case_when(
+        condition %in% c(1, 4) ~ 1,
+        condition %in% c(2, 5) ~ 2,
+        condition %in% c(3, 6) ~ 3
+      )
+    ) %>%
+    group_by(meaning, prod_condition, condition, sim) %>%
+    summarize(
+      mean_freq_diff = mean(freq_minus_infreq),
+      .groups = "keep"
+    ) %>%
+    group_by(meaning, prod_condition, condition) %>%
+    summarize(
+      mean_freq_diff_v2 = mean(mean_freq_diff),
+      ci2.5  = quantile(mean_freq_diff, 0.025, na.rm = TRUE),
+      ci97.5 = quantile(mean_freq_diff, 0.975, na.rm = TRUE),
+      .groups = "keep"
+    )
+  
+  hum2 = hum %>%
+  mutate(
+    Meaning   = tolower(Meaning),
+    Condition = case_when(Condition == 'cond1' ~ 1,
+                          Condition == 'cond2' ~ 2,
+                          Condition == 'cond3' ~ 3),
+    Stem      = tolower(Stem)
+  ) %>%
+  dplyr::select(Meaning, Condition, Stem, Estimate)
+
+  out = out %>%
+    left_join(
+      hum2,
+      by = join_by(
+        meaning == Meaning,
+        condition == Condition,
+        prod_condition == Stem
+      )
+    ) %>%
+    mutate(
+      mse = (mean_freq_diff_v2 - Estimate)^2
+    )
+
+
+  return(out)
+}
+
+
+results = run_rw_production(
+  n_sims = 100,
+  Alpha = 0.05,
+  SemAlpha = 0.25,
+  Beta = 0.1,
+  configural_list = list(
+    data_cond1_configural,
+    data_cond2_configural,
+    data_cond3_configural,
+    data_cond4_configural,
+    data_cond5_configural,
+    data_cond6_configural),
+    hum = human_data
+)
+
+
+```
+## Plot 
+
+```{r}
+semalpha_vals = seq(0, 1, by = 0.05)
+beta_vals     = seq(0, 1, by = 0.05)
+alpha_vals   = seq(0, 1, by = 0.05)
+
+param_grid = tidyr::crossing(
+  SemAlpha = semalpha_vals,
+  Beta = beta_vals,
+  Alpha = alpha_vals
+)
+
+results_all = param_grid %>%
+  mutate(
+    model_results = pmap(
+      list(SemAlpha, Beta, Alpha),
+      ~ run_rw_production(
+          n_sims = 50,
+          Alpha = ..3,
+          SemAlpha = ..1,
+          Beta = ..2,
+          configural_list = list(
+            data_cond1_configural,
+            data_cond2_configural,
+            data_cond3_configural,
+            data_cond4_configural,
+            data_cond5_configural,
+            data_cond6_configural),
+          #prod_file = prod_file,
+          hum = human_data
+        )
+    )
+  )
+
+
+
+results_all = results_all %>%
+  tidyr::unnest(model_results) %>%
+  group_by(SemAlpha, Beta) %>%
+  mutate(mean_mse = mean(mse))
+
+```
+
+
+```{r}
+
+results_lowest_mse = results_all %>%
+  ungroup() %>%
+  filter(mean_mse == min(mean_mse))
+  
+results_lowest_mse$SemAlpha
+results_lowest_mse$Beta
+results_lowest_mse$Alpha
+
+ggplot(data = results_lowest_mse, aes(x = meaning, y = invlogit(mean_freq_diff_v2), fill = prod_condition)) +
+  geom_col(position = "dodge") +
+  ylim(c(0,1)) +
+  ggtitle('configural cues + mod alpha') +
+  facet_wrap(~condition)
+
+```
+
