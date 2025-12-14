@@ -288,7 +288,9 @@ run_rw_production = function(
 
   library(tidyverse)
   library(purrr)
-
+  message("Running production: Alpha=", Alpha,
+          " SemAlpha=", SemAlpha,
+          " Beta=", Beta)
   # -----------------------------
   # 1. helper that runs RW once
   # -----------------------------
@@ -465,63 +467,114 @@ results = run_rw_production(
 ## Plot 
 
 ```{r}
+library(dplyr)
+library(tidyr)
+
 semalpha_vals = seq(0, 1, by = 0.05)
 beta_vals     = seq(0, 1, by = 0.05)
-alpha_vals   = seq(0, 1, by = 0.05)
+alpha_vals    = seq(0, 1, by = 0.05)
 
 param_grid = tidyr::crossing(
   SemAlpha = semalpha_vals,
-  Beta = beta_vals,
-  Alpha = alpha_vals
+  Beta     = beta_vals,
+  Alpha    = alpha_vals
 )
 
-results_all = param_grid %>%
+results_all <- param_grid %>%
   mutate(
     model_results = pmap(
       list(SemAlpha, Beta, Alpha),
       ~ run_rw_production(
           n_sims = 50,
-          Alpha = ..3,
+          Alpha    = ..3,
           SemAlpha = ..1,
-          Beta = ..2,
+          Beta     = ..2,
           configural_list = list(
             data_cond1_configural,
             data_cond2_configural,
             data_cond3_configural,
             data_cond4_configural,
             data_cond5_configural,
-            data_cond6_configural),
-          #prod_file = prod_file,
+            data_cond6_configural
+          ),
           hum = human_data
-        )
+      )
     )
-  )
-
-
+  ) %>%
+  unnest(model_results)
 
 results_all = results_all %>%
-  tidyr::unnest(model_results) %>%
-  group_by(SemAlpha, Beta) %>%
-  mutate(mean_mse = mean(mse))
+  group_by(SemAlpha, Beta, Alpha) %>%
+  mutate(mean_mse = mean(mse, na.rm = TRUE))
 
 ```
 
 
 ```{r}
+results_all_prod = read_csv('../Data/grid_search_results_all.csv')
+pattern_scores <- results_all_prod %>%
+  group_by(Alpha, Beta, SemAlpha) %>%
+  summarize(
+    spearman = cor(
+      Estimate,
+      mean_freq_diff_v2,
+      method = "spearman"
+    ),
+    kendall = cor(
+      Estimate,
+      mean_freq_diff_v2,
+      method = "kendall"
+    ),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(spearman))
 
-results_lowest_mse = results_all %>%
-  ungroup() %>%
-  filter(mean_mse == min(mean_mse))
-  
-results_lowest_mse$SemAlpha
-results_lowest_mse$Beta
-results_lowest_mse$Alpha
+# pattern_scores <- results_all_prod %>%
+#   ungroup() %>%
+#   filter(condition == 2) %>%
+#   group_by(Alpha, Beta, SemAlpha) %>%
+#   summarize(
+#     spearman = cor(
+#       Estimate,
+#       mean_freq_diff_v2,
+#       method = "spearman"
+#     ),
+#     kendall = cor(
+#       Estimate,
+#       mean_freq_diff_v2,
+#       method = "kendall"
+#     ),
+#     .groups = "drop"
+#   ) %>%
+#   arrange(desc(spearman))
 
-ggplot(data = results_lowest_mse, aes(x = meaning, y = invlogit(mean_freq_diff_v2), fill = prod_condition)) +
+
+
+results_plot = results_all_prod %>%
+  filter(
+    near(Alpha, pattern_scores$Alpha[1]),
+    near(Beta, pattern_scores$Beta[1]),
+    near(SemAlpha, pattern_scores$SemAlpha[1])
+  )
+
+#write_csv(results_plot, '../Data/grid_search_results_best_params.csv')
+
+
+p1 = ggplot(data = results_plot, aes(x = meaning, y = invlogit(mean_freq_diff_v2), fill = prod_condition)) +
   geom_col(position = "dodge") +
   ylim(c(0,1)) +
   ggtitle('configural cues + mod alpha') +
   facet_wrap(~condition)
 
+p2 = ggplot(data = results_lowest_mse, aes(x = meaning, y = invlogit(Estimate), fill = prod_condition)) +
+  geom_col(position = "dodge") +
+  ylim(c(0,1)) +
+  ggtitle('configural cues + mod alpha') +
+  facet_wrap(~condition)
+
+ggarrange(p1, p2)
+
 ```
+
+
 

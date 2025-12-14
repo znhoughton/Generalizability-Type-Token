@@ -520,6 +520,12 @@ model_comprehension_numeric_rw_by_cond = brm(meaning ~ condition_numeric*new_min
                                        control = list(adapt_delta = 0.99),
                                        file = '../Data/model_comprehension_numeric_rw_by_cond')
 
+test = hypothesis(
+  model_comprehension_numeric_rw_by_cond,
+  "condition_numeric3M3 - condition_numeric12M12 > 0"
+)
+
+
 human_data_no_sil_no_shoon_plus_rw_preds$stem_condition = factor(human_data_no_sil_no_shoon_plus_rw_preds$stem_condition)
 
 
@@ -1170,17 +1176,17 @@ priors_m1b = c(
   prior(student_t(3, 0, 0.3), class = 'b'),
   prior(student_t(3, 0, 0.3), class = 'sd'))
 
-model_rw_preds_by_statistical_preds_context_cues_added_to_test = brm(new_minus_old ~ condition_numeric*stem_condition + (1 | participant) + (1 | stem),
-                                       data = human_data_no_sil_no_shoon_plus_rw_preds,
-                                       #family = bernoulli(link = 'logit'),
-                                       iter = 16000, 
-                                       warmup = 8000,
-                                       chains = 4,
-                                       cores = 4,
-                                       prior = priors_m1b,
-                                       save_pars = save_pars(all = TRUE),
-                                       control = list(adapt_delta = 0.999, max_treedepth = 23),
-                                       file = '../Data/model_rw_preds_by_statistical_preds_context_cues_added_to_test')
+# model_rw_preds_by_statistical_preds_context_cues_added_to_test = brm(new_minus_old ~ condition_numeric*stem_condition + (1 | participant) + (1 | stem),
+#                                        data = human_data_no_sil_no_shoon_plus_rw_preds,
+#                                        #family = bernoulli(link = 'logit'),
+#                                        iter = 16000, 
+#                                        warmup = 8000,
+#                                        chains = 4,
+#                                        cores = 4,
+#                                        prior = priors_m1b,
+#                                        save_pars = save_pars(all = TRUE),
+#                                        control = list(adapt_delta = 0.999, max_treedepth = 23),
+#                                        file = '../Data/model_rw_preds_by_statistical_preds_context_cues_added_to_test')
 
 ```
 
@@ -1190,42 +1196,42 @@ model_rw_preds_by_statistical_preds_context_cues_added_to_test = brm(new_minus_o
 n_sims = 100
 
 data_cond1_rw_matrix = map_dfr(1:n_sims, function(i) {
-  result = as.data.frame(Rescorla(cuesOutcomes = data_cond1[sample(1:nrow(data_cond1)), ], logistic = T))
+  result = as.data.frame(Rescorla(Alpha = 0.45, Beta = 0.25, cuesOutcomes = data_cond1[sample(1:nrow(data_cond1)), ], logistic = T))
   result = rownames_to_column(result, var = 'cue')
   result$sim = i
   result
 })
   
 data_cond2_rw_matrix = map_dfr(1:n_sims, function(i) {
-  result = as.data.frame(Rescorla(cuesOutcomes = data_cond2[sample(1:nrow(data_cond2)), ], logistic = T))
+  result = as.data.frame(Rescorla(Alpha = 0.45, Beta = 0.25, cuesOutcomes = data_cond2[sample(1:nrow(data_cond2)), ], logistic = T))
   result = rownames_to_column(result, var = 'cue')
   result$sim = i
   result
 })
 
 data_cond3_rw_matrix = map_dfr(1:n_sims, function(i) {
-  result = as.data.frame(Rescorla(cuesOutcomes = data_cond3[sample(1:nrow(data_cond3)), ], logistic = T))
+  result = as.data.frame(Rescorla(Alpha = 0.45, Beta = 0.25, cuesOutcomes = data_cond3[sample(1:nrow(data_cond3)), ], logistic = T))
   result = rownames_to_column(result, var = 'cue')
   result$sim = i
   result
 })
 
 data_cond4_rw_matrix = map_dfr(1:n_sims, function(i) {
-  result = as.data.frame(Rescorla(cuesOutcomes = data_cond4[sample(1:nrow(data_cond4)), ], logistic = T))
+  result = as.data.frame(Rescorla(Alpha = 0.45, Beta = 0.25, cuesOutcomes = data_cond4[sample(1:nrow(data_cond4)), ], logistic = T))
   result = rownames_to_column(result, var = 'cue')
   result$sim = i
   result
 })
   
 data_cond5_rw_matrix = map_dfr(1:n_sims, function(i) {
-  result = as.data.frame(Rescorla(cuesOutcomes = data_cond5[sample(1:nrow(data_cond5)), ], logistic = T))
+  result = as.data.frame(Rescorla(Alpha = 0.45, Beta = 0.25, cuesOutcomes = data_cond5[sample(1:nrow(data_cond5)), ], logistic = T))
   result = rownames_to_column(result, var = 'cue')
   result$sim = i
   result
 })
 
 data_cond6_rw_matrix = map_dfr(1:n_sims, function(i) {
-  result = as.data.frame(Rescorla(cuesOutcomes = data_cond6[sample(1:nrow(data_cond6)), ], logistic = T))
+  result = as.data.frame(Rescorla(Alpha = 0.45, Beta = 0.25, cuesOutcomes = data_cond6[sample(1:nrow(data_cond6)), ], logistic = T))
   result = rownames_to_column(result, var = 'cue')
   result$sim = i
   result
@@ -1464,18 +1470,18 @@ data_all_conds_test = data_all_conds %>%
 
 
 ```{r}
-
+options(contrasts = c("contr.treatment","contr.treatment"))
 priors_m1b = c(
-  prior(student_t(3, 0, 0.05), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
-  prior(student_t(3, 0, 0.05), class = 'b'),
-  prior(student_t(3, 0, 0.2), class = 'sd'))
+  prior(student_t(3, 0, 0.001), class = 'Intercept'), #0.5 might seem small, but in logistic regression this is still quite large since a-prior exp(1) = 2.7 is still plausible.
+  prior(student_t(3, 0, 0.001), class = 'b'),
+  prior(student_t(3, 0, 0.001), class = 'sd'))
 
 data_all_conds_test$stem_condition = factor(data_all_conds_test$stem_condition)
 contrasts(data_all_conds_test$stem_condition) = contr.sum(levels(data_all_conds_test$stem_condition))
 
 data_all_conds_test$condition_numeric = factor(data_all_conds_test$condition_numeric, levels = c('12-3', '12-12', '3-3'))
 
-model_rw_preds_by_statistical_preds_nsims = brm(new_minus_old ~ condition_numeric*stem_condition + (1 | sim) + (1 | stem),
+model_rw_preds_by_statistical_preds_nsims = brm(new_minus_old ~ condition_numeric*stem_condition + (1 || sim) + (1 || stem),
                                        data = data_all_conds_test,
                                        #family = bernoulli(link = 'logit'),
                                        iter = 8000, 
@@ -1484,8 +1490,266 @@ model_rw_preds_by_statistical_preds_nsims = brm(new_minus_old ~ condition_numeri
                                        cores = 4,
                                        prior = priors_m1b,
                                        save_pars = save_pars(all = TRUE),
-                                       control = list(adapt_delta = 0.99, max_treedepth = 20),
+                                       #control = list(adapt_delta = 0.999, max_treedepth = 20),
                                        file = '../Data/model_rw_preds_by_statistical_preds_nsims')
 
+```
+
+## grid search
+
+```{r}
+run_comprehension <- function(
+  data_comp,
+  data_conds,      # list of 6 configural datasets
+  human_comp_data, # must contain: stem_condition, condition_numeric, Estimate
+  n_sims,
+  Alpha,
+  Beta
+){
+
+  # -------------------------------------
+  # internal helper to simulate RW model
+  # -------------------------------------
+  run_rw <- function(data) {
+    map_dfr(1:n_sims, function(i){
+      Rescorla(
+        cuesOutcomes = data[sample(nrow(data)), ],
+        logistic = TRUE,
+        Alpha = Alpha,
+        Beta  = Beta
+      ) %>%
+        as.data.frame() %>%
+        tibble::rownames_to_column("cue") %>%
+        mutate(sim = i)
+    })
+  }
+
+  # run RW on all 6 conditions
+  rw_results_list <- purrr::map(data_conds, run_rw)
+
+  # -------------------------------------
+  # preprocess comprehension data
+  # -------------------------------------
+  data_comp <- data_comp %>%
+    mutate(
+      label = if_else(suffix != "none",
+                      paste0(stem, "_", suffix),
+                      stem),
+      row_id = row_number()
+    )
+
+  # expand across simulations (same logic as production)
+  data_comp <- purrr::map_dfr(1:n_sims, ~ mutate(data_comp, sim = .x))
+
+  # -------------------------------------
+  # process single condition
+  # -------------------------------------
+  process_one_condition <- function(comp_data, rw_data, cond_num){
+
+    comp_data %>%
+      mutate(key = label) %>%
+      separate_rows(key, sep="_") %>%
+      left_join(rw_data, by = c("key" = "cue", "sim")) %>%
+      group_by(row_id, sim) %>%
+      summarize(
+        big_activations = sum(big, na.rm=TRUE),
+        pl_activations  = sum(pl, na.rm=TRUE),
+        dim_activations = sum(dim, na.rm=TRUE),
+        sg_activations  = sum(sg, na.rm=TRUE),
+        .groups="drop"
+      ) %>%
+      left_join(comp_data, by=c("row_id","sim")) %>%
+      mutate(
+        condition = cond_num,
+        new_minus_old = case_when(
+          suffix == 'dan' ~ (dim_activations + pl_activations) - (big_activations + pl_activations),
+          suffix == 'nem' ~ (dim_activations + pl_activations) - (dim_activations + sg_activations)
+        )
+      )
+  }
+
+  # run all 6 conditions together
+  results <- purrr::map2_dfr(
+    seq_along(rw_results_list),
+    rw_results_list,
+    ~ process_one_condition(data_comp, .y, .x)
+  )
+
+  # -------------------------------------
+  # recode into 3 comprehension conditions
+  # -------------------------------------
+  results <- results %>%
+    mutate(
+      language = case_when(
+        condition %in% c(1, 2, 3) ~ "dan",
+        condition %in% c(4, 5, 6) ~ "nem"
+      ),
+      frequency = ifelse(suffix == language, 1, 0),
+
+      # collapse 4/5/6 into 1/2/3
+      condition = case_when(
+        condition == 4 ~ 1,
+        condition == 5 ~ 2,
+        condition == 6 ~ 3,
+        TRUE ~ condition
+      ),
+
+      condition_numeric = case_when(
+        (condition == 1 & frequency == 1) |
+        (condition == 3 & frequency == 1) ~ "12-12",
+
+        (condition == 1 & frequency == 0) |
+        (condition == 2 & frequency == 1) ~ "12-3",
+
+        (condition == 2 & frequency == 0) |
+        (condition == 3 & frequency == 0) ~ "3-3"
+      )
+    )
+
+  # -------------------------------------
+  # summarize by stem × condition_numeric
+  # -------------------------------------
+  results <- results %>%
+    group_by(stem_condition, condition_numeric) %>%
+    summarize(
+      mean_pred = mean(new_minus_old),
+      ci2.5     = quantile(new_minus_old, 0.025),
+      ci97.5    = quantile(new_minus_old, 0.975),
+      .groups   = "drop"
+    )
+
+  # -------------------------------------
+  # join against human data + MSE
+  # -------------------------------------
+  results <- results %>%
+    left_join(
+      human_comp_data,
+      by = c("stem_condition", "condition_numeric")
+    ) %>%
+    mutate(
+      mse = (mean_pred - Estimate)^2
+    )
+
+  return(results)
+}
+
+
+
+```
+
+
+
+```{r}
+## --- extract fixed effects and turn rownames into a column ---
+hum_raw <- fixef(model_comprehension_numeric_stem_humans) %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column("term")
+
+b <- hum_raw %>%
+  dplyr::select(term, Estimate) %>%
+  tibble::deframe()
+
+human_cells <- expand.grid(
+  stem_condition    = c("familiar", "novel"),
+  condition_numeric = c("12-12", "12-3", "3-3"),
+  stringsAsFactors  = FALSE
+) %>%
+  mutate(
+
+    # sum coded stem
+    S = ifelse(stem_condition == "familiar", 1, -1),
+
+    # treatment-coded condition
+    cond = case_when(
+      condition_numeric == "12-12" ~ b["condition_numeric12M12"],
+      condition_numeric == "3-3"   ~ b["condition_numeric3M3"],
+      TRUE                         ~ 0   # "12-3" baseline
+    ),
+
+    # interaction uses same sum contrast:
+    # coefficient * S * 1(condition)
+    int = case_when(
+      condition_numeric == "12-12" ~ S * b["condition_numeric12M12:stem_condition1"],
+      condition_numeric == "3-3"   ~ S * b["condition_numeric3M3:stem_condition1"],
+      TRUE                         ~ 0
+    ),
+
+    Estimate = b["Intercept"] + cond + S*b["stem_condition1"] + int
+  ) %>%
+  dplyr::select(stem_condition, condition_numeric, Estimate)
+
+
+
+
+
+# test = run_comprehension(
+#           data_comp = data_comp,
+#           human_comp_data = human_cells,
+#           data_conds = list(
+#             data_cond1,
+#             data_cond2,
+#             data_cond3,
+#             data_cond4,
+#             data_cond5,
+#             data_cond6),
+#           n_sims = 5,
+#           Alpha = 0.2,
+#           Beta = 0.2)
+```
+
+
+## run grid search
+
+```{r}
+
+
+#semalpha_vals = seq(0, 1, by = 0.05)
+beta_vals     = seq(0, 1, by = 0.05)
+alpha_vals   = seq(0, 1, by = 0.05)
+
+param_grid = tidyr::crossing(
+  #SemAlpha = semalpha_vals,
+  Beta = beta_vals,
+  Alpha = alpha_vals
+)
+
+results_all <- param_grid %>%
+  mutate(
+    comp_results = pmap(
+      list(Beta, Alpha),
+      ~ run_comprehension(
+          data_comp = data_comp,
+          human_comp_data = human_cells,
+          data_conds = list(
+            data_cond1,
+            data_cond2,
+            data_cond3,
+            data_cond4,
+            data_cond5,
+            data_cond6),
+          n_sims = 50,
+          Alpha = ..2,
+          Beta = ..1
+      )
+    )
+  ) %>%
+  unnest(comp_results)
+
+results_all = results_all %>%
+  group_by(Beta, Alpha) %>%
+  mutate(mean_mse = mean(mse, na.rm = TRUE))
+
+
+results_lowest_mse_comp = results_all %>%
+  ungroup() %>%
+  filter(mean_mse == min(mean_mse))
+  
+results_lowest_mse_comp$SemAlpha
+results_lowest_mse_comp$Beta
+results_lowest_mse_comp$Alpha
+```
+
+```{r}
+write_csv(results_all, 'Data/results_all_comp.csv')
 ```
 
