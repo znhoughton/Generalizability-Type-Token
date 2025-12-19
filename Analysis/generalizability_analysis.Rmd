@@ -19,7 +19,7 @@ options(contrasts = c("contr.sum","contr.sum"))
 Table1:
 
 |  |  |  |  |  |  |  |  |  |
-|----|----|----|----|----|----|----|----|----|
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
 | **Condition1** | #of tokens | #of types | **Condition2** | #of tokens | #of types | **Condition3** | #of tokens | #of types |
 | dan | 12 | 12 | dan | 12 | 3 | dan | 12 | 12 |
 | nem | 12 | 3 | nem | 3 | 3 | nem | 3 | 3 |
@@ -34,7 +34,7 @@ Table1:
 Table2
 
 |  |  |  |  |  |  |  |  |  |
-|----|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+|--------|:------:|:------:|:------:|:------:|:------:|:------:|:------:|:------:|
 | **Condition** | **dan token** | **nem token** | **sil token** | **shoon token** | **dan type** | **nem type** | **sil type** | **shoon type** |
 | 1 | 12 | 12 | 6 | 6 | 12 | 3 | 6 | 6 |
 | 2 | 12 | 3 | 6 | 6 | 3 | 3 | 6 | 6 |
@@ -44,13 +44,13 @@ Table2
 | 6 | 3 | 12 | 6 | 6 | 3 | 12 | 6 | 6 |
 
 |   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type | Frequent Competitor Token | Frequent Competitor Type | Infrequent Competitor Token | Infrequent Competitor Type |
-|----|----|----|----|----|----|----|----|----|
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
 | **Condition 1** | 12 | 12 | 12 | 3 | 6 | 6 | 6 | 6 |
 | **Condition 2** | 12 | 3 | 3 | 3 | 6 | 6 | 6 | 6 |
 | **Condition 3** | 12 | 12 | 3 | 3 | 6 | 6 | 6 | 6 |
 
 |   | Frequent Token | Frequent Type | Infrequent Token | Infrequent Type |
-|----|----|----|----|----|
+|---------------|---------------|---------------|---------------|---------------|
 | **Condition 1** | 12 | 12 | 12 | 3 |
 | **Condition 2** | 12 | 3 | 3 | 3 |
 | **Condition 3** | 12 | 12 | 3 | 3 |
