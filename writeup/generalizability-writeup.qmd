@@ -873,7 +873,46 @@ loo_results_rwcomp = data.frame(loo_compare(
 
 \setlength{\parindent}{4em}
 
+We can structure it like this:
+
+1.  Hook (how do we extend our language to novel contexts?
+2.  Semantic Extension
+    1.  What is it?
+    2.  What drives it?
+        1.  Accessibility? Informativity?
+3.  Discussion point: Point out that informativity may also be another form of accessibility: low informativity = high predictability, more likely to be stored
+
 ## Introduction
+
+As humans, the ability to adapt to novel contexts is essential to our survival as a species. Language is no exception to that: the language we encounter and produce is often novel. For example, word-frequency follows a Zipfian distribution [@zipf1949principleleasteffort], where the most frequent word is twice as frequent as the second most frequent word which is twice as frequent as the third most frequent word, so on and so forth. This means that the majority of words fall in the tail end of the distribution, with humans encountering them extremely rarely. As a result, in order to learn and process language well, we must encode language in a way that enables flexibility.
+
+Put another way, humans must be able to generalize a form or meaning beyond the specific contexts in which it is heard in. For example, a child having heard the word *kitty* in limited contexts must at some point learn that this word applies to a kitten that the child has never seen before, but not to a puppy that may share many features with the kitten. Similarly, a child having learned the adjective *wug* should be able to understand that *wugness* is an acceptable way to nominalize the adjective.
+
+There is good evidence that children are able to effectively generalize. For example, @xuWordLearningBayesian2007 have demonstrated that children are able to generalize a word's meaning beyond the literal context it is heard in. Specifically, they examined how children come to learn that a novel word refers to a hypernym such as dalmatian as opposed to the respective hyponym (dog). They found that when encountering only one example of the novel word with a dalmatian, children assume that the word refers to the hyponym. However, when they encounter the word in three separate instances, each of which referred to a dalmatian, the children instead assume that the word refers to the hypernym. This, @xuWordLearningBayesian2007 argued, is the rational conclusion because it seems unlikely that the word would mean dog and occur three separate times with a dalmatian (without occurring with any other dogs).
+
+Additionally, @smith1996namingyoungchildren have even demonstrated that children can generalize a word's meaning across several different contexts, even when each individual context doesn't indicate what the meaning of the word is.
+
+While word-learning is an important form of generalization, it is by no means the only type of generalization. A less intuitive form of generalization that is extremely common is semantic extension. Impressively, even after learning a word's meaning, humans will sometimes extend that word to encompass novel contexts. For example, children will sometimes use the word *kitty* to mean all four-legged animals. Further, adults will sometimes accept intransitive verbs in transitive contexts [@theakstonRoleEntrenchmentChildren2004].
+
+It is unclear, however, what factors lead to semantic extension. Mainly, the literature has demonstrated that semantic extension may be driven by accessibility, but it may instead be driven by informativity.
+
+Accessibility, as the term suggests, refers to how easy it is for a learner to access a given representation. Accessibility is driven by many different factors, such as the frequency of the representation or the current attention of the learner. For example, frequent words are thought to be easier to access, evidenced by faster reading times, higher skip-rates in reading, and phonetic reduction in spoken speech. Similarly, while in a random context the representation for *wolf* may not be very accessible, this may not be the case if you are visiting the Wolf Conservation Center in New York, where the representation may be significantly more accessible given the context.
+
+Accessibility provides a fairly intuitive account for semantic extension: when encountering a new context, the most accessible word that can fit the new context seems like a reasonable approach. The role of accessibility within semantic extension has also been posited before by @harmonPuttingOldTools2017. @harmonPuttingOldTools2017 demonstrated the plausibility of this through an artificial language learning experiment. In their experiment, participants were taught a morphological artificial language that consisted of learning the correct words for a creature. In their artificial language, the stem for each creature could be followed by one of four suffixes. In their language, these suffixes varied in how frequent they occurred. Two of these were diminutive singular suffixes and two were big plural suffixes. In the test case, participants were asked to produce the correct suffix to express the diminutive plural meaning. They found that in production, participants were more likely to use the frequent suffix. Interestingly, they also found that in a two-alternative forced choice task (2afc), participants were equally likely to select each suffix. They argued that this was because in a two-alternative forced choice task, both forms were made equally accessible.
+
+On the other hand, informativity – the extent to which a specific linguistic cue is informative about the meaning – also clearly plays a large role in language learning. Indeed, this is the foundation that underlies associative, or error-driven, learning theories. Perhaps one of the most seminal demonstrations of this can be found in @smith2008infantsrapidlylearn where the authors demonstrated that children can learn the meanings of words despite there not being enough information on each individual trial to learn the word's meaning. Instead, learners must track the statistics across different environments to learn the word's meaning, which they did successfully.
+
+Indeed, the results of @harmonPuttingOldTools2017 are also compatible with an informativity account since the frequent suffix also occurred with more unique creatures than the infrequent suffix (i.e., it had high type-frequency). This may have led participants to produce the more frequent suffix in a novel context because they believe that it is the most informative option. While the 2afc results seem to contradict this possibility at-first-glance, participants may accept both possibilities when explicitly ask because they are both technically compatible with the new meaning.[^1]
+
+[^1]: Indeed, @qiu2023taskvariationscalar and @houghtonTaskdependentConsequencesDisfluency2024 have both found that the tasks that participants are engaged in can impact the linguistic processes that they're engaged in. For example, when participants are asked whether it is true that all the images on a card are cats upon hearing the sentence "some animals are cats", they will answer yes despite the implicature that not all the animals on the card are cats.
+
+Yet another possibility is that both accessibility and informativity may play a role in semantic extension. This seems plausible since humans employ both Hebbian [@hebb1949firststageperceptionhebb] and error-driven learning mechanisms [@ashbyNeurobiologicalTheoryAutomaticity2007, @kapatsinskiChangingMindsChanging2018]. In other words, humans are sensitive to not only frequency, but also informativity. It is possible that both of these play a crucial role in semantic extension.
+
+Further, there is evidence that both drive linguistic productivity [@jarosz2025typetokenfrequency].
+
+### Present Study
+
+Thus in the present study, we expand upon the findings in @harmonPuttingOldTools2017 by examining the effects of type and token frequency independently on semantic extension.
 
 ## Methods
 
@@ -952,9 +991,9 @@ tbl %>%
 
 ### Procedure
 
-175 participants were recruited from Prolific, a crowd sourcing platform. 42 participants were excluded for failing to complete the task properly or achieving below 75% accuracy on control items. Each participant was randomly assigned one of the conditions. In each condition, participants were first presented with an exposure phase. After the exposure phase, participants were tested using a production task, a form choice task, and a comprehension task. We describe each of these below. Each participant was randomly assigned one of the conditions. In each condition, participants were first presented with an exposure phase. After the exposure phase, participants were tested using a production task, a form choice task, and a comprehension task. We describe each of these below.[^1]
+175 participants were recruited from Prolific, a crowd sourcing platform. 42 participants were excluded for failing to complete the task properly or achieving below 75% accuracy on control items. Each participant was randomly assigned one of the conditions. In each condition, participants were first presented with an exposure phase. After the exposure phase, participants were tested using a production task, a form choice task, and a comprehension task. We describe each of these below. Each participant was randomly assigned one of the conditions. In each condition, participants were first presented with an exposure phase. After the exposure phase, participants were tested using a production task, a form choice task, and a comprehension task. We describe each of these below.[^2]
 
-[^1]: Additionally, a demo of the experiment can be found at the following link: <https://run.pavlovia.org/znhoughton/generalizability_demo>.
+[^2]: Additionally, a demo of the experiment can be found at the following link: <https://run.pavlovia.org/znhoughton/generalizability_demo>.
 
 #### Exposure Phase
 
@@ -1018,9 +1057,9 @@ ggplot(fixed_effects_df_all, aes(x = Meaning, y = Prob, fill = Stem)) +
 # The plot demonstrates that participants were more likely to produce the frequent suffix with a novel meaning when the frequent suffix had a high type frequency, but were less likely to produce the frequent suffix with a novel meaning when the frequent suffix had a high token frequency. Our results also demonstrate that this effect disappears when both forms are made accessible in the form-choice task. Further, the results also demonstrate that in comprehension, regardless of the condition or stem familiarity, the original meaning is chosen far more than the novel meaning for a given suffix.
 ```
 
-We explore the results for each task in depth in the next sections.[^2]
+We explore the results for each task in depth in the next sections.[^3]
 
-[^2]: All data and code for the analyses can be found here: <https://github.com/znhoughton/Generalizability-Type-Token>.
+[^3]: All data and code for the analyses can be found here: <https://github.com/znhoughton/Generalizability-Type-Token>.
 
 ### Production Task
 
@@ -1583,7 +1622,6 @@ For each of the items in the production task, we computed activation of each out
 
 We then calculated the difference in activation between the frequent suffix and the infrequent suffix given the semantic cues and the stem cue present on a particular trial. This corresponds to the expected effect of frequency on the log odds of choosing these suffixes when presented with a particular meaning and a particular stem. For example, the activation *nem* receives when the subject is presented with its original meaning is the sum of activations from DIMINUTIVE, SINGULAR and the stem. It is the log odds of *nem* in its original meaning. If the frequent suffix is *dan*, then the activation of *nem* would be subtracted from the activation *dan* would receive in its original meaning, i.e., from BIG, PLURAL and the same stem. If *nem* is the frequent suffix, then the subtraction is in the opposite direction. For the novel meaning, the semantic cues are DIMINITUVE and PLURAL for both suffixes. This results in a single value for each trial that is the model’s expected log odds of the frequent suffix relative to the infrequent suffix given the stem and meaning (original or novel) on that trial.
 
-
 In order to examine the model predictions, we conducted several statistical analyses. In each model, the dependent variable was whether the human learner, for a given trial, selected the frequent suffix or the infrequent suffix. In the baseline analysis, we used expected difference in log odds (referred to as freq_minus_infreq) with random intercepts for participant and stem identity (@eq-rwmodel1). In our second model, we calculated separately the activation received by the suffix from the stem and from the meaning (using the perceptron). The motivation behind this is that the perceptron is agnostic to whether the cue is a stem or a meaning, but participants may show varying sensitivity to one over the other [e.g., @gagliardi2017modelingstatisticalinsensitivity argue that learners are more sensitive to form cues than to semantic cues]. Using the activation from the stem and the meaning as separate predictors allows the statistical model to fit different slopes for the stem activations and the meaning activations. We then added a fixed-effect for condition as well (@eq-rwmodel2). Our third model was identical to the second model except we included an interaction effect between condition and the stem activations, and an interaction between the meaning activations and condition (@eq-rwmodel3). This model tests whether the perceptron captures the effects of type and token frequency and their interactions with meaning and stem novelty, or if some effects are not captured by the perceptron and therefore provide support for additional mechanisms.
 
 We evaluated the discrepancies between model predictions and human data by using expected log odds from the model as predictors in a Bayesian logistic regression models. In each model, the dependent variable was whether the human learner, for a given trial, selected the frequent suffix or the infrequent suffix.
@@ -1606,13 +1644,11 @@ $$
 \end{aligned}
 $$ {#eq-rwmodel3}
 
-
 In addition to this simple logistic RW model, we also evaluated more complex models that allowed for configural cues as well as different weighting of semantic vs phonetic cues. This is well-motivated by previous work. For example, there is evidence that linguistic units can have associations that their parts do not have [@kapatsinskiTestingTheoriesLinguistic2009; @kapatsinskiLearningFastAvoiding2021; @houghton2025multiwordrepresentationsminds; see also @saavedra1975pavloviancompoundconditioning for stimuli in classical conditioning]. Additionally, there is also evidence that adult native English speakers show greater reliance on semantic cues than phonological cues in production [@culbertson2018childrenprivilegephonological]. For these models, there was qualitatively more variability across different parameter values. In order to address this, we conducted a grid search to determine the optimal values for each of the model parameters (the salience of the phonetic cues, the salience of the semantic cues, and the salience of outcomes). The ground truth of this grid search was the model estimates for the human data across condition, stem familiarity, and meaning. Model predictions were compared using mean squared error. This grid search yielded $\alpha_{SemC}=0.65$ for all present semantic cues, $\alpha_c=0.05$ for present phonological cues and $\beta=0.65$ for both present and absent outcomes.
-
 
 Similarly, in order to examine the effect of configural cues and modified semantic salience, we ran five additional statistical models: one with configural cues and modified semantic salience, one with configural cues and modified semantic salience, both of which were allowed to vary by condition, one with configural cues, increased semantic salience, and the original statistical predictors (condition:meaning:stem_condition), one with only configural cues (no modified semantic salience), and one with only modified semantic salience (no configural cues). As before, all statistical models included random intercepts for participant and stem identity.
 
-We then compared the results of these statistical models to the model with only statistical predictors, and the three models described previously (@eq-rwmodel1, @eq-rwmodel2, and @eq-rwmodel3) using leave-one-out-cross-validation (@tbl-loocv_addsims). The results of the leave-one-out cross-validation suggest that the models that include configural cues or increased sensitivity to semantic cues outperform all other models. Further, allowing the configural cues and increased semantic saliency to vary by condition does not result in further improvement of the model. Among those models, any of the models that include special salience of semantic cues perform better than any model that does not. 
+We then compared the results of these statistical models to the model with only statistical predictors, and the three models described previously (@eq-rwmodel1, @eq-rwmodel2, and @eq-rwmodel3) using leave-one-out-cross-validation (@tbl-loocv_addsims). The results of the leave-one-out cross-validation suggest that the models that include configural cues or increased sensitivity to semantic cues outperform all other models. Further, allowing the configural cues and increased semantic saliency to vary by condition does not result in further improvement of the model. Among those models, any of the models that include special salience of semantic cues perform better than any model that does not.
 
 In order to visualize the Rescorla-Wagner model predictions, we also included a side-by-side plot of the human data with the RW activations from the model that included both modified semantic salience and configural cues (@fig-rwvshumanpreds).
 
