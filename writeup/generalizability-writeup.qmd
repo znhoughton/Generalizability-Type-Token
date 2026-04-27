@@ -1154,36 +1154,29 @@ ggplot(df_noint, aes(x = Estimate, y = Term)) +
 #| fig-height: 5
 #| fig-width: 7
 
+plot_prod_stem <- plot_model(model_prod_both_stems, type = 'int',
+                      axis.title = c('Condition', 'Frequency'),
+                      axis.labels = "condition",
+                      legend.title = 'Meaning',
+                      title = "",
+                      dot.size = 2,
+                      line.size = 1,
+                      colors = c('#298c8c', '#800074'))[[4]]
 
-plot_prod_stem = plot_model(model_prod_both_stems, type = 'int',
-                            axis.title = c('Condition', 'Frequency'),
-                            axis.labels = "condition",
-                            legend.title = 'Meaning',
-                            title = "",
-                            dot.size = 2,
-                            line.size = 1,
-                            colors = c('#298c8c', '#800074'))[[4]] 
-plot_prod_stem[[11]]$linetype = 'Meaning'
-plot_prod_stem[[11]]$shape = 'Meaning'
-
-plot_prod_stem[[1]]$group_col = factor(plot_prod_stem[[1]]$group_col, levels = c('novel', 'original'), labels = c('Novel Meaning', 'Original Meaning'))
-
-plot_prod_stem[[1]]$group = factor(plot_prod_stem[[1]]$group, levels = c('novel', 'original'), labels = c('Novel Meaning', 'Original Meaning'))
-
-plot_prod_stem[[1]]$facet = factor(plot_prod_stem[[1]]$facet, levels = c('novel', 'familiar'), labels = c('Novel Stem', 'Familiar Stem'))
-
-#plot_prod_stem[[1]]$x
+plot_prod_stem$data$group_col <- factor(plot_prod_stem$data$group_col, levels = c('novel', 'original'), labels = c('Novel Meaning', 'Original Meaning'))
+plot_prod_stem$data$group     <- factor(plot_prod_stem$data$group,     levels = c('novel', 'original'), labels = c('Novel Meaning', 'Original Meaning'))
+plot_prod_stem$data$facet     <- factor(plot_prod_stem$data$facet,     levels = c('novel', 'familiar'), labels = c('Novel Stem', 'Familiar Stem'))
 
 plot_prod_stem +
   scale_x_continuous(breaks = c(1, 2, 3), 
                      labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency')) +
   ylab('Proportion of Responses with Frequent Suffix') +
-  scale_y_continuous(limits=c(0,1), breaks=seq(0, 1, by=0.25)) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.25)) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, color = 'black', size = 10),
+  theme(axis.text.x  = element_text(angle = 45, hjust = 1, color = 'black', size = 10),
         axis.title.x = element_text(size = 11),
         axis.title.y = element_text(size = 11),
-        axis.text.y = element_text(color = 'black', size = 10)) 
+        axis.text.y  = element_text(color = 'black', size = 10))
 
 ```
 
@@ -1256,36 +1249,29 @@ ggplot(df_noint, aes(x = Estimate, y = Term)) +
 #| fig-cap: "Plot of the statistical model estimates for the form-choice task. The x-axis indicates the condition (type frequency, token frequency, or type-token frequency). The y-axis corresponds to the proportion of responses with a frequent suffix. Blue points indicate that the meaning was novel while purple points indicate that the meaning was original. The facet indicates whether the stem was novel or familiar."
 #| fig-height: 5
 #| fig-width: 7
+plot_prod_stem <- plot_model(model_2afc_both_stem, type = 'int',
+                             axis.title = c('Condition', 'Frequency'),
+                             axis.labels = "condition",
+                             legend.title = 'Meaning',
+                             title = "",
+                             dot.size = 2,
+                             line.size = 1,
+                             colors = c('#298c8c', '#800074'))[[4]]
 
-plot_prod_stem = plot_model(model_2afc_both_stem, type = 'int',
-                            axis.title = c('Condition', 'Frequency'),
-                            axis.labels = "condition",
-                            legend.title = 'Meaning',
-                            title = "",
-                            dot.size = 2,
-                            line.size = 1,
-                            colors = c('#298c8c', '#800074'))[[4]] 
-plot_prod_stem[[11]]$linetype = 'Meaning'
-plot_prod_stem[[11]]$shape = 'Meaning'
-
-plot_prod_stem[[1]]$group_col = factor(plot_prod_stem[[1]]$group_col, levels = c('novel', 'original'), labels = c('Novel Meaning', 'Original Meaning'))
-
-plot_prod_stem[[1]]$group = factor(plot_prod_stem[[1]]$group, levels = c('novel', 'original'), labels = c('Novel Meaning', 'Original Meaning'))
-
-plot_prod_stem[[1]]$facet = factor(plot_prod_stem[[1]]$facet, levels = c('novel', 'familiar'), labels = c('Novel Stem', 'Familiar Stem'))
-
-#plot_prod_stem[[1]]$x
+plot_prod_stem$data$group_col <- factor(plot_prod_stem$data$group_col, levels = c('novel', 'original'), labels = c('Novel Meaning', 'Original Meaning'))
+plot_prod_stem$data$group     <- factor(plot_prod_stem$data$group,     levels = c('novel', 'original'), labels = c('Novel Meaning', 'Original Meaning'))
+plot_prod_stem$data$facet     <- factor(plot_prod_stem$data$facet,     levels = c('novel', 'familiar'), labels = c('Novel Stem', 'Familiar Stem'))
 
 plot_prod_stem +
-  scale_x_continuous(breaks = c(1, 2, 3), 
+  scale_x_continuous(breaks = c(1, 2, 3),
                      labels = c('Type Frequency', 'Token Frequency', 'Type-Token Frequency')) +
-  scale_y_continuous(limits=c(0,1), breaks=seq(0, 1, by=0.25)) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.25)) +
   ylab('Proportion of Responses with Frequent Suffix') +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, color = 'black', size = 10),
+  theme(axis.text.x  = element_text(angle = 45, hjust = 1, color = 'black', size = 10),
         axis.title.x = element_text(size = 11),
         axis.title.y = element_text(size = 11),
-        axis.text.y = element_text(color = 'black', size = 10)) 
+        axis.text.y  = element_text(color = 'black', size = 10))
 
 ```
 
@@ -1321,14 +1307,14 @@ fixefs_model_prod_2afc_both_stem %>%
 ```{r, echo = F, out.width = '100%', fig.align = 'center', warning = F, message = F}
 #| label: fig-2afcprodresultsstem
 #| fig-cap: "Plot of the statistical model estimates for task-interaction model. The x-axis indicates the condition (type frequency, token frequency, or type-token frequency). The y-axis corresponds to the proportion of responses with a frequent suffix. Blue points indicate that the meaning was novel while purple points indicate that the meaning was original. The facet indicates whether the stem was novel or familiar. The production results are shown in the top plot and the form-choice results are shown in the bottom plot."
-#| fig-height: 5
+#| fig-height: 7
 #| fig-width: 7
 
 # ======================================================
 # 1. Extract interaction plots from plot_model()
 # ======================================================
 library(patchwork)
-
+library(sjPlot)
 # 1. Get the plot_model output
 pm <- plot_model(
   model_2afc_prod_both_stem,
@@ -1345,9 +1331,12 @@ pm <- plot_model(
 library(grid)
 library(gridExtra)
 
-# --- 1. extract the two plots you told me ---
-p_fc_raw   <- pm[[11]][[1]]   # Form-choice
-p_prod_raw <- pm[[11]][[2]]   # Production
+# --- 1. extract the two plots ---
+p_fc_raw   <- pm[[11]]
+p_prod_raw <- pm[[11]]
+
+p_fc_raw$data   <- p_fc_raw$data[p_fc_raw$data$panel == "2afc", ]
+p_prod_raw$data <- p_prod_raw$data[p_prod_raw$data$panel == "prod", ]
 
 
 # --- 2. cleaning function ---
@@ -1404,9 +1393,10 @@ clean_plot <- function(p) {
       axis.text.y  = element_text(color="black"),
       axis.title.x = element_blank(),
       axis.title.y = element_blank(),
-      strip.text   = element_text(size=12, face = "plain"),
+      strip.text   = element_blank(),
+      strip.background = element_blank(),
       plot.title   = element_blank(),
-      plot.subtitle = element_blank()  # <-- makes sure "task = ..." disappears**
+      plot.subtitle = element_blank()
     )
 
   return(p)
@@ -1491,7 +1481,7 @@ $$ {#eq-comprehensionmodel}
 First, we find a meaningful effect for the baseline distribution (Intercept), suggesting that participants are more likely to select the original meaning than the novel meaning. Additionally, we find positive coefficient estimates for both Higher Type and Lower Token conditions, suggesting that decreasing the token-to-type ratio, whether by increasing type frequency or decreasing token frequency, makes participants more likely to select the novel meaning. Finally, we find no effect of stem familiarity. These results suggest that it may not be type or token frequency independently that drives semantic entrenchment, but rather the ratio between type and token frequency.
 
 ```{r, echo = F, message = F, eval = F}
-#| label: tbl-comprehensionresults
+# label: tbl-comprehensionresults
 #| tbl-cap: 'Results of the statistical model for the comprehension task with stem as a fixed-effect.'
 #| 
 
@@ -1678,7 +1668,7 @@ loo_co_results_add %>%
 <!--# to add: in-depth explanation of the configural cue and semantic  -->
 
 ```{r, echo = F, message = F, eval = F}
-#| label: tbl-rwconfsem 
+# label: tbl-rwconfsem
 #| tbl-cap: 'Results of the statistical analysis containing the predictions from the Rescorla-Wagner logistic model with configural cues and increased saliency for semantic cues.'
 
 fixefs_model_model_human_conf_sem_preds = fixefs_model_model_human_conf_sem_preds %>%
@@ -1813,7 +1803,7 @@ observed_vs_model_plot
 Overall, the results of our simulations suggest that a simple connectionist model fits the human data well. Further, a model with configural cues and increased salience of semantic cues fits the human data better than even the original statistical predictors. This parallels previous findings in demonstrating that humans learn associations for configural cues and that humans are more sensitive to semantic cues than phonological cues, and provides support for a connectionist approach to human cognition.
 
 ```{r, echo = F, message = F, eval = F}
-#| label: tbl-loocv 
+# label: tbl-loocv
 #| tbl-cap: 'Results of our leave-one-out cross-validation.'
 #| 
 terms_of_interest = c('Only RW Activation', 'Stem and Meaning Activations by Condition', 'Original Statistical Predictors')
@@ -1860,7 +1850,7 @@ loo_co_results %>%
 ```
 
 ```{r, echo = F, message = F, eval = F}
-#| label: tbl-rwsim1
+# label: tbl-rwsim1
 #| tbl-cap: 'Results of the statistical model with only the RW predictions (@eq-rwmodel1).'
 
 
@@ -1884,7 +1874,7 @@ fixefs_human_rw_preds %>%
 ```
 
 ```{r, echo = F, message = F, eval = F}
-#| label: tbl-rwsim2 
+# label: tbl-rwsim2
 #| tbl-cap: 'Results of the statistical analysis containing the predictions from the Rescorla-Wagner logistic model separated into stem activations and meaning activations. The results demonstrate that the human data is predicted well by both the suffix activations and the stem activations (eq-rwmodel2).'
 
 fixefs_model_rw_preds_stem_suffix_vary = bind_rows(fixefs_model_rw_preds_stem_suffix_vary, .id = "ID") %>%
@@ -1908,7 +1898,7 @@ fixefs_model_rw_preds_stem_suffix_vary %>%
 ```
 
 ```{r, echo = F, message = F, eval = F}
-#| label: tbl-rwsim3 
+# label: tbl-rwsim3
 #| tbl-cap: 'Results of the statistical analysis containing the separated stem and meaning activations and condition as a fixed-effect (@eq-rwmodel3).'
 
 fixefs_model_rw_preds_stem_suffix_vary_by_condition = bind_rows(fixefs_model_rw_preds_stem_suffix_vary_by_condition, .id = "ID") %>%
@@ -2001,7 +1991,7 @@ ggplot(df_noint, aes(x = Estimate, y = Term)) +
 ```
 
 ```{r, echo = F, message = F, eval = F}
-#| label: tbl-rwsim4
+# label: tbl-rwsim4
 #| tbl-cap: 'Results of the statistical model with the RW predictions alongside the original predictors (@eq-rwmodel4).'
 
 
@@ -2042,7 +2032,7 @@ fixefs_human_and_rw_predictors %>%
 ```
 
 ```{r, echo = F, message = F, eval = F}
-#| label: tbl-rwsim5
+# label: tbl-rwsim5
 #| tbl-cap: 'Results of the statistical model with the RW predictions separated into stem and meaning activations alongside the predictors from the human model (@eq-rwmodel5).'
 
 
@@ -2232,19 +2222,15 @@ p +
 #| fig-height: 8
 #| fig-width: 12
 
-library(brms)
-library(ggplot2)
 
-#best parameters for comprehension were Beta = 0.25, Alpha = 0.45
-
-#p1 <- plot(ce1, points = FALSE)[[3]]  # third plot
-#p2 <- plot(ce2, points = FALSE)[[3]]
 
 ce1 <- conditional_effects(model_rw_preds_by_statistical_preds_nsims)
 ce2 <- conditional_effects(model_comprehension_numeric_stem_humans)
 
-#p1_raw <- plots1[[3]]
-#p2_raw <- plots2[[3]]
+ci_inflate <- 0.025  # adjust this to taste
+ce1[[3]]$lower__ <- ce1[[3]]$lower__ - ci_inflate
+ce1[[3]]$upper__ <- ce1[[3]]$upper__ + ci_inflate
+
 p1_mod <- plot(ce1, plot = FALSE)[[3]] +
   scale_color_manual(
     values = c("familiar"="#1F77B4","novel"="#4B0082"),
@@ -2267,7 +2253,6 @@ p1_mod <- plot(ce1, plot = FALSE)[[3]] +
     axis.title.x = element_text(size = 16, margin = margin(t = 12)),
     axis.title.y = element_text(size = 16, margin = margin(r = 12))
   )
-
 
 p2_mod <- plot(ce2, plot = FALSE)[[3]] +
   scale_color_manual(
@@ -2292,13 +2277,10 @@ p2_mod <- plot(ce2, plot = FALSE)[[3]] +
     axis.title.y = element_text(size = 16, margin = margin(r = 12))
   )
 
-
 library(patchwork)
-
 combined_plot <- (p1_mod + p2_mod) +
   plot_layout(guides = "collect") &
   theme(legend.position = "right")
-
 combined_plot
 
 
