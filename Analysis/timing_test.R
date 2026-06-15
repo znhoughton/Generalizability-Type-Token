@@ -3,7 +3,7 @@
 ## Run on the target machine and check the final printed estimate.
 ## Change N_WORKERS to match the number of cores available on that machine.
 
-N_WORKERS = 20   # <-- set this to the number of available cores
+N_WORKERS = 16   # <-- set this to the number of available cores
 N_SAMPLE  = 40   # combinations to time (keep at 40 for a reliable estimate)
 N_SIMS    = 50   # must match the real grid search
 
