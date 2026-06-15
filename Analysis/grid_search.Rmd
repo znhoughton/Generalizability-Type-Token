@@ -727,15 +727,15 @@ run_rw_production_conf = function(
 ```
 
 ```{r}
-plan(multisession, workers = 4)
+plan(multisession, workers = 16)
 handlers(global = TRUE)
 handlers("txtprogressbar")
 
 param_grid_conf = tidyr::crossing(
-  ConfAlpha = seq(0, 1, by = 0.05),
-  SemAlpha  = seq(0, 1, by = 0.05),
-  Beta      = seq(0, 1, by = 0.05),
-  Alpha     = seq(0, 1, by = 0.05)
+  ConfAlpha = seq(0, 1, by = 0.1),
+  SemAlpha  = seq(0, 1, by = 0.1),
+  Beta      = seq(0, 1, by = 0.1),
+  Alpha     = seq(0, 1, by = 0.1)
 )
 
 results_all_conf = param_grid_conf %>%
