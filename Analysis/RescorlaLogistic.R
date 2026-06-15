@@ -450,7 +450,71 @@ Rescorla_modified_alpha_for_semantic_cues = function (cuesOutcomes,
       # Multiply each row by its rate using sweep
       adj_matrix = sweep(adj_matrix, 1, rates_otherou, "*")
       w[cs,otherou] = t(t(w[cs,otherou])) + adj_matrix
-      
+
+    }
+  }
+  return(w)
+}
+
+
+Rescorla_modified_alpha_for_configural_cues = function (cuesOutcomes,
+                     Lambda = 1,
+                     Alpha = 0.05,
+                     SemAlpha = 0.65,
+                     ConfAlpha = 0.25,
+                     Beta = 0.6, logistic = FALSE, sigSlope = 1)
+{
+  cues = unique(unlist(strsplit(cuesOutcomes$Cues, "_")))
+  outcomes = unique(unlist(strsplit(cuesOutcomes$Outcomes, "_")))
+  frequency = cuesOutcomes$Frequency
+  w = matrix(0, length(cues), length(outcomes))
+  rownames(w) = cues
+  colnames(w) = outcomes
+  theCues = strsplit(cuesOutcomes$Cues, "_")
+  theOutcomes = strsplit(cuesOutcomes$Outcomes, "_")
+  rate     = Alpha    * Beta
+  semrate  = SemAlpha * Beta
+  confrate = ConfAlpha * Beta
+
+  configural_cues_vec          = c('big.pl', 'big.sg', 'dim.sg', 'dim.pl')
+  individual_semantic_cues_vec = c('dim', 'pl', 'big', 'sg')
+
+  knownOutcomes = NULL
+
+  for (i in 1:nrow(cuesOutcomes)) {
+    cs = theCues[[i]]
+    ou = theOutcomes[[i]]
+
+    toAdd = ou[!is.element(ou, knownOutcomes)]
+    knownOutcomes = c(knownOutcomes, toAdd)
+
+    if (logistic == FALSE) {Vtotal = colSums(w[cs, ou, drop = FALSE])}
+    else {Vtotal = 1 / (1 + exp((-1) * sigSlope * colSums(w[cs, ou, drop = FALSE])))}
+
+    cue_names = rownames(w[cs, ou, drop = F])
+    rates = case_when(
+      cue_names %in% configural_cues_vec          ~ confrate,
+      cue_names %in% individual_semantic_cues_vec  ~ semrate,
+      TRUE                                          ~ rate
+    )
+
+    w[cs, ou] = t(t(w[cs, ou]) + (Lambda - Vtotal) * rates * frequency[i])
+
+    otherou = knownOutcomes[!is.element(knownOutcomes, ou)]
+    if (!is.null(otherou)) {
+      if (logistic == FALSE) {Vtotal = colSums(w[cs, otherou, drop = FALSE])}
+      else {Vtotal = 1 / (1 + exp((-1) * sigSlope * colSums(w[cs, otherou, drop = FALSE])))}
+
+      otherou_cue_names = rownames(w[cs, otherou, drop = F])
+      rates_otherou = case_when(
+        otherou_cue_names %in% configural_cues_vec          ~ confrate,
+        otherou_cue_names %in% individual_semantic_cues_vec  ~ semrate,
+        TRUE                                                  ~ rate
+      )
+      adj_matrix = matrix(rep((0 - Vtotal) * frequency[i], each = length(cs)),
+                          nrow = length(cs), byrow = FALSE)
+      adj_matrix = sweep(adj_matrix, 1, rates_otherou, "*")
+      w[cs, otherou] = t(t(w[cs, otherou])) + adj_matrix
     }
   }
   return(w)
