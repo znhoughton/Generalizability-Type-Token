@@ -783,7 +783,15 @@ pattern_scores_conf = results_all_conf %>%
   ) %>%
   arrange(desc(spearman), desc(kendall))
 
-write_csv(results_all_conf, '../Data/grid_search_results_conf_alpha.csv')
+write_csv(results_all_conf,    '../Data/grid_search_results_conf_alpha.csv')
+write_csv(pattern_scores_conf, '../Data/grid_search_scores_conf_alpha.csv')
+```
+
+```{r}
+# If loading results from a previously saved run rather than running the grid
+# search above, read them in here:
+# results_all_conf    = read_csv('../Data/grid_search_results_conf_alpha.csv')
+# pattern_scores_conf = read_csv('../Data/grid_search_scores_conf_alpha.csv')
 ```
 
 ```{r}
