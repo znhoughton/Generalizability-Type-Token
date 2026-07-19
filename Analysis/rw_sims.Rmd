@@ -1,0 +1,1054 @@
+---
+title: "RW Simulations — Production & Comprehension"
+date: "2025-11-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries}
+library(tidyverse)
+library(brms)
+library(ggpubr)
+library(ggh4x)
+library(arm)
+library(ndl)
+library(future)
+library(future.apply)
+source("RescorlaLogistic.R")
+
+plan(multisession, workers = min(7L, parallel::detectCores() %/% 4L))
+DATA_DIR <- normalizePath('../Data')
+
+n_sims <- 100
+```
+
+```{r load-conditions}
+cond1 <- read_csv('../Conditions/Condition1.csv')
+cond2 <- read_csv('../Conditions/Condition2.csv')
+cond3 <- read_csv('../Conditions/Condition3.csv')
+cond4 <- read_csv('../Conditions/Condition4.csv')
+cond5 <- read_csv('../Conditions/Condition5.csv')
+cond6 <- read_csv('../Conditions/Condition6.csv')
+```
+
+---
+
+# Production RW Simulations
+
+## Data Preparation
+
+```{r prod-build-cue-tables}
+make_prod_cue_table <- function(cond_df, freq_multiplier = 5) {
+  cond_df %>%
+    mutate(stem = orthoCoding(stem),
+           type = case_when(
+             suffix %in% c('dan','sil')   ~ 'big_pl',
+             suffix == 'none'             ~ 'big_sg',
+             suffix %in% c('nem','shoon') ~ 'dim_sg')) %>%
+    mutate(key = paste0(stem, '_', type)) %>%
+    group_by(key, suffix) %>%
+    summarize(frequency = table(key), .groups = 'drop') %>%
+    rename(Cues = key, Outcomes = suffix, Frequency = frequency) %>%
+    mutate(Frequency = as.numeric(Frequency) * freq_multiplier) %>%
+    uncount(Frequency) %>%
+    mutate(Frequency = 1)
+}
+
+data_cond1_prod <- make_prod_cue_table(cond1)
+data_cond2_prod <- make_prod_cue_table(cond2)
+data_cond3_prod <- make_prod_cue_table(cond3)
+data_cond4_prod <- make_prod_cue_table(cond4)
+data_cond5_prod <- make_prod_cue_table(cond5)
+data_cond6_prod <- make_prod_cue_table(cond6)
+```
+
+```{r prod-load-items}
+data_prod <- read_csv('../Conditions/production_condition.csv') %>%
+  mutate(stem = orthoCoding(prod_label),
+         type = case_when(
+           str_detect(file, 'dim_sg') ~ 'dim_sg',
+           str_detect(file, '_2')     ~ 'big_pl',
+           str_detect(file, 'dim_pl') ~ 'dim_pl'),
+         row_id = row_number())
+```
+
+---
+
+## Main RW Simulations
+
+Each variant runs 100 simulations (averaged over random orderings) per condition, with the `sim` column preserved for CI band calculation.
+
+### Standard Variant
+
+Cues = stem bigrams + type label. Outcomes = suffix identity.
+
+```{r prod-std-matrices}
+std_matrices <- future_map(
+  list(data_cond1_prod, data_cond2_prod, data_cond3_prod,
+       data_cond4_prod, data_cond5_prod, data_cond6_prod),
+  function(cond_data) {
+    map_dfr(1:n_sims, function(i) {
+      result <- as.data.frame(Rescorla(
+        cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T))
+      rownames_to_column(result, var = 'cue') %>% mutate(sim = i)
+    })
+  })
+
+data_cond1_rw_matrix <- std_matrices[[1]]
+data_cond2_rw_matrix <- std_matrices[[2]]
+data_cond3_rw_matrix <- std_matrices[[3]]
+data_cond4_rw_matrix <- std_matrices[[4]]
+data_cond5_rw_matrix <- std_matrices[[5]]
+data_cond6_rw_matrix <- std_matrices[[6]]
+```
+
+```{r prod-std-predictions}
+data_prod_sims <- map_dfr(1:n_sims, ~ mutate(data_prod, sim = .x))
+
+make_prod_results <- function(data_prod_sim, rw_matrix, cond_num, flip_sign = FALSE) {
+  data_prod_sim %>%
+    mutate(key = paste0(stem, '_', type)) %>%
+    dplyr::select(prod_condition, key, sim, row_id, prod_label, file, type) %>%
+    group_by(sim) %>%
+    mutate(row_id = row_number()) %>%
+    ungroup() %>%
+    separate_rows(key, sep = "_") %>%
+    left_join(rw_matrix, by = c("key" = "cue", "sim")) %>%
+    group_by(row_id, sim) %>%
+    summarize(dan_activations   = sum(dan,   na.rm = T),
+              sil_activations   = sum(sil,   na.rm = T),
+              nem_activations   = sum(nem,   na.rm = T),
+              shoon_activations = sum(shoon, na.rm = T),
+              .groups = 'drop') %>%
+    left_join(data_prod_sim %>% group_by(sim) %>% mutate(row_id = row_number()),
+              by = c("row_id", "sim")) %>%
+    mutate(condition = cond_num,
+           freq_minus_infreq = if (flip_sign) nem_activations - dan_activations
+                               else           dan_activations - nem_activations)
+}
+
+data_prod_results_cond1 <- make_prod_results(data_prod_sims, data_cond1_rw_matrix, 1)
+data_prod_results_cond2 <- make_prod_results(data_prod_sims, data_cond2_rw_matrix, 2)
+data_prod_results_cond3 <- make_prod_results(data_prod_sims, data_cond3_rw_matrix, 3)
+data_prod_results_cond4 <- make_prod_results(data_prod_sims, data_cond4_rw_matrix, 4, flip_sign = TRUE)
+data_prod_results_cond5 <- make_prod_results(data_prod_sims, data_cond5_rw_matrix, 5, flip_sign = TRUE)
+data_prod_results_cond6 <- make_prod_results(data_prod_sims, data_cond6_rw_matrix, 6, flip_sign = TRUE)
+
+data_all_conds_logistic2 <- rbind(
+  data_prod_results_cond1, data_prod_results_cond2, data_prod_results_cond3,
+  data_prod_results_cond4, data_prod_results_cond5, data_prod_results_cond6)
+```
+
+```{r prod-std-summarize}
+data_all_conds_logistic2_summary <- data_all_conds_logistic2 %>%
+  mutate(meaning = case_when(
+    type == 'dim_sg' ~ 'original',
+    type == 'big_pl' ~ 'original',
+    type == 'dim_pl' ~ 'novel')) %>%
+  mutate(condition = case_when(
+    condition %in% c(1,4) ~ 1,
+    condition %in% c(2,5) ~ 2,
+    condition %in% c(3,6) ~ 3)) %>%
+  group_by(meaning, prod_condition, condition, sim) %>%
+  summarize(mean_freq_diff = mean(freq_minus_infreq), .groups = 'keep') %>%
+  group_by(meaning, prod_condition, condition) %>%
+  summarize(mean_freq_diff_v2 = mean(mean_freq_diff),
+            ci2.5  = quantile(mean_freq_diff, 0.025, na.rm = T),
+            ci97.5 = quantile(mean_freq_diff, 0.975, na.rm = T),
+            .groups = 'keep')
+```
+
+### Configural Cues
+
+Cues = concatenated stem_meaning tags (e.g., "blik_big.pl"). Forces stem-meaning bindings.
+
+```{r prod-configural-setup}
+add_configural_suffix <- function(cond_data) {
+  cond_data %>%
+    mutate(Cues = case_when(
+      str_ends(Cues, "big_pl") ~ paste0(Cues, "_big.pl"),
+      str_ends(Cues, "big_sg") ~ paste0(Cues, "_big.sg"),
+      str_ends(Cues, "dim_sg") ~ paste0(Cues, "_dim.sg"),
+      TRUE ~ Cues))
+}
+
+data_cond1_configural <- add_configural_suffix(data_cond1_prod)
+data_cond2_configural <- add_configural_suffix(data_cond2_prod)
+data_cond3_configural <- add_configural_suffix(data_cond3_prod)
+data_cond4_configural <- add_configural_suffix(data_cond4_prod)
+data_cond5_configural <- add_configural_suffix(data_cond5_prod)
+data_cond6_configural <- add_configural_suffix(data_cond6_prod)
+```
+
+```{r prod-configural-matrices}
+configural_matrices <- future_map(
+  list(data_cond1_configural, data_cond2_configural, data_cond3_configural,
+       data_cond4_configural, data_cond5_configural, data_cond6_configural),
+  function(cond_data) {
+    map_dfr(1:n_sims, function(i) {
+      result <- as.data.frame(Rescorla(
+        cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T))
+      rownames_to_column(result, var = 'cue') %>% mutate(sim = i)
+    })
+  })
+
+data_cond1_rw_matrix_configural <- configural_matrices[[1]]
+data_cond2_rw_matrix_configural <- configural_matrices[[2]]
+data_cond3_rw_matrix_configural <- configural_matrices[[3]]
+data_cond4_rw_matrix_configural <- configural_matrices[[4]]
+data_cond5_rw_matrix_configural <- configural_matrices[[5]]
+data_cond6_rw_matrix_configural <- configural_matrices[[6]]
+```
+
+```{r prod-configural-predictions}
+# For configural cues, type labels are remapped to include the dot notation
+data_prod_cfg <- data_prod %>%
+  mutate(type = case_when(
+    type == 'dim_sg' ~ 'dim_sg_dim.sg',
+    type == 'big_pl' ~ 'big_pl_big.pl',
+    type == 'dim_pl' ~ 'dim_pl'))
+
+data_prod_cfg_sims <- map_dfr(1:n_sims, ~ mutate(data_prod_cfg, sim = .x))
+
+make_prod_results_cfg <- function(data_prod_sim, rw_matrix, cond_num, flip_sign = FALSE) {
+  data_prod_sim %>%
+    mutate(key = paste0(stem, '_', type)) %>%
+    dplyr::select(prod_condition, key, sim, row_id, prod_label, file, type) %>%
+    group_by(sim) %>% mutate(row_id = row_number()) %>% ungroup() %>%
+    separate_rows(key, sep = "_") %>%
+    left_join(rw_matrix, by = c("key" = "cue", "sim")) %>%
+    group_by(row_id, sim) %>%
+    summarize(dan_activations   = sum(dan,   na.rm = T),
+              sil_activations   = sum(sil,   na.rm = T),
+              nem_activations   = sum(nem,   na.rm = T),
+              shoon_activations = sum(shoon, na.rm = T), .groups = 'drop') %>%
+    left_join(data_prod_sim %>% group_by(sim) %>% mutate(row_id = row_number()),
+              by = c("row_id", "sim")) %>%
+    mutate(condition = cond_num,
+           freq_minus_infreq = if (flip_sign) nem_activations - dan_activations
+                               else           dan_activations - nem_activations)
+}
+
+cfg_cond1 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond1_rw_matrix_configural, 1)
+cfg_cond2 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond2_rw_matrix_configural, 2)
+cfg_cond3 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond3_rw_matrix_configural, 3)
+cfg_cond4 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond4_rw_matrix_configural, 4, flip_sign = TRUE)
+cfg_cond5 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond5_rw_matrix_configural, 5, flip_sign = TRUE)
+cfg_cond6 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond6_rw_matrix_configural, 6, flip_sign = TRUE)
+
+data_all_conds_configural <- rbind(cfg_cond1, cfg_cond2, cfg_cond3,
+                                   cfg_cond4, cfg_cond5, cfg_cond6)
+```
+
+### Configural + Modified Alpha
+
+Configural cues with elevated alpha for semantic cues (dim, pl, big, sg).
+
+```{r prod-mod-alpha-matrices}
+semantic_cues <- c('dim', 'pl', 'big', 'sg', 'big.pl', 'big.sg', 'dim.sg', 'dim.pl')
+
+mod_alpha_matrices <- future_map(
+  list(data_cond1_configural, data_cond2_configural, data_cond3_configural,
+       data_cond4_configural, data_cond5_configural, data_cond6_configural),
+  function(cond_data) {
+    map_dfr(1:n_sims, function(i) {
+      result <- as.data.frame(Rescorla_modified_alpha_for_semantic_cues(
+        cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T))
+      rownames_to_column(result, var = 'cue') %>% mutate(sim = i)
+    })
+  })
+
+data_cond1_rw_matrix_configural_mod_alpha <- mod_alpha_matrices[[1]]
+data_cond2_rw_matrix_configural_mod_alpha <- mod_alpha_matrices[[2]]
+data_cond3_rw_matrix_configural_mod_alpha <- mod_alpha_matrices[[3]]
+data_cond4_rw_matrix_configural_mod_alpha <- mod_alpha_matrices[[4]]
+data_cond5_rw_matrix_configural_mod_alpha <- mod_alpha_matrices[[5]]
+data_cond6_rw_matrix_configural_mod_alpha <- mod_alpha_matrices[[6]]
+```
+
+```{r prod-mod-alpha-predictions}
+mod_cond1 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond1_rw_matrix_configural_mod_alpha, 1)
+mod_cond2 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond2_rw_matrix_configural_mod_alpha, 2)
+mod_cond3 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond3_rw_matrix_configural_mod_alpha, 3)
+mod_cond4 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond4_rw_matrix_configural_mod_alpha, 4, flip_sign = TRUE)
+mod_cond5 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond5_rw_matrix_configural_mod_alpha, 5, flip_sign = TRUE)
+mod_cond6 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond6_rw_matrix_configural_mod_alpha, 6, flip_sign = TRUE)
+
+data_all_conds_configural_modified_alpha <- rbind(mod_cond1, mod_cond2, mod_cond3,
+                                                   mod_cond4, mod_cond5, mod_cond6)
+```
+
+---
+
+## Statistical Models for Paper
+
+```{r prod-load-human-data}
+human_data_prod <- read_csv('../Data/data_prod_no_sil_shoon.csv')
+```
+
+```{r prod-align-rw-human}
+data_all_conds_for_comparison <- data_all_conds_logistic2 %>%
+  rename(picture_meaning  = type,
+         resp_stem        = prod_label,
+         stem_condition   = prod_condition,
+         original_condition = condition)
+
+human_data_plus_rw_prod <- human_data_prod %>%
+  left_join(data_all_conds_for_comparison %>%
+              dplyr::select(original_condition, stem_condition, resp_stem,
+                            picture_meaning, freq_minus_infreq,
+                            dan_activations, nem_activations,
+                            sil_activations, shoon_activations))
+```
+
+```{r prod-rw-models}
+options(contrasts = c("contr.treatment","contr.treatment"))
+
+priors_rw_prod <- c(
+  prior(student_t(3, 0, 1), class = 'Intercept'),
+  prior(student_t(3, 0, 1), class = 'b'),
+  prior(student_t(3, 0, 1), class = 'sd'))
+
+f_human_rw_preds <- future({
+  brm(frequency ~ freq_minus_infreq + (1 | participant) + (1 | resp_stem),
+      data = human_data_plus_rw_prod, family = bernoulli(link = 'logit'),
+      iter = 15000, warmup = 7500, chains = 4, cores = 4,
+      prior = priors_rw_prod, save_pars = save_pars(all = TRUE), seed = 964,
+      file = file.path(DATA_DIR, 'model_human_rw_preds'))
+})
+
+data_prod_results_for_stem_suffix_vary <- data_all_conds_logistic2 %>%
+  dplyr::select(row_id, sim, condition, freq_minus_infreq, prod_condition,
+                prod_label, type, dan_activations, nem_activations) %>%
+  rename(stem_condition     = prod_condition,
+         picture_meaning    = type,
+         original_condition = condition,
+         resp_stem          = prod_label) %>%
+  group_by(resp_stem, original_condition, stem_condition, picture_meaning, sim) %>%
+  summarize(freq_minus_infreq = mean(freq_minus_infreq), .groups = 'drop')
+
+human_data_plus_rw_stem_suffix <- human_data_prod %>%
+  left_join(data_prod_results_for_stem_suffix_vary)
+
+human_data_plus_rw_stem_suffix$condition <- factor(
+  human_data_plus_rw_stem_suffix$condition, levels = c(3, 1, 2))
+
+f_rw_stem_suffix_vary <- future({
+  brm(frequency ~ freq_minus_infreq + (1 | participant) + (1 | resp_stem),
+      data = human_data_plus_rw_stem_suffix, family = bernoulli(link = 'logit'),
+      iter = 14000, warmup = 7000, chains = 4, cores = 4,
+      prior = priors_rw_prod, control = list(adapt_delta = 0.99),
+      save_pars = save_pars(all = TRUE), seed = 964,
+      file = file.path(DATA_DIR, 'model_prod_rw_stem_suffix_vary'))
+})
+
+f_rw_stem_suffix_by_cond <- future({
+  brm(frequency ~ freq_minus_infreq + condition +
+        freq_minus_infreq:condition + (1 | participant) + (1 | resp_stem),
+      data = human_data_plus_rw_stem_suffix, family = bernoulli(link = 'logit'),
+      iter = 14000, warmup = 7000, chains = 4, cores = 4,
+      prior = priors_rw_prod, control = list(adapt_delta = 0.99),
+      save_pars = save_pars(all = TRUE), seed = 964,
+      file = file.path(DATA_DIR, 'model_prod_rw_stem_suffix_vary_by_condition'))
+})
+
+f_rw_stem_suffix_no_int <- future({
+  brm(frequency ~ freq_minus_infreq + condition + (1 | participant) + (1 | resp_stem),
+      data = human_data_plus_rw_stem_suffix, family = bernoulli(link = 'logit'),
+      iter = 14000, warmup = 7000, chains = 4, cores = 4,
+      prior = priors_rw_prod, control = list(adapt_delta = 0.99),
+      save_pars = save_pars(all = TRUE), seed = 964,
+      file = file.path(DATA_DIR, 'model_prod_rw_stem_suffix_vary_no_interaction'))
+})
+
+human_data_plus_rw_stem_suffix$meaning <- factor(
+  human_data_plus_rw_stem_suffix$meaning)
+contrasts(human_data_plus_rw_stem_suffix$meaning) <-
+  contr.sum(levels(human_data_plus_rw_stem_suffix$meaning))
+human_data_plus_rw_stem_suffix$stem_condition <- factor(
+  human_data_plus_rw_stem_suffix$stem_condition, levels = c('novel','familiar'))
+contrasts(human_data_plus_rw_stem_suffix$stem_condition) <-
+  contr.sum(levels(human_data_plus_rw_stem_suffix$stem_condition))
+
+f_rw_by_cond_orig_preds <- future({
+  brm(frequency ~ condition*meaning*stem_condition +
+        freq_minus_infreq + freq_minus_infreq:condition +
+        (1 | participant) + (1 | resp_stem),
+      data = human_data_plus_rw_stem_suffix, family = bernoulli(link = 'logit'),
+      iter = 14000, warmup = 7000, chains = 4, cores = 4,
+      prior = priors_rw_prod, control = list(adapt_delta = 0.99),
+      save_pars = save_pars(all = TRUE), seed = 964,
+      file = file.path(DATA_DIR, 'model_prod_rw_stem_suffix_vary_by_condition_original_preds'))
+})
+
+model_human_rw_preds                           <- value(f_human_rw_preds)
+model_prod_rw_stem_suffix_vary                 <- value(f_rw_stem_suffix_vary)
+model_prod_rw_stem_suffix_vary_by_condition    <- value(f_rw_stem_suffix_by_cond)
+model_prod_rw_stem_suffix_vary_no_interaction  <- value(f_rw_stem_suffix_no_int)
+model_prod_rw_stem_suffix_vary_by_condition_original_preds <- value(f_rw_by_cond_orig_preds)
+
+fixef(model_prod_rw_stem_suffix_vary)
+
+model_prod_rw_stem_suffix_vary_by_condition <-
+  add_criterion(model_prod_rw_stem_suffix_vary_by_condition, 'loo')
+model_prod_rw_stem_suffix_vary <-
+  add_criterion(model_prod_rw_stem_suffix_vary, 'loo')
+model_prod_rw_stem_suffix_vary_by_condition_original_preds <-
+  add_criterion(model_prod_rw_stem_suffix_vary_by_condition_original_preds, 'loo')
+model_prod_rw_stem_suffix_vary_no_interaction <-
+  add_criterion(model_prod_rw_stem_suffix_vary_no_interaction, 'loo')
+
+loo_compare(model_prod_rw_stem_suffix_vary,
+            model_prod_rw_stem_suffix_vary_by_condition,
+            model_prod_rw_stem_suffix_vary_no_interaction,
+            model_prod_rw_stem_suffix_vary_by_condition_original_preds)
+```
+
+---
+
+## Paper Figure
+
+```{r prod-paper-figure-data}
+data_all_conds_logistic2_plot <- data_all_conds_logistic2 %>%
+  mutate(meaning = case_when(
+    type %in% c('dim_sg','big_pl') ~ 'original',
+    type == 'dim_pl'               ~ 'novel')) %>%
+  mutate(condition = case_when(
+    condition %in% c(1,4) ~ 1,
+    condition %in% c(2,5) ~ 2,
+    condition %in% c(3,6) ~ 3)) %>%
+  group_by(meaning, prod_condition, condition, sim) %>%
+  summarize(mean_freq_diff = mean(freq_minus_infreq), .groups = 'keep') %>%
+  group_by(meaning, prod_condition, condition) %>%
+  summarize(mean_freq_diff_v2 = mean(mean_freq_diff),
+            ci2.5  = quantile(mean_freq_diff, 0.025, na.rm = T),
+            ci97.5 = quantile(mean_freq_diff, 0.975, na.rm = T), .groups = 'keep')
+
+data_all_conds_logistic2_configural_modified_alpha_plot <-
+  data_all_conds_configural_modified_alpha %>%
+  mutate(meaning = case_when(
+    type %in% c('dim_sg_dim.sg','big_pl_big.pl') ~ 'original',
+    type == 'dim_pl'                              ~ 'novel')) %>%
+  mutate(condition = case_when(
+    condition %in% c(1,4) ~ 1,
+    condition %in% c(2,5) ~ 2,
+    condition %in% c(3,6) ~ 3)) %>%
+  group_by(meaning, prod_condition, condition, sim) %>%
+  summarize(mean_freq_diff = mean(freq_minus_infreq), .groups = 'keep') %>%
+  group_by(meaning, prod_condition, condition) %>%
+  summarize(mean_freq_diff_v2 = mean(mean_freq_diff),
+            ci2.5  = quantile(mean_freq_diff, 0.025, na.rm = T),
+            ci97.5 = quantile(mean_freq_diff, 0.975, na.rm = T), .groups = 'keep')
+
+data_configural_plot <- data_all_conds_configural %>%
+  mutate(meaning = case_when(
+    type %in% c('dim_sg_dim.sg','big_pl_big.pl') ~ 'original',
+    type == 'dim_pl'                              ~ 'novel')) %>%
+  mutate(condition = case_when(
+    condition %in% c(1,4) ~ 1,
+    condition %in% c(2,5) ~ 2,
+    condition %in% c(3,6) ~ 3)) %>%
+  group_by(meaning, prod_condition, condition, sim) %>%
+  summarize(mean_freq_diff = mean(freq_minus_infreq), .groups = 'keep') %>%
+  group_by(meaning, prod_condition, condition) %>%
+  summarize(mean_freq_diff_v2 = mean(mean_freq_diff),
+            ci2.5  = quantile(mean_freq_diff, 0.025, na.rm = T),
+            ci97.5 = quantile(mean_freq_diff, 0.975, na.rm = T), .groups = 'keep')
+```
+
+```{r prod-paper-figure}
+rw_plot_configural <- ggplot(
+  data = data_configural_plot,
+  aes(x = meaning, y = invlogit(mean_freq_diff_v2), fill = prod_condition)) +
+  geom_col(position = "dodge") +
+  ylim(c(0,1)) +
+  ggtitle('Configural cues') +
+  facet_wrap(~condition)
+
+rw_plot_configural_mod_alpha <- ggplot(
+  data = data_all_conds_logistic2_configural_modified_alpha_plot,
+  aes(x = meaning, y = invlogit(mean_freq_diff_v2), fill = prod_condition)) +
+  geom_col(position = "dodge") +
+  ylim(c(0,1)) +
+  ggtitle('Configural cues + modified alpha') +
+  facet_wrap(~condition)
+
+fixed_effects_df <- read_csv('../Data/fixed_effects_df_all.csv') %>%
+  filter(Task == 'prod')
+
+observed_estimates_plot <- ggplot(
+  data = fixed_effects_df,
+  aes(x = Meaning, y = Prob, fill = Stem)) +
+  geom_col(position = "dodge") +
+  ylim(c(0,1)) +
+  ggtitle('Human data') +
+  facet_wrap(~Condition)
+
+ggarrange(observed_estimates_plot, rw_plot_configural, rw_plot_configural_mod_alpha,
+          nrow = 3, common.legend = TRUE)
+```
+
+---
+
+## Further Exploration
+
+### Alpha Changed But No Configural Cues
+
+Modified alpha applied to standard (non-configural) cues — controls for the alpha change alone vs. the configural cue structure.
+
+```{r prod-alpha-no-configural}
+non_cfg_matrices <- future_map(
+  list(data_cond1_prod, data_cond2_prod, data_cond3_prod,
+       data_cond4_prod, data_cond5_prod, data_cond6_prod),
+  function(cond_data) {
+    map_dfr(1:n_sims, function(i) {
+      result <- as.data.frame(Rescorla_modified_alpha_for_semantic_cues(
+        cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T))
+      rownames_to_column(result, var = 'cue') %>% mutate(sim = i)
+    })
+  })
+
+data_cond1_rw_matrix_non_configural <- non_cfg_matrices[[1]]
+data_cond2_rw_matrix_non_configural <- non_cfg_matrices[[2]]
+data_cond3_rw_matrix_non_configural <- non_cfg_matrices[[3]]
+data_cond4_rw_matrix_non_configural <- non_cfg_matrices[[4]]
+data_cond5_rw_matrix_non_configural <- non_cfg_matrices[[5]]
+data_cond6_rw_matrix_non_configural <- non_cfg_matrices[[6]]
+
+nc1 <- make_prod_results(data_prod_sims, data_cond1_rw_matrix_non_configural, 1)
+nc2 <- make_prod_results(data_prod_sims, data_cond2_rw_matrix_non_configural, 2)
+nc3 <- make_prod_results(data_prod_sims, data_cond3_rw_matrix_non_configural, 3)
+nc4 <- make_prod_results(data_prod_sims, data_cond4_rw_matrix_non_configural, 4, flip_sign = TRUE)
+nc5 <- make_prod_results(data_prod_sims, data_cond5_rw_matrix_non_configural, 5, flip_sign = TRUE)
+nc6 <- make_prod_results(data_prod_sims, data_cond6_rw_matrix_non_configural, 6, flip_sign = TRUE)
+
+data_all_conds_non_configural <- rbind(nc1, nc2, nc3, nc4, nc5, nc6)
+
+data_non_cfg_plot <- data_all_conds_non_configural %>%
+  mutate(meaning = case_when(
+    type %in% c('dim_sg','big_pl') ~ 'original',
+    type == 'dim_pl'               ~ 'novel')) %>%
+  mutate(condition = case_when(
+    condition %in% c(1,4) ~ 1,
+    condition %in% c(2,5) ~ 2,
+    condition %in% c(3,6) ~ 3)) %>%
+  group_by(meaning, prod_condition, condition, sim) %>%
+  summarize(mean_freq_diff = mean(freq_minus_infreq), .groups = 'keep') %>%
+  group_by(meaning, prod_condition, condition) %>%
+  summarize(mean_freq_diff_v2 = mean(mean_freq_diff),
+            ci2.5  = quantile(mean_freq_diff, 0.025, na.rm = T),
+            ci97.5 = quantile(mean_freq_diff, 0.975, na.rm = T), .groups = 'keep')
+
+ggplot(data = data_non_cfg_plot,
+       aes(x = meaning, y = invlogit(mean_freq_diff_v2), fill = prod_condition)) +
+  geom_col(position = "dodge") +
+  ylim(c(0,1)) +
+  ggtitle('Modified alpha, no configural cues') +
+  facet_wrap(~condition)
+```
+
+---
+
+# Comprehension RW Simulations
+
+## Data Preparation
+
+For comprehension, cues are the full label (stem_suffix form) and outcomes are the meaning categories.
+
+```{r comp-build-cue-tables}
+make_comp_cue_table <- function(cond_df, freq_multiplier = 2) {
+  cond_df %>%
+    mutate(label = case_when(
+      suffix != 'none' ~ paste0(stem, '_', suffix),
+      suffix == 'none' ~ stem),
+           type = case_when(
+             suffix %in% c('dan','sil')   ~ 'big_pl',
+             suffix == 'none'             ~ 'big_sg',
+             suffix %in% c('nem','shoon') ~ 'dim_sg')) %>%
+    mutate(key = label) %>%
+    group_by(key, type) %>%
+    summarize(frequency = table(key), .groups = 'drop') %>%
+    rename(Cues = key, Outcomes = type, Frequency = frequency) %>%
+    mutate(Frequency = as.numeric(Frequency) * freq_multiplier) %>%
+    uncount(Frequency) %>%
+    mutate(Frequency = 1)
+}
+
+data_cond1_comp <- make_comp_cue_table(cond1)
+data_cond2_comp <- make_comp_cue_table(cond2)
+data_cond3_comp <- make_comp_cue_table(cond3)
+data_cond4_comp <- make_comp_cue_table(cond4)
+data_cond5_comp <- make_comp_cue_table(cond5)
+data_cond6_comp <- make_comp_cue_table(cond6)
+```
+
+```{r comp-load-items}
+data_comp <- read_csv('../Conditions/comprehension_condition.csv') %>%
+  mutate(label = case_when(
+    suffix != 'none' ~ paste0(stem, '_', suffix),
+    suffix == 'none' ~ stem),
+    row_id = row_number())
+```
+
+---
+
+## Main RW Simulations
+
+Parameters Alpha=0.45, Beta=0.25 selected via grid search (see "Further Exploration" below).
+
+```{r comp-main-matrices}
+main_matrices <- future_map(
+  list(data_cond1_comp, data_cond2_comp, data_cond3_comp,
+       data_cond4_comp, data_cond5_comp, data_cond6_comp),
+  function(cond_data) {
+    map_dfr(1:n_sims, function(i) {
+      result <- as.data.frame(Rescorla(
+        Alpha = 0.45, Beta = 0.25,
+        cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T))
+      rownames_to_column(result, var = 'cue') %>% mutate(sim = i)
+    })
+  })
+
+data_cond1_comp_rw_matrix <- main_matrices[[1]]
+data_cond2_comp_rw_matrix <- main_matrices[[2]]
+data_cond3_comp_rw_matrix <- main_matrices[[3]]
+data_cond4_comp_rw_matrix <- main_matrices[[4]]
+data_cond5_comp_rw_matrix <- main_matrices[[5]]
+data_cond6_comp_rw_matrix <- main_matrices[[6]]
+```
+
+```{r comp-main-predictions}
+data_comp_sims <- map_dfr(1:n_sims, ~ mutate(data_comp, sim = .x))
+
+make_comp_results <- function(data_comp_sim, rw_matrix, cond_num) {
+  data_comp_sim %>%
+    mutate(key = label) %>%
+    dplyr::select(stem_condition, key, sim, row_id, suffix) %>%
+    group_by(sim) %>% mutate(row_id = row_number()) %>% ungroup() %>%
+    separate_rows(key, sep = "_") %>%
+    left_join(rw_matrix, by = c("key" = "cue", "sim")) %>%
+    group_by(row_id, sim) %>%
+    summarize(big_activations = sum(big, na.rm = T),
+              pl_activations  = sum(pl,  na.rm = T),
+              dim_activations = sum(dim, na.rm = T),
+              sg_activations  = sum(sg,  na.rm = T), .groups = 'drop') %>%
+    left_join(data_comp_sim %>% group_by(sim) %>% mutate(row_id = row_number()),
+              by = c("row_id", "sim")) %>%
+    mutate(condition = cond_num,
+           new_minus_old = case_when(
+             suffix == 'dan' ~ (dim_activations + pl_activations) -
+               (big_activations + pl_activations),
+             suffix == 'nem' ~ (dim_activations + pl_activations) -
+               (dim_activations + sg_activations)))
+}
+
+comp_cond1 <- make_comp_results(data_comp_sims, data_cond1_comp_rw_matrix, 1)
+comp_cond2 <- make_comp_results(data_comp_sims, data_cond2_comp_rw_matrix, 2)
+comp_cond3 <- make_comp_results(data_comp_sims, data_cond3_comp_rw_matrix, 3)
+comp_cond4 <- make_comp_results(data_comp_sims, data_cond4_comp_rw_matrix, 4)
+comp_cond5 <- make_comp_results(data_comp_sims, data_cond5_comp_rw_matrix, 5)
+comp_cond6 <- make_comp_results(data_comp_sims, data_cond6_comp_rw_matrix, 6)
+
+data_all_conds <- rbind(comp_cond1, comp_cond2, comp_cond3,
+                        comp_cond4, comp_cond5, comp_cond6)
+```
+
+```{r comp-load-human}
+human_data_comp <- read_csv('../Data/data_analysis_comprehension.csv')
+
+# Recode to 3 comprehension conditions (fold 4-6 into 1-3)
+data_all_conds_test <- data_all_conds %>%
+  mutate(
+    language = case_when(condition %in% c(1,2,3) ~ 'dan', condition %in% c(4,5,6) ~ 'nem'),
+    frequency = ifelse(suffix == language, 1, 0),
+    condition = case_when(
+      condition == 4 ~ 1, condition == 5 ~ 2, condition == 6 ~ 3, TRUE ~ condition),
+    condition_numeric = case_when(
+      (condition == 1 & frequency == 1) | (condition == 3 & frequency == 1) ~ '12-12',
+      (condition == 1 & frequency == 0) | (condition == 2 & frequency == 1) ~ '12-3',
+      (condition == 2 & frequency == 0) | (condition == 3 & frequency == 0) ~ '3-3'))
+
+data_all_conds_test$stem_condition <- factor(data_all_conds_test$stem_condition)
+contrasts(data_all_conds_test$stem_condition) <-
+  contr.sum(levels(data_all_conds_test$stem_condition))
+data_all_conds_test$condition_numeric <- factor(
+  data_all_conds_test$condition_numeric, levels = c('12-3', '12-12', '3-3'))
+
+# For RW-as-predictor models: average over sims first to avoid duplicating human rows.
+# Join key: comprehension_label (human) = label (RW) for item-level matching.
+data_rw_avg <- data_all_conds_test %>%
+  group_by(label, stem) %>%
+  summarize(new_minus_old = mean(new_minus_old), .groups = 'drop')
+
+human_data_plus_rw <- human_data_comp %>%
+  left_join(data_rw_avg, by = c("comprehension_label" = "label"))
+```
+
+---
+
+## Statistical Models for Paper
+
+```{r comp-rw-priors}
+priors_rw_comp <- c(
+  prior(student_t(3, 0, 1), class = 'Intercept'),
+  prior(student_t(3, 0, 1), class = 'b'),
+  prior(student_t(3, 0, 1), class = 'sd'))
+
+priors_rw_comp_b <- c(
+  prior(student_t(3, 0, 0.5), class = 'Intercept'),
+  prior(student_t(3, 0, 0.5), class = 'b'),
+  prior(student_t(3, 0, 0.5), class = 'sd'))
+
+human_data_plus_rw$meaning <- factor(human_data_plus_rw$meaning, levels = c(0, 1))
+human_data_plus_rw$condition_numeric <- factor(
+  human_data_plus_rw$condition_numeric, levels = c('12-3', '12-12', '3-3'))
+human_data_plus_rw$stem_condition <- factor(human_data_plus_rw$stem_condition)
+contrasts(human_data_plus_rw$stem_condition) <-
+  contr.sum(levels(human_data_plus_rw$stem_condition))
+```
+
+```{r comp-rw-models}
+f_comp_rw <- future({
+  brm(meaning ~ new_minus_old + (1 | participant) + (1 | stem),
+      data = human_data_plus_rw, family = bernoulli(link = 'logit'),
+      iter = 16000, warmup = 8000, chains = 4, cores = 4,
+      prior = priors_rw_comp, save_pars = save_pars(all = TRUE),
+      control = list(adapt_delta = 0.99), seed = 964,
+      file = file.path(DATA_DIR, 'model_comprehension_numeric_rw'))
+})
+
+f_comp_rw_by_cond <- future({
+  brm(meaning ~ condition_numeric*new_minus_old + (1 | participant) + (1 | stem),
+      data = human_data_plus_rw, family = bernoulli(link = 'logit'),
+      iter = 12000, warmup = 6000, chains = 4, cores = 4,
+      prior = priors_rw_comp, save_pars = save_pars(all = TRUE),
+      control = list(adapt_delta = 0.99), seed = 964,
+      file = file.path(DATA_DIR, 'model_comprehension_numeric_rw_by_cond'))
+})
+
+f_comp_rw_stem <- future({
+  brm(meaning ~ condition_numeric*stem_condition*new_minus_old + (1 | participant) + (1 | stem),
+      data = human_data_plus_rw, family = bernoulli(link = 'logit'),
+      iter = 20000, warmup = 10000, chains = 4, cores = 4,
+      prior = priors_rw_comp, save_pars = save_pars(all = TRUE),
+      control = list(adapt_delta = 0.99, max_treedepth = 15), seed = 964,
+      file = file.path(DATA_DIR, 'model_comprehension_numeric_stem_rw'))
+})
+
+f_comp_humans <- future({
+  brm(meaning ~ condition_numeric + (1 | participant) + (1 | stem),
+      data = human_data_plus_rw, family = bernoulli(link = 'logit'),
+      iter = 12000, warmup = 6000, chains = 4, cores = 4,
+      prior = priors_rw_comp, save_pars = save_pars(all = TRUE),
+      control = list(adapt_delta = 0.99), seed = 964,
+      file = file.path(DATA_DIR, 'model_comprehension_numeric_humans'))
+})
+
+f_comp_humans_stem <- future({
+  brm(meaning ~ condition_numeric*stem_condition + (1 | participant) + (1 | stem),
+      data = human_data_plus_rw, family = bernoulli(link = 'logit'),
+      iter = 46000, warmup = 23000, chains = 4, cores = 4,
+      prior = priors_rw_comp, save_pars = save_pars(all = TRUE),
+      control = list(adapt_delta = 0.999, max_treedepth = 20), seed = 964,
+      file = file.path(DATA_DIR, 'model_comprehension_numeric_stem_humans'))
+})
+
+f_rw_by_stat <- future({
+  brm(new_minus_old ~ condition_numeric*stem_condition + (1 | participant) + (1 | stem),
+      data = human_data_plus_rw,
+      iter = 8000, warmup = 4000, chains = 4, cores = 4,
+      prior = priors_rw_comp_b, save_pars = save_pars(all = TRUE),
+      seed = 964,
+      file = file.path(DATA_DIR, 'model_rw_preds_by_statistical_preds_nsims'))
+})
+
+model_comprehension_numeric_rw          <- value(f_comp_rw)
+model_comprehension_numeric_rw_by_cond  <- value(f_comp_rw_by_cond)
+model_comprehension_numeric_stem_rw     <- value(f_comp_rw_stem)
+model_comprehension_numeric_humans      <- value(f_comp_humans)
+model_comprehension_numeric_stem_humans <- value(f_comp_humans_stem)
+model_rw_preds_by_statistical_preds_nsims <- value(f_rw_by_stat)
+```
+
+```{r comp-rw-results}
+fixef(model_comprehension_numeric_rw)
+fixef(model_comprehension_numeric_stem_rw)
+
+hypothesis(model_comprehension_numeric_rw_by_cond,
+           "condition_numeric3M3 - condition_numeric12M12 > 0")
+
+model_comprehension_numeric_rw      <- add_criterion(model_comprehension_numeric_rw,      'loo')
+model_comprehension_numeric_stem_rw <- add_criterion(model_comprehension_numeric_stem_rw, 'loo')
+model_comprehension_numeric_humans  <- add_criterion(model_comprehension_numeric_humans,  'loo')
+model_comprehension_numeric_stem_humans <- add_criterion(model_comprehension_numeric_stem_humans, 'loo')
+model_comprehension_numeric_rw_by_cond  <- add_criterion(model_comprehension_numeric_rw_by_cond,  'loo')
+
+loo_compare(model_comprehension_numeric_rw,
+            model_comprehension_numeric_stem_rw,
+            model_comprehension_numeric_humans,
+            model_comprehension_numeric_stem_humans,
+            model_comprehension_numeric_rw_by_cond)
+```
+
+---
+
+## Further Exploration
+
+### Default Alpha Simulations
+
+Standard RW parameters (default Alpha and Beta) for comparison against the tuned Alpha=0.45, Beta=0.25 model.
+
+```{r comp-default-matrices}
+default_matrices <- future_map(
+  list(data_cond1_comp, data_cond2_comp, data_cond3_comp,
+       data_cond4_comp, data_cond5_comp, data_cond6_comp),
+  function(cond_data) {
+    map_dfr(1:n_sims, function(i) {
+      result <- as.data.frame(Rescorla(
+        cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T))
+      rownames_to_column(result, var = 'cue') %>% mutate(sim = i)
+    })
+  })
+
+data_cond1_rw_matrix_default <- default_matrices[[1]]
+data_cond2_rw_matrix_default <- default_matrices[[2]]
+data_cond3_rw_matrix_default <- default_matrices[[3]]
+data_cond4_rw_matrix_default <- default_matrices[[4]]
+data_cond5_rw_matrix_default <- default_matrices[[5]]
+data_cond6_rw_matrix_default <- default_matrices[[6]]
+
+d1 <- make_comp_results(data_comp_sims, data_cond1_rw_matrix_default, 1)
+d2 <- make_comp_results(data_comp_sims, data_cond2_rw_matrix_default, 2)
+d3 <- make_comp_results(data_comp_sims, data_cond3_rw_matrix_default, 3)
+d4 <- make_comp_results(data_comp_sims, data_cond4_rw_matrix_default, 4)
+d5 <- make_comp_results(data_comp_sims, data_cond5_rw_matrix_default, 5)
+d6 <- make_comp_results(data_comp_sims, data_cond6_rw_matrix_default, 6)
+
+data_all_conds_default <- rbind(d1, d2, d3, d4, d5, d6)
+
+data_default_test <- data_all_conds_default %>%
+  mutate(
+    language = case_when(condition %in% c(1,2,3) ~ 'dan', condition %in% c(4,5,6) ~ 'nem'),
+    frequency = ifelse(suffix == language, 1, 0),
+    condition = case_when(
+      condition == 4 ~ 1, condition == 5 ~ 2, condition == 6 ~ 3, TRUE ~ condition),
+    condition_numeric = case_when(
+      (condition == 1 & frequency == 1) | (condition == 3 & frequency == 1) ~ '12-12',
+      (condition == 1 & frequency == 0) | (condition == 2 & frequency == 1) ~ '12-3',
+      (condition == 2 & frequency == 0) | (condition == 3 & frequency == 0) ~ '3-3'))
+
+human_data_plus_rw_default <- human_data_comp %>%
+  left_join(
+    data_default_test %>%
+      group_by(label, stem) %>%
+      summarize(new_minus_old_default = mean(new_minus_old), .groups = 'drop'),
+    by = c("comprehension_label" = "label"))
+
+priors_rw_comp_b2 <- c(
+  prior(student_t(3, 0, 0.5), class = 'Intercept'),
+  prior(student_t(3, 0, 0.5), class = 'b'),
+  prior(student_t(3, 0, 0.5), class = 'sd'))
+
+model_rw_preds_by_statistical_preds_default <- brm(
+  new_minus_old_default ~ condition_numeric*stem_condition + (1 | participant) + (1 | stem),
+  data = human_data_plus_rw_default,
+  iter = 10000, warmup = 5000, chains = 4, cores = 4,
+  prior = priors_rw_comp_b2, save_pars = save_pars(all = TRUE),
+  control = list(adapt_delta = 0.999, max_treedepth = 20), seed = 964,
+  file = file.path(DATA_DIR, 'model_rw_preds_by_statistical_preds'))
+
+fixef(model_rw_preds_by_statistical_preds_default)
+```
+
+### Context Cues
+
+Variant where training cues are prefixed with `cx_` to explicitly encode context. Explored as an alternative cue representation.
+
+```{r comp-context-cues}
+data_cond1_ccs <- data_cond1_comp %>% mutate(Cues = paste0('cx_', Cues))
+data_cond2_ccs <- data_cond2_comp %>% mutate(Cues = paste0('cx_', Cues))
+data_cond3_ccs <- data_cond3_comp %>% mutate(Cues = paste0('cx_', Cues))
+data_cond4_ccs <- data_cond4_comp %>% mutate(Cues = paste0('cx_', Cues))
+data_cond5_ccs <- data_cond5_comp %>% mutate(Cues = paste0('cx_', Cues))
+data_cond6_ccs <- data_cond6_comp %>% mutate(Cues = paste0('cx_', Cues))
+
+ccs_matrices <- future_map(
+  list(data_cond1_ccs, data_cond2_ccs, data_cond3_ccs,
+       data_cond4_ccs, data_cond5_ccs, data_cond6_ccs),
+  function(cond_data) {
+    map_dfr(1:n_sims, function(i) {
+      result <- as.data.frame(Rescorla(
+        cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T))
+      rownames_to_column(result, var = 'cue') %>% mutate(sim = i)
+    })
+  })
+
+data_cond1_rw_matrix_ccs <- ccs_matrices[[1]]
+data_cond2_rw_matrix_ccs <- ccs_matrices[[2]]
+data_cond3_rw_matrix_ccs <- ccs_matrices[[3]]
+data_cond4_rw_matrix_ccs <- ccs_matrices[[4]]
+data_cond5_rw_matrix_ccs <- ccs_matrices[[5]]
+data_cond6_rw_matrix_ccs <- ccs_matrices[[6]]
+
+# Build label vectors from raw condition data
+# cx_ prefix applies to test items that appeared in training
+cond1_labels <- cond1 %>% mutate(label = if_else(suffix != 'none', paste0(stem, '_', suffix), stem)) %>% pull(label)
+cond2_labels <- cond2 %>% mutate(label = if_else(suffix != 'none', paste0(stem, '_', suffix), stem)) %>% pull(label)
+cond3_labels <- cond3 %>% mutate(label = if_else(suffix != 'none', paste0(stem, '_', suffix), stem)) %>% pull(label)
+cond4_labels <- cond4 %>% mutate(label = if_else(suffix != 'none', paste0(stem, '_', suffix), stem)) %>% pull(label)
+cond5_labels <- cond5 %>% mutate(label = if_else(suffix != 'none', paste0(stem, '_', suffix), stem)) %>% pull(label)
+cond6_labels <- cond6 %>% mutate(label = if_else(suffix != 'none', paste0(stem, '_', suffix), stem)) %>% pull(label)
+
+make_comp_ccs_sims <- function(data_comp_sim, cond_labels) {
+  data_comp_sim %>%
+    mutate(key = if_else(label %in% cond_labels, paste0('cx_', label), label))
+}
+
+data_comp_ccs_sims_c1 <- make_comp_ccs_sims(data_comp_sims, cond1_labels)
+data_comp_ccs_sims_c2 <- make_comp_ccs_sims(data_comp_sims, cond2_labels)
+data_comp_ccs_sims_c3 <- make_comp_ccs_sims(data_comp_sims, cond3_labels)
+data_comp_ccs_sims_c4 <- make_comp_ccs_sims(data_comp_sims, cond4_labels)
+data_comp_ccs_sims_c5 <- make_comp_ccs_sims(data_comp_sims, cond5_labels)
+data_comp_ccs_sims_c6 <- make_comp_ccs_sims(data_comp_sims, cond6_labels)
+
+ccs1 <- make_comp_results(data_comp_ccs_sims_c1, data_cond1_rw_matrix_ccs, 1)
+ccs2 <- make_comp_results(data_comp_ccs_sims_c2, data_cond2_rw_matrix_ccs, 2)
+ccs3 <- make_comp_results(data_comp_ccs_sims_c3, data_cond3_rw_matrix_ccs, 3)
+ccs4 <- make_comp_results(data_comp_ccs_sims_c4, data_cond4_rw_matrix_ccs, 4)
+ccs5 <- make_comp_results(data_comp_ccs_sims_c5, data_cond5_rw_matrix_ccs, 5)
+ccs6 <- make_comp_results(data_comp_ccs_sims_c6, data_cond6_rw_matrix_ccs, 6)
+
+data_all_conds_ccs <- rbind(ccs1, ccs2, ccs3, ccs4, ccs5, ccs6)
+
+data_ccs_test <- data_all_conds_ccs %>%
+  mutate(
+    language = case_when(condition %in% c(1,2,3) ~ 'dan', condition %in% c(4,5,6) ~ 'nem'),
+    frequency = ifelse(suffix == language, 1, 0),
+    condition = case_when(
+      condition == 4 ~ 1, condition == 5 ~ 2, condition == 6 ~ 3, TRUE ~ condition),
+    condition_numeric = case_when(
+      (condition == 1 & frequency == 1) | (condition == 3 & frequency == 1) ~ '12-12',
+      (condition == 1 & frequency == 0) | (condition == 2 & frequency == 1) ~ '12-3',
+      (condition == 2 & frequency == 0) | (condition == 3 & frequency == 0) ~ '3-3'))
+
+data_ccs_test$stem_condition <- factor(data_ccs_test$stem_condition)
+contrasts(data_ccs_test$stem_condition) <- contr.sum(levels(data_ccs_test$stem_condition))
+data_ccs_test$condition_numeric <- factor(
+  data_ccs_test$condition_numeric, levels = c('12-3', '12-12', '3-3'))
+
+human_data_plus_ccs <- human_data_comp %>%
+  left_join(
+    data_ccs_test %>%
+      group_by(label, stem) %>%
+      summarize(new_minus_old_ccs = mean(new_minus_old), .groups = 'drop'),
+    by = c("comprehension_label" = "label"))
+
+priors_rw_comp_b3 <- c(
+  prior(student_t(3, 0, 0.3), class = 'Intercept'),
+  prior(student_t(3, 0, 0.3), class = 'b'),
+  prior(student_t(3, 0, 0.3), class = 'sd'))
+
+model_rw_preds_context_cues <- brm(
+  new_minus_old_ccs ~ condition_numeric*stem_condition + (1 | participant) + (1 | stem),
+  data = human_data_plus_ccs,
+  iter = 16000, warmup = 8000, chains = 4, cores = 4,
+  prior = priors_rw_comp_b3, save_pars = save_pars(all = TRUE),
+  control = list(adapt_delta = 0.999, max_treedepth = 23), seed = 964,
+  file = file.path(DATA_DIR, 'model_rw_preds_by_statistical_preds_context_cues'))
+
+fixef(model_rw_preds_context_cues)
+```
+
+### Grid Search (Alpha × Beta)
+
+Used to identify optimal RW parameters. Results informed the Alpha=0.45, Beta=0.25 choice for the main analysis.
+
+```{r comp-grid-search}
+run_comprehension <- function(
+  data_comp, data_conds, human_comp_data, n_sims, Alpha, Beta) {
+
+  run_rw <- function(data) {
+    map_dfr(1:n_sims, function(i){
+      Rescorla(cuesOutcomes = data[sample(nrow(data)), ],
+               logistic = TRUE, Alpha = Alpha, Beta = Beta) %>%
+        as.data.frame() %>%
+        tibble::rownames_to_column("cue") %>%
+        mutate(sim = i)
+    })
+  }
+
+  rw_results_list <- purrr::map(data_conds, run_rw)
+
+  data_comp <- data_comp %>%
+    mutate(label = if_else(suffix != "none", paste0(stem, "_", suffix), stem),
+           row_id = row_number())
+  data_comp <- purrr::map_dfr(1:n_sims, ~ mutate(data_comp, sim = .x))
+
+  process_one_condition <- function(comp_data, rw_data, cond_num) {
+    comp_data %>%
+      mutate(key = label) %>%
+      separate_rows(key, sep="_") %>%
+      left_join(rw_data, by = c("key" = "cue", "sim")) %>%
+      group_by(row_id, sim) %>%
+      summarize(big_activations = sum(big, na.rm=TRUE),
+                pl_activations  = sum(pl, na.rm=TRUE),
+                dim_activations = sum(dim, na.rm=TRUE),
+                sg_activations  = sum(sg, na.rm=TRUE), .groups="drop") %>%
+      left_join(comp_data, by=c("row_id","sim")) %>%
+      mutate(condition = cond_num,
+             new_minus_old = case_when(
+               suffix == 'dan' ~ (dim_activations + pl_activations) -
+                 (big_activations + pl_activations),
+               suffix == 'nem' ~ (dim_activations + pl_activations) -
+                 (dim_activations + sg_activations)))
+  }
+
+  results <- purrr::map2_dfr(seq_along(rw_results_list), rw_results_list,
+                              ~ process_one_condition(data_comp, .y, .x))
+
+  results <- results %>%
+    mutate(language = case_when(
+      condition %in% c(1,2,3) ~ "dan", condition %in% c(4,5,6) ~ "nem"),
+      frequency = ifelse(suffix == language, 1, 0),
+      condition = case_when(
+        condition == 4 ~ 1, condition == 5 ~ 2, condition == 6 ~ 3, TRUE ~ condition),
+      condition_numeric = case_when(
+        (condition == 1 & frequency == 1) | (condition == 3 & frequency == 1) ~ "12-12",
+        (condition == 1 & frequency == 0) | (condition == 2 & frequency == 1) ~ "12-3",
+        (condition == 2 & frequency == 0) | (condition == 3 & frequency == 0) ~ "3-3"))
+
+  results %>%
+    group_by(stem_condition, condition_numeric) %>%
+    summarize(mean_pred = mean(new_minus_old),
+              ci2.5  = quantile(new_minus_old, 0.025),
+              ci97.5 = quantile(new_minus_old, 0.975), .groups = "drop") %>%
+    left_join(human_comp_data, by = c("stem_condition", "condition_numeric")) %>%
+    mutate(mse = (mean_pred - Estimate)^2)
+}
+```
+
+```{r comp-grid-search-human-cells}
+hum_raw <- fixef(model_comprehension_numeric_stem_humans) %>%
+  as.data.frame() %>% tibble::rownames_to_column("term")
+b <- hum_raw %>% dplyr::select(term, Estimate) %>% tibble::deframe()
+
+human_cells <- expand.grid(
+  stem_condition    = c("familiar", "novel"),
+  condition_numeric = c("12-12", "12-3", "3-3"),
+  stringsAsFactors  = FALSE) %>%
+  mutate(
+    S = ifelse(stem_condition == "familiar", 1, -1),
+    cond = case_when(
+      condition_numeric == "12-12" ~ b["condition_numeric12M12"],
+      condition_numeric == "3-3"   ~ b["condition_numeric3M3"],
+      TRUE                         ~ 0),
+    int = case_when(
+      condition_numeric == "12-12" ~ S * b["condition_numeric12M12:stem_condition1"],
+      condition_numeric == "3-3"   ~ S * b["condition_numeric3M3:stem_condition1"],
+      TRUE                         ~ 0),
+    Estimate = b["Intercept"] + cond + S*b["stem_condition1"] + int) %>%
+  dplyr::select(stem_condition, condition_numeric, Estimate)
+```
