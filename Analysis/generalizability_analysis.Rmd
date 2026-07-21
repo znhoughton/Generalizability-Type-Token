@@ -17,7 +17,7 @@ options(contrasts = c("contr.sum", "contr.sum"))
 
 # On a 28-core machine: 7 concurrent models × 4 cores each = 28 cores fully utilized.
 # Workers are separate R sessions, so brms/Stan threading within each is independent.
-plan(multisession, workers = min(7L, parallel::detectCores() %/% 4L))
+plan(multisession, workers = min(7L, (parallel::detectCores() - 4L) %/% 4L))
 
 # Absolute path used inside future workers (relative paths break across sessions)
 DATA_DIR <- normalizePath('../Data')

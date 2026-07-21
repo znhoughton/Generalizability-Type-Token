@@ -19,7 +19,7 @@ library(future)
 library(future.apply)
 source("RescorlaLogistic.R")
 
-plan(multisession, workers = min(7L, parallel::detectCores() %/% 4L))
+plan(multisession, workers = min(7L, (parallel::detectCores() - 4L) %/% 4L))
 DATA_DIR <- normalizePath('../Data')
 
 n_sims <- 100
