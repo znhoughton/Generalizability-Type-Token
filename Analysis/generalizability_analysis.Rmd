@@ -541,12 +541,11 @@ plot_prod_stem <- plot_model(model_prod_both_stem, type = 'int',
                              legend.title = 'Meaning',
                              title = "", dot.size = 2, line.size = 1,
                              colors = c('#298c8c', '#800074'))[[4]]
-plot_prod_stem[[11]]$linetype <- 'Meaning'
-plot_prod_stem[[11]]$shape    <- 'Meaning'
-plot_prod_stem[[1]]$group_col <- factor(plot_prod_stem[[1]]$group_col, levels = c('novel','original'), labels = c('Novel','Original'))
-plot_prod_stem[[1]]$group     <- factor(plot_prod_stem[[1]]$group,     levels = c('novel','original'), labels = c('Novel','Original'))
-plot_prod_stem[[1]]$facet     <- factor(plot_prod_stem[[1]]$facet,     levels = c('novel','familiar'), labels = c('Novel','Familiar'))
+plot_prod_stem$data$group_col <- factor(plot_prod_stem$data$group_col, levels = c('novel','original'), labels = c('Novel','Original'))
+plot_prod_stem$data$group     <- factor(plot_prod_stem$data$group,     levels = c('novel','original'), labels = c('Novel','Original'))
+plot_prod_stem$data$facet     <- factor(plot_prod_stem$data$facet,     levels = c('novel','familiar'), labels = c('Novel','Familiar'))
 plot_prod_stem +
+  labs(linetype = 'Meaning', shape = 'Meaning') +
   scale_x_continuous(breaks = c(1,2,3),
                      labels = c('Type Frequency','Token Frequency','Type-Token Frequency')) +
   theme_bw() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -677,12 +676,11 @@ plot_prod_stem_2afc <- plot_model(model_2afc_both_stem_dif_conditions, type = 'i
                                   legend.title = 'Meaning', title = "",
                                   dot.size = 2, line.size = 1,
                                   colors = c('#298c8c', '#800074'))[[4]]
-plot_prod_stem_2afc[[11]]$linetype <- 'Meaning'
-plot_prod_stem_2afc[[11]]$shape    <- 'Meaning'
-plot_prod_stem_2afc[[1]]$group_col <- factor(plot_prod_stem_2afc[[1]]$group_col, levels = c('novel','original'), labels = c('Novel','Original'))
-plot_prod_stem_2afc[[1]]$group     <- factor(plot_prod_stem_2afc[[1]]$group,     levels = c('novel','original'), labels = c('Novel','Original'))
-plot_prod_stem_2afc[[1]]$facet     <- factor(plot_prod_stem_2afc[[1]]$facet,     levels = c('novel','familiar'), labels = c('Novel','Familiar'))
+plot_prod_stem_2afc$data$group_col <- factor(plot_prod_stem_2afc$data$group_col, levels = c('novel','original'), labels = c('Novel','Original'))
+plot_prod_stem_2afc$data$group     <- factor(plot_prod_stem_2afc$data$group,     levels = c('novel','original'), labels = c('Novel','Original'))
+plot_prod_stem_2afc$data$facet     <- factor(plot_prod_stem_2afc$data$facet,     levels = c('novel','familiar'), labels = c('Novel','Familiar'))
 plot_prod_stem_2afc +
+  labs(linetype = 'Meaning', shape = 'Meaning') +
   scale_x_continuous(breaks = c(1,2,3),
                      labels = c('Type Frequency','Token Frequency','Type-Token Frequency')) +
   theme_bw() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
