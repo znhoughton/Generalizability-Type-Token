@@ -255,6 +255,7 @@ mod_alpha_matrices <- future_map(
   list(data_cond1_configural, data_cond2_configural, data_cond3_configural,
        data_cond4_configural, data_cond5_configural, data_cond6_configural),
   function(cond_data) {
+    sem_cues <- semantic_cues  # capture explicitly so workers can access it
     map_dfr(1:n_sims, function(i) {
       result <- as.data.frame(Rescorla_modified_alpha_for_semantic_cues(
         cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T))
@@ -511,6 +512,7 @@ non_cfg_matrices <- future_map(
   list(data_cond1_prod, data_cond2_prod, data_cond3_prod,
        data_cond4_prod, data_cond5_prod, data_cond6_prod),
   function(cond_data) {
+    sem_cues <- semantic_cues  # capture explicitly so workers can access it
     map_dfr(1:n_sims, function(i) {
       result <- as.data.frame(Rescorla_modified_alpha_for_semantic_cues(
         cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T))
@@ -632,7 +634,7 @@ data_comp_sims <- map_dfr(1:n_sims, ~ mutate(data_comp, sim = .x))
 
 make_comp_results <- function(data_comp_sim, rw_matrix, cond_num) {
   data_comp_sim %>%
-    mutate(key = label) %>%
+    mutate(key = if ("key" %in% names(.)) key else label) %>%
     dplyr::select(stem_condition, key, sim, row_id, suffix) %>%
     group_by(sim) %>% mutate(row_id = row_number()) %>% ungroup() %>%
     separate_rows(key, sep = "_") %>%
