@@ -17,6 +17,7 @@ library(arm)
 library(ndl)
 library(future)
 library(future.apply)
+library(furrr)
 source("RescorlaLogistic.R")
 
 plan(multisession, workers = min(7L, (parallel::detectCores() - 4L) %/% 4L))
