@@ -296,12 +296,18 @@ data_all_conds_for_comparison <- data_all_conds_logistic2 %>%
          stem_condition   = prod_condition,
          original_condition = condition)
 
+# Average RW predictions over sims before joining to avoid 100x row duplication
+data_rw_avg_prod <- data_all_conds_for_comparison %>%
+  group_by(original_condition, stem_condition, resp_stem, picture_meaning) %>%
+  summarize(freq_minus_infreq = mean(freq_minus_infreq),
+            dan_activations   = mean(dan_activations),
+            nem_activations   = mean(nem_activations),
+            sil_activations   = mean(sil_activations),
+            shoon_activations = mean(shoon_activations),
+            .groups = 'drop')
+
 human_data_plus_rw_prod <- human_data_prod %>%
-  left_join(data_all_conds_for_comparison %>%
-              dplyr::select(original_condition, stem_condition, resp_stem,
-                            picture_meaning, freq_minus_infreq,
-                            dan_activations, nem_activations,
-                            sil_activations, shoon_activations))
+  left_join(data_rw_avg_prod)
 ```
 
 ```{r prod-rw-models}
@@ -321,13 +327,13 @@ f_human_rw_preds <- future({
 })
 
 data_prod_results_for_stem_suffix_vary <- data_all_conds_logistic2 %>%
-  dplyr::select(row_id, sim, condition, freq_minus_infreq, prod_condition,
-                prod_label, type, dan_activations, nem_activations) %>%
+  dplyr::select(condition, freq_minus_infreq, prod_condition,
+                prod_label, type) %>%
   rename(stem_condition     = prod_condition,
          picture_meaning    = type,
          original_condition = condition,
          resp_stem          = prod_label) %>%
-  group_by(resp_stem, original_condition, stem_condition, picture_meaning, sim) %>%
+  group_by(resp_stem, original_condition, stem_condition, picture_meaning) %>%
   summarize(freq_minus_infreq = mean(freq_minus_infreq), .groups = 'drop')
 
 human_data_plus_rw_stem_suffix <- human_data_prod %>%

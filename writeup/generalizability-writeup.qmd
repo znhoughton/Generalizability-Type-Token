@@ -281,7 +281,7 @@ model_comprehension_numeric = brm(meaning ~ condition_numeric + (1 | participant
                                        cores = 4,
                                        prior = priors_m1,
                                        #control = list(adapt_delta = 0.99),
-                                       file = '../Data/model_comprehension_numeric')
+                                       file = '../Data/model_comprehension_numeric_test')
 
 percent_greater_zero_comprehension_numeric = data.frame(fixef(model_comprehension_numeric, summary = F)) %>%
   pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
@@ -315,7 +315,7 @@ model_comprehension_numeric_stem = brm(meaning ~ condition_numeric*stem_conditio
                                        cores = 4,
                                        prior = priors_m1,
                                        #control = list(adapt_delta = 0.99),
-                                       file = '../Data/model_comprehension_numeric_stem_test')
+                                       file = '../Data/model_comprehension_numeric_stem_test2')
 
 percent_greater_zero_comprehension_numeric_stem = data.frame(fixef(model_comprehension_numeric_stem, summary = F)) %>%
   pivot_longer(cols = everything(), names_to = 'beta_coefficient', values_to = 'estimate') %>%
