@@ -685,13 +685,13 @@ data_all_conds_test$condition_numeric <- factor(
   data_all_conds_test$condition_numeric, levels = c('12-3', '12-12', '3-3'))
 
 # For RW-as-predictor models: average over sims first to avoid duplicating human rows.
-# Join key: comprehension_label (human) = label (RW) for item-level matching.
+# Join on comprehension_label (no-underscore format matching the human data CSV).
 data_rw_avg <- data_all_conds_test %>%
-  group_by(label, stem) %>%
+  group_by(comprehension_label, stem) %>%
   summarize(new_minus_old = mean(new_minus_old), .groups = 'drop')
 
 human_data_plus_rw <- human_data_comp %>%
-  left_join(data_rw_avg, by = c("comprehension_label" = "label"))
+  left_join(data_rw_avg, by = "comprehension_label")
 ```
 
 ---
@@ -850,9 +850,9 @@ data_default_test <- data_all_conds_default %>%
 human_data_plus_rw_default <- human_data_comp %>%
   left_join(
     data_default_test %>%
-      group_by(label, stem) %>%
+      group_by(comprehension_label, stem) %>%
       summarize(new_minus_old_default = mean(new_minus_old), .groups = 'drop'),
-    by = c("comprehension_label" = "label"))
+    by = "comprehension_label")
 
 priors_rw_comp_b2 <- c(
   prior(student_t(3, 0, 0.5), class = 'Intercept'),
@@ -949,9 +949,9 @@ data_ccs_test$condition_numeric <- factor(
 human_data_plus_ccs <- human_data_comp %>%
   left_join(
     data_ccs_test %>%
-      group_by(label, stem) %>%
+      group_by(comprehension_label, stem) %>%
       summarize(new_minus_old_ccs = mean(new_minus_old), .groups = 'drop'),
-    by = c("comprehension_label" = "label"))
+    by = "comprehension_label")
 
 priors_rw_comp_b3 <- c(
   prior(student_t(3, 0, 0.3), class = 'Intercept'),
