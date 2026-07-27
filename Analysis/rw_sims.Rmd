@@ -244,9 +244,30 @@ data_all_conds_configural <- rbind(cfg_cond1, cfg_cond2, cfg_cond3,
                                    cfg_cond4, cfg_cond5, cfg_cond6)
 ```
 
+### Grid Search for Best Parameters
+
+Alpha, SemAlpha, and Beta are determined by a grid search over Spearman correlation with human production estimates (run separately via `grid_search.Rmd`; results loaded from disk).
+
+```{r prod-grid-search}
+grid_search_all <- read_csv(file.path(DATA_DIR, 'grid_search_results_all.csv'))
+
+best_params <- grid_search_all %>%
+  group_by(Alpha, Beta, SemAlpha) %>%
+  summarize(spearman = cor(Estimate, mean_freq_diff_v2, method = 'spearman'),
+            .groups = 'drop') %>%
+  slice_max(spearman, n = 1)
+
+best_Alpha    <- best_params$Alpha
+best_SemAlpha <- best_params$SemAlpha
+best_Beta     <- best_params$Beta
+
+cat('Best params: Alpha =', best_Alpha, 'SemAlpha =', best_SemAlpha,
+    'Beta =', best_Beta, '\n')
+```
+
 ### Configural + Modified Alpha
 
-Configural cues with elevated alpha for semantic cues (dim, pl, big, sg).
+Configural cues with elevated alpha for semantic cues (dim, pl, big, sg), using best parameters from the grid search.
 
 ```{r prod-mod-alpha-matrices}
 semantic_cues <- c('dim', 'pl', 'big', 'sg', 'big.pl', 'big.sg', 'dim.sg', 'dim.pl')
@@ -258,7 +279,8 @@ mod_alpha_matrices <- future_map(
     sem_cues <- semantic_cues  # capture explicitly so workers can access it
     map_dfr(1:n_sims, function(i) {
       result <- as.data.frame(Rescorla_modified_alpha_for_semantic_cues(
-        cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T))
+        cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T,
+        Alpha = best_Alpha, SemAlpha = best_SemAlpha, Beta = best_Beta))
       rownames_to_column(result, var = 'cue') %>% mutate(sim = i)
     })
   })
@@ -281,6 +303,41 @@ mod_cond6 <- make_prod_results_cfg(data_prod_cfg_sims, data_cond6_rw_matrix_conf
 
 data_all_conds_configural_modified_alpha <- rbind(mod_cond1, mod_cond2, mod_cond3,
                                                    mod_cond4, mod_cond5, mod_cond6)
+```
+
+### Modified Alpha Without Configural Cues
+
+Modified alpha using the grid search best parameters applied to standard (non-configural) cues. This isolates elevated semantic salience from the configural cue structure.
+
+```{r prod-alpha-no-configural}
+non_cfg_matrices <- future_map(
+  list(data_cond1_prod, data_cond2_prod, data_cond3_prod,
+       data_cond4_prod, data_cond5_prod, data_cond6_prod),
+  function(cond_data) {
+    sem_cues <- semantic_cues  # capture explicitly so workers can access it
+    map_dfr(1:n_sims, function(i) {
+      result <- as.data.frame(Rescorla_modified_alpha_for_semantic_cues(
+        cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T,
+        Alpha = best_Alpha, SemAlpha = best_SemAlpha, Beta = best_Beta))
+      rownames_to_column(result, var = 'cue') %>% mutate(sim = i)
+    })
+  })
+
+data_cond1_rw_matrix_non_configural <- non_cfg_matrices[[1]]
+data_cond2_rw_matrix_non_configural <- non_cfg_matrices[[2]]
+data_cond3_rw_matrix_non_configural <- non_cfg_matrices[[3]]
+data_cond4_rw_matrix_non_configural <- non_cfg_matrices[[4]]
+data_cond5_rw_matrix_non_configural <- non_cfg_matrices[[5]]
+data_cond6_rw_matrix_non_configural <- non_cfg_matrices[[6]]
+
+nc1 <- make_prod_results(data_prod_sims, data_cond1_rw_matrix_non_configural, 1)
+nc2 <- make_prod_results(data_prod_sims, data_cond2_rw_matrix_non_configural, 2)
+nc3 <- make_prod_results(data_prod_sims, data_cond3_rw_matrix_non_configural, 3)
+nc4 <- make_prod_results(data_prod_sims, data_cond4_rw_matrix_non_configural, 4, flip_sign = TRUE)
+nc5 <- make_prod_results(data_prod_sims, data_cond5_rw_matrix_non_configural, 5, flip_sign = TRUE)
+nc6 <- make_prod_results(data_prod_sims, data_cond6_rw_matrix_non_configural, 6, flip_sign = TRUE)
+
+data_all_conds_non_configural <- rbind(nc1, nc2, nc3, nc4, nc5, nc6)
 ```
 
 ---
@@ -310,6 +367,46 @@ data_rw_avg_prod <- data_all_conds_for_comparison %>%
 
 human_data_plus_rw_prod <- human_data_prod %>%
   left_join(data_rw_avg_prod)
+```
+
+```{r prod-align-rw-variants}
+# Configural type labels are 'dim_sg_dim.sg', 'big_pl_big.pl'; remap to match human data
+remap_cfg_type <- function(x) {
+  case_when(x == 'dim_sg_dim.sg' ~ 'dim_sg',
+            x == 'big_pl_big.pl' ~ 'big_pl',
+            TRUE ~ x)
+}
+
+prep_rw_avg <- function(data_rw, remap = FALSE) {
+  out <- data_rw %>%
+    rename(picture_meaning    = type,
+           resp_stem          = prod_label,
+           stem_condition     = prod_condition,
+           original_condition = condition)
+  if (remap) out <- mutate(out, picture_meaning = remap_cfg_type(picture_meaning))
+  out %>%
+    group_by(original_condition, stem_condition, resp_stem, picture_meaning) %>%
+    summarize(freq_minus_infreq = mean(freq_minus_infreq), .groups = 'drop')
+}
+
+human_data_plus_rw_conf <- human_data_prod %>%
+  left_join(prep_rw_avg(data_all_conds_configural,              remap = TRUE))
+human_data_plus_rw_conf_sem <- human_data_prod %>%
+  left_join(prep_rw_avg(data_all_conds_configural_modified_alpha, remap = TRUE))
+human_data_plus_rw_non_conf_sem <- human_data_prod %>%
+  left_join(prep_rw_avg(data_all_conds_non_configural,          remap = FALSE))
+
+# Apply the same factor coding used by the standard models
+for (nm in c('human_data_plus_rw_conf', 'human_data_plus_rw_conf_sem',
+             'human_data_plus_rw_non_conf_sem')) {
+  df <- get(nm)
+  df$condition      <- factor(df$condition, levels = c(3, 1, 2))
+  df$meaning        <- factor(df$meaning)
+  contrasts(df$meaning) <- contr.sum(levels(df$meaning))
+  df$stem_condition <- factor(df$stem_condition, levels = c('novel', 'familiar'))
+  contrasts(df$stem_condition) <- contr.sum(levels(df$stem_condition))
+  assign(nm, df)
+}
 ```
 
 ```{r prod-rw-models}
@@ -415,6 +512,90 @@ loo_compare(model_prod_rw_stem_suffix_vary,
             model_prod_rw_stem_suffix_vary_by_condition_original_preds)
 ```
 
+```{r prod-configural-models}
+priors_rw_prod_cfg <- c(
+  prior(student_t(3, 0, 1), class = 'Intercept'),
+  prior(student_t(3, 0, 1), class = 'b'),
+  prior(student_t(3, 0, 1), class = 'sd'))
+
+# Configural cues only
+f_conf <- future({
+  brm(frequency ~ freq_minus_infreq + (1 | participant) + (1 | resp_stem),
+      data = human_data_plus_rw_conf, family = bernoulli(link = 'logit'),
+      iter = 14000, warmup = 7000, chains = 4, cores = 4,
+      prior = priors_rw_prod_cfg, control = list(adapt_delta = 0.99),
+      save_pars = save_pars(all = TRUE), seed = 964,
+      file = file.path(DATA_DIR, 'model_human_conf'))
+})
+
+# Configural cues + modified alpha (best params)
+f_conf_sem <- future({
+  brm(frequency ~ freq_minus_infreq + (1 | participant) + (1 | resp_stem),
+      data = human_data_plus_rw_conf_sem, family = bernoulli(link = 'logit'),
+      iter = 14000, warmup = 7000, chains = 4, cores = 4,
+      prior = priors_rw_prod_cfg, control = list(adapt_delta = 0.99),
+      save_pars = save_pars(all = TRUE), seed = 964,
+      file = file.path(DATA_DIR, 'model_human_conf_sem_preds'))
+})
+
+# Configural + modified alpha, interaction with condition
+f_conf_sem_by_cond <- future({
+  brm(frequency ~ freq_minus_infreq * condition + (1 | participant) + (1 | resp_stem),
+      data = human_data_plus_rw_conf_sem, family = bernoulli(link = 'logit'),
+      iter = 14000, warmup = 7000, chains = 4, cores = 4,
+      prior = priors_rw_prod_cfg, control = list(adapt_delta = 0.99),
+      save_pars = save_pars(all = TRUE), seed = 964,
+      file = file.path(DATA_DIR, 'model_human_conf_sem_preds_vary_by_condition'))
+})
+
+# Configural + modified alpha + original statistical predictors
+f_conf_sem_orig <- future({
+  brm(frequency ~ freq_minus_infreq + condition * meaning * stem_condition +
+        (1 | participant) + (1 | resp_stem),
+      data = human_data_plus_rw_conf_sem, family = bernoulli(link = 'logit'),
+      iter = 14000, warmup = 7000, chains = 4, cores = 4,
+      prior = priors_rw_prod_cfg, control = list(adapt_delta = 0.99),
+      save_pars = save_pars(all = TRUE), seed = 964,
+      file = file.path(DATA_DIR, 'model_human_conf_sem_preds_original_preds'))
+})
+
+# Modified alpha only (no configural cues)
+f_non_conf_sem <- future({
+  brm(frequency ~ freq_minus_infreq + (1 | participant) + (1 | resp_stem),
+      data = human_data_plus_rw_non_conf_sem, family = bernoulli(link = 'logit'),
+      iter = 14000, warmup = 7000, chains = 4, cores = 4,
+      prior = priors_rw_prod_cfg, control = list(adapt_delta = 0.99),
+      save_pars = save_pars(all = TRUE), seed = 964,
+      file = file.path(DATA_DIR, 'model_human_mod_sem_alpha'))
+})
+
+model_human_conf                          <- value(f_conf)
+model_human_conf_sem_preds                <- value(f_conf_sem)
+model_human_conf_sem_preds_vary_by_cond   <- value(f_conf_sem_by_cond)
+model_human_conf_sem_preds_original_preds <- value(f_conf_sem_orig)
+model_human_mod_sem_alpha                 <- value(f_non_conf_sem)
+
+fixef(model_human_conf_sem_preds)
+```
+
+```{r prod-loo-all}
+model_human_conf                          <- add_criterion(model_human_conf,                          'loo')
+model_human_conf_sem_preds                <- add_criterion(model_human_conf_sem_preds,                'loo')
+model_human_conf_sem_preds_vary_by_cond   <- add_criterion(model_human_conf_sem_preds_vary_by_cond,   'loo')
+model_human_conf_sem_preds_original_preds <- add_criterion(model_human_conf_sem_preds_original_preds, 'loo')
+model_human_mod_sem_alpha                 <- add_criterion(model_human_mod_sem_alpha,                 'loo')
+
+loo_compare(model_human_rw_preds,
+            model_prod_rw_stem_suffix_vary_by_condition,
+            model_prod_rw_stem_suffix_vary_no_interaction,
+            model_human_conf,
+            model_human_conf_sem_preds,
+            model_human_conf_sem_preds_vary_by_cond,
+            model_human_conf_sem_preds_original_preds,
+            model_human_mod_sem_alpha,
+            model_prod_rw_stem_suffix_vary_by_condition_original_preds)
+```
+
 ---
 
 ## Paper Figure
@@ -501,66 +682,6 @@ ggarrange(observed_estimates_plot, rw_plot_configural, rw_plot_configural_mod_al
 
 ---
 
-## Further Exploration
-
-### Alpha Changed But No Configural Cues
-
-Modified alpha applied to standard (non-configural) cues — controls for the alpha change alone vs. the configural cue structure.
-
-```{r prod-alpha-no-configural}
-non_cfg_matrices <- future_map(
-  list(data_cond1_prod, data_cond2_prod, data_cond3_prod,
-       data_cond4_prod, data_cond5_prod, data_cond6_prod),
-  function(cond_data) {
-    sem_cues <- semantic_cues  # capture explicitly so workers can access it
-    map_dfr(1:n_sims, function(i) {
-      result <- as.data.frame(Rescorla_modified_alpha_for_semantic_cues(
-        cuesOutcomes = cond_data[sample(1:nrow(cond_data)), ], logistic = T))
-      rownames_to_column(result, var = 'cue') %>% mutate(sim = i)
-    })
-  })
-
-data_cond1_rw_matrix_non_configural <- non_cfg_matrices[[1]]
-data_cond2_rw_matrix_non_configural <- non_cfg_matrices[[2]]
-data_cond3_rw_matrix_non_configural <- non_cfg_matrices[[3]]
-data_cond4_rw_matrix_non_configural <- non_cfg_matrices[[4]]
-data_cond5_rw_matrix_non_configural <- non_cfg_matrices[[5]]
-data_cond6_rw_matrix_non_configural <- non_cfg_matrices[[6]]
-
-nc1 <- make_prod_results(data_prod_sims, data_cond1_rw_matrix_non_configural, 1)
-nc2 <- make_prod_results(data_prod_sims, data_cond2_rw_matrix_non_configural, 2)
-nc3 <- make_prod_results(data_prod_sims, data_cond3_rw_matrix_non_configural, 3)
-nc4 <- make_prod_results(data_prod_sims, data_cond4_rw_matrix_non_configural, 4, flip_sign = TRUE)
-nc5 <- make_prod_results(data_prod_sims, data_cond5_rw_matrix_non_configural, 5, flip_sign = TRUE)
-nc6 <- make_prod_results(data_prod_sims, data_cond6_rw_matrix_non_configural, 6, flip_sign = TRUE)
-
-data_all_conds_non_configural <- rbind(nc1, nc2, nc3, nc4, nc5, nc6)
-
-data_non_cfg_plot <- data_all_conds_non_configural %>%
-  mutate(meaning = case_when(
-    type %in% c('dim_sg','big_pl') ~ 'original',
-    type == 'dim_pl'               ~ 'novel')) %>%
-  mutate(condition = case_when(
-    condition %in% c(1,4) ~ 1,
-    condition %in% c(2,5) ~ 2,
-    condition %in% c(3,6) ~ 3)) %>%
-  group_by(meaning, prod_condition, condition, sim) %>%
-  summarize(mean_freq_diff = mean(freq_minus_infreq), .groups = 'keep') %>%
-  group_by(meaning, prod_condition, condition) %>%
-  summarize(mean_freq_diff_v2 = mean(mean_freq_diff),
-            ci2.5  = quantile(mean_freq_diff, 0.025, na.rm = T),
-            ci97.5 = quantile(mean_freq_diff, 0.975, na.rm = T), .groups = 'keep')
-
-ggplot(data = data_non_cfg_plot,
-       aes(x = meaning, y = invlogit(mean_freq_diff_v2), fill = prod_condition)) +
-  geom_col(position = "dodge") +
-  ylim(c(0,1)) +
-  ggtitle('Modified alpha, no configural cues') +
-  facet_wrap(~condition)
-```
-
----
-
 # Comprehension RW Simulations
 
 ## Data Preparation
@@ -606,7 +727,7 @@ data_comp <- read_csv('../Conditions/comprehension_condition.csv') %>%
 
 ## Main RW Simulations
 
-Parameters Alpha=0.45, Beta=0.25 selected via grid search (see "Further Exploration" below).
+Parameters Alpha=0.45, Beta=0.25 selected via grid search (see `grid_search.Rmd` and `comp-grid-search` chunk in Further Exploration below).
 
 ```{r comp-main-matrices}
 main_matrices <- future_map(
