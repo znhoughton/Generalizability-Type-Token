@@ -590,6 +590,7 @@ fixef(model_human_conf_sem_preds)
 ```
 
 ```{r prod-loo-all}
+model_human_rw_preds                      <- add_criterion(model_human_rw_preds,                      'loo')
 model_human_conf                          <- add_criterion(model_human_conf,                          'loo')
 model_human_conf_sem_preds                <- add_criterion(model_human_conf_sem_preds,                'loo')
 model_human_conf_sem_preds_vary_by_cond   <- add_criterion(model_human_conf_sem_preds_vary_by_cond,   'loo')
