@@ -1,0 +1,331 @@
+---
+title: "Generalizability Results Summary"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    theme: flatly
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+```{r libraries}
+library(tidyverse)
+library(brms)
+library(knitr)
+library(kableExtra)
+
+DATA_DIR <- normalizePath('../Data')
+load_m   <- function(name) readRDS(file.path(DATA_DIR, paste0(name, '.rds')))
+```
+
+```{r helpers}
+# Extract fixef table with 95% CIs and % posterior samples > 0
+fixef_table <- function(model, row_labels = NULL) {
+  draws <- as.data.frame(fixef(model, summary = FALSE))
+  pgt0  <- draws %>%
+    pivot_longer(everything(), names_to = 'term', values_to = 'est') %>%
+    group_by(term) %>%
+    summarize(pgt0 = mean(est > 0) * 100, .groups = 'drop')
+
+  out <- as.data.frame(fixef(model)) %>%
+    rownames_to_column('term') %>%
+    left_join(pgt0, by = 'term') %>%
+    mutate(
+      `95% CI` = paste0('[', round(Q2.5, 3), ', ', round(Q97.5, 3), ']'),
+      `% > 0`  = paste0(round(pgt0, 1), '%'),
+      Estimate = round(Estimate, 3),
+      Est.Error = round(Est.Error, 3)
+    ) %>%
+    select(term, Estimate, Est.Error, `95% CI`, `% > 0`)
+
+  if (!is.null(row_labels)) out$term <- row_labels
+  out %>% rename(Term = term, SE = Est.Error)
+}
+
+fmt_table <- function(df, caption = '') {
+  kable(df, caption = caption, align = c('l', 'r', 'r', 'c', 'r')) %>%
+    kable_styling(bootstrap_options = c('striped', 'hover', 'condensed'),
+                  full_width = FALSE) %>%
+    row_spec(0, bold = TRUE)
+}
+
+add_loo_safe <- function(model) {
+  tryCatch(add_criterion(model, 'loo'), error = function(e) model)
+}
+```
+
+---
+
+# Coding Notes
+
+**Condition** (sum-coded, reference = Type-Token Frequency):
+
+- `condition1` = Type Frequency vs. grand mean
+- `condition2` = Token Frequency vs. grand mean
+- Type-Token is the implicit reference (coded −1 on both contrasts)
+
+**Meaning** (sum-coded): `meaning1` = Novel Meaning vs. grand mean
+**Stem** (sum-coded): `stem_condition1` = Novel Stem vs. grand mean
+**95% CI** = 2.5th–97.5th percentile of posterior samples
+**% > 0** = proportion of posterior samples where coefficient > 0 (analogous to 1 − *p*/2 for positive effects)
+
+---
+
+# 1. Production Task
+
+How does type, token, and type-token frequency affect suffix production, overall and broken down by meaning (original vs. novel) and stem familiarity?
+
+## 1.1 Condition × Meaning
+
+*Model:* `frequency ~ condition * meaning + (1 + meaning | participant)`
+
+```{r prod-both}
+m_prod_both <- load_m('model_prod_both')
+
+labels_2way <- c('Intercept',
+                 'Type Frequency', 'Token Frequency',
+                 'Novel Meaning',
+                 'Type Freq × Novel Meaning', 'Token Freq × Novel Meaning')
+
+fixef_table(m_prod_both, labels_2way) %>%
+  fmt_table('Production: Condition × Meaning')
+```
+
+**Interpretation guide:**
+
+- `Type Frequency` / `Token Frequency`: how each condition differs from the grand mean in suffix production (positive = more frequent-suffix responses)
+- `Novel Meaning`: whether novel-meaning items differ from original-meaning items on average
+- Interactions: whether the condition effect is bigger or smaller for novel-meaning items
+
+## 1.2 Condition × Meaning × Stem Type
+
+*Model:* `frequency ~ condition * meaning * stem_condition + (1 + meaning | participant)`
+
+```{r prod-both-stem}
+m_prod_both_stem <- load_m('model_prod_both_stem')
+
+labels_3way <- c('Intercept',
+                 'Type Frequency', 'Token Frequency',
+                 'Novel Meaning', 'Novel Stem',
+                 'Type Freq × Novel Meaning', 'Token Freq × Novel Meaning',
+                 'Type Freq × Novel Stem',   'Token Freq × Novel Stem',
+                 'Novel Meaning × Novel Stem',
+                 'Type Freq × Novel Meaning × Novel Stem',
+                 'Token Freq × Novel Meaning × Novel Stem')
+
+fixef_table(m_prod_both_stem, labels_3way) %>%
+  fmt_table('Production: Condition × Meaning × Stem Type')
+```
+
+---
+
+# 2. Form-Choice (2AFC) Task
+
+## 2.1 Condition × Meaning
+
+*Model:* `frequency ~ condition * meaning + (1 + meaning | participant)`
+
+```{r afc-both}
+m_2afc_both <- load_m('model_2afc_both')
+
+fixef_table(m_2afc_both, labels_2way) %>%
+  fmt_table('2AFC: Condition × Meaning')
+```
+
+## 2.2 Condition × Meaning × Stem Type
+
+*Model:* `frequency ~ condition * meaning * stem_condition + (1 + meaning | participant)`
+
+```{r afc-both-stem}
+m_2afc_both_stem <- load_m('model_2afc_both_stem')
+
+fixef_table(m_2afc_both_stem, labels_3way) %>%
+  fmt_table('2AFC: Condition × Meaning × Stem Type')
+```
+
+---
+
+# 3. Production + 2AFC Combined
+
+*Model:* `frequency ~ condition * meaning * stem_condition * task + (1 + meaning * task | participant)`
+
+Tests whether condition effects differ across tasks (production vs. form choice).
+
+```{r combined}
+m_both_tasks <- load_m('model_2afc_prod_both_stem')
+
+fixef_table(m_both_tasks) %>%
+  fmt_table('Production + 2AFC: Full Model')
+```
+
+---
+
+# 4. Comprehension Task
+
+Comprehension uses a different design: `condition_numeric` compares token-frequency (12-12) and type-frequency (3-3) training regimens against the type-token baseline.
+
+## 4.1 Condition Effect
+
+*Model:* `meaning ~ condition_numeric + (1 | participant)`
+
+```{r comp-main}
+m_comp_humans <- load_m('model_comprehension_numeric_humans')
+
+comp_labels <- c('Intercept', 'Token Freq (12-12)', 'Type Freq (3-3)')
+fixef_table(m_comp_humans, comp_labels) %>%
+  fmt_table('Comprehension: Condition Effect')
+```
+
+## 4.2 Condition × Stem Type
+
+*Model:* `meaning ~ condition_numeric * stem_condition + (1 | participant)`
+
+```{r comp-stem}
+m_comp_stem <- load_m('model_comprehension_numeric_stem_humans')
+
+comp_stem_labels <- c('Intercept',
+                      'Token Freq (12-12)', 'Type Freq (3-3)',
+                      'Novel Stem',
+                      'Token Freq × Novel Stem', 'Type Freq × Novel Stem')
+fixef_table(m_comp_stem, comp_stem_labels) %>%
+  fmt_table('Comprehension: Condition × Stem Type')
+```
+
+---
+
+# 5. Rescorla-Wagner Simulations
+
+## 5.1 LOO Model Comparison
+
+Which RW model variant best predicts human production choices?
+
+| Model | Description |
+|---|---|
+| `Only RW Activation` | Standard RW: stem bigrams + type label |
+| `Stem and Meaning (not by Condition)` | Standard RW + condition as additive covariate |
+| `Stem and Meaning by Condition` | Standard RW × condition interaction |
+| `Only Configural Cues` | Configural RW: stem-meaning compound cues |
+| `Only Increased Saliency` | Modified α only (no configural cues) |
+| `Configural + Increased Saliency` | Configural + modified α (best grid-search params) |
+| `Configural + Saliency × Condition` | Above, with condition interaction |
+| `Configural + Saliency + Original Preds` | Above, plus condition × meaning × stem |
+| `Original Statistical Predictors` | Human condition × meaning × stem baseline (no RW) |
+
+```{r rw-loo}
+m_rw_only      <- load_m('model_human_rw_preds')
+m_rw_nc        <- load_m('model_prod_rw_stem_suffix_vary_no_interaction')
+m_rw_bc        <- load_m('model_prod_rw_stem_suffix_vary_by_condition')
+m_conf         <- load_m('model_human_conf')
+m_mod_alpha    <- load_m('model_human_mod_sem_alpha')
+m_conf_sem     <- load_m('model_human_conf_sem_preds')
+m_conf_sem_cond<- load_m('model_human_conf_sem_preds_vary_by_condition')
+m_conf_sem_orig<- load_m('model_human_conf_sem_preds_original_preds')
+m_humans_only  <- load_m('model_prod_both_stem_simple_humans')
+
+m_rw_only       <- add_loo_safe(m_rw_only)
+m_rw_nc         <- add_loo_safe(m_rw_nc)
+m_rw_bc         <- add_loo_safe(m_rw_bc)
+m_conf          <- add_loo_safe(m_conf)
+m_mod_alpha     <- add_loo_safe(m_mod_alpha)
+m_conf_sem      <- add_loo_safe(m_conf_sem)
+m_conf_sem_cond <- add_loo_safe(m_conf_sem_cond)
+m_conf_sem_orig <- add_loo_safe(m_conf_sem_orig)
+m_humans_only   <- add_loo_safe(m_humans_only)
+
+loo_results <- loo_compare(
+  m_rw_only, m_rw_nc, m_rw_bc,
+  m_conf, m_mod_alpha,
+  m_conf_sem, m_conf_sem_cond, m_conf_sem_orig,
+  m_humans_only
+)
+
+label_lookup <- c(
+  m_rw_only       = 'Only RW Activation',
+  m_rw_nc         = 'Stem and Meaning Activations (not by Condition)',
+  m_rw_bc         = 'Stem and Meaning Activations by Condition',
+  m_conf          = 'Only Configural Cues',
+  m_mod_alpha     = 'Only Increased Saliency of Semantic Cues',
+  m_conf_sem      = 'Configural + Increased Saliency',
+  m_conf_sem_cond = 'Configural + Increased Saliency × Condition',
+  m_conf_sem_orig = 'Configural + Increased Saliency + Original Preds',
+  m_humans_only   = 'Original Statistical Predictors'
+)
+
+loo_df <- as.data.frame(loo_results) %>%
+  rownames_to_column('model_id') %>%
+  mutate(Model = label_lookup[model_id]) %>%
+  select(Model, elpd_diff, se_diff, looic, se_looic) %>%
+  mutate(across(where(is.numeric), ~round(., 1))) %>%
+  rename(`ELPD diff` = elpd_diff, `SE diff` = se_diff,
+         LOOIC = looic, `SE LOOIC` = se_looic)
+
+kable(loo_df, caption = 'LOO Comparison: RW Model Variants (sorted best to worst)') %>%
+  kable_styling(bootstrap_options = c('striped', 'hover', 'condensed'),
+                full_width = FALSE) %>%
+  row_spec(0, bold = TRUE) %>%
+  row_spec(1, background = '#d4edda')
+```
+
+*Note:* ELPD diff and SE diff are relative to the best model (row 1). Models within 2 SE of the best are not clearly distinguishable. Higher ELPD (less negative LOOIC) = better fit.
+
+## 5.2 Best RW Model: Configural + Modified Alpha + Original Predictors
+
+Fixed effects for the best-fitting model, showing the contribution of RW predictions on top of the original statistical structure.
+
+```{r rw-best-model}
+rw_best_labels <- c('Intercept',
+                    'RW Activation (freq_minus_infreq)',
+                    'Type Frequency', 'Token Frequency',
+                    'Novel Meaning', 'Novel Stem',
+                    'Type Freq × Novel Meaning', 'Token Freq × Novel Meaning',
+                    'Type Freq × Novel Stem',   'Token Freq × Novel Stem',
+                    'Novel Meaning × Novel Stem',
+                    'Type Freq × Novel Meaning × Novel Stem',
+                    'Token Freq × Novel Meaning × Novel Stem')
+
+fixef_table(m_conf_sem_orig, rw_best_labels) %>%
+  fmt_table('Best RW Model: Configural + Increased Saliency + Original Predictors')
+```
+
+## 5.3 Standard RW Model: Stem and Meaning Activations
+
+For comparison, the standard (non-configural) RW predictions with and without condition interaction.
+
+```{r rw-standard}
+rw_bc_labels <- c('Intercept',
+                  'RW Activation',
+                  'Type Frequency', 'Token Frequency',
+                  'RW × Type Frequency', 'RW × Token Frequency')
+
+fixef_table(m_rw_bc, rw_bc_labels) %>%
+  fmt_table('Standard RW: Stem and Meaning Activations by Condition')
+```
+
+## 5.4 RW Comprehension Models
+
+Does RW activation predict comprehension accuracy, and does this vary by condition?
+
+```{r rw-comp}
+m_comp_rw      <- load_m('model_comprehension_numeric_rw')
+m_comp_rw_cond <- load_m('model_comprehension_numeric_rw_by_cond')
+m_comp_stem_rw <- load_m('model_comprehension_numeric_stem_rw')
+
+fixef_table(m_comp_rw) %>%
+  fmt_table('Comprehension: RW Activation Only')
+```
+
+```{r rw-comp-cond}
+fixef_table(m_comp_rw_cond) %>%
+  fmt_table('Comprehension: RW Activation × Condition')
+```
+
+```{r rw-comp-stem}
+fixef_table(m_comp_stem_rw) %>%
+  fmt_table('Comprehension: RW Activation × Condition × Stem')
+```
