@@ -71,15 +71,27 @@ hyp_table <- function(model, hyps, labels = NULL, caption = '') {
     row_spec(0, bold = TRUE)
 }
 
-# Standard contrast strings for a sum-coded 3-level condition
-# (condition1 = Type, condition2 = Token, reference = Type-Token)
+# Condition contrast strings.
+# Condition is TREATMENT coded with Type-Token (level 3) as reference:
+#   condition1 = Type Freq vs Type-Token
+#   condition2 = Token Freq vs Type-Token
+# Meaning and stem_condition are SUM coded.
+#
+# suffix: if non-empty, the sum-coded interaction partner (e.g. 'meaning1').
+#   Within the +1 level of that variable (e.g. Novel):
+#     Type vs Token        : condition1 - condition2 + condition1:suffix - condition2:suffix
+#     Type vs Type-Token   : condition1 + condition1:suffix
+#     Token vs Type-Token  : condition2 + condition2:suffix
 cond_contrasts <- function(suffix = '') {
-  s <- if (nchar(suffix)) paste0(':', suffix) else ''
-  c(
-    paste0('condition1', s, ' - condition2', s, ' = 0'),
-    paste0('2*condition1', s, ' + condition2', s, ' = 0'),
-    paste0('condition1', s, ' + 2*condition2', s, ' = 0')
-  )
+  if (nchar(suffix) == 0) {
+    c('condition1 - condition2 = 0',
+      'condition1 = 0',
+      'condition2 = 0')
+  } else {
+    c(paste0('condition1 - condition2 + condition1:', suffix, ' - condition2:', suffix, ' = 0'),
+      paste0('condition1 + condition1:', suffix, ' = 0'),
+      paste0('condition2 + condition2:', suffix, ' = 0'))
+  }
 }
 cond_labels <- c('Type vs Token', 'Type vs Type-Token', 'Token vs Type-Token')
 
@@ -92,14 +104,14 @@ add_loo_safe <- function(model) {
 
 # Coding Notes
 
-**Condition** (sum-coded, reference = Type-Token Frequency):
+**Condition** (treatment-coded, reference = Type-Token Frequency):
 
-- `condition1` = Type Frequency vs. grand mean
-- `condition2` = Token Frequency vs. grand mean
-- Type-Token is the implicit reference (coded −1 on both contrasts)
+- Intercept = Type-Token Frequency baseline
+- `condition1` = Type Frequency vs. Type-Token
+- `condition2` = Token Frequency vs. Type-Token
 
-**Meaning** (sum-coded): `meaning1` = Novel Meaning vs. grand mean
-**Stem** (sum-coded): `stem_condition1` = Novel Stem vs. grand mean
+**Meaning** (sum-coded): `meaning1` = Novel vs. grand mean; Original is implicit −1 reference
+**Stem** (sum-coded): `stem_condition1` = Novel Stem vs. grand mean; Familiar is implicit −1 reference
 **95% CI** = 2.5th–97.5th percentile of posterior samples
 **% > 0** = proportion of posterior samples where coefficient > 0 (analogous to 1 − *p*/2 for positive effects)
 
@@ -190,7 +202,7 @@ hyp_table(m_prod_both_stem,
 hyp_table(m_prod_both_stem,
           c('2*meaning1 + 2*condition1:meaning1 = 0',
             '2*meaning1 + 2*condition2:meaning1 = 0',
-            '2*meaning1 - 2*condition1:meaning1 - 2*condition2:meaning1 = 0'),
+            '2*meaning1 = 0'),
           c('Novel vs Original | Type Freq',
             'Novel vs Original | Token Freq',
             'Novel vs Original | Type-Token Freq'),
@@ -202,7 +214,7 @@ hyp_table(m_prod_both_stem,
 hyp_table(m_prod_both_stem,
           c('2*stem_condition1 + 2*condition1:stem_condition1 = 0',
             '2*stem_condition1 + 2*condition2:stem_condition1 = 0',
-            '2*stem_condition1 - 2*condition1:stem_condition1 - 2*condition2:stem_condition1 = 0'),
+            '2*stem_condition1 = 0'),
           c('Novel vs Familiar Stem | Type Freq',
             'Novel vs Familiar Stem | Token Freq',
             'Novel vs Familiar Stem | Type-Token Freq'),
@@ -272,7 +284,7 @@ hyp_table(m_2afc_both_stem,
 hyp_table(m_2afc_both_stem,
           c('2*meaning1 + 2*condition1:meaning1 = 0',
             '2*meaning1 + 2*condition2:meaning1 = 0',
-            '2*meaning1 - 2*condition1:meaning1 - 2*condition2:meaning1 = 0'),
+            '2*meaning1 = 0'),
           c('Novel vs Original | Type Freq',
             'Novel vs Original | Token Freq',
             'Novel vs Original | Type-Token Freq'),
@@ -284,7 +296,7 @@ hyp_table(m_2afc_both_stem,
 hyp_table(m_2afc_both_stem,
           c('2*stem_condition1 + 2*condition1:stem_condition1 = 0',
             '2*stem_condition1 + 2*condition2:stem_condition1 = 0',
-            '2*stem_condition1 - 2*condition1:stem_condition1 - 2*condition2:stem_condition1 = 0'),
+            '2*stem_condition1 = 0'),
           c('Novel vs Familiar Stem | Type Freq',
             'Novel vs Familiar Stem | Token Freq',
             'Novel vs Familiar Stem | Type-Token Freq'),
