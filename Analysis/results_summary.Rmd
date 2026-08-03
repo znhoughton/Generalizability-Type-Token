@@ -55,6 +55,34 @@ fmt_table <- function(df, caption = '') {
     row_spec(0, bold = TRUE)
 }
 
+# Run hypothesis() contrasts and return a formatted kable
+hyp_table <- function(model, hyps, labels = NULL, caption = '') {
+  res <- hypothesis(model, hyps)$hypothesis %>%
+    mutate(
+      `95% CI` = paste0('[', round(CI.Lower, 3), ', ', round(CI.Upper, 3), ']'),
+      Estimate  = round(Estimate, 3),
+      `% Post` = paste0(round(Post.Prob * 100, 1), '%')
+    ) %>%
+    select(Hypothesis, Estimate, `95% CI`, `% Post`)
+  if (!is.null(labels)) res$Hypothesis <- labels
+  kable(res, caption = caption, align = c('l', 'r', 'c', 'r')) %>%
+    kable_styling(bootstrap_options = c('striped', 'hover', 'condensed'),
+                  full_width = FALSE) %>%
+    row_spec(0, bold = TRUE)
+}
+
+# Standard contrast strings for a sum-coded 3-level condition
+# (condition1 = Type, condition2 = Token, reference = Type-Token)
+cond_contrasts <- function(suffix = '') {
+  s <- if (nchar(suffix)) paste0(':', suffix) else ''
+  c(
+    paste0('condition1', s, ' - condition2', s, ' = 0'),
+    paste0('2*condition1', s, ' + condition2', s, ' = 0'),
+    paste0('condition1', s, ' + 2*condition2', s, ' = 0')
+  )
+}
+cond_labels <- c('Type vs Token', 'Type vs Type-Token', 'Token vs Type-Token')
+
 add_loo_safe <- function(model) {
   tryCatch(add_criterion(model, 'loo'), error = function(e) model)
 }
@@ -123,6 +151,64 @@ fixef_table(m_prod_both_stem, labels_3way) %>%
   fmt_table('Production: Condition × Meaning × Stem Type')
 ```
 
+## 1.3 Pairwise Contrasts (Production)
+
+*% Post = posterior probability that the contrast is in the stated direction.*
+
+### Condition (marginal)
+```{r prod-hyp-cond}
+hyp_table(m_prod_both_stem, cond_contrasts(), cond_labels,
+          'Production: Pairwise Condition Contrasts (marginal)')
+```
+
+### Meaning and Stem (marginal)
+```{r prod-hyp-ms}
+hyp_table(m_prod_both_stem,
+          c('2*meaning1 = 0', '2*stem_condition1 = 0'),
+          c('Novel vs Original Meaning', 'Novel vs Familiar Stem'),
+          'Production: Meaning and Stem Contrasts (marginal)')
+```
+
+### Condition contrasts within Novel Meaning
+```{r prod-hyp-cond-novel-meaning}
+hyp_table(m_prod_both_stem,
+          cond_contrasts('meaning1'),
+          paste0(cond_labels, ' | Novel Meaning'),
+          'Production: Condition Contrasts within Novel Meaning')
+```
+
+### Condition contrasts within Novel Stem
+```{r prod-hyp-cond-novel-stem}
+hyp_table(m_prod_both_stem,
+          cond_contrasts('stem_condition1'),
+          paste0(cond_labels, ' | Novel Stem'),
+          'Production: Condition Contrasts within Novel Stem')
+```
+
+### Meaning contrast within each Condition
+```{r prod-hyp-meaning-by-cond}
+hyp_table(m_prod_both_stem,
+          c('2*meaning1 + 2*condition1:meaning1 = 0',
+            '2*meaning1 + 2*condition2:meaning1 = 0',
+            '2*meaning1 - 2*condition1:meaning1 - 2*condition2:meaning1 = 0'),
+          c('Novel vs Original | Type Freq',
+            'Novel vs Original | Token Freq',
+            'Novel vs Original | Type-Token Freq'),
+          'Production: Meaning Contrast within each Condition')
+```
+
+### Stem contrast within each Condition
+```{r prod-hyp-stem-by-cond}
+hyp_table(m_prod_both_stem,
+          c('2*stem_condition1 + 2*condition1:stem_condition1 = 0',
+            '2*stem_condition1 + 2*condition2:stem_condition1 = 0',
+            '2*stem_condition1 - 2*condition1:stem_condition1 - 2*condition2:stem_condition1 = 0'),
+          c('Novel vs Familiar Stem | Type Freq',
+            'Novel vs Familiar Stem | Token Freq',
+            'Novel vs Familiar Stem | Type-Token Freq'),
+          'Production: Stem Contrast within each Condition')
+```
+
 ---
 
 # 2. Form-Choice (2AFC) Task
@@ -147,6 +233,62 @@ m_2afc_both_stem <- load_m('model_2afc_both_stem')
 
 fixef_table(m_2afc_both_stem, labels_3way) %>%
   fmt_table('2AFC: Condition × Meaning × Stem Type')
+```
+
+## 2.3 Pairwise Contrasts (2AFC)
+
+### Condition (marginal)
+```{r afc-hyp-cond}
+hyp_table(m_2afc_both_stem, cond_contrasts(), cond_labels,
+          '2AFC: Pairwise Condition Contrasts (marginal)')
+```
+
+### Meaning and Stem (marginal)
+```{r afc-hyp-ms}
+hyp_table(m_2afc_both_stem,
+          c('2*meaning1 = 0', '2*stem_condition1 = 0'),
+          c('Novel vs Original Meaning', 'Novel vs Familiar Stem'),
+          '2AFC: Meaning and Stem Contrasts (marginal)')
+```
+
+### Condition contrasts within Novel Meaning
+```{r afc-hyp-cond-novel-meaning}
+hyp_table(m_2afc_both_stem,
+          cond_contrasts('meaning1'),
+          paste0(cond_labels, ' | Novel Meaning'),
+          '2AFC: Condition Contrasts within Novel Meaning')
+```
+
+### Condition contrasts within Novel Stem
+```{r afc-hyp-cond-novel-stem}
+hyp_table(m_2afc_both_stem,
+          cond_contrasts('stem_condition1'),
+          paste0(cond_labels, ' | Novel Stem'),
+          '2AFC: Condition Contrasts within Novel Stem')
+```
+
+### Meaning contrast within each Condition
+```{r afc-hyp-meaning-by-cond}
+hyp_table(m_2afc_both_stem,
+          c('2*meaning1 + 2*condition1:meaning1 = 0',
+            '2*meaning1 + 2*condition2:meaning1 = 0',
+            '2*meaning1 - 2*condition1:meaning1 - 2*condition2:meaning1 = 0'),
+          c('Novel vs Original | Type Freq',
+            'Novel vs Original | Token Freq',
+            'Novel vs Original | Type-Token Freq'),
+          '2AFC: Meaning Contrast within each Condition')
+```
+
+### Stem contrast within each Condition
+```{r afc-hyp-stem-by-cond}
+hyp_table(m_2afc_both_stem,
+          c('2*stem_condition1 + 2*condition1:stem_condition1 = 0',
+            '2*stem_condition1 + 2*condition2:stem_condition1 = 0',
+            '2*stem_condition1 - 2*condition1:stem_condition1 - 2*condition2:stem_condition1 = 0'),
+          c('Novel vs Familiar Stem | Type Freq',
+            'Novel vs Familiar Stem | Token Freq',
+            'Novel vs Familiar Stem | Type-Token Freq'),
+          '2AFC: Stem Contrast within each Condition')
 ```
 
 ---
@@ -195,6 +337,25 @@ comp_stem_labels <- c('Intercept',
                       'Token Freq × Novel Stem', 'Type Freq × Novel Stem')
 fixef_table(m_comp_stem, comp_stem_labels) %>%
   fmt_table('Comprehension: Condition × Stem Type')
+```
+
+## 4.3 Pairwise Contrasts (Comprehension)
+
+*Note: comprehension uses treatment coding; the baseline is Type-Token (12-12 and 3-3 are deviations from it).*
+
+```{r comp-hyp}
+hyp_table(m_comp_stem,
+          c('condition_numeric3M3 - condition_numeric12M12 = 0',
+            '2*stem_condition1 = 0',
+            '2*stem_condition1 + 2*condition_numeric12M12:stem_condition1 = 0',
+            '2*stem_condition1 + 2*condition_numeric3M3:stem_condition1 = 0',
+            '2*stem_condition1 - 2*condition_numeric12M12:stem_condition1 - 2*condition_numeric3M3:stem_condition1 = 0'),
+          c('Type Freq (3-3) vs Token Freq (12-12)',
+            'Novel vs Familiar Stem (marginal)',
+            'Novel vs Familiar Stem | Token Freq (12-12)',
+            'Novel vs Familiar Stem | Type Freq (3-3)',
+            'Novel vs Familiar Stem | Type-Token (baseline)'),
+          'Comprehension: Key Pairwise Contrasts')
 ```
 
 ---
